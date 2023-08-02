@@ -1,9 +1,13 @@
 ﻿#ifndef CRYPTO_H
 #define CRYPTO_H
 
+#include <iostream>
 #include <QByteArray>
 #include <QObject>
-#include <iostream>
+#include <QVariantMap>
+#include <QJsonDocument>
+#include <QRandomGenerator>
+#include <QCryptographicHash>
 
 extern "C" {
 #include <openssl/rc4.h>
@@ -32,7 +36,7 @@ const QString eapiKey = "e82ckenh8dichen8";
  * @param iv 偏移量
  * @return QString 密文数据，如果加密失败则为空字符串
  */
-QString aesEncrypt(const QString &plainData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
+QByteArray aesEncrypt(const QByteArray &plainData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
 {
     // 创建加密上下文对象，并使用智能指针接管
     QScopedPointer<EVP_CIPHER_CTX, QScopedPointerPodDeleter> ctx(EVP_CIPHER_CTX_new());
@@ -42,22 +46,21 @@ QString aesEncrypt(const QString &plainData, const EVP_CIPHER *mode(), const QSt
     }
 
     // 将QString类型的输入参数转换为char*类型
-    QByteArray plainDataBytes = plainData.toUtf8();
     QByteArray keyBytes = key.toUtf8();
     QByteArray ivBytes = iv.toUtf8();
-    const char *plainDataChar = plainDataBytes.constData();
+    const char *plainDataChar = plainData.constData();
     const char *keyChar = keyBytes.constData();
     const char *ivChar = ivBytes.constData();
 
     // 计算加密后的数据长度，至少要比明文数据长度大一个块大小
-    int outBufLen = plainDataBytes.size() + EVP_CIPHER_block_size(mode());
+    int outBufLen = plainData.size() + EVP_CIPHER_block_size(mode());
     // 使用QByteArray代替动态分配的数组
     QByteArray outBuf(outBufLen, '\0');
 
     // 初始化加密上下文，设置加密算法、密钥、偏移量等参数
     EVP_EncryptInit_ex(ctx.data(), mode(), NULL, (const unsigned char *)keyChar, (const unsigned char *)ivChar);
     // 加密明文数据，将结果存放在outBuf中，更新outBufLen为输出长度
-    if (!EVP_EncryptUpdate(ctx.data(), (unsigned char *)outBuf.data(), &outBufLen, (const unsigned char *)plainDataChar, plainDataBytes.size()))
+    if (!EVP_EncryptUpdate(ctx.data(), (unsigned char *)outBuf.data(), &outBufLen, (const unsigned char *)plainDataChar, plainData.size()))
     {
         return "";
     }
@@ -71,15 +74,11 @@ QString aesEncrypt(const QString &plainData, const EVP_CIPHER *mode(), const QSt
 
     outBufLen += tempLen;
 
-    // 将outBuf中的密文数据转换为QByteArray类型，并使用Hex编码
-    QByteArray cipherDataBytes = outBuf.left(outBufLen).toHex();
+    // 将outBuf中的密文数据转换为QByteArray类型
+    QByteArray cipherDataBytes = outBuf.left(outBufLen);
 
-    // 将QByteArray类型的密文数据转换为QString类型
-    QString cipherData = QString::fromUtf8(cipherDataBytes);
-
-    return cipherData;
+    return cipherDataBytes;
 }
-
 
 /**
  * @brief 使用AES算法解密数据的函数
@@ -89,7 +88,7 @@ QString aesEncrypt(const QString &plainData, const EVP_CIPHER *mode(), const QSt
  * @param iv 偏移量
  * @return QString 明文数据，如果解密失败则为空字符串
  */
-QString aesDecrypt(const QString &cipherData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
+QByteArray aesDecrypt(const QByteArray &cipherData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
 {
     // 创建解密上下文对象，并使用智能指针接管
     QScopedPointer<EVP_CIPHER_CTX, QScopedPointerPodDeleter> ctx(EVP_CIPHER_CTX_new());
@@ -98,16 +97,15 @@ QString aesDecrypt(const QString &cipherData, const EVP_CIPHER *mode(), const QS
         return "";
     }
 
-    // 将QString类型的输入参数转换为char*类型，并使用Hex解码
-    QByteArray cipherDataBytes = QByteArray::fromHex(cipherData.toUtf8());
+    // 将QString类型的输入参数转换为char*类型
     QByteArray keyBytes = key.toUtf8();
     QByteArray ivBytes = iv.toUtf8();
-    const char *cipherDataChar = cipherDataBytes.constData();
+    const char *cipherDataChar = cipherData.constData();
     const char *keyChar = keyBytes.constData();
     const char *ivChar = ivBytes.constData();
 
     // 计算解密后的数据长度，至少要和密文数据长度一样大
-    int outBufLen = cipherDataBytes.size();
+    int outBufLen = cipherData.size();
 
     // 使用QByteArray代替动态分配的数组
     QByteArray outBuf(outBufLen, '\0');
@@ -115,7 +113,7 @@ QString aesDecrypt(const QString &cipherData, const EVP_CIPHER *mode(), const QS
     // 初始化解密上下文，设置解密算法、密钥、偏移量等参数
     EVP_DecryptInit_ex(ctx.data(), mode(), NULL, (const unsigned char *)keyChar, (const unsigned char *)ivChar);
     // 解密密文数据，将结果存放在outBuf中，更新outBufLen为输出长度
-    if (!EVP_DecryptUpdate(ctx.data(), (unsigned char *)outBuf.data(), &outBufLen, (const unsigned char *)cipherDataChar, cipherDataBytes.size()))
+    if (!EVP_DecryptUpdate(ctx.data(), (unsigned char *)outBuf.data(), &outBufLen, (const unsigned char *)cipherDataChar, cipherData.size()))
     {
         return "";
     }
@@ -128,10 +126,7 @@ QString aesDecrypt(const QString &cipherData, const EVP_CIPHER *mode(), const QS
     // 将outBuf中的明文数据转换为QByteArray类型，并使用UTF-8编码
     QByteArray plainDataBytes = outBuf.left(outBufLen);
 
-    // 将QByteArray类型的明文数据转换为QString类型
-    QString plainData = QString::fromUtf8(plainDataBytes);
-
-    return plainData;
+    return plainDataBytes;
 }
 
 /**
@@ -140,9 +135,8 @@ QString aesDecrypt(const QString &cipherData, const EVP_CIPHER *mode(), const QS
  * @param strPubKey 公钥
  * @return 加密后数据(Hex格式)
  */
-QString rsaEncrypt (const QString& plainData, const QString& strPubKey)
+QByteArray rsaEncrypt (const QByteArray& plainData, const QString& strPubKey)
 {
-    QString strEncryptData;
     QByteArray encryptData;
     QByteArray pubKeyArry = strPubKey.toUtf8();
     uchar* pPubKey = (uchar*)pubKeyArry.data();
@@ -165,9 +159,12 @@ QString rsaEncrypt (const QString& plainData, const QString& strPubKey)
     char* pEncryptBuf = new char[nLen];
 
 
-    QByteArray clearDataArry = plainData.toUtf8();
-    int nClearDataLen = clearDataArry.length();
-    uchar* pClearData = (uchar*)clearDataArry.data();
+//    if (clearDataArry.length() < 128) {
+//        // 如果小于128，就用0填充空位，直到长度为128
+//        clearDataArry.append(QByteArray(128 - clearDataArry.length(), 0));
+//    }
+    int nClearDataLen = plainData.length();
+    uchar* pClearData = (uchar*)plainData.data();
 
     int pdBlock = nLen - 11;
     int nCount = (nClearDataLen / pdBlock) + 1;//分段次数
@@ -191,14 +188,13 @@ QString rsaEncrypt (const QString& plainData, const QString& strPubKey)
             QByteArray arry((char*)pEncryptBuf, nSize);
             encryptData.append(arry);
         }
-    }
-    strEncryptData += encryptData.toHex();       //最后才转，很重要，否则后面解密不成功
+    }     //最后才转，很重要，否则后面解密不成功
 
     // 释放内存
     delete pEncryptBuf;
     BIO_free_all(pKeyBio);
     RSA_free(pRsa);
-    return strEncryptData;
+    return encryptData;
 }
 
 /**
@@ -207,9 +203,9 @@ QString rsaEncrypt (const QString& plainData, const QString& strPubKey)
  * @param strPriKey 私钥
  * @return 明文
  */
-QString rsaDecrypt(const QString& cipherData, const QString& strPriKey)
+QByteArray rsaDecrypt(const QByteArray& cipherData, const QString& strPriKey)
 {
-    QString plainData = "";
+    QByteArray plainData = "";
     QByteArray priKeyArry = strPriKey.toUtf8();
     uchar* pPriKey = (uchar*)priKeyArry.data();
     BIO* pKeyBio = BIO_new_mem_buf(pPriKey, priKeyArry.length());
@@ -227,10 +223,8 @@ QString rsaDecrypt(const QString& cipherData, const QString& strPriKey)
     memset(pClearBuf, 0, nLen);
 
     //解密
-    QByteArray decryptDataArry = cipherData.toUtf8();
-    decryptDataArry = QByteArray::fromHex(decryptDataArry);
-    int nDecryptDataLen = decryptDataArry.length();
-    uchar* pDecryptData = (uchar*)decryptDataArry.data();
+    int nDecryptDataLen = cipherData.length();
+    uchar* pDecryptData = (uchar*)cipherData.data();
 
     int pdBlock = nLen;
     int nCount = (nDecryptDataLen / pdBlock) + 1;//分段次数
@@ -262,6 +256,52 @@ QString rsaDecrypt(const QString& cipherData, const QString& strPriKey)
     return plainData;
 }
 
+const QVariantMap weapi(QJsonDocument object) {
+    const QString text = object.toJson(QJsonDocument::Indented);
+
+    // 创建一个长度为16的字节数组
+    QByteArray secretKey;
+    secretKey.resize(16);
+
+    // 生成随机字节并映射到base62字符的ASCII码
+    for (int i = 0; i < secretKey.size(); i++) {
+        // 生成一个随机的quint32值取其最低8位作为字节值
+        quint8 byte = QRandomGenerator::global()->generate() & 0xFF;
+        // 对62取余得到base62字符的索引
+        int index = byte % base62.length();
+        // 获取base62字符并转换为ASCII码存入结果数组
+        secretKey[i] = base62.at(index).toLatin1();
+    }
+
+    std::reverse(secretKey.begin(), secretKey.end());
+
+    return {
+        { "params", aesEncrypt(aesEncrypt(text.toUtf8(), EVP_aes_128_cbc, presetKey, iv).toBase64(),
+                              EVP_aes_128_cbc, presetKey, iv).toBase64() },
+        { "encSecKey", rsaEncrypt(secretKey, publicKey).toHex() }
+    };
+}
+
+const QVariantMap linuxapi(QJsonDocument object) {
+    const QString text = object.toJson(QJsonDocument::Indented);
+    return {
+        { "eparams", aesEncrypt(text.toUtf8(), EVP_aes_128_ecb, linuxapiKey, "").toHex().toUpper() }
+    };
+}
+
+const QVariantMap eapi(QString url, QJsonDocument object) {
+    const QString text = object.toJson(QJsonDocument::Indented);
+    const QString message = "nobody" + url + "use" + text + "md5forencrypt";
+    const QByteArray digest = QCryptographicHash::hash(message.toUtf8(), QCryptographicHash::Md5).toHex();
+    const QString data = url + "-36cd479b6b5-" + text + "-36cd479b6b5-" + digest;
+    return {
+        { "params", aesEncrypt(data.toUtf8(), EVP_aes_128_ecb, eapiKey, "").toHex().toUpper() }
+    };
+}
+
+const QByteArray decrypt(QByteArray cipherBuffer) {
+    return aesDecrypt(cipherBuffer, EVP_aes_128_ecb, eapiKey, "");
+}
 }
 
 
