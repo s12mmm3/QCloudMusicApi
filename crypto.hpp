@@ -3,6 +3,7 @@
 
 #include <QByteArray>
 #include <QObject>
+#include <iostream>
 
 extern "C" {
 #include <openssl/rc4.h>
@@ -18,11 +19,13 @@ const QByteArray iv = QByteArray::fromStdString("0102030405060708");
 const QByteArray presetKey = QByteArray::fromStdString("0CoJUm6Qyw8W8jud");
 const QByteArray linuxapiKey = QByteArray::fromStdString("rFgB&h#%2?^eDg:Q");
 const QString base62 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const QString publicKey = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB\n-----END PUBLIC KEY-----";
+const QString publicKey = "-----BEGIN PUBLIC KEY-----\n"
+                          "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB"
+                          "\n-----END PUBLIC KEY-----";
 const QString eapiKey = "e82ckenh8dichen8";
 
 /**
- * @brief 使用AES-128-CBC算法加密数据的函数
+ * @brief 使用AES算法加密数据的函数
  * @param plainData 明文数据
  * @param mode 加密算法
  * @param key 加密密钥
@@ -79,7 +82,7 @@ QString aesEncrypt(const QString &plainData, const EVP_CIPHER *mode(), const QSt
 
 
 /**
- * @brief 使用AES-128-CBC算法解密数据的函数
+ * @brief 使用AES算法解密数据的函数
  * @param cipherData 密文数据
  * @param mode 解密算法
  * @param key 解密密钥
@@ -128,6 +131,134 @@ QString aesDecrypt(const QString &cipherData, const EVP_CIPHER *mode(), const QS
     // 将QByteArray类型的明文数据转换为QString类型
     QString plainData = QString::fromUtf8(plainDataBytes);
 
+    return plainData;
+}
+
+/**
+ * @brief rsaEncrypt 公钥加密
+ * @param plainData 明文
+ * @param strPubKey 公钥
+ * @return 加密后数据(Hex格式)
+ */
+QString rsaEncrypt (const QString& plainData, const QString& strPubKey)
+{
+    QString strEncryptData;
+    QByteArray encryptData;
+    QByteArray pubKeyArry = strPubKey.toUtf8();
+    uchar* pPubKey = (uchar*)pubKeyArry.data();
+    BIO* pKeyBio = BIO_new_mem_buf(pPubKey, pubKeyArry.length());
+    if (pKeyBio == NULL){
+        return "";
+    }
+    RSA* pRsa = RSA_new();
+    if ( strPubKey.contains("BEGIN RSA PUBLIC KEY") ){
+        pRsa = PEM_read_bio_RSAPublicKey(pKeyBio, &pRsa, NULL, NULL);
+    }else{
+        pRsa = PEM_read_bio_RSA_PUBKEY(pKeyBio, &pRsa, NULL, NULL);
+    }
+    if ( pRsa == NULL ){
+        BIO_free_all(pKeyBio);
+        return "";
+    }
+
+    int nLen = RSA_size(pRsa);
+    char* pEncryptBuf = new char[nLen];
+
+
+    QByteArray clearDataArry = plainData.toUtf8();
+    int nClearDataLen = clearDataArry.length();
+    uchar* pClearData = (uchar*)clearDataArry.data();
+
+    int pdBlock = nLen - 11;
+    int nCount = (nClearDataLen / pdBlock) + 1;//分段次数
+
+    //分段加密
+    for (int i = 0; i < nCount; i++)
+    {
+        int nSize = 0;
+        pdBlock = (nClearDataLen > pdBlock) ? pdBlock : nClearDataLen;
+
+        nSize = RSA_public_encrypt(pdBlock,
+                                   pClearData,
+                                   (unsigned char*)pEncryptBuf,
+                                   pRsa,
+                                   RSA_PKCS1_PADDING);
+
+        pClearData += pdBlock;      //指针往前移
+        nClearDataLen -= pdBlock;
+
+        if ( nSize >= 0 ){
+            QByteArray arry((char*)pEncryptBuf, nSize);
+            encryptData.append(arry);
+        }
+    }
+    strEncryptData += encryptData.toHex();       //最后才转，很重要，否则后面解密不成功
+
+    // 释放内存
+    delete pEncryptBuf;
+    BIO_free_all(pKeyBio);
+    RSA_free(pRsa);
+    return strEncryptData;
+}
+
+/**
+ * @brief rsaDecrypt 私钥解密
+ * @param strDecrypt 待解密数据(Hex格式)
+ * @param strPriKey 私钥
+ * @return 明文
+ */
+QString rsaDecrypt(const QString& cipherData, const QString& strPriKey)
+{
+    QString plainData = "";
+    QByteArray priKeyArry = strPriKey.toUtf8();
+    uchar* pPriKey = (uchar*)priKeyArry.data();
+    BIO* pKeyBio = BIO_new_mem_buf(pPriKey, priKeyArry.length());
+    if (pKeyBio == NULL){
+        return "";
+    }
+    RSA* pRsa = RSA_new();
+    pRsa = PEM_read_bio_RSAPrivateKey(pKeyBio, &pRsa, NULL, NULL);
+    if ( pRsa == NULL ){
+        BIO_free_all(pKeyBio);
+        return "";
+    }
+    int nLen = RSA_size(pRsa);
+    char* pClearBuf = new char[nLen];
+    memset(pClearBuf, 0, nLen);
+
+    //解密
+    QByteArray decryptDataArry = cipherData.toUtf8();
+    decryptDataArry = QByteArray::fromHex(decryptDataArry);
+    int nDecryptDataLen = decryptDataArry.length();
+    uchar* pDecryptData = (uchar*)decryptDataArry.data();
+
+    int pdBlock = nLen;
+    int nCount = (nDecryptDataLen / pdBlock) + 1;//分段次数
+
+    //分段解密
+    for (int i = 0; i < nCount; i++)
+    {
+        int nSize = 0;
+
+        pdBlock = (nDecryptDataLen > pdBlock) ? pdBlock : nDecryptDataLen;
+
+        nSize = RSA_private_decrypt(pdBlock,
+                                    pDecryptData,
+                                    (uchar*)pClearBuf,
+                                    pRsa,
+                                    RSA_PKCS1_PADDING);
+        pDecryptData += pdBlock;        //加密数据指针往前移
+        nDecryptDataLen -= pdBlock;
+
+        if ( nSize >= 0 ){
+            plainData += QByteArray(pClearBuf, nSize);
+        }
+    }
+
+    // 释放内存
+    delete pClearBuf;
+    BIO_free_all(pKeyBio);
+    RSA_free(pRsa);
     return plainData;
 }
 
