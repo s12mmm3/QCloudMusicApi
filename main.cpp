@@ -1,10 +1,7 @@
 ﻿#include <QCoreApplication>
 #include <QJsonDocument>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QTimer>
 #include "crypto.hpp"
+#include "module.h"
 
 extern "C" {
 #include <openssl/rc4.h>
@@ -19,61 +16,7 @@ QString getLrc(QString source) {
     return doc["lrc"]["lyric"].toString();
 }
 
-/**
- * @brief 发送一个HTTP GET请求，并返回响应内容
- * @param request 要发送的请求
- * @return 如果请求成功，返回响应内容；如果请求失败或超时，返回空字节数组
- */
-QByteArray get(QNetworkRequest request) {
-    QByteArray result; // 定义一个空字节数组作为结果
-    result.clear();
-    // 设置超时处理定时器
-    QTimer timer;
-    timer.setInterval(10000);  // 设置超时时间 10 秒
-    timer.setSingleShot(true);  // 单次触发
 
-    // 设置网络访问管理器
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
-
-    // 开启一个局部的事件循环，等待响应结束，退出
-    QNetworkReply* reply = manager->get(request); // 发送GET请求
-    QEventLoop eventLoop;
-    QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit); // 定时器超时时退出事件循环
-    QObject::connect(manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
-    timer.start(); // 启动定时器
-    eventLoop.exec(); // 启动事件循环
-
-    if(timer.isActive()) { // 处理响应，定时器激活状态
-        timer.stop(); // 停止定时器
-        if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
-            qDebug() << "http请求出错 : " << reply->errorString();
-                                                     reply->deleteLater();
-            return result;
-        }
-        else {
-            // http - 响应状态码
-            int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            qDebug() << "服务器返回的Code : " << statusCode;
-                if(statusCode == 200) { // http请求响应正常
-                result = reply->readAll(); // 读取响应内容
-                return result;
-            }
-            else {
-                reply->deleteLater();
-                return result;
-            }
-        }
-    }
-    else { // 超时处理
-        QObject::disconnect(manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 断开连接
-        reply->abort(); // 中止请求
-        qDebug() << "http请求超时 ";
-        return result;
-    }
-    reply->deleteLater();
-    qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString();
-    return result;
-}
 
 int main(int argc, char *argv[])
 {
@@ -125,8 +68,12 @@ TA7YfAENuKJcEaTMMaLF9xM=
     qDebug().noquote() << Crypto::weapi(QJsonDocument());
     qDebug().noquote() << Crypto::linuxapi(QJsonDocument::fromJson(QString(R"({"1": "1"})").toUtf8()));
     qDebug().noquote() << Crypto::eapi("/api/song/enhance/player/url/v1", QJsonDocument::fromJson(QString(R"({"1": "1"})").toUtf8()));
-//    qDebug() << Crypto::rsaDecrypt(encrypt, EVP_aes_128_ecb, Crypto::eapiKey, QString());
 
+
+
+    Module::song_url_v1(QVariantMap(), [](QVariantList params) {
+        qDebug().noquote() << params;
+    });
     return a.exec();
 }
 //    QNetworkRequest request; // 创建一个网络请求对象
