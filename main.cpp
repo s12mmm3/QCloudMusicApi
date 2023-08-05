@@ -1,7 +1,10 @@
 ﻿#include <QCoreApplication>
 #include <QJsonDocument>
+#include <QNetworkCookie>
+
 #include "crypto.hpp"
 #include "module.h"
+#include "request.hpp"
 
 extern "C" {
 #include <openssl/rc4.h>
@@ -9,6 +12,7 @@ extern "C" {
 #include <openssl/rand.h>
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
+
 }
 
 QString getLrc(QString source) {
@@ -74,6 +78,18 @@ TA7YfAENuKJcEaTMMaLF9xM=
     Module::song_url_v1(QVariantMap(), [](QVariantList params) {
         qDebug().noquote() << params;
     });
+    qDebug() << chooseUserAgent();
+    QNetworkRequest request; // 创建一个网络请求对象
+    QUrl qUrl("http://coolaf.com/tool/params?r=rtest&t2=rtest2"); // 创建一个URL对象
+    request.setHeader(QNetworkRequest::UserAgentHeader,
+                      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
+                      " Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.34"); // 设置请求头中的用户代理字段
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json;charset=UTF-8"); // 设置请求头中的内容类型字段
+    request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(QList<QNetworkCookie>({
+                                                         QNetworkCookie("id", "123")
+                                                     })));
+    request.setUrl(qUrl); // 设置请求的URL
+    qDebug().noquote() << post(request, "666");
     return a.exec();
 }
 //    QNetworkRequest request; // 创建一个网络请求对象

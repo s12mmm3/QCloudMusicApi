@@ -10,6 +10,12 @@
 #include <QByteArray>
 #include <QObject>
 #include <QRandomGenerator>
+#include <QNetworkCookie>
+#include <QNetworkProxyFactory>
+#include <QNetworkReply>
+#include <QUrlQuery>
+
+#include "crypto.hpp"
 
 QString chooseUserAgent(QString ua = "") {
     const QList<QString> mobile = {
@@ -178,8 +184,177 @@ QByteArray request() {
     return QByteArray();
 }
 
-auto createRequest(QNetworkAccessManager::Operation method, QString url,QVariantMap data, QVariantMap options) {
-    QVariantMap header = {
-                          { "User-Agent", chooseUserAgent(options["ua"].toString()) }
+auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMap data, QVariantMap options) {
+    qDebug().noquote() << "data:" << data;
+    qDebug().noquote() << "options:" << options;
+    QNetworkRequest request(url);
+
+    request.setHeader(QNetworkRequest::UserAgentHeader, chooseUserAgent(options["ua"].toString()));
+
+    if(method == QNetworkAccessManager::PostOperation) {
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    }
+    if(url.toString().contains("music.163.com")) {
+        request.setRawHeader("Referer", "https://music.163.com");
+    }
+    QString ip;
+    if(options["realIP"].isValid()) ip = options["realIP"].toString();
+    else if(options["ip"].isValid()) ip = options["ip"].toString();
+    else ip = "";
+    if(options["cookie"].isValid()) {
+        auto cookie = options["cookie"].toMap();
+        auto randomBytes = []() {
+            QByteArray bytes;
+            for(int i = 0; i < 16; ++i) {
+                bytes.append(QRandomGenerator::global()->generate());
+            }
+            return bytes;
+        };
+        cookie.insert({
+            { "__remember_me", true },
+            { "NMTID", randomBytes().toHex() },
+            { "_ntes_nuid", randomBytes().toHex() }
+        });
+        if(!cookie["MUSIC_U"].isValid()) {
+            // 游客
+            if(!cookie["MUSIC_A"].isValid()) {
+                //options.cookie.MUSIC_A = config.anonymous_token
+                cookie["MUSIC_A"] = "bf8bfeabb1aa84f9c8c3906c04a04fb864322804c83f5d607e91a04eae463c9436bd1a17ec353cf780b396507a3f7464e8a60f4bbc019437993166e004087dd32d1490298caf655c2353e58daa0bc13cc7d5c198250968580b12c1b8817e3f5c807e650dd04abd3fb8130b7ae43fcc5b";
+            }
+        }
+        QList<QNetworkCookie> cookieList;
+        for(QMap<QString, QVariant>::iterator i = cookie.begin(); i != cookie.end(); ++i) {
+            cookieList.append(QNetworkCookie(i.key().toUtf8(), i.value().toByteArray()));
+        }
+        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(cookieList));
+    }
+    else {
+        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(QList<QNetworkCookie>({
+                                                             QNetworkCookie("__remember_me", QVariant(true).toByteArray()),
+                                                             QNetworkCookie("NMTID", "xxx")
+                                                         })));
+    }
+    if(options["crypto"].toString() == "weapi") {
+
+    }
+    else if(options["crypto"].toString() == "linuxapi") {
+
+    }
+    else if(options["crypto"].toString() == "eapi") {
+        const QVariantMap cookie = options["cookie"].isValid() ? options["cookie"].toMap() : QVariantMap();
+        const QString csrfToken = cookie["__csrf"].isValid() ? cookie["__csrf"].toString() : "";
+        QVariantMap header =
+            {
+             //系统版本
+             { "osver", cookie["osver"] },
+             { "deviceId", cookie["deviceId"] },
+             // app版本
+             { "appver", cookie["appver"] },
+             //版本号
+             { "versioncode", cookie["versioncode"].isValid() ? cookie["versioncode"]
+                                                             : "" },
+             //设备model
+             { "mobilename", cookie["mobilename"] },
+             { "buildver", cookie["buildver"].isValid() ? cookie["buildver"]
+                                                       : QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10) },
+             //设备分辨率
+             { "resolution", cookie["resolution"].isValid() ? cookie["resolution"]
+                                                           : "1920x1080" },
+             { "__csrf", csrfToken },
+             { "os", cookie["os"].isValid() ? cookie["os"]
+                                           : "android" },
+             { "channel", cookie["channel"] },
+             { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
+                                  + "_"
+                                  + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
+             },
+             };
+        if(cookie["MUSIC_U"].isValid()) header["MUSIC_U"] = cookie["MUSIC_U"];
+        if(cookie["MUSIC_A"].isValid()) header["MUSIC_A"] = cookie["MUSIC_A"];
+
+        auto getCookies = [](QVariantMap header) {
+            QList<QNetworkCookie> l;
+            for(QMap<QString, QVariant>::iterator i = header.begin(); i != header.end(); ++i) {
+                l.append(QNetworkCookie(i.key().toUtf8(), i.value().toByteArray()));
+            }
+            return l;
+        };
+        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(getCookies(header)));
+        data["header"] = QVariant::fromValue(header);
+//        qDebug().noquote() << data << QJsonDocument::fromVariant(data);
+        data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
+        url.setPath(url.path().replace(QRegularExpression("\\w*api"), "eapi"));
+    }
+    QVariantMap answer = {
+        { "status", 500 },
+        { "body", {} },
+        { "cookie", {} }
     };
+//    QVariantMap settings = {
+//        { "method", method },
+//        { "url", url },
+//        { "headers", headers }
+//    };
+    // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    if (options.contains("proxy")) {
+        if (options["proxy"].toString().contains("pac")) {
+            QNetworkProxyFactory::setUseSystemConfiguration(true);
+            QNetworkProxyQuery query(url);
+            QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
+            if (!proxies.isEmpty()) {
+                manager->setProxy(proxies.first());
+            }
+        } else {
+            QUrl purl(options["proxy"].toString());
+            if (!purl.host().isEmpty()) {
+                QNetworkProxy proxy;
+                proxy.setType(QNetworkProxy::HttpProxy);
+                proxy.setHostName(purl.host());
+                proxy.setPort(purl.port(80));
+                manager->setProxy(proxy);
+            } else {
+                qDebug() << "代理配置无效，不使用代理";
+            }
+        }
+    }
+
+    // 发送HTTP请求，并返回一个QNetworkReply对象
+    qDebug().noquote() << request.rawHeaderList() << request.header(QNetworkRequest::CookieHeader);
+    auto getResult = [](QNetworkAccessManager* manager, QNetworkReply* reply) {
+        if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
+            qDebug() << "http请求出错 : " << reply->errorString();
+                                                     reply->deleteLater();
+        }
+        else {
+            // http - 响应状态码
+            int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            qDebug() << "服务器返回的Code : " << statusCode;
+                if(statusCode == 200) { // http请求响应正常
+                qDebug().noquote() << reply->operation() << QString::fromUtf8(QJsonDocument::fromJson(reply->readAll()).toJson (QJsonDocument::Indented)); // 读取响应内容
+            }
+            else {
+                reply->deleteLater();
+            }
+        }
+        manager->deleteLater();
+        reply->deleteLater();
+    };
+    if (method == QNetworkAccessManager::PostOperation) {
+        QUrlQuery urlQuery;
+        for(QMap<QString, QVariant>::iterator i = data.begin(); i != data.end(); ++i) {
+            urlQuery.addQueryItem(i.key(), i.value().toString());
+        }
+        QNetworkReply* reply = manager->post(request, urlQuery.toString().toUtf8());
+        QObject::connect(manager, &QNetworkAccessManager::finished, [&]() {
+            getResult(manager, reply);
+        });
+        return reply;
+    } else {
+        QNetworkReply* reply = manager->get(request);
+        QObject::connect(manager, &QNetworkAccessManager::finished, [&]() {
+            getResult(manager, reply);
+        });
+        return reply;
+    }
 }

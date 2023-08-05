@@ -4,10 +4,11 @@
 #include <QNetworkAccessManager>
 
 #include "crypto.hpp"
+#include "request.hpp"
 namespace Module {
-const void song_url_v1(QVariantMap query, void request(QVariantList)) {
+const void song_url_v1(QVariantMap query) {
     const QVariantMap data = {
-        { "ids", '[' + query["id"].toString() + ']' },
+        { "ids", query["id"].toList() },
         { "level", query["level"].toString() },
         { "encodeType", "flac" }
     };
@@ -15,17 +16,17 @@ const void song_url_v1(QVariantMap query, void request(QVariantList)) {
         data["immerseType"] = "c51";
     }
     qDebug().noquote() << data;
-    request({
+    createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://interface.music.163.com/eapi/song/enhance/player/url/v1",
+        QUrl("https://interface.music.163.com/eapi/song/enhance/player/url/v1"),
         data,
         QVariantMap({
             { "crypto", "eapi" },
-            { "cookie", query["cookie"].toString() },
-            { "proxy", query["proxy"].toString() },
-            { "realIP", query["realIP"].toString() },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
             { "url", "/api/song/enhance/player/url/v1" }
         })
-    });
+    );
 }
 }
