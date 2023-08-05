@@ -237,10 +237,17 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
                                                          })));
     }
     if(options["crypto"].toString() == "weapi") {
-
+        if(!request.header(QNetworkRequest::CookieHeader).isValid()) {
+            data["csrf_token"] = request.header(QNetworkRequest::CookieHeader).value<QNetworkCookie>().value();
+            data = Crypto::weapi(QJsonDocument::fromVariant(data));
+        }
     }
     else if(options["crypto"].toString() == "linuxapi") {
-
+        data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap({
+            { "method", method },
+            { "url", url.path().replace(QRegularExpression("\\w*api"), "api") },
+            { "params", data }
+        })));
     }
     else if(options["crypto"].toString() == "eapi") {
         const QVariantMap cookie = options["cookie"].isValid() ? options["cookie"].toMap() : QVariantMap();
