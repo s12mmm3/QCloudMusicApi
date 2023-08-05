@@ -177,15 +177,6 @@ QByteArray post(QNetworkRequest request, QString data)
     return emptyResult; // 返回空结果
 }
 
-QByteArray request() {
-    QNetworkRequest request; // 创建一个网络请求对象
-    QUrl qUrl("http://coolaf.com/tool/params?r=rtest&t2=rtest2"); // 创建一个URL对象
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json;charset=UTF-8"); // 设置请求头中的内容类型字段
-    request.setUrl(qUrl); // 设置请求的URL
-    qDebug().noquote() << post(request, qUrl.toString());
-    return QByteArray();
-}
-
 auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMap data, QVariantMap options) {
     qDebug().noquote() << "data:" << data;
     qDebug().noquote() << "options:" << options;
@@ -290,7 +281,6 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
         };
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(getCookies(header)));
         data["header"] = QVariant::fromValue(header);
-//        qDebug().noquote() << data << QJsonDocument::fromVariant(data);
         data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
         url.setPath(url.path().replace(QRegularExpression("\\w*api"), "eapi"));
     }

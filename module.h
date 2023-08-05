@@ -136,4 +136,28 @@ const QByteArray related_playlist(QVariantMap query) {
     };
     return QJsonDocument::fromVariant(response).toJson (QJsonDocument::Indented);
 }
+
+// 歌曲评论
+const QByteArray comment_music(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "rid", query["id"] },
+        { "limit", query["limit"].isValid() ? query["limit"].toInt() : 20 },
+        { "offset", query["offset"].isValid() ? query["offset"].toInt() : 0 },
+        { "beforeTime", query["beforeTime"].isValid() ? query["beforeTime"].toInt() : 0 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/api/v1/resource/comments/R_SO_4_" + query["id"].toString()),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
 }
