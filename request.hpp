@@ -2,6 +2,8 @@
 #include <QObject>
 #include <QEventLoop>
 #include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -296,14 +298,14 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
 //        { "headers", headers }
 //    };
     // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    QNetworkAccessManager manager;
     if (options.contains("proxy")) {
         if (options["proxy"].toString().contains("pac")) {
             QNetworkProxyFactory::setUseSystemConfiguration(true);
             QNetworkProxyQuery query(url);
             QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
             if (!proxies.isEmpty()) {
-                manager->setProxy(proxies.first());
+                manager.setProxy(proxies.first());
             }
         } else {
             QUrl purl(options["proxy"].toString());
@@ -312,7 +314,7 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
                 proxy.setType(QNetworkProxy::HttpProxy);
                 proxy.setHostName(purl.host());
                 proxy.setPort(purl.port(80));
-                manager->setProxy(proxy);
+                manager.setProxy(proxy);
             } else {
                 qDebug() << "代理配置无效，不使用代理";
             }
@@ -321,40 +323,64 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
 
     // 发送HTTP请求，并返回一个QNetworkReply对象
     qDebug().noquote() << request.rawHeaderList() << request.header(QNetworkRequest::CookieHeader);
-    auto getResult = [](QNetworkAccessManager* manager, QNetworkReply* reply) {
-        if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
-            qDebug() << "http请求出错 : " << reply->errorString();
-                                                     reply->deleteLater();
-        }
-        else {
-            // http - 响应状态码
-            int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            qDebug() << "服务器返回的Code : " << statusCode;
-                if(statusCode == 200) { // http请求响应正常
-                qDebug().noquote() << reply->operation() << QString::fromUtf8(QJsonDocument::fromJson(reply->readAll()).toJson (QJsonDocument::Indented)); // 读取响应内容
+    auto getResult = [](QNetworkAccessManager& manager, QNetworkReply* reply) {
+        QByteArray result; // 定义一个空字节数组作为结果
+        result.clear();
+        // 设置超时处理定时器
+        QTimer timer;
+        timer.setInterval(10000);  // 设置超时时间 10 秒
+        timer.setSingleShot(true);  // 单次触发
+
+        // 开启一个局部的事件循环，等待响应结束，退出
+        QEventLoop eventLoop;
+        QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit); // 定时器超时时退出事件循环
+        QObject::connect(&manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
+        timer.start(); // 启动定时器
+        eventLoop.exec(); // 启动事件循环
+
+        if(timer.isActive()) { // 处理响应，定时器激活状态
+            timer.stop(); // 停止定时器
+            if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
+                qDebug() << "http请求出错 : " << reply->errorString();
+                                                         reply->deleteLater();
             }
             else {
-                reply->deleteLater();
+                // http - 响应状态码
+                int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+                qDebug() << "服务器返回的Code : " << statusCode;
+                    if(statusCode == 200) { // http请求响应正常
+                    // 读取响应内容
+                    result = reply->readAll();
+                    auto doc = QJsonDocument::fromJson(result);
+                    if(!doc.isNull()) {
+                        return doc.toJson (QJsonDocument::Indented);
+                    }
+                    else {
+                        return result;
+                    }
+                }
+                else {
+                    reply->deleteLater();
+                }
             }
         }
-        manager->deleteLater();
+        else { // 超时处理
+            QObject::disconnect(&manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 断开连接
+            reply->abort(); // 中止请求
+            qDebug() << "http请求超时 ";
+        }
         reply->deleteLater();
+        return result;
     };
     if (method == QNetworkAccessManager::PostOperation) {
         QUrlQuery urlQuery;
         for(QMap<QString, QVariant>::iterator i = data.begin(); i != data.end(); ++i) {
             urlQuery.addQueryItem(i.key(), i.value().toString());
         }
-        QNetworkReply* reply = manager->post(request, urlQuery.toString().toUtf8());
-        QObject::connect(manager, &QNetworkAccessManager::finished, [&]() {
-            getResult(manager, reply);
-        });
-        return reply;
+        QNetworkReply* reply = manager.post(request, urlQuery.toString().toUtf8());
+        return getResult(manager, reply);
     } else {
-        QNetworkReply* reply = manager->get(request);
-        QObject::connect(manager, &QNetworkAccessManager::finished, [&]() {
-            getResult(manager, reply);
-        });
-        return reply;
+        QNetworkReply* reply = manager.get(request);
+        return getResult(manager, reply);
     }
 }

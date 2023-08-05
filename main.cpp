@@ -4,7 +4,6 @@
 
 #include "crypto.hpp"
 #include "module.h"
-#include "request.hpp"
 
 extern "C" {
 #include <openssl/rc4.h>
@@ -67,36 +66,24 @@ TA7YfAENuKJcEaTMMaLF9xM=
 -----END PRIVATE KEY-----)";
     };
     QByteArray c = Crypto::rsaEncrypt(buffer.toUtf8(), getPubKey());
-    qDebug().noquote() << c;
-    qDebug().noquote() << (QString::fromUtf8(Crypto::rsaDecrypt(c, getPriKey())).compare(buffer) == 0);
-    qDebug().noquote() << Crypto::weapi(QJsonDocument());
-    qDebug().noquote() << Crypto::linuxapi(QJsonDocument::fromJson(QString(R"({"1": "1"})").toUtf8()));
-    qDebug().noquote() << Crypto::eapi("/api/song/enhance/player/url/v1", QJsonDocument::fromJson(QString(R"({"1": "1"})").toUtf8()));
-
-
-
-    Module::song_url_v1(QVariantMap(), [](QVariantList params) {
-        qDebug().noquote() << params;
-    });
-    qDebug() << chooseUserAgent();
-    QNetworkRequest request; // 创建一个网络请求对象
-    QUrl qUrl("http://coolaf.com/tool/params?r=rtest&t2=rtest2"); // 创建一个URL对象
-    request.setHeader(QNetworkRequest::UserAgentHeader,
-                      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
-                      " Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.34"); // 设置请求头中的用户代理字段
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json;charset=UTF-8"); // 设置请求头中的内容类型字段
-    request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(QList<QNetworkCookie>({
-                                                         QNetworkCookie("id", "123")
-                                                     })));
-    request.setUrl(qUrl); // 设置请求的URL
-    qDebug().noquote() << post(request, "666");
+//    qDebug().noquote() << c;
+//    qDebug().noquote() << (QString::fromUtf8(Crypto::rsaDecrypt(c, getPriKey())).compare(buffer) == 0);
+//    qDebug().noquote() << Crypto::weapi(QJsonDocument());
+//    qDebug().noquote() << Crypto::linuxapi(QJsonDocument::fromJson(QString(R"({"1": "1"})").toUtf8()));
+//    qDebug().noquote() << Crypto::eapi("/api/song/enhance/player/url/v1", QJsonDocument::fromJson(QString(R"({"1": "1"})").toUtf8()));
+//    qDebug().noquote() << QString::fromUtf8(Module::song_url_v1({
+//        { "id", QVariant::fromValue(QList({2058263032, 2057797340})) },
+//        { "level", "exhigh" },
+//        { "cookie", QVariantMap({
+//                          { "NMTID", "00Otg9F5P1zqloq2kW4hreMZ5JO2BcAAAGJtqKtJg" }
+//                      })
+//        }
+//    }));
+//    qDebug().noquote() << QString::fromUtf8(Module::lyric({
+//        { "id", 2058263032 }
+//    }));
+    qDebug().noquote() << QString::fromUtf8(Module::related_playlist({
+        { "id", 2057797340 }
+    }));
     return a.exec();
 }
-//    QNetworkRequest request; // 创建一个网络请求对象
-//    QUrl qUrl("http://music.163.com/api/song/lyric?os=pc&id=2065967510&lv=-1&kv=-1&tv=-1"); // 创建一个URL对象
-//    request.setHeader(QNetworkRequest::UserAgentHeader,
-//                      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
-//                      " Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.34"); // 设置请求头中的用户代理字段
-//    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json;charset=UTF-8"); // 设置请求头中的内容类型字段
-//    request.setUrl(qUrl); // 设置请求的URL
-//    qDebug().noquote() << QString::fromUtf8(QJsonDocument::fromJson(get(request)).toJson (QJsonDocument::Indented)); // 调用get函数发送请求，并打印返回结果
