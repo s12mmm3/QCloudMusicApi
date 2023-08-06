@@ -160,4 +160,19 @@ const QByteArray comment_music(QVariantMap query) {
         })
         );
 }
+
+// 所有榜单介绍
+const QByteArray toplist(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/api/toplist"),
+        {},
+        QVariantMap({
+            { "crypto", "api" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
 }
