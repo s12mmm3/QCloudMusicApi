@@ -18,6 +18,7 @@
 #include <QUrlQuery>
 
 #include "crypto.hpp"
+#include "config.h"
 
 static QString chooseUserAgent(QString ua = "") {
     const QVariantMap userAgentList = {
@@ -218,11 +219,12 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
             // 游客
             if(!cookie["MUSIC_A"].isValid()) {
                 //options.cookie.MUSIC_A = config.anonymous_token
-                cookie["MUSIC_A"] = "bf8bfeabb1aa84f9c8c3906c04a04fb864322804c83f5d607e91a04eae463c9436bd1a17ec353cf780b396507a3f7464e8a60f4bbc019437993166e004087dd32d1490298caf655c2353e58daa0bc13cc7d5c198250968580b12c1b8817e3f5c807e650dd04abd3fb8130b7ae43fcc5b";
+                cookie["MUSIC_A"] = Config::anonymous_token;
             }
         }
         QList<QNetworkCookie> cookieList;
         for(QMap<QString, QVariant>::iterator i = cookie.begin(); i != cookie.end(); ++i) {
+            if(!i.value().isValid()) continue;
             cookieList.append(QNetworkCookie(i.key().toUtf8(), i.value().toByteArray()));
         }
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(cookieList));
@@ -236,8 +238,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
                                                              QNetworkCookie("NMTID", "xxx")
                                                          })));
     }
-//    qDebug() << request.header(QNetworkRequest::CookieHeader);
-    qDebug() << "headers" << request.header(QNetworkRequest::CookieHeader).value<QList<QNetworkCookie>>();
+
     if(options["crypto"].toString() == "weapi") {
         if(request.header(QNetworkRequest::CookieHeader).isValid()) {
             auto cookieList = request.header(QNetworkRequest::CookieHeader).value<QList<QNetworkCookie>>();
@@ -248,8 +249,6 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
                 }
             }
         }
-        qDebug().noquote() << "data" << data ;
-        qDebug().noquote() << "weapi" << Crypto::weapi(QJsonDocument::fromVariant(data));
         data = Crypto::weapi(QJsonDocument::fromVariant(data));
         url.setPath(url.path().replace(QRegularExpression("\\w*api"), "weapi"));
     }
@@ -338,8 +337,12 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         }
     }
 
+    qDebug() << "headers" ;
+    for(auto i : request.rawHeaderList()) {
+        qDebug() << i << request.rawHeader(i);
+    }
+
     // 发送HTTP请求，并返回一个QNetworkReply对象
-    qDebug().noquote() << request.rawHeaderList() << request.header(QNetworkRequest::CookieHeader);
     auto getResult = [](QNetworkReply* reply) {
         QByteArray result; // 定义一个空字节数组作为结果
         result.clear();
@@ -393,7 +396,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         QUrlQuery urlQuery;
         for(QMap<QString, QVariant>::iterator i = data.begin(); i != data.end(); ++i) {
             urlQuery.addQueryItem(i.key(), i.value().toString());
-        }qDebug() << urlQuery.queryItems();
+        }
         QNetworkReply* reply = manager.post(request, urlQuery.toString().toUtf8());
         return getResult(reply);
     } else {

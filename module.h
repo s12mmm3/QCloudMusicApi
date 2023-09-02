@@ -248,4 +248,61 @@ public:
             })
             );
     }
+
+    // 游客登录
+    Q_INVOKABLE const QByteArray register_anonimous(QVariantMap query) {
+        auto cookie = query["cookie"].toMap();
+        cookie["os"] = "iOS";
+        query["cookie"] = cookie;
+
+        const QByteArray ID_XOR_KEY_1 = QByteArray::fromStdString("3go8&$833h0k(2)2");
+
+        auto cloudmusic_dll_encode_id = [ID_XOR_KEY_1](QString some_id) {
+            QString xored;
+            for (int i = 0; i < some_id.size(); i++) {
+                xored.append(QChar(some_id[i].unicode() ^ ID_XOR_KEY_1[i % ID_XOR_KEY_1.size()]));
+            }
+            QByteArray digest = QCryptographicHash::hash(xored.toUtf8(), QCryptographicHash::Md5);
+            return digest.toBase64();
+        };
+
+        auto createRandomDeviceId = []() {
+            const QString t = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const int e = 6;
+            QString n = "";
+            for (int i = 0; i < e; i++) n += t.at(QRandomGenerator::global()->bounded(e));
+            return n;
+        };
+
+        const auto deviceId = createRandomDeviceId();
+        const auto encodedId = QString(deviceId + " " + cloudmusic_dll_encode_id(deviceId)).toUtf8();
+        const auto username = encodedId.toBase64();
+        const QVariantMap data = {
+            /* A base64 encoded string. */
+            { "username", username },
+        };
+
+        QByteArray result = createRequest(
+            QNetworkAccessManager::PostOperation,
+            QUrl("https://music.163.com/api/register/anonimous"),
+            data,
+            QVariantMap({
+                { "crypto", "weapi" },
+                { "cookie", query["cookie"] },
+                { "proxy", query["proxy"] },
+                { "realIP", query["realIP"] }
+            })
+            );
+        auto doc = QJsonDocument::fromJson(result);
+        if(doc["body"]["code"].toInt() == 200) {
+            auto body = doc["body"].toVariant().toMap();
+            body["cookie"] = doc["cookie"];
+            result = QJsonDocument::fromVariant(QVariantMap({
+                { "status", 200 },
+                { "body", body },
+                { "cookie", doc["cookie"] }
+            })).toJson();
+        }
+        return result;
+    }
 };

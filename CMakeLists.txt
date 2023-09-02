@@ -19,6 +19,7 @@ add_executable(QCloudMusicApi
   crypto.hpp
   module.h
   request.hpp
+  config.h
 )
 target_link_libraries(QCloudMusicApi Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network OpenSSL::SSL OpenSSL::Crypto)
 
