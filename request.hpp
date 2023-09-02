@@ -19,43 +19,42 @@
 
 #include "crypto.hpp"
 
-QString chooseUserAgent(QString ua = "") {
-    const QList<QString> mobile = {
-        // iOS 13.5.1 14.0 beta with safari
-        R"(Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1)",
-        R"(Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.)",
-        // iOS with qq micromsg
-        R"(Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML like Gecko) Mobile/14A456 QQ/6.5.7.408 V1_IPH_SQ_6.5.7_1_APP_A Pixel/750 Core/UIWebView NetType/4G Mem/103)",
-        R"(Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/7.0.15(0x17000f27) NetType/WIFI Language/zh)",
-        // Android -> Huawei Xiaomi
-        R"(Mozilla/5.0 (Linux; Android 9; PCT-AL10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.64 HuaweiBrowser/10.0.3.311 Mobile Safari/537.36)",
-        R"(Mozilla/5.0 (Linux; U; Android 9; zh-cn; Redmi Note 8 Build/PKQ1.190616.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.141 Mobile Safari/537.36 XiaoMi/MiuiBrowser/12.5.22)",
-        // Android + qq micromsg
-        R"(Mozilla/5.0 (Linux; Android 10; YAL-AL00 Build/HUAWEIYAL-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.62 XWEB/2581 MMWEBSDK/200801 Mobile Safari/537.36 MMWEBID/3027 MicroMessenger/7.0.18.1740(0x27001235) Process/toolsmp WeChat/arm64 NetType/WIFI Language/zh_CN ABI/arm64)",
-        R"(Mozilla/5.0 (Linux; U; Android 8.1.0; zh-cn; BKK-AL10 Build/HONORBKK-AL10) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/10.6 Mobile Safari/537.36)"
+static QString chooseUserAgent(QString ua = "") {
+    const QVariantMap userAgentList = {
+        {
+            "mobile",
+            QVariant::fromValue(QList<QString>({
+                // iOS 13.5.1 14.0 beta with safari
+                R"(Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1)",
+                R"(Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.)",
+                // iOS with qq micromsg
+                R"(Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML like Gecko) Mobile/14A456 QQ/6.5.7.408 V1_IPH_SQ_6.5.7_1_APP_A Pixel/750 Core/UIWebView NetType/4G Mem/103)",
+                R"(Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/7.0.15(0x17000f27) NetType/WIFI Language/zh)",
+                // Android -> Huawei Xiaomi
+                R"(Mozilla/5.0 (Linux; Android 9; PCT-AL10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.64 HuaweiBrowser/10.0.3.311 Mobile Safari/537.36)",
+                R"(Mozilla/5.0 (Linux; U; Android 9; zh-cn; Redmi Note 8 Build/PKQ1.190616.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.141 Mobile Safari/537.36 XiaoMi/MiuiBrowser/12.5.22)",
+                // Android + qq micromsg
+                R"(Mozilla/5.0 (Linux; Android 10; YAL-AL00 Build/HUAWEIYAL-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.62 XWEB/2581 MMWEBSDK/200801 Mobile Safari/537.36 MMWEBID/3027 MicroMessenger/7.0.18.1740(0x27001235) Process/toolsmp WeChat/arm64 NetType/WIFI Language/zh_CN ABI/arm64)",
+                R"(Mozilla/5.0 (Linux; U; Android 8.1.0; zh-cn; BKK-AL10 Build/HONORBKK-AL10) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/10.6 Mobile Safari/537.36)"
+            }))
+        },
+        {
+            "pc",
+            QVariant::fromValue(QList<QString>({
+                // macOS 10.15.6  Firefox / Chrome / Safari
+                R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:80.0) Gecko/20100101 Firefox/80.0)",
+                R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.30 Safari/537.36)",
+                R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15)",
+                // Windows 10 Firefox / Chrome / Edge
+                R"(Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0)",
+                R"(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.30 Safari/537.36)",
+                R"(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/13.10586)"
+                // Linux 就算了
+            }))
+        }
     };
-
-    const QList<QString> pc = {
-        // macOS 10.15.6  Firefox / Chrome / Safari
-        R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:80.0) Gecko/20100101 Firefox/80.0)",
-        R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.30 Safari/537.36)",
-        R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15)",
-        // Windows 10 Firefox / Chrome / Edge
-        R"(Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0)",
-        R"(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.30 Safari/537.36)",
-        R"(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/13.10586)"
-        // Linux 就算了
-    };
-
-    const QMap<QString, QList<QString>> userAgentList = {
-        { "mobile", mobile },
-        { "pc", pc }
-    };
-
-    auto list = userAgentList["mobile"].toList();
-    list.append(userAgentList["pc"].toList());
-
-    auto realUserAgentList = userAgentList.contains(ua) ? userAgentList[ua].toList() : list;
+    auto list = userAgentList["mobile"].toStringList() + userAgentList["pc"].toStringList();
+    auto realUserAgentList = userAgentList[ua].isValid() ? userAgentList[ua].toStringList() : list;
     return QList({"mobile", "pc", ""}).indexOf(ua) > -1 ? realUserAgentList[QRandomGenerator::global()->generate() % realUserAgentList.size()]
                                                         : ua;
 }
@@ -64,7 +63,7 @@ QString chooseUserAgent(QString ua = "") {
  * @param request 要发送的请求
  * @return 如果请求成功，返回响应内容；如果请求失败或超时，返回空字节数组
  */
-QByteArray get(QNetworkRequest request) {
+static QByteArray get(QNetworkRequest request) {
     QByteArray result; // 定义一个空字节数组作为结果
     result.clear();
     // 设置超时处理定时器
@@ -121,7 +120,7 @@ QByteArray get(QNetworkRequest request) {
  * @param data 要上传的数据
  * @return 如果请求成功，返回响应内容；如果请求失败或超时，返回空字节数组
  */
-QByteArray post(QNetworkRequest request, QString data)
+static QByteArray post(QNetworkRequest request, QString data)
 {
     QByteArray emptyResult; // 定义一个空字节数组，用于返回错误或超时的结果
     emptyResult.clear();
@@ -177,7 +176,9 @@ QByteArray post(QNetworkRequest request, QString data)
     return emptyResult; // 返回空结果
 }
 
-auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMap data, QVariantMap options) {
+static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMap data, QVariantMap options) {
+    qDebug().noquote() << "method:" << method;
+    qDebug().noquote() << "url:" << url;
     qDebug().noquote() << "data:" << data;
     qDebug().noquote() << "options:" << options;
     QNetworkRequest request(url);
@@ -194,7 +195,12 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
     if(options["realIP"].isValid()) ip = options["realIP"].toString();
     else if(options["ip"].isValid()) ip = options["ip"].toString();
     else ip = "";
-    if(options["cookie"].isValid()) {
+    if(ip.length() > 0) {
+        request.setRawHeader("X-Real-IP", ip.toUtf8());
+        request.setRawHeader("X-Forwarded-For", ip.toUtf8());
+    }
+//    request.setRawHeader("X-Real-IP", "118.88.88.88");
+    if(options["cookie"].userType() == QMetaType::QVariantMap) {
         auto cookie = options["cookie"].toMap();
         auto randomBytes = []() {
             QByteArray bytes;
@@ -221,17 +227,31 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
         }
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(cookieList));
     }
+    else if(options["cookie"].isValid()) {
+        request.setHeader(QNetworkRequest::CookieHeader, options["cookie"]);
+    }
     else {
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(QList<QNetworkCookie>({
                                                              QNetworkCookie("__remember_me", QVariant(true).toByteArray()),
                                                              QNetworkCookie("NMTID", "xxx")
                                                          })));
     }
+//    qDebug() << request.header(QNetworkRequest::CookieHeader);
+    qDebug() << "headers" << request.header(QNetworkRequest::CookieHeader).value<QList<QNetworkCookie>>();
     if(options["crypto"].toString() == "weapi") {
-        if(!request.header(QNetworkRequest::CookieHeader).isValid()) {
-            data["csrf_token"] = request.header(QNetworkRequest::CookieHeader).value<QNetworkCookie>().value();
-            data = Crypto::weapi(QJsonDocument::fromVariant(data));
+        if(request.header(QNetworkRequest::CookieHeader).isValid()) {
+            auto cookieList = request.header(QNetworkRequest::CookieHeader).value<QList<QNetworkCookie>>();
+            for(auto i: cookieList) {
+                if(i.name() == "__csrf") {
+                    data["csrf_token"] = i.value();
+                    break;
+                }
+            }
         }
+        qDebug().noquote() << "data" << data ;
+        qDebug().noquote() << "weapi" << Crypto::weapi(QJsonDocument::fromVariant(data));
+        data = Crypto::weapi(QJsonDocument::fromVariant(data));
+        url.setPath(url.path().replace(QRegularExpression("\\w*api"), "weapi"));
     }
     else if(options["crypto"].toString() == "linuxapi") {
         data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap({
@@ -284,11 +304,11 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
         data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
         url.setPath(url.path().replace(QRegularExpression("\\w*api"), "eapi"));
     }
-    QVariantMap answer = {
-        { "status", 500 },
-        { "body", {} },
-        { "cookie", {} }
-    };
+//    QVariantMap answer = {
+//        { "status", 500 },
+//        { "body", {} },
+//        { "cookie", {} }
+//    };
 //    QVariantMap settings = {
 //        { "method", method },
 //        { "url", url },
@@ -320,7 +340,7 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
 
     // 发送HTTP请求，并返回一个QNetworkReply对象
     qDebug().noquote() << request.rawHeaderList() << request.header(QNetworkRequest::CookieHeader);
-    auto getResult = [](QNetworkAccessManager& manager, QNetworkReply* reply) {
+    auto getResult = [](QNetworkReply* reply) {
         QByteArray result; // 定义一个空字节数组作为结果
         result.clear();
         // 设置超时处理定时器
@@ -331,7 +351,7 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
         // 开启一个局部的事件循环，等待响应结束，退出
         QEventLoop eventLoop;
         QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit); // 定时器超时时退出事件循环
-        QObject::connect(&manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
+        QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
         timer.start(); // 启动定时器
         eventLoop.exec(); // 启动事件循环
 
@@ -362,7 +382,7 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
             }
         }
         else { // 超时处理
-            QObject::disconnect(&manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 断开连接
+            QObject::disconnect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 断开连接
             reply->abort(); // 中止请求
             qDebug() << "http请求超时 ";
         }
@@ -373,11 +393,11 @@ auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMa
         QUrlQuery urlQuery;
         for(QMap<QString, QVariant>::iterator i = data.begin(); i != data.end(); ++i) {
             urlQuery.addQueryItem(i.key(), i.value().toString());
-        }
+        }qDebug() << urlQuery.queryItems();
         QNetworkReply* reply = manager.post(request, urlQuery.toString().toUtf8());
-        return getResult(manager, reply);
+        return getResult(reply);
     } else {
         QNetworkReply* reply = manager.get(request);
-        return getResult(manager, reply);
+        return getResult(reply);
     }
 }

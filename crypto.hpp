@@ -19,14 +19,14 @@ extern "C" {
 
 namespace Crypto {
 
-const QByteArray iv = QByteArray::fromStdString("0102030405060708");
-const QByteArray presetKey = QByteArray::fromStdString("0CoJUm6Qyw8W8jud");
-const QByteArray linuxapiKey = QByteArray::fromStdString("rFgB&h#%2?^eDg:Q");
-const QString base62 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const QString publicKey = "-----BEGIN PUBLIC KEY-----\n"
+const static QByteArray iv = QByteArray::fromStdString("0102030405060708");
+const static QByteArray presetKey = QByteArray::fromStdString("0CoJUm6Qyw8W8jud");
+const static QByteArray linuxapiKey = QByteArray::fromStdString("rFgB&h#%2?^eDg:Q");
+const static QString base62 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const static QString publicKey = "-----BEGIN PUBLIC KEY-----\n"
                           "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB"
                           "\n-----END PUBLIC KEY-----";
-const QString eapiKey = "e82ckenh8dichen8";
+const static QString eapiKey = "e82ckenh8dichen8";
 
 /**
  * @brief 使用AES算法加密数据的函数
@@ -36,7 +36,7 @@ const QString eapiKey = "e82ckenh8dichen8";
  * @param iv 偏移量
  * @return QString 密文数据，如果加密失败则为空字符串
  */
-QByteArray aesEncrypt(const QByteArray &plainData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
+static QByteArray aesEncrypt(const QByteArray &plainData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
 {
     // 创建加密上下文对象，并使用智能指针接管
     QScopedPointer<EVP_CIPHER_CTX, QScopedPointerPodDeleter> ctx(EVP_CIPHER_CTX_new());
@@ -88,7 +88,7 @@ QByteArray aesEncrypt(const QByteArray &plainData, const EVP_CIPHER *mode(), con
  * @param iv 偏移量
  * @return QString 明文数据，如果解密失败则为空字符串
  */
-QByteArray aesDecrypt(const QByteArray &cipherData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
+static QByteArray aesDecrypt(const QByteArray &cipherData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
 {
     // 创建解密上下文对象，并使用智能指针接管
     QScopedPointer<EVP_CIPHER_CTX, QScopedPointerPodDeleter> ctx(EVP_CIPHER_CTX_new());
@@ -135,7 +135,7 @@ QByteArray aesDecrypt(const QByteArray &cipherData, const EVP_CIPHER *mode(), co
  * @param strPubKey 公钥
  * @return 加密后数据(Hex格式)
  */
-QByteArray rsaEncrypt (const QByteArray& plainData, const QString& strPubKey)
+static QByteArray rsaEncrypt (const QByteArray& plainData, const QString& strPubKey)
 {
     QByteArray encryptData;
     QByteArray pubKeyArry = strPubKey.toUtf8();
@@ -203,7 +203,7 @@ QByteArray rsaEncrypt (const QByteArray& plainData, const QString& strPubKey)
  * @param strPriKey 私钥
  * @return 明文
  */
-QByteArray rsaDecrypt(const QByteArray& cipherData, const QString& strPriKey)
+static QByteArray rsaDecrypt(const QByteArray& cipherData, const QString& strPriKey)
 {
     QByteArray plainData = "";
     QByteArray priKeyArry = strPriKey.toUtf8();
@@ -256,8 +256,8 @@ QByteArray rsaDecrypt(const QByteArray& cipherData, const QString& strPriKey)
     return plainData;
 }
 
-const QVariantMap weapi(QJsonDocument object) {
-    const QString text = object.toJson(QJsonDocument::Indented);
+static const QVariantMap weapi(QJsonDocument object) {
+    const QString text = object.toJson(QJsonDocument::Compact);
 
     // 创建一个长度为16的字节数组
     QByteArray secretKey;
@@ -276,20 +276,20 @@ const QVariantMap weapi(QJsonDocument object) {
     std::reverse(secretKey.begin(), secretKey.end());
 
     return {
-        { "params", aesEncrypt(aesEncrypt(text.toUtf8(), EVP_aes_128_cbc, presetKey, iv).toBase64(),
-                              EVP_aes_128_cbc, presetKey, iv).toBase64() },
+        { "params", aesEncrypt(aesEncrypt(text.toUtf8(), EVP_aes_128_cbc, presetKey, iv),
+                              EVP_aes_128_cbc, presetKey, iv) },
         { "encSecKey", rsaEncrypt(secretKey, publicKey).toHex() }
     };
 }
 
-const QVariantMap linuxapi(QJsonDocument object) {
+static const QVariantMap linuxapi(QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Indented);
     return {
         { "eparams", aesEncrypt(text.toUtf8(), EVP_aes_128_ecb, linuxapiKey, "").toHex().toUpper() }
     };
 }
 
-const QVariantMap eapi(QString url, QJsonDocument object) {
+static const QVariantMap eapi(QString url, QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Indented);
     const QString message = "nobody" + url + "use" + text + "md5forencrypt";
     const QByteArray digest = QCryptographicHash::hash(message.toUtf8(), QCryptographicHash::Md5).toHex();
@@ -299,7 +299,7 @@ const QVariantMap eapi(QString url, QJsonDocument object) {
     };
 }
 
-const QByteArray decrypt(QByteArray cipherBuffer) {
+static const QByteArray decrypt(QByteArray cipherBuffer) {
     return aesDecrypt(cipherBuffer, EVP_aes_128_ecb, eapiKey, "");
 }
 }

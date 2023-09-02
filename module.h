@@ -3,10 +3,67 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QJsonArray>
+#include <QNetworkInterface>
 
 #include "request.hpp"
 
 namespace Module {
+
+QVariantMap paramInject(QVariantMap params) {
+    auto ip = QNetworkInterface::allAddresses()[0].toString();
+    if(ip.mid(0, 7) == "::ffff:") {
+        ip = ip.mid(7);
+    }
+    params["ip"] = ip;
+    return params;
+}
+
+// 专辑内容
+const QByteArray album(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/weapi/v1/album/" + query["id"].toString()),
+        {},
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 歌手单曲
+const QByteArray artists(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/weapi/v1/artist/" + query["id"].toString()),
+        {{ "id", 32238754 }},
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+const QByteArray artist_detail(QVariantMap query) {
+    const QVariantMap data = {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/api/artist/head/info/get"),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
 
 // 歌曲链接 - v1
 // 此版本不再采用 br 作为音质区分的标准
@@ -169,6 +226,21 @@ const QByteArray toplist(QVariantMap query) {
         {},
         QVariantMap({
             { "crypto", "api" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 用户详情
+const QByteArray user_detail(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/weapi/v1/user/detail/" + query["uid"].toString()),
+        {},
+        QVariantMap({
+            { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] }
