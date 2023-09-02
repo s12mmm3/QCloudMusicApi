@@ -304,6 +304,4 @@ static const QByteArray decrypt(QByteArray cipherBuffer) {
 }
 }
 
-
-
 #endif // CRYPTO_H
