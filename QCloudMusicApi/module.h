@@ -6,6 +6,7 @@
 #include <QNetworkAccessManager>
 #include <QJsonArray>
 #include <QNetworkInterface>
+#include <QRegularExpression>
 
 #include "request.hpp"
 
@@ -72,7 +73,7 @@ public:
     // 此版本不再采用 br 作为音质区分的标准
     // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
     Q_INVOKABLE const QByteArray song_url_v1(QVariantMap query) {
-        const QVariantMap data = {
+        QVariantMap data = {
             { "ids", query["id"].toList() },
             { "level", query["level"].toString() },
             { "encodeType", "flac" }
@@ -172,19 +173,19 @@ public:
                         {
                             "creator", {
                                 QVariantMap({
-                                    { "userId", result[4].sliced(QString("/user/home?id=").length()) },
+                                    { "userId", result[4].split("/user/home?id=")[1] },
                                     { "nickname", result[5] }
                                 })
                             }
                         },
                         {
-                            "coverImgUrl", result[1].sliced(0, -QString("?param=50y50").length())
+                            "coverImgUrl", result[1].split("?param=50y50")[0]
                         },
                         {
                             "name", result[3]
                         },
                         {
-                            "id", result[2].sliced(QString("/playlist?id=").length())
+                            "id", result[2].split("/playlist?id=")[1]
                         }
                     })
                     )
