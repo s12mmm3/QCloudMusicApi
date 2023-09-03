@@ -4,6 +4,7 @@
 #include <QMetaMethod>
 #include <QTextEdit>
 #include <QJsonDocument>
+#include <QFile>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,5 +31,17 @@ void MainWindow::on_pushButton_clicked()
                               , Q_RETURN_ARG(QByteArray, ret)
                               , Q_ARG(QVariantMap, QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toVariant().toMap()));
     ui->textEdit->setText(ret);
+}
+
+
+void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
+{
+    QFile file(":/config.json");
+    file.open(QIODevice::ReadOnly);
+    auto config = QJsonDocument::fromJson(file.readAll());
+    ui->textEdit_2->setText(
+        QJsonDocument(config[arg1].toObject())
+            .toJson(QJsonDocument::Indented)
+        );
 }
 

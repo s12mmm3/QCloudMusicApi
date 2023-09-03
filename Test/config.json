@@ -1,0 +1,35 @@
+{
+    "song_url_v1": {
+        "id": [
+            2058263032,
+            2057797340
+        ],
+        "level": "exhigh"
+    },
+    "lyric": {
+        "id": 2058263032
+    },
+    "lyric_new": {
+        "id": 2058263032
+    },
+    "related_playlist": {
+        "id": 2057797340
+    },
+    "register_anonimous": {},
+    "album": {
+        "id": 149114512
+    },
+    "comment_music": {
+        "id": 1969230350
+    },
+    "artists": {
+        "id": 32238754
+    },
+    "toplist": {},
+    "user_detail": {
+        "uid": 257800231
+    },
+    "artist_detail": {
+        "id": 32238754
+    }
+}
