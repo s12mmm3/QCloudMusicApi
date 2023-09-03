@@ -131,7 +131,7 @@ static QByteArray aesDecrypt(const QByteArray &cipherData, const EVP_CIPHER *mod
 
 /**
  * @brief rsaEncrypt 公钥加密
- * @param plainData 明文
+ * @param plainText 明文
  * @param strPubKey 公钥
  * @return 加密后数据(Hex格式)
  */
