@@ -37,12 +37,50 @@ public:
             );
     }
 
+    // 歌手专辑列表
+    Q_INVOKABLE const QByteArray artist_album(QVariantMap query) {
+        const QVariantMap data = {
+            { "limit", query["limit"].isValid() ? query["limit"].toInt() : 30 },
+            { "offset", query["offset"].isValid() ? query["offset"].toInt() : 0 },
+            { "total", true }
+        };
+        return createRequest(
+            QNetworkAccessManager::PostOperation,
+            QUrl("https://music.163.com/weapi/artist/albums/" + QString::number(query["id"].toInt())),
+            data,
+            QVariantMap({
+                { "crypto", "weapi" },
+                { "cookie", query["cookie"] },
+                { "proxy", query["proxy"] },
+                { "realIP", query["realIP"] }
+                })
+        );
+    }
+
+    // 歌手热门 50 首歌曲
+    Q_INVOKABLE const QByteArray artist_top_song(QVariantMap query) {
+        const QVariantMap data = {
+            { "id", query["id"] }
+        };
+        return createRequest(
+            QNetworkAccessManager::PostOperation,
+            QUrl("https://music.163.com/api/artist/top/song"),
+            data,
+            QVariantMap({
+                { "crypto", "weapi" },
+                { "cookie", query["cookie"] },
+                { "proxy", query["proxy"] },
+                { "realIP", query["realIP"] }
+                })
+        );
+    }
+
     // 歌手单曲
     Q_INVOKABLE const QByteArray artists(QVariantMap query) {
         return createRequest(
             QNetworkAccessManager::PostOperation,
-            QUrl("https://music.163.com/weapi/v1/artist/" + query["id"].toString()),
-            {{ "id", 32238754 }},
+            QUrl("https://music.163.com/weapi/v1/artist/" + QString::number(query["id"].toInt())),
+            {},
             QVariantMap({
                 { "crypto", "weapi" },
                 { "cookie", query["cookie"] },
@@ -211,7 +249,7 @@ public:
         };
         return createRequest(
             QNetworkAccessManager::PostOperation,
-            QUrl("https://music.163.com/api/v1/resource/comments/R_SO_4_" + query["id"].toString()),
+            QUrl("https://music.163.com/api/v1/resource/comments/R_SO_4_" + QString::number(query["id"].toInt())),
             data,
             QVariantMap({
                 { "crypto", "weapi" },

@@ -31,5 +31,12 @@
     },
     "artist_detail": {
         "id": 32238754
+    },
+    "artist_album": {
+        "id": 159692,
+        "limit": 5
+    },
+    "artist_top_song": {
+        "id": 32238754
     }
 }
