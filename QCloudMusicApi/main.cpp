@@ -89,10 +89,10 @@ TA7YfAENuKJcEaTMMaLF9xM=
 //    qDebug().noquote() << QString::fromUtf8(api.related_playlist({
 //        { "id", 2057797340 }
 //    }));
-//     
-    QMetaObject::invokeMethod(&api, "lyric_new", Qt::DirectConnection, Q_RETURN_ARG(QByteArray, ret), Q_ARG(QVariantMap, QVariantMap({
+//
+    QMetaObject::invokeMethod(&api, "register_anonimous", Qt::DirectConnection, Q_RETURN_ARG(QByteArray, ret), Q_ARG(QVariantMap, QVariantMap(/*{
         { "id", 1969230350 }
-        })));
+        }*/)));
 //    qDebug().noquote() << QString::fromUtf8(api.album({
 //        { "id", 149114512 },
 //        { "cookie", QVariantMap({
