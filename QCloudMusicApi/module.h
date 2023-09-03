@@ -345,4 +345,44 @@ public:
         }
         return result;
     }
+
+    // 搜索
+    Q_INVOKABLE const QByteArray search(QVariantMap query) {
+        if (query["type"].isValid() && query["type"].toString() == "2000") {
+            const QVariantMap data = {
+                { "keyword", query["keywords"] },
+                { "scene", "normal"},
+                { "limit", query["limit"].isValid() ? query["limit"].toInt() : 20 },
+                { "offset", query["offset"].isValid() ? query["offset"].toInt() : 0 }
+            };
+            return createRequest(
+                QNetworkAccessManager::PostOperation,
+                QUrl("https://music.163.com/api/search/voice/get"),
+                data,
+                QVariantMap({
+                    { "crypto", "weapi" },
+                    { "cookie", query["cookie"] },
+                    { "proxy", query["proxy"] },
+                    { "realIP", query["realIP"] }
+                })
+                );
+        }
+        const QVariantMap data = {
+            { "s", query["keywords"] },
+            { "type", query["type"].isValid() ? query["type"].toInt() : 1 },// 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
+            { "limit", query["limit"].isValid() ? query["limit"].toInt() : 20 },
+            { "offset", query["offset"].isValid() ? query["offset"].toInt() : 0 }
+        };
+        return createRequest(
+            QNetworkAccessManager::PostOperation,
+            QUrl("https://music.163.com/weapi/search/get"),
+            data,
+            QVariantMap({
+                { "crypto", "weapi" },
+                { "cookie", query["cookie"] },
+                { "proxy", query["proxy"] },
+                { "realIP", query["realIP"] }
+            })
+            );
+    }
 };

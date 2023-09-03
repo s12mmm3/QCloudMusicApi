@@ -254,6 +254,9 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
                 // http - 响应状态码
                 int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
                 qDebug() << "服务器返回的Code : " << statusCode;
+                    for(auto i : reply->rawHeaderList()) {
+                    qDebug() << "header:" << i << "value:" << reply->rawHeader(i);
+                }
                     if(statusCode == 200) { // http请求响应正常
                     // 读取响应内容
                     result = reply->readAll();
