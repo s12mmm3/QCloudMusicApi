@@ -59,130 +59,13 @@ static QString chooseUserAgent(QString ua = "") {
     return QList({"mobile", "pc", ""}).indexOf(ua) > -1 ? realUserAgentList[QRandomGenerator::global()->generate() % realUserAgentList.size()]
                                                         : ua;
 }
-/**
- * @brief 发送一个HTTP GET请求，并返回响应内容
- * @param request 要发送的请求
- * @return 如果请求成功，返回响应内容；如果请求失败或超时，返回空字节数组
- */
-static QByteArray get(QNetworkRequest request) {
-    QByteArray result; // 定义一个空字节数组作为结果
-    result.clear();
-    // 设置超时处理定时器
-    QTimer timer;
-    timer.setInterval(10000);  // 设置超时时间 10 秒
-    timer.setSingleShot(true);  // 单次触发
-
-    // 设置网络访问管理器
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
-
-    // 开启一个局部的事件循环，等待响应结束，退出
-    QNetworkReply* reply = manager->get(request); // 发送GET请求
-    QEventLoop eventLoop;
-    QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit); // 定时器超时时退出事件循环
-    QObject::connect(manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
-    timer.start(); // 启动定时器
-    eventLoop.exec(); // 启动事件循环
-
-    if(timer.isActive()) { // 处理响应，定时器激活状态
-        timer.stop(); // 停止定时器
-        if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
-            qDebug() << "http请求出错 : " << reply->errorString();
-                                                     reply->deleteLater();
-            return result;
-        }
-        else {
-            // http - 响应状态码
-            int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            qDebug() << "服务器返回的Code : " << statusCode;
-                if(statusCode == 200) { // http请求响应正常
-                result = reply->readAll(); // 读取响应内容
-                return result;
-            }
-            else {
-                reply->deleteLater();
-                return result;
-            }
-        }
-    }
-    else { // 超时处理
-        QObject::disconnect(manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 断开连接
-        reply->abort(); // 中止请求
-        qDebug() << "http请求超时 ";
-        return result;
-    }
-    reply->deleteLater();
-    qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString();
-    return result;
-}
-
-/**
- * @brief 发送一个HTTP POST请求，并返回响应内容
- * @param request 要发送的网络请求
- * @param data 要上传的数据
- * @return 如果请求成功，返回响应内容；如果请求失败或超时，返回空字节数组
- */
-static QByteArray post(QNetworkRequest request, QString data)
-{
-    QByteArray emptyResult; // 定义一个空字节数组，用于返回错误或超时的结果
-    emptyResult.clear();
-    // 设置超时处理定时器
-    QTimer timer;
-    timer.setInterval(10000);  // 设置超时时间 10 秒
-    timer.setSingleShot(true);  // 单次触发
-
-    QByteArray postData; // 定义一个字节数组，用于存储要上传的JSON数据
-    postData.append(data.toUtf8());
-
-    // 创建一个网络访问管理器，用于发送和接收网络请求
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
-
-    // 开启一个局部的事件循环，等待响应结束，退出
-    qDebug()<<"Send: "<<postData;
-    QNetworkReply* reply = manager->post(request, postData); // 发送POST请求，并获取响应对象
-    QEventLoop eventLoop;
-    QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit); // 连接定时器的超时信号和事件循环的退出槽函数
-    QObject::connect(manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 连接网络管理器的完成信号和事件循环的退出槽函数
-    timer.start(); // 启动定时器
-    eventLoop.exec(); // 启动事件循环
-
-    if(timer.isActive()) { // 处理响应，定时器激活状态表示没有超时
-        timer.stop(); // 停止定时器
-        if(reply->error() != QNetworkReply::NoError) { // HTTP请求出错，进行错误处理
-            qDebug() << "HTTP请求出错 : " << reply->errorString();
-                                                     reply->deleteLater(); // 删除响应对象
-            return emptyResult; // 返回空结果
-        }
-        else {
-            // HTTP - 响应状态码
-            int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            qDebug()<<"服务器返回的Code : "<<statusCode;
-                if(statusCode == 200) { // HTTP请求响应正常
-                QByteArray replyContent = reply->readAll(); // 读取响应内容
-                return replyContent; // 返回响应内容
-            }
-            else {
-                reply->deleteLater(); // 删除响应对象
-                return emptyResult; // 返回空结果
-            }
-        }
-    }
-    else { // 超时处理
-        QObject::disconnect(manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 断开网络管理器的完成信号和事件循环的退出槽函数的连接
-        reply->abort(); // 中止响应对象
-        qDebug() << "HTTP请求超时 ";
-        return emptyResult; // 返回空结果
-    }
-    reply->deleteLater(); // 删除响应对象
-    qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString();
-    return emptyResult; // 返回空结果
-}
 
 static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMap data, QVariantMap options) {
     qDebug().noquote() << "method:" << method;
     qDebug().noquote() << "url:" << url;
     qDebug().noquote() << "data:" << data;
     qDebug().noquote() << "options:" << options;
-    QNetworkRequest request(url);
+    QNetworkRequest request;
 
     request.setHeader(QNetworkRequest::UserAgentHeader, chooseUserAgent(options["ua"].toString()));
 
@@ -212,7 +95,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         };
         cookie.insert({
             { "__remember_me", true },
-            { "NMTID", randomBytes().toHex() },
+//            { "NMTID", randomBytes().toHex() },
             { "_ntes_nuid", randomBytes().toHex() }
         });
         if(!cookie["MUSIC_U"].isValid()) {
@@ -240,15 +123,16 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
     }
 
     if(options["crypto"].toString() == "weapi") {
-        if(request.header(QNetworkRequest::CookieHeader).isValid()) {
-            auto cookieList = request.header(QNetworkRequest::CookieHeader).value<QList<QNetworkCookie>>();
-            for(auto i: cookieList) {
-                if(i.name() == "__csrf") {
-                    data["csrf_token"] = i.value();
-                    break;
-                }
+        QString csrfToken = "";
+        auto cookieList = request.header(QNetworkRequest::CookieHeader).value<QList<QNetworkCookie>>();
+        for(auto i: cookieList) {
+            if(i.name() == "__csrf") {
+                csrfToken = i.value();
+                break;
             }
         }
+        data["csrf_token"] = csrfToken;
+
         data = Crypto::weapi(QJsonDocument::fromVariant(data));
         url.setPath(url.path().replace(QRegularExpression("\\w*api"), "weapi"));
     }
@@ -315,31 +199,31 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
 //    };
     // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
     QNetworkAccessManager manager;
-    if (options.contains("proxy")) {
-        if (options["proxy"].toString().contains("pac")) {
-            QNetworkProxyFactory::setUseSystemConfiguration(true);
-            QNetworkProxyQuery query(url);
-            QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
-            if (!proxies.isEmpty()) {
-                manager.setProxy(proxies.first());
-            }
-        } else {
-            QUrl purl(options["proxy"].toString());
-            if (!purl.host().isEmpty()) {
-                QNetworkProxy proxy;
-                proxy.setType(QNetworkProxy::HttpProxy);
-                proxy.setHostName(purl.host());
-                proxy.setPort(purl.port(80));
-                manager.setProxy(proxy);
-            } else {
-                qDebug() << "代理配置无效，不使用代理";
-            }
-        }
-    }
+//    if (options.contains("proxy")) {
+//        if (options["proxy"].toString().contains("pac")) {
+//            QNetworkProxyFactory::setUseSystemConfiguration(true);
+//            QNetworkProxyQuery query(url);
+//            QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
+//            if (!proxies.isEmpty()) {
+//                manager.setProxy(proxies.first());
+//            }
+//        } else {
+//            QUrl purl(options["proxy"].toString());
+//            if (!purl.host().isEmpty()) {
+//                QNetworkProxy proxy;
+//                proxy.setType(QNetworkProxy::HttpProxy);
+//                proxy.setHostName(purl.host());
+//                proxy.setPort(purl.port(80));
+//                manager.setProxy(proxy);
+//            } else {
+//                qDebug() << "代理配置无效，不使用代理";
+//            }
+//        }
+//    }
 
     qDebug() << "headers" ;
     for(auto i : request.rawHeaderList()) {
-        qDebug() << i << request.rawHeader(i);
+        qDebug() << "header:" << i << "value:" << request.rawHeader(i);
     }
 
     // 发送HTTP请求，并返回一个QNetworkReply对象
@@ -392,11 +276,14 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         reply->deleteLater();
         return result;
     };
+    qDebug() << url;
+    request.setUrl(url);
     if (method == QNetworkAccessManager::PostOperation) {
         QUrlQuery urlQuery;
         for(QMap<QString, QVariant>::iterator i = data.begin(); i != data.end(); ++i) {
             urlQuery.addQueryItem(i.key(), i.value().toString());
         }
+        qDebug() << urlQuery.toString().toUtf8();
         QNetworkReply* reply = manager.post(request, urlQuery.toString().toUtf8());
         return getResult(reply);
     } else {

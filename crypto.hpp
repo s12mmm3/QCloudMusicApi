@@ -273,12 +273,14 @@ static const QVariantMap weapi(QJsonDocument object) {
         secretKey[i] = base62.at(index).toLatin1();
     }
 
+    auto params = aesEncrypt(aesEncrypt(text.toUtf8(), EVP_aes_128_cbc, presetKey, iv).toBase64(),
+                             EVP_aes_128_cbc, secretKey, iv).toBase64();
     std::reverse(secretKey.begin(), secretKey.end());
+    auto encSecKey = rsaEncrypt(secretKey, publicKey).toHex();
 
     return {
-        { "params", aesEncrypt(aesEncrypt(text.toUtf8(), EVP_aes_128_cbc, presetKey, iv),
-                              EVP_aes_128_cbc, presetKey, iv) },
-        { "encSecKey", rsaEncrypt(secretKey, publicKey).toHex() }
+        { "params", params },
+        { "encSecKey", encSecKey }
     };
 }
 
