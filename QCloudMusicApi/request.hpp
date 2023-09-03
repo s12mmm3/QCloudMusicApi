@@ -26,7 +26,7 @@ static QString chooseUserAgent(QString ua = "") {
     const QVariantMap userAgentList = {
         {
             "mobile",
-            QVariant::fromValue(QList<QString>({
+            QStringList({
                 // iOS 13.5.1 14.0 beta with safari
                 R"(Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1)",
                 R"(Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.)",
@@ -39,11 +39,11 @@ static QString chooseUserAgent(QString ua = "") {
                 // Android + qq micromsg
                 R"(Mozilla/5.0 (Linux; Android 10; YAL-AL00 Build/HUAWEIYAL-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.62 XWEB/2581 MMWEBSDK/200801 Mobile Safari/537.36 MMWEBID/3027 MicroMessenger/7.0.18.1740(0x27001235) Process/toolsmp WeChat/arm64 NetType/WIFI Language/zh_CN ABI/arm64)",
                 R"(Mozilla/5.0 (Linux; U; Android 8.1.0; zh-cn; BKK-AL10 Build/HONORBKK-AL10) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/10.6 Mobile Safari/537.36)"
-            }))
+            })
         },
         {
             "pc",
-            QVariant::fromValue(QList<QString>({
+            QStringList({
                 // macOS 10.15.6  Firefox / Chrome / Safari
                 R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:80.0) Gecko/20100101 Firefox/80.0)",
                 R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.30 Safari/537.36)",
@@ -53,7 +53,7 @@ static QString chooseUserAgent(QString ua = "") {
                 R"(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.30 Safari/537.36)",
                 R"(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/13.10586)"
                 // Linux 就算了
-            }))
+            })
         }
     };
     auto list = userAgentList["mobile"].toStringList() + userAgentList["pc"].toStringList();
