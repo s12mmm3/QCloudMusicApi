@@ -18,6 +18,7 @@ add_executable(QCloudMusicApi
   main.cpp
   crypto.hpp
   module.h
+  module.cpp
   request.hpp
   config.h
 )
