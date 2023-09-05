@@ -16,6 +16,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
 
 set(PROJECT_SOURCES
     ../QCloudMusicApi/module.h
+    ../QCloudMusicApi/module.cpp
     main.cpp
     mainwindow.cpp
     mainwindow.h

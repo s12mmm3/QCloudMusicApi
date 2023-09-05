@@ -4,6 +4,7 @@
 #include <QMetaMethod>
 #include <QTextEdit>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QFile>
 
 MainWindow::MainWindow(QWidget *parent)

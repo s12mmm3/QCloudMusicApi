@@ -131,11 +131,11 @@ static QByteArray aesDecrypt(const QByteArray &cipherData, const EVP_CIPHER *mod
 
 /**
  * @brief rsaEncrypt 公钥加密
- * @param plainData 明文
+ * @param plainText 明文
  * @param strPubKey 公钥
  * @return 加密后数据(Hex格式)
  */
-static QByteArray rsaEncrypt (const QByteArray& plainData, const QString& strPubKey)
+static QByteArray rsaEncrypt (QString plainText, const QString& strPubKey)
 {
     QByteArray encryptData;
     QByteArray pubKeyArry = strPubKey.toUtf8();
@@ -159,36 +159,24 @@ static QByteArray rsaEncrypt (const QByteArray& plainData, const QString& strPub
     char* pEncryptBuf = new char[nLen];
 
 
-//    if (clearDataArry.length() < 128) {
-//        // 如果小于128，就用0填充空位，直到长度为128
-//        clearDataArry.append(QByteArray(128 - clearDataArry.length(), 0));
-//    }
+    if (plainText.length() < 128) {
+        // 如果小于128，就用0填充空位，直到长度为128
+        plainText.prepend(QString().fill(QChar(), 128 - plainText.length()));
+    }
+    QByteArray plainData = plainText.toUtf8();
     int nClearDataLen = plainData.length();
     uchar* pClearData = (uchar*)plainData.data();
 
-    int pdBlock = nLen - 11;
-    int nCount = (nClearDataLen / pdBlock) + 1;//分段次数
+    int nSize = RSA_public_encrypt(nClearDataLen,
+        pClearData,
+        (unsigned char*)pEncryptBuf,
+        pRsa,
+        RSA_NO_PADDING);
 
-    //分段加密
-    for (int i = 0; i < nCount; i++)
-    {
-        int nSize = 0;
-        pdBlock = (nClearDataLen > pdBlock) ? pdBlock : nClearDataLen;
-
-        nSize = RSA_public_encrypt(pdBlock,
-                                   pClearData,
-                                   (unsigned char*)pEncryptBuf,
-                                   pRsa,
-                                   RSA_PKCS1_PADDING);
-
-        pClearData += pdBlock;      //指针往前移
-        nClearDataLen -= pdBlock;
-
-        if ( nSize >= 0 ){
-            QByteArray arry((char*)pEncryptBuf, nSize);
-            encryptData.append(arry);
-        }
-    }     //最后才转，很重要，否则后面解密不成功
+    if (nSize >= 0) {
+        QByteArray arry((char*)pEncryptBuf, nSize);
+        encryptData.append(arry);
+    }
 
     // 释放内存
     delete pEncryptBuf;
