@@ -1,6 +1,7 @@
 ﻿#include <QCoreApplication>
 #include <QJsonDocument>
 #include <QNetworkCookie>
+#include <QDebug>
 
 #include "module.h"
 
