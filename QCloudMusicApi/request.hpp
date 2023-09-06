@@ -85,7 +85,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         request.setRawHeader("X-Real-IP", ip.toUtf8());
         request.setRawHeader("X-Forwarded-For", ip.toUtf8());
     }
-//    request.setRawHeader("X-Real-IP", "118.88.88.88");
+    //    request.setRawHeader("X-Real-IP", "118.88.88.88");
     if(options["cookie"].userType() == QMetaType::QVariantMap) {
         auto cookie = options["cookie"].toMap();
         auto randomBytes = []() {
@@ -97,7 +97,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         };
         cookie.insert({
             { "__remember_me", true },
-//            { "NMTID", randomBytes().toHex() },
+            //            { "NMTID", randomBytes().toHex() },
             { "_ntes_nuid", randomBytes().toHex() }
         });
         if(!cookie["MUSIC_U"].isValid()) {
@@ -189,39 +189,30 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
         url.setPath(url.path().replace(QRegularExpression("\\w*api"), "eapi"));
     }
-//    QVariantMap answer = {
-//        { "status", 500 },
-//        { "body", {} },
-//        { "cookie", {} }
-//    };
-//    QVariantMap settings = {
-//        { "method", method },
-//        { "url", url },
-//        { "headers", headers }
-//    };
+
     // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
     QNetworkAccessManager manager;
-//    if (options.contains("proxy")) {
-//        if (options["proxy"].toString().contains("pac")) {
-//            QNetworkProxyFactory::setUseSystemConfiguration(true);
-//            QNetworkProxyQuery query(url);
-//            QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
-//            if (!proxies.isEmpty()) {
-//                manager.setProxy(proxies.first());
-//            }
-//        } else {
-//            QUrl purl(options["proxy"].toString());
-//            if (!purl.host().isEmpty()) {
-//                QNetworkProxy proxy;
-//                proxy.setType(QNetworkProxy::HttpProxy);
-//                proxy.setHostName(purl.host());
-//                proxy.setPort(purl.port(80));
-//                manager.setProxy(proxy);
-//            } else {
-//                qDebug() << "代理配置无效，不使用代理";
-//            }
-//        }
-//    }
+    //    if (options.contains("proxy")) {
+    //        if (options["proxy"].toString().contains("pac")) {
+    //            QNetworkProxyFactory::setUseSystemConfiguration(true);
+    //            QNetworkProxyQuery query(url);
+    //            QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
+    //            if (!proxies.isEmpty()) {
+    //                manager.setProxy(proxies.first());
+    //            }
+    //        } else {
+    //            QUrl purl(options["proxy"].toString());
+    //            if (!purl.host().isEmpty()) {
+    //                QNetworkProxy proxy;
+    //                proxy.setType(QNetworkProxy::HttpProxy);
+    //                proxy.setHostName(purl.host());
+    //                proxy.setPort(purl.port(80));
+    //                manager.setProxy(proxy);
+    //            } else {
+    //                qDebug() << "代理配置无效，不使用代理";
+    //            }
+    //        }
+    //    }
 
     qDebug() << "headers" ;
     for(auto i : request.rawHeaderList()) {
@@ -229,7 +220,12 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
     }
 
     // 发送HTTP请求，并返回一个QNetworkReply对象
-    auto getResult = [](QNetworkReply* reply) {
+    auto getResult = [&](QNetworkReply* reply) {
+        QVariantMap answer = {
+            { "status", 500 },
+            { "body", {} },
+            { "cookie", {} }
+        };
         QByteArray result; // 定义一个空字节数组作为结果
         result.clear();
         // 设置超时处理定时器
@@ -257,16 +253,34 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
                     for(auto i : reply->rawHeaderList()) {
                     qDebug() << "header:" << i << "value:" << reply->rawHeader(i);
                 }
-                    if(statusCode == 200) { // http请求响应正常
+                if(statusCode == 200) { // http请求响应正常
                     // 读取响应内容
-                    result = reply->readAll();
-                    auto doc = QJsonDocument::fromJson(result);
-                    if(!doc.isNull()) {
-                        return doc.toJson (QJsonDocument::Indented);
+                    auto body = reply->readAll();
+                    if(reply->hasRawHeader("set-cookie")) {
+                        answer["cookie"] = reply->rawHeader("set-cookie");
+                    }
+                    if(options["crypto"].toString() == "eapi") {
+                        answer["body"] = QJsonDocument::fromJson(
+                                             Crypto::aesDecrypt(body, EVP_aes_128_ecb, Crypto::eapiKey, "")
+                                             ).toVariant().toMap();
+                        if(answer["body"].toMap().isEmpty()) {
+                            answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+                        }
                     }
                     else {
-                        return result;
+                        answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
                     }
+                    answer["status"] = answer["body"].toMap()["code"].isValid()
+                                           ? answer["body"].toMap()["code"]
+                                           : reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+                    if(QList<int>({201, 302, 400, 502, 800, 801, 802, 803}).indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
+                        answer["status"] = 200;
+                    }
+
+                    answer["status"] = 100 < answer["status"].toInt() && answer["status"].toInt() < 600
+                                           ? answer["status"]
+                                           : 400;
+                    return QJsonDocument::fromVariant(answer).toJson(QJsonDocument::Indented);
                 }
                 else {
                     reply->deleteLater();

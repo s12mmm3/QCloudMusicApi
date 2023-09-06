@@ -105,6 +105,23 @@ const QByteArray NeteaseCloudMusicApi::artist_detail(QVariantMap query) {
         );
 }
 
+// 国家编码列表
+const QByteArray NeteaseCloudMusicApi::countries_code_list(QVariantMap query) {
+    const QVariantMap data = { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://interface3.music.163.com/eapi/lbs/countries/v1"),
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "url", "/api/lbs/countries/v1" },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 歌曲链接 - v1
 // 此版本不再采用 br 作为音质区分的标准
 // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
@@ -279,6 +296,27 @@ const QByteArray NeteaseCloudMusicApi::user_detail(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         QUrl("https://music.163.com/weapi/v1/user/detail/" + query["uid"].toString()),
         {},
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 用户歌单
+const QByteArray NeteaseCloudMusicApi::user_playlist(QVariantMap query) {
+    const QVariantMap data = {
+        { "uid", query["uid"] },
+        { "limit", query["limit"].isValid() ? query["limit"] : 30 },
+        { "offset", query["offset"].isValid() ? query["offset"] : 0 },
+        { "includeVideo", true },
+        };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/api/user/playlist"),
+        data,
         QVariantMap({
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
