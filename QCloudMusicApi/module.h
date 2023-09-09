@@ -4,11 +4,21 @@
 #include <QVariantMap>
 #include <QObject>
 #include <QByteArray>
+#include <QtCore/qglobal.h>
 
-class NeteaseCloudMusicApi: public QObject {
+#if defined(QCLOUDMUSICAPI_LIBRARY)
+#  define QCLOUDMUSICAPI_EXPORT Q_DECL_EXPORT
+#else
+#  define QCLOUDMUSICAPI_EXPORT Q_DECL_IMPORT
+#endif
+
+class QCLOUDMUSICAPI_EXPORT NeteaseCloudMusicApi: public QObject {
     Q_OBJECT
 
 public:
+    NeteaseCloudMusicApi();
+    ~NeteaseCloudMusicApi();
+
     QVariantMap paramInject(QVariantMap params);
     // 专辑内容
     Q_INVOKABLE const QByteArray album(QVariantMap query);

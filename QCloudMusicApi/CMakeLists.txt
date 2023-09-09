@@ -14,7 +14,7 @@ find_package(OpenSSL REQUIRED)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
 
-add_library(QCloudMusicApi#[[ SHARED]]
+add_library(QCloudMusicApi SHARED
     crypto.hpp
     module.h
     module.cpp

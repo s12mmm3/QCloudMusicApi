@@ -12,6 +12,14 @@
 
 #include "request.hpp"
 
+NeteaseCloudMusicApi::NeteaseCloudMusicApi() {
+
+}
+
+NeteaseCloudMusicApi::~NeteaseCloudMusicApi() {
+
+}
+
 QVariantMap NeteaseCloudMusicApi::paramInject(QVariantMap params) {
     auto ip = QNetworkInterface::allAddresses()[0].toString();
     if(ip.mid(0, 7) == "::ffff:") {
