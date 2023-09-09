@@ -27,6 +27,9 @@ public:
     // 国家编码列表
     Q_INVOKABLE const QByteArray countries_code_list(QVariantMap query);
 
+    // 获取客户端歌曲下载链接
+    Q_INVOKABLE const QByteArray song_download_url(QVariantMap query);
+
     // 歌曲链接 - v1
     // 此版本不再采用 br 作为音质区分的标准
     // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断

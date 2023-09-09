@@ -123,6 +123,26 @@ const QByteArray NeteaseCloudMusicApi::countries_code_list(QVariantMap query) {
         );
 }
 
+// 获取客户端歌曲下载链接
+const QByteArray NeteaseCloudMusicApi::song_download_url(QVariantMap query) {
+    QVariantMap data = {
+        { "id", query["id"] },
+        { "br", query.contains("br") ? query["br"] : 999000 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://interface.music.163.com/eapi/song/enhance/download/url"),
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/song/enhance/download/url" }
+        })
+        );
+}
+
 // 歌曲链接 - v1
 // 此版本不再采用 br 作为音质区分的标准
 // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断

@@ -191,27 +191,29 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
 
     // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
     QNetworkAccessManager manager;
-    //    if (options.contains("proxy")) {
-    //        if (options["proxy"].toString().contains("pac")) {
-    //            QNetworkProxyFactory::setUseSystemConfiguration(true);
-    //            QNetworkProxyQuery query(url);
-    //            QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
-    //            if (!proxies.isEmpty()) {
-    //                manager.setProxy(proxies.first());
-    //            }
-    //        } else {
-    //            QUrl purl(options["proxy"].toString());
-    //            if (!purl.host().isEmpty()) {
-    //                QNetworkProxy proxy;
-    //                proxy.setType(QNetworkProxy::HttpProxy);
-    //                proxy.setHostName(purl.host());
-    //                proxy.setPort(purl.port(80));
-    //                manager.setProxy(proxy);
-    //            } else {
-    //                qDebug() << "代理配置无效，不使用代理";
-    //            }
-    //        }
-    //    }
+
+    if (options.contains("proxy")) {
+        if (options["proxy"].toString().contains("pac")) {
+            QNetworkProxyFactory::setUseSystemConfiguration(true);
+            QNetworkProxyQuery query(url);
+            QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
+            if (!proxies.isEmpty()) {
+                manager.setProxy(proxies.first());
+            }
+        } else {
+            QUrl purl(options["proxy"].toString());
+            if (!purl.host().isEmpty()) {
+                QNetworkProxy proxy;
+                proxy.setType(QNetworkProxy::HttpProxy);
+                proxy.setHostName(purl.host());
+                proxy.setPort(purl.port() > 0 ? purl.port() : 80);
+                manager.setProxy(proxy);
+            } else {
+                manager.setProxy (QNetworkProxy::NoProxy);
+                qDebug() << "代理配置无效，不使用代理";
+            }
+        }
+    }
 
     qDebug() << "headers" ;
     for(auto i : request.rawHeaderList()) {
