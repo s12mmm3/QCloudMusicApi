@@ -1,11 +1,12 @@
 ﻿#include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "../QCloudMusicApi/module.h"
 #include <QMetaMethod>
 #include <QTextEdit>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
+
+#include "../QCloudMusicApi/module.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

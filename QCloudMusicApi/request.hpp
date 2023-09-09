@@ -58,9 +58,9 @@ static QString chooseUserAgent(QString ua = "") {
         }
     };
     auto list = userAgentList["mobile"].toStringList() + userAgentList["pc"].toStringList();
-    auto realUserAgentList = userAgentList[ua].isValid() ? userAgentList[ua].toStringList() : list;
+    auto realUserAgentList = userAgentList.contains(ua) ? userAgentList[ua].toStringList() : list;
     return QStringList({"mobile", "pc", ""}).indexOf(ua) > -1 ? realUserAgentList[QRandomGenerator::global()->generate() % realUserAgentList.size()]
-                                                        : ua;
+                                                              : ua;
 }
 
 static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMap data, QVariantMap options) {
@@ -79,8 +79,8 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         request.setRawHeader("Referer", "https://music.163.com");
     }
     QString ip;
-    if(options["realIP"].isValid()) ip = options["realIP"].toString();
-    else if(options["ip"].isValid()) ip = options["ip"].toString();
+    if(options.contains("realIP")) ip = options["realIP"].toString();
+    else if(options.contains("ip")) ip = options["ip"].toString();
     else ip = "";
     if(ip.length() > 0) {
         request.setRawHeader("X-Real-IP", ip.toUtf8());
@@ -99,9 +99,9 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         cookie.insert("__remember_me", true);
         //        cookie.insert("NMTID", randomBytes().toHex());
         cookie.insert("_ntes_nuid", randomBytes().toHex());
-        if(!cookie["MUSIC_U"].isValid()) {
+        if(!cookie.contains("MUSIC_U")) {
             // 游客
-            if(!cookie["MUSIC_A"].isValid()) {
+            if(!cookie.contains("MUSIC_A")) {
                 //options.cookie.MUSIC_A = config.anonymous_token
                 cookie["MUSIC_A"] = Config::anonymous_token;
             }
@@ -113,7 +113,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         }
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(cookieList));
     }
-    else if(options["cookie"].isValid()) {
+    else if(options.contains("cookie")) {
         request.setHeader(QNetworkRequest::CookieHeader, options["cookie"]);
     }
     else {
@@ -145,8 +145,8 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         })));
     }
     else if(options["crypto"].toString() == "eapi") {
-        const QVariantMap cookie = options["cookie"].isValid() ? options["cookie"].toMap() : QVariantMap();
-        const QString csrfToken = cookie["__csrf"].isValid() ? cookie["__csrf"].toString() : "";
+        const QVariantMap cookie = options.contains("cookie") ? options["cookie"].toMap() : QVariantMap();
+        const QString csrfToken = cookie.contains("__csrf") ? cookie["__csrf"].toString() : "";
         QVariantMap header =
             {
              //系统版本
@@ -155,26 +155,26 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
              // app版本
              { "appver", cookie["appver"] },
              //版本号
-             { "versioncode", cookie["versioncode"].isValid() ? cookie["versioncode"]
-                                                             : "" },
+             { "versioncode", cookie.contains("versioncode") ? cookie["versioncode"]
+                                                            : "" },
              //设备model
              { "mobilename", cookie["mobilename"] },
-             { "buildver", cookie["buildver"].isValid() ? cookie["buildver"]
-                                                       : QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10) },
+             { "buildver", cookie.contains("buildver") ? cookie["buildver"]
+                                                      : QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10) },
              //设备分辨率
-             { "resolution", cookie["resolution"].isValid() ? cookie["resolution"]
-                                                           : "1920x1080" },
+             { "resolution", cookie.contains("resolution") ? cookie["resolution"]
+                                                          : "1920x1080" },
              { "__csrf", csrfToken },
-             { "os", cookie["os"].isValid() ? cookie["os"]
-                                           : "android" },
+             { "os", cookie.contains("os") ? cookie["os"]
+                                          : "android" },
              { "channel", cookie["channel"] },
              { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
                                   + "_"
                                   + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
              },
              };
-        if(cookie["MUSIC_U"].isValid()) header["MUSIC_U"] = cookie["MUSIC_U"];
-        if(cookie["MUSIC_A"].isValid()) header["MUSIC_A"] = cookie["MUSIC_A"];
+        if(cookie.contains("MUSIC_U")) header["MUSIC_U"] = cookie["MUSIC_U"];
+        if(cookie.contains("MUSIC_A")) header["MUSIC_A"] = cookie["MUSIC_A"];
 
         auto getCookies = [](QVariantMap header) {
             QList<QNetworkCookie> l;
@@ -269,7 +269,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
                     else {
                         answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
                     }
-                    answer["status"] = answer["body"].toMap()["code"].isValid()
+                    answer["status"] = answer["body"].toMap().contains("code")
                                            ? answer["body"].toMap()["code"]
                                            : reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
                     if(QList<int>({201, 302, 400, 502, 800, 801, 802, 803}).indexOf(answer["body"].toMap()["code"].toInt()) > -1) {

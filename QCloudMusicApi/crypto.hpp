@@ -179,69 +179,10 @@ static QByteArray rsaEncrypt (QString plainText, const QString& strPubKey)
     }
 
     // 释放内存
-    delete pEncryptBuf;
+    delete[] pEncryptBuf;
     BIO_free_all(pKeyBio);
     RSA_free(pRsa);
     return encryptData;
-}
-
-/**
- * @brief rsaDecrypt 私钥解密
- * @param strDecrypt 待解密数据(Hex格式)
- * @param strPriKey 私钥
- * @return 明文
- */
-static QByteArray rsaDecrypt(const QByteArray& cipherData, const QString& strPriKey)
-{
-    QByteArray plainData = "";
-    QByteArray priKeyArry = strPriKey.toUtf8();
-    uchar* pPriKey = (uchar*)priKeyArry.data();
-    BIO* pKeyBio = BIO_new_mem_buf(pPriKey, priKeyArry.length());
-    if (pKeyBio == NULL){
-        return "";
-    }
-    RSA* pRsa = RSA_new();
-    pRsa = PEM_read_bio_RSAPrivateKey(pKeyBio, &pRsa, NULL, NULL);
-    if ( pRsa == NULL ){
-        BIO_free_all(pKeyBio);
-        return "";
-    }
-    int nLen = RSA_size(pRsa);
-    char* pClearBuf = new char[nLen];
-    memset(pClearBuf, 0, nLen);
-
-    //解密
-    int nDecryptDataLen = cipherData.length();
-    uchar* pDecryptData = (uchar*)cipherData.data();
-
-    int pdBlock = nLen;
-    int nCount = (nDecryptDataLen / pdBlock) + 1;//分段次数
-
-    //分段解密
-    for (int i = 0; i < nCount; i++)
-    {
-        int nSize = 0;
-
-        pdBlock = (nDecryptDataLen > pdBlock) ? pdBlock : nDecryptDataLen;
-
-        nSize = RSA_private_decrypt(pdBlock,
-                                    pDecryptData,
-                                    (uchar*)pClearBuf,
-                                    pRsa,
-                                    RSA_PKCS1_PADDING);
-        pDecryptData += pdBlock;        //加密数据指针往前移
-        nDecryptDataLen -= pdBlock;
-
-        if ( nSize >= 0 ){
-            plainData += QByteArray(pClearBuf, nSize);
-        }
-    }
-
-    // 释放内存
-    delete pClearBuf;
-    BIO_free_all(pKeyBio);
-    RSA_free(pRsa);
-    return plainData;
 }
 
 static const QVariantMap weapi(QJsonDocument object) {
