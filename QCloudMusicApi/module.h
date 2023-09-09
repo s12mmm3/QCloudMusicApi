@@ -32,6 +32,9 @@ public:
     // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
     Q_INVOKABLE const QByteArray song_url_v1(QVariantMap query);
 
+    // 音乐百科基础信息
+    Q_INVOKABLE const QByteArray song_wiki_summary(QVariantMap query);
+
     // 歌词
     Q_INVOKABLE const QByteArray lyric(QVariantMap query);
 

@@ -135,7 +135,6 @@ const QByteArray NeteaseCloudMusicApi::song_url_v1(QVariantMap query) {
     if(data["level"].toString() == "sky") {
         data["immerseType"] = "c51";
     }
-    qDebug().noquote() << data;
     return createRequest(
         QNetworkAccessManager::PostOperation,
         QUrl("https://interface.music.163.com/eapi/song/enhance/player/url/v1"),
@@ -146,6 +145,25 @@ const QByteArray NeteaseCloudMusicApi::song_url_v1(QVariantMap query) {
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
             { "url", "/api/song/enhance/player/url/v1" }
+        })
+        );
+}
+
+// 音乐百科基础信息
+const QByteArray NeteaseCloudMusicApi::song_wiki_summary(QVariantMap query) {
+    QVariantMap data = {
+        { "songId", query["id"].toInt() }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://interface3.music.163.com/eapi/music/wiki/home/song/get"),
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/song/play/about/block/page" }
         })
         );
 }
