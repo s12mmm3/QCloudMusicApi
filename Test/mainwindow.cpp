@@ -5,7 +5,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
+//#include <QNetworkCookie>
 
+//#include "../QCloudMusicApi/config.h"
 #include "../QCloudMusicApi/module.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -16,6 +18,20 @@ MainWindow::MainWindow(QWidget *parent)
     for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
         ui->comboBox->addItem(api.metaObject()->method(i).name());
     }
+
+//    auto register_anonimous = api.register_anonimous({});
+//    qDebug() << "register_anonimous" << register_anonimous;
+//    QString cookieStr = QJsonDocument::fromJson(register_anonimous).toVariant()
+//                            .toMap()["body"].toMap()["cookie"].toString();
+//    auto cookie = QNetworkCookie(cookieStr.toUtf8());
+
+//    qDebug () << "Name:" << cookie.name ();
+//    qDebug () << "Value:" << cookie.value ();
+//    Config::anonymous_token = cookie.value ();
+//    qDebug () << "Max-Age:" << cookie.expirationDate ().toSecsSinceEpoch () - QDateTime::currentSecsSinceEpoch ();
+//    qDebug () << "Expires:" << cookie.expirationDate ();
+//    qDebug () << "Path:" << cookie.path ();
+//    qDebug () << "Domain:" << cookie.domain ();
 }
 
 MainWindow::~MainWindow()
