@@ -23,6 +23,8 @@ private slots:
 
     void on_comboBox_currentTextChanged(const QString &arg1);
 
+    void on_checkBox_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     NeteaseCloudMusicApi api;

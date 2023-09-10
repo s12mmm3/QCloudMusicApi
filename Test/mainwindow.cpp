@@ -32,7 +32,12 @@ void MainWindow::on_pushButton_clicked()
                               , Qt::DirectConnection
                               , Q_RETURN_ARG(QByteArray, ret)
                               , Q_ARG(QVariantMap, QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toVariant().toMap()));
-    ui->textEdit->setText(ret);
+    if(ui->checkBox->isChecked()) {
+        ui->textEdit->setText(QJsonDocument::fromJson(ret).toJson(QJsonDocument::Indented));
+    }
+    else {
+        ui->textEdit->setText(QJsonDocument::fromJson(ret).toJson(QJsonDocument::Compact));
+    }
 }
 
 
@@ -45,5 +50,16 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
         QJsonDocument(config[arg1].toObject())
             .toJson(QJsonDocument::Indented)
         );
+}
+
+
+void MainWindow::on_checkBox_stateChanged(int arg1)
+{
+    if(arg1) {
+        ui->textEdit->setText(QJsonDocument::fromJson(ui->textEdit->toPlainText().toUtf8()).toJson(QJsonDocument::Indented));
+    }
+    else {
+        ui->textEdit->setText(QJsonDocument::fromJson(ui->textEdit->toPlainText().toUtf8()).toJson(QJsonDocument::Compact));
+    }
 }
 

@@ -45,6 +45,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>QJsonDocument::Indented</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
