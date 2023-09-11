@@ -64,10 +64,17 @@ static QString chooseUserAgent(QString ua = "") {
 }
 
 static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMap data, QVariantMap options) {
-    qDebug().noquote() << "method:" << method;
-    qDebug().noquote() << "url:" << url;
-    qDebug().noquote() << "data:" << data;
-    qDebug().noquote() << "options:" << options;
+    qDebug().noquote() <<
+        QJsonDocument::fromVariant(
+            QVariantMap(
+                {
+                    { "method", method },
+                    { "url", url },
+                    { "data", data },
+                    { "options", options}
+                }
+                )
+            ).toJson();
     QNetworkRequest request;
 
     request.setHeader(QNetworkRequest::UserAgentHeader, chooseUserAgent(options["ua"].toString()));
@@ -192,7 +199,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
     // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
     QNetworkAccessManager manager;
 
-    if (options.contains("proxy")) {
+    if (options.contains("proxy") && !options["proxy"].isNull()) {
         if (options["proxy"].toString().contains("pac")) {
             QNetworkProxyFactory::setUseSystemConfiguration(true);
             QNetworkProxyQuery query(url);
@@ -215,10 +222,11 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         }
     }
 
-    qDebug() << "headers" ;
+    QVariantMap headers;
     for(auto i : request.rawHeaderList()) {
-        qDebug() << "header:" << i << "value:" << request.rawHeader(i);
+        headers[i] = request.rawHeader(i);
     }
+    qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
     // 发送HTTP请求，并返回一个QNetworkReply对象
     auto getResult = [&](QNetworkReply* reply) {
@@ -250,10 +258,14 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
             else {
                 // http - 响应状态码
                 int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
                 qDebug() << "服务器返回的Code : " << statusCode;
-                    for(auto i : reply->rawHeaderList()) {
-                    qDebug() << "header:" << i << "value:" << reply->rawHeader(i);
+                QVariantMap headers;
+                for(auto i : reply->rawHeaderList()) {
+                    if(!request.rawHeader(i).isNull()) headers[i] = request.rawHeader(i);
                 }
+                qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
+
                 if(statusCode == 200) { // http请求响应正常
                     // 读取响应内容
                     auto body = reply->readAll();
