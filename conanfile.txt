@@ -1,0 +1,9 @@
+[requires]
+openssl/[>=1.0.0 <3.0.0]
+[generators]
+CMakeDeps
+CMakeToolchain
+[layout]
+cmake_layout
+[options]
+openssl*:shared=True
