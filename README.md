@@ -25,7 +25,7 @@ pip3 install conan
 在Qt Creator装上conan插件，帮助->关于插件->conan打勾重启，打开项目重新CMake，自动下载/编译依赖的库
 
 ## 使用说明
-## 引用动态库文件
+### 引用动态库文件
 在CMakeLists.txt文件中加上
 ```
 # 指定第三方库的路径
@@ -60,7 +60,7 @@ QMetaObject::invokeMethod(&api, "song_url_v1"
 qDebug() << ret;
 ```
 
-## 在项目中引用CMake项目
+### 在项目中引用CMake项目
 将conanfile.txt移动至项目根目录
 在CMakeLists.txt文件中加上
 ```
