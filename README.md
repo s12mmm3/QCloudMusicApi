@@ -86,3 +86,7 @@ C++代码中加上
 error: Syntax error in cmake code at ... when parsing string ... Invalid character escape '\q'.
 ```
 进入出错的CMake文件，将"\\"全部替换为"/"，重新CMake即可
+
+## License
+
+[The MIT License (MIT)](https://github.com/s12mmm3/QCloudMusicApi/blob/master/LICENSE)
