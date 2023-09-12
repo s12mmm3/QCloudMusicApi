@@ -25,3 +25,6 @@ add_library(QCloudMusicApi SHARED
 target_link_libraries(QCloudMusicApi Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network OpenSSL::SSL OpenSSL::Crypto)
 
 target_compile_definitions(QCloudMusicApi PRIVATE QCLOUDMUSICAPI_LIBRARY)
+
+set(PUBLIC_HEADERS module.h)
+install(FILES ${PUBLIC_HEADERS} DESTINATION ${CMAKE_BINARY_DIR}/include)
