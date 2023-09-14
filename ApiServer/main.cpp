@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
                 QVariantMap args = {
                     { "path", path },
                     { "funName", funName },
+                    { "localAddress", request.localAddress().toString() + ":" + QString::number(request.localPort())  },
+                    { "remoteAddress", request.remoteAddress().toString() + ":" + QString::number(request.remotePort())  },
                     { "query", query }
                 };
                 qDebug().noquote() << QJsonDocument::fromVariant(args).toJson();
