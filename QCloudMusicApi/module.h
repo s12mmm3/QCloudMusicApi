@@ -48,6 +48,9 @@ public:
     // 音乐百科基础信息
     Q_INVOKABLE const QByteArray song_wiki_summary(QVariantMap query);
 
+    // 手机登录
+    Q_INVOKABLE const QByteArray login_cellphone(QVariantMap query);
+
     // 歌词
     Q_INVOKABLE const QByteArray lyric(QVariantMap query);
 

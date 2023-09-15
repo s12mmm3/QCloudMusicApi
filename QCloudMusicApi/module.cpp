@@ -196,6 +196,47 @@ const QByteArray NeteaseCloudMusicApi::song_wiki_summary(QVariantMap query) {
         );
 }
 
+// 手机登录
+const QByteArray NeteaseCloudMusicApi::login_cellphone(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.7.01";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "phone", query["phone"] },
+        { "countrycode", query.contains("countrycode") ? query["countrycode"] : 86 },
+//        { "captcha", query["captcha"] },
+        { query.contains("captcha") ? "captcha" : "password",
+         query.contains("captcha") ? query["captcha"]
+         : query.contains("md5_password") ? query["md5_password"]
+                                          : QCryptographicHash::hash(query["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex() },
+        { "rememberLogin", "true" }
+    };
+    QByteArray result = createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/weapi/login/cellphone"),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "ua", "pc" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+    auto doc = QJsonDocument::fromJson(result);
+    if(doc["body"]["code"].toInt() == 200) {
+        auto body = doc["body"].toVariant().toMap();
+        body["cookie"] = doc["cookie"];
+        result = QJsonDocument::fromVariant(QVariantMap({
+                                                { "status", 200 },
+                                                { "body", body },
+                                                { "cookie", doc["cookie"] }
+                                            })).toJson();
+    }
+    return result;
+}
+
 // 歌词
 const QByteArray NeteaseCloudMusicApi::lyric(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
