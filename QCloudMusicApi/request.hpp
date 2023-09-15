@@ -308,14 +308,12 @@ static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVa
         reply->deleteLater();
         return result;
     };
-    qDebug() << url;
     request.setUrl(url);
     if (method == QNetworkAccessManager::PostOperation) {
         QUrlQuery urlQuery;
         for(QMap<QString, QVariant>::iterator i = data.begin(); i != data.end(); ++i) {
             urlQuery.addQueryItem(i.key(), i.value().toString());
         }
-        qDebug() << urlQuery.toString().toUtf8();
         QNetworkReply* reply = manager.post(request, urlQuery.toString().toUtf8());
         return getResult(reply);
     } else {

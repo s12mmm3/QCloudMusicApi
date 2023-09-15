@@ -20,6 +20,24 @@ public:
     ~NeteaseCloudMusicApi();
 
     QVariantMap paramInject(QVariantMap params);
+    // 专辑动态信息
+    Q_INVOKABLE const QByteArray album_detail_dynamic(QVariantMap query);
+
+    // 数字专辑详情
+    Q_INVOKABLE const QByteArray album_detail(QVariantMap query);
+
+    // 数字专辑-语种风格馆
+    Q_INVOKABLE const QByteArray album_list_style(QVariantMap query);
+
+    // 数字专辑-新碟上架
+    Q_INVOKABLE const QByteArray album_list(QVariantMap query);
+
+    // 全部新碟
+    Q_INVOKABLE const QByteArray album_new(QVariantMap query);
+
+    // 最新专辑
+    Q_INVOKABLE const QByteArray album_newest(QVariantMap query);
+
     // 专辑内容
     Q_INVOKABLE const QByteArray album(QVariantMap query);
 
@@ -48,6 +66,9 @@ public:
     // 音乐百科基础信息
     Q_INVOKABLE const QByteArray song_wiki_summary(QVariantMap query);
 
+    // 手机登录
+    Q_INVOKABLE const QByteArray login_cellphone(QVariantMap query);
+
     // 歌词
     Q_INVOKABLE const QByteArray lyric(QVariantMap query);
 
@@ -56,6 +77,9 @@ public:
 
     // 相关歌单
     Q_INVOKABLE const QByteArray related_playlist(QVariantMap query);
+
+    // 搜索
+    Q_INVOKABLE const QByteArray cloudsearch(QVariantMap query);
 
     // 歌曲评论
     Q_INVOKABLE const QByteArray comment_music(QVariantMap query);
