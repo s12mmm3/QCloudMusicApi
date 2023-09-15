@@ -51,5 +51,26 @@
     },
     "song_download_url": {
         "id": 2058263032
-    }
+    },
+    "cloudsearch": {
+        "keywords": "電音部"
+    },
+    "album_detail_dynamic": {
+        "id": 149114512
+    },
+    "album_detail": {
+        "id": 84547195
+    },
+    "album_list_style": {
+        "area": "Z_H",
+        "offset": 2
+    },
+    "album_list": {
+        "limit": 10
+    },
+    "album_new": {
+        "area": "KR",
+        "limit": 10
+    },
+    "album_newest": {}
 }

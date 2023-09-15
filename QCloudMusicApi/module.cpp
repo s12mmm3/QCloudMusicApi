@@ -29,6 +29,121 @@ QVariantMap NeteaseCloudMusicApi::paramInject(QVariantMap params) {
     return params;
 }
 
+// 专辑动态信息
+const QByteArray NeteaseCloudMusicApi::album_detail_dynamic(QVariantMap query) {
+    const QVariantMap data = {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/api/album/detail/dynamic"),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 数字专辑详情
+const QByteArray NeteaseCloudMusicApi::album_detail(QVariantMap query) {
+    const QVariantMap data = {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/weapi/vipmall/albumproduct/detail"),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 数字专辑-语种风格馆
+const QByteArray NeteaseCloudMusicApi::album_list_style(QVariantMap query) {
+    const QVariantMap data = {
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 10 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "total", true },
+        { "area", query.contains("area") ? query["area"] : "Z_H" }//Z_H:华语,E_A:欧美,KR:韩国,JP:日本
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/weapi/vipmall/appalbum/album/style"),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 数字专辑-新碟上架
+const QByteArray NeteaseCloudMusicApi::album_list(QVariantMap query) {
+    const QVariantMap data = {
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 30 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "total", true },
+        { "area", query.contains("area") ? query["area"] : "ALL" },//ALL:全部,ZH:华语,EA:欧美,KR:韩国,JP:日本
+        { "type", query["type"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/weapi/vipmall/albumproduct/list"),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 全部新碟
+const QByteArray NeteaseCloudMusicApi::album_new(QVariantMap query) {
+    const QVariantMap data = {
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 30 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "total", true },
+        { "area", query.contains("area") ? query["area"] : "ALL" },//ALL:全部,ZH:华语,EA:欧美,KR:韩国,JP:日本
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/weapi/album/new"),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 最新专辑
+const QByteArray NeteaseCloudMusicApi::album_newest(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://music.163.com/api/discovery/newAlbum"),
+        {},
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 专辑内容
 const QByteArray NeteaseCloudMusicApi::album(QVariantMap query) {
     return createRequest(
@@ -337,6 +452,29 @@ const QByteArray NeteaseCloudMusicApi::related_playlist(QVariantMap query) {
         { "playlists", QVariant(playlists) }
     };
     return QJsonDocument::fromVariant(response).toJson (QJsonDocument::Indented);
+}
+
+// 搜索
+const QByteArray NeteaseCloudMusicApi::cloudsearch(QVariantMap query) {
+    const QVariantMap data = {
+        { "s", query["keywords"] },
+        { "type", query.contains("type") ? query["type"].toInt() : 1 },// 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 30 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "total", true }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QUrl("https://interface.music.163.com/eapi/cloudsearch/pc"),
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "url", "/api/cloudsearch/pc" },
+            { "realIP", query["realIP"] }
+        })
+        );
 }
 
 // 歌曲评论
