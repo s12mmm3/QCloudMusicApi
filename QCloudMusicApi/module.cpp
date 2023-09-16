@@ -410,6 +410,32 @@ const QByteArray NeteaseCloudMusicApi::artist_new_song(QVariantMap query) {
         );
 }
 
+// 歌手全部歌曲
+const QByteArray NeteaseCloudMusicApi::artist_songs(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "id", query["id"] },
+        { "private_cloud", "true" },
+        { "work_type", 1 },
+        { "order", query.contains("order") ? query["order"] : "hot" }, //hot,time
+        { "offset", query.contains("offset") ? query["offset"] : 0 },
+        { "limit", query.contains("limit") ? query["limit"] : 100 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/v1/artist/songs",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 歌手热门 50 首歌曲
 const QByteArray NeteaseCloudMusicApi::artist_top_song(QVariantMap query) {
     const QVariantMap data = {
