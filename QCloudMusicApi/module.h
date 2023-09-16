@@ -19,7 +19,6 @@ public:
     NeteaseCloudMusicApi();
     ~NeteaseCloudMusicApi();
 
-    QVariantMap paramInject(QVariantMap params);
     // 专辑动态信息
     Q_INVOKABLE const QByteArray album_detail_dynamic(QVariantMap query);
 

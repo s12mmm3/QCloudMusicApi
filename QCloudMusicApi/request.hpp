@@ -63,7 +63,8 @@ static QString chooseUserAgent(QString ua = "") {
                                                               : ua;
 }
 
-static auto createRequest(QNetworkAccessManager::Operation method, QUrl url, QVariantMap data, QVariantMap options) {
+static auto createRequest(QNetworkAccessManager::Operation method, QString urlStr, QVariantMap data, QVariantMap options) {
+    QUrl url(urlStr);
     qDebug().noquote() <<
         QJsonDocument::fromVariant(
             QVariantMap(

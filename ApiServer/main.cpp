@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
     quint16 port = 3000;
     if(port == server.listen(QHostAddress::Any, port)) {
-
+        qDebug() << "ApiServer running at port" << port;
     }
     else {
         qDebug() << "该端口号已被占用:" << port;
