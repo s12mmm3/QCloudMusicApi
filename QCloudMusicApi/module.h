@@ -84,6 +84,18 @@ public:
 */
     Q_INVOKABLE const QByteArray artist_list(QVariantMap query);
 
+    // 歌手相关MV
+    Q_INVOKABLE const QByteArray artist_mv(QVariantMap query);
+
+    // 关注歌手新 MV
+    Q_INVOKABLE const QByteArray artist_new_mv(QVariantMap query);
+
+    // 关注歌手新歌
+    Q_INVOKABLE const QByteArray artist_new_song(QVariantMap query);
+
+    // 歌手全部歌曲
+    Q_INVOKABLE const QByteArray artist_songs(QVariantMap query);
+
     // 歌手热门 50 首歌曲
     Q_INVOKABLE const QByteArray artist_top_song(QVariantMap query);
 

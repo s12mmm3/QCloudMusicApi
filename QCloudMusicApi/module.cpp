@@ -343,6 +343,99 @@ const QByteArray NeteaseCloudMusicApi::artist_list(QVariantMap query) {
         );
 }
 
+// 歌手相关MV
+const QByteArray NeteaseCloudMusicApi::artist_mv(QVariantMap query) {
+    const QVariantMap data = {
+        { "artistId", query["id"] },
+        { "limit", query["limit"] },
+        { "offset", query["offset"] },
+        { "total", true }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/artist/mvs",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 关注歌手新 MV
+const QByteArray NeteaseCloudMusicApi::artist_new_mv(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.7.01";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "limit", query.contains("limit") ? query["limit"] : 20 },
+        { "startTimestamp", query.contains("before") ? query["before"] : QDateTime::currentDateTime().toMSecsSinceEpoch() }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/sub/artist/new/works/mv/list",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 关注歌手新歌
+const QByteArray NeteaseCloudMusicApi::artist_new_song(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.7.01";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "limit", query.contains("limit") ? query["limit"] : 20 },
+        { "startTimestamp", query.contains("before") ? query["before"] : QDateTime::currentDateTime().toMSecsSinceEpoch() }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/sub/artist/new/works/song/list",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 歌手全部歌曲
+const QByteArray NeteaseCloudMusicApi::artist_songs(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "id", query["id"] },
+        { "private_cloud", "true" },
+        { "work_type", 1 },
+        { "order", query.contains("order") ? query["order"] : "hot" }, //hot,time
+        { "offset", query.contains("offset") ? query["offset"] : 0 },
+        { "limit", query.contains("limit") ? query["limit"] : 100 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/v1/artist/songs",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 歌手热门 50 首歌曲
 const QByteArray NeteaseCloudMusicApi::artist_top_song(QVariantMap query) {
     const QVariantMap data = {

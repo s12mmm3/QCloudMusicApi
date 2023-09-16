@@ -6,6 +6,7 @@
 #include <QMetaMethod>
 #include <QMetaObject>
 #include <QUrlQuery>
+#include <QtConcurrent>
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +26,7 @@ int main(int argc, char *argv[])
         server.route(
             path,
             QHttpServerRequest::Method::Get,
-            [=, &api](const QHttpServerRequest &request) {
+            [=](const QHttpServerRequest &request) {
                 QVariantMap query;
 
                 for(auto i: request.query().queryItems()) {
@@ -41,17 +42,21 @@ int main(int argc, char *argv[])
                 };
                 qDebug().noquote() << QJsonDocument::fromVariant(args).toJson();
 
-                QByteArray ret;
-                bool ok = QMetaObject::invokeMethod(&api, funName
-                                                    , Qt::DirectConnection
-                                                    , Q_RETURN_ARG(QByteArray, ret)
-                                                    , Q_ARG(QVariantMap, query));
-                if(ok) {
-                    return ret;
-                }
-                else {
-                    return QByteArray();
-                }
+                return QtConcurrent::run([=]() {
+                    QByteArray ret;
+                    NeteaseCloudMusicApi api;
+                    bool ok = QMetaObject::invokeMethod(&api, funName
+                                                        , Qt::DirectConnection
+                                                        , Q_RETURN_ARG(QByteArray, ret)
+                                                        , Q_ARG(QVariantMap, query));
+                    if(ok) {
+                        return QHttpServerResponse(ret);
+                    }
+                    else {
+                        return QHttpServerResponse(QString(u8"函数调用错误").toUtf8());
+                    }
+                });
+
             });
     }
 
