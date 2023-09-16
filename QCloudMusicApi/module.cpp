@@ -135,6 +135,65 @@ const QByteArray NeteaseCloudMusicApi::album_newest(QVariantMap query) {
         );
 }
 
+// 数字专辑&数字单曲-榜单
+const QByteArray NeteaseCloudMusicApi::album_songsaleboard(QVariantMap query) {
+    QVariantMap data = {
+        { "albumType", query.contains("albumType") ? query["albumType"] : 0 } //0为数字专辑,1为数字单曲
+    };
+    const QString type = query.contains("type") ? query["type"].toString() : "daily"; // daily,week,year,total
+    if(type == "year") data["year"] = query["year"];
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/feealbum/songsaleboard/" + type + "/type",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 收藏/取消收藏专辑
+const QByteArray NeteaseCloudMusicApi::album_sub(QVariantMap query) {
+    query["t"] = query.contains("t") && query["t"] == 1 ? "sub" : "unsub";
+    const QVariantMap data = {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/album/" + query["t"].toString(),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 已收藏专辑列表
+const QByteArray NeteaseCloudMusicApi::album_sublist(QVariantMap query) {
+    const QVariantMap data = {
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 25 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "total", true }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/album/sublist",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 专辑内容
 const QByteArray NeteaseCloudMusicApi::album(QVariantMap query) {
     return createRequest(
@@ -170,6 +229,42 @@ const QByteArray NeteaseCloudMusicApi::artist_album(QVariantMap query) {
         );
 }
 
+// 歌手介绍
+const QByteArray NeteaseCloudMusicApi::artist_desc(QVariantMap query) {
+    const QVariantMap data = {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/artist/introduction",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 歌手详情
+const QByteArray NeteaseCloudMusicApi::artist_detail(QVariantMap query) {
+    const QVariantMap data = {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/artist/head/info/get",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 歌手热门 50 首歌曲
 const QByteArray NeteaseCloudMusicApi::artist_top_song(QVariantMap query) {
     const QVariantMap data = {
@@ -194,23 +289,6 @@ const QByteArray NeteaseCloudMusicApi::artists(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/artist/" + QString::number(query["id"].toInt()),
         {},
-        QVariantMap({
-            { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-const QByteArray NeteaseCloudMusicApi::artist_detail(QVariantMap query) {
-    const QVariantMap data = {
-        { "id", query["id"] }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/artist/head/info/get",
-        data,
         QVariantMap({
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },

@@ -72,5 +72,18 @@
         "area": "KR",
         "limit": 10
     },
-    "album_newest": {}
+    "album_newest": {},
+    "album_songsaleboard": {
+        "type": "year",
+        "year": 2020,
+        "albumType": 0
+    },
+    "album_sub": {
+        "id": 173024447,
+        "t": 1
+    },
+    "album_sublist": {},
+    "artist_desc": {
+        "id": 32238754
+    }
 }
