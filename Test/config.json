@@ -20,31 +20,31 @@
         "id": 149114512
     },
     "comment_music": {
-        "id": 1969230350
+        "id": 2058263032
     },
     "artists": {
-        "id": 32238754
+        "id": 15396
     },
     "toplist": {},
     "user_detail": {
-        "uid": 257800231
+        "uid": 79248480
     },
     "artist_detail": {
-        "id": 32238754
+        "id": 15396
     },
     "artist_album": {
-        "id": 159692,
+        "id": 15396,
         "limit": 5
     },
     "artist_top_song": {
-        "id": 32238754
+        "id": 15396
     },
     "search": {
         "keywords": "電音部"
     },
     "countries_code_list": {},
     "user_playlist": {
-        "uid": 257800231
+        "uid": 79248480
     },
     "song_wiki_summary": {
         "id": 2058263032
@@ -59,7 +59,7 @@
         "id": 149114512
     },
     "album_detail": {
-        "id": 84547195
+        "id": 149114512
     },
     "album_list_style": {
         "area": "Z_H",
@@ -79,22 +79,33 @@
         "albumType": 0
     },
     "album_sub": {
-        "id": 173024447,
+        "id": 149114512,
         "t": 1
     },
     "album_sublist": {},
     "artist_desc": {
-        "id": 32238754
+        "id": 15396
     },
     "artist_fans": {
-        "id": 32238754
+        "id": 15396
     },
     "artist_follow_count": {
-        "id": 32238754
+        "id": 15396
     },
     "artist_list": {
         "type": "1",
         "area": "96",
         "initial": "b"
+    },
+    "artist_mv": {
+        "id": 15396
+    },
+    "artist_new_mv": {
+        "before": 1602777625000,
+        "limit": 1
+    },
+    "artist_new_song": {
+        "before": 1602777625000,
+        "limit": 1
     }
 }

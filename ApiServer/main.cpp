@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
                         return QHttpServerResponse(ret);
                     }
                     else {
-                        return QHttpServerResponse(QByteArray());
+                        return QHttpServerResponse(QString(u8"函数调用错误").toUtf8());
                     }
                 });
 
