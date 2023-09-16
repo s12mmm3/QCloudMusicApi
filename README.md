@@ -4,7 +4,7 @@ Qt版 网易云音乐 API
 ## 简介
 本项目翻译自Node.js项目[Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
-更新尽量与原项目同步，暂时只实现了部分接口，底层加解密逻辑已实现
+更新尽量与原项目同步，暂时只实现了部分接口，底层的加解密逻辑已实现
 
 使用方式请参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致；支持设置Http服务器，运行ApiServer即可启动本地Http服务器
 
@@ -21,8 +21,6 @@ conan 是一个开源的 C/C++ 包管理器，可以自动下载、编译和链�
 sudo apt install python3-pip
 pip3 install conan
 ```
-
-在Qt Creator装上conan插件，帮助->关于插件->conan打勾重启，打开项目重新CMake，自动下载/编译依赖的库
 
 ## 使用说明
 ### 引用动态库文件
