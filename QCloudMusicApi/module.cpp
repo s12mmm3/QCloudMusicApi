@@ -265,6 +265,84 @@ const QByteArray NeteaseCloudMusicApi::artist_detail(QVariantMap query) {
         );
 }
 
+// 歌手粉丝
+const QByteArray NeteaseCloudMusicApi::artist_fans(QVariantMap query) {
+    const QVariantMap data = {
+        { "id", query["id"] },
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 20 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/artist/fans/get",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 歌手粉丝数量
+const QByteArray NeteaseCloudMusicApi::artist_follow_count(QVariantMap query) {
+    const QVariantMap data = {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/artist/follow/count/get",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 歌手分类
+
+/*
+    type 取值
+    1:男歌手
+    2:女歌手
+    3:乐队
+
+    area 取值
+    -1:全部
+    7华语
+    96欧美
+    8:日本
+    16韩国
+    0:其他
+
+    initial 取值 a-z/A-Z
+*/
+const QByteArray NeteaseCloudMusicApi::artist_list(QVariantMap query) {
+    const QVariantMap data = {
+        { "initial", (quint16)((query.contains("initial") ? query["initial"].toString()[0] : '\0').toUpper()).unicode() },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 30 },
+        { "total", true },
+        { "type", query.contains("type") ? query["type"] : "1" },
+        { "area", query["area"] },
+        };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/v1/artist/list",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 歌手热门 50 首歌曲
 const QByteArray NeteaseCloudMusicApi::artist_top_song(QVariantMap query) {
     const QVariantMap data = {

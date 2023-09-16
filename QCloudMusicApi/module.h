@@ -58,6 +58,32 @@ public:
     // 歌手详情
     Q_INVOKABLE const QByteArray artist_detail(QVariantMap query);
 
+    // 歌手粉丝
+    Q_INVOKABLE const QByteArray artist_fans(QVariantMap query);
+
+    // 歌手粉丝数量
+    Q_INVOKABLE const QByteArray artist_follow_count(QVariantMap query);
+
+    // 歌手分类
+
+    /*
+    type 取值
+    1:男歌手
+    2:女歌手
+    3:乐队
+
+    area 取值
+    -1:全部
+    7华语
+    96欧美
+    8:日本
+    16韩国
+    0:其他
+
+    initial 取值 a-z/A-Z
+*/
+    Q_INVOKABLE const QByteArray artist_list(QVariantMap query);
+
     // 歌手热门 50 首歌曲
     Q_INVOKABLE const QByteArray artist_top_song(QVariantMap query);
 

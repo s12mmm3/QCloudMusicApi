@@ -85,5 +85,16 @@
     "album_sublist": {},
     "artist_desc": {
         "id": 32238754
+    },
+    "artist_fans": {
+        "id": 32238754
+    },
+    "artist_follow_count": {
+        "id": 32238754
+    },
+    "artist_list": {
+        "type": "1",
+        "area": "96",
+        "initial": "b"
     }
 }
