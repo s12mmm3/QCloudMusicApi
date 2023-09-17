@@ -20,7 +20,7 @@
 #include <QUrlQuery>
 #include <QRegularExpression>
 
-#include "util/crypto.hpp"
+#include "util/crypto.h"
 #include "util/config.h"
 
 static QString chooseUserAgent(QString ua = "") {
