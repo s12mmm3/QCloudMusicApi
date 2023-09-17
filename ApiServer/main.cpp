@@ -40,12 +40,17 @@ int main(int argc, char *argv[])
                     query[i.first] = i.second;
                 }
 
+                QVariantMap headers;
+                for(auto i: request.headers()) {
+                    headers[i.first] = i.second;
+                }
                 QVariantMap args = {
                     { "path", path },
                     { "funName", funName },
                     { "localAddress", request.localAddress().toString() + ":" + QString::number(request.localPort())  },
                     { "remoteAddress", request.remoteAddress().toString() + ":" + QString::number(request.remotePort())  },
-                    { "query", query }
+                    { "query", query },
+                    { "headers", headers }
                 };
                 qDebug().noquote() << QJsonDocument::fromVariant(args).toJson();
 
