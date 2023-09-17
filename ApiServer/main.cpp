@@ -15,6 +15,13 @@ int main(int argc, char *argv[])
     NeteaseCloudMusicApi api;
 
     QHttpServer server;
+    //设置请求的路径和方法未知时的错误提示
+    server.setMissingHandler([] (const QHttpServerRequest &request, QHttpServerResponder &&responder) {
+        QHttpServerResponse response(("Cannot GET "
+                                      + request.url().path()).toUtf8()
+                                     , QHttpServerResponse::StatusCode::NotFound);
+        responder.sendResponse(response);
+    });
 
     auto parseRoute = [](QString funName) {
         QString path = funName.replace("_", "/").trimmed();
@@ -49,12 +56,10 @@ int main(int argc, char *argv[])
                                                         , Qt::DirectConnection
                                                         , Q_RETURN_ARG(QByteArray, ret)
                                                         , Q_ARG(QVariantMap, query));
-                    if(ok) {
-                        return QHttpServerResponse(ret);
+                    if(!ok) {
+                        ret = QString(u8"函数调用错误").toUtf8();
                     }
-                    else {
-                        return QHttpServerResponse(QString(u8"函数调用错误").toUtf8());
-                    }
+                    return QHttpServerResponse(ret);
                 });
 
             });
