@@ -255,7 +255,12 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
             timer.stop(); // 停止定时器
             if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
                 qDebug() << "http请求出错 : " << reply->errorString();
-                                                         reply->deleteLater();
+
+                answer["body"] = QVariantMap({
+                    { "code", 502 },
+                    { "msg", reply->errorString() }
+                });
+                answer["status"] = 502;
             }
             else {
                 // http - 响应状态码
@@ -268,38 +273,40 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
                 }
                 qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
-                if(statusCode == 200) { // http请求响应正常
-                    // 读取响应内容
-                    auto body = reply->readAll();
-                    if(reply->hasRawHeader("set-cookie")) {
-                        answer["cookie"] = reply->rawHeader("set-cookie");
+                // 读取响应内容
+                auto body = reply->readAll();
+                qDebug() << "body" << body;
+                if(reply->hasRawHeader("set-cookie")) {
+                    QStringList setCookie;
+                    for (QNetworkCookie cookie : reply->header(QNetworkRequest::SetCookieHeader).value<QList<QNetworkCookie>>()) {
+                        // 去掉cookie中的domain属性
+                        cookie.setDomain("");
+                        setCookie.append(QString::fromUtf8(cookie.toRawForm()));
                     }
-                    if(options["crypto"].toString() == "eapi") {
-                        answer["body"] = QJsonDocument::fromJson(
-                                             Crypto::aesDecrypt(body, EVP_aes_128_ecb, Crypto::eapiKey, "")
-                                             ).toVariant().toMap();
-                        if(answer["body"].toMap().isEmpty()) {
-                            answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
-                        }
-                    }
-                    else {
+                    answer["cookie"] = setCookie;
+                }
+                if(options["crypto"].toString() == "eapi") {
+                    answer["body"] = QJsonDocument::fromJson(
+                                         Crypto::aesDecrypt(body, EVP_aes_128_ecb, Crypto::eapiKey, "")
+                                         ).toVariant().toMap();
+                    if(answer["body"].toMap().isEmpty()) {
                         answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
                     }
-                    answer["status"] = answer["body"].toMap().contains("code")
-                                           ? answer["body"].toMap()["code"]
-                                           : reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-                    if(QList<int>({201, 302, 400, 502, 800, 801, 802, 803}).indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
-                        answer["status"] = 200;
-                    }
-
-                    answer["status"] = 100 < answer["status"].toInt() && answer["status"].toInt() < 600
-                                           ? answer["status"]
-                                           : 400;
-                    return QJsonDocument::fromVariant(answer).toJson(QJsonDocument::Indented);
                 }
                 else {
-                    reply->deleteLater();
+                    answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
                 }
+                answer["status"] = answer["body"].toMap().contains("code")
+                                       ? answer["body"].toMap()["code"]
+                                       : reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+                if(QList<int>({201, 302, 400, 502, 800, 801, 802, 803}).indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
+                    answer["status"] = 200;
+                }
+
+                answer["status"] = 100 < answer["status"].toInt() && answer["status"].toInt() < 600
+                                       ? answer["status"]
+                                       : 400;
+                return QJsonDocument::fromVariant(answer).toJson(QJsonDocument::Indented);
             }
         }
         else { // 超时处理

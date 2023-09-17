@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
                 qDebug().noquote() << QJsonDocument::fromVariant(args).toJson();
 
                 return QtConcurrent::run([=]() {
-                    QByteArray ret;
                     NeteaseCloudMusicApi api;
+                    QByteArray ret;
                     bool ok = QMetaObject::invokeMethod(&api, funName
                                                         , Qt::DirectConnection
                                                         , Q_RETURN_ARG(QByteArray, ret)
