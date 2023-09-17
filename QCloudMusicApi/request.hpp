@@ -237,78 +237,74 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
             { "body", {} },
             { "cookie", {} }
         };
-        QByteArray result; // 定义一个空字节数组作为结果
-        result.clear();
-        // 设置超时处理定时器
-        QTimer timer;
-        timer.setInterval(10000);  // 设置超时时间 10 秒
-        timer.setSingleShot(true);  // 单次触发
+
+        //设置默认超时时间
+        reply->manager()->setTransferTimeout(QNetworkRequest::DefaultTransferTimeoutConstant);
 
         // 开启一个局部的事件循环，等待响应结束，退出
         QEventLoop eventLoop;
-        QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit); // 定时器超时时退出事件循环
         QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
-        timer.start(); // 启动定时器
         eventLoop.exec(); // 启动事件循环
 
-        if(timer.isActive()) { // 处理响应，定时器激活状态
-            timer.stop(); // 停止定时器
-            if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
-                qDebug() << "http请求出错 : " << reply->errorString();
-                                                         reply->deleteLater();
-            }
-            else {
+        if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
+            answer["body"] = QVariantMap({
+                { "code", 502 },
+                { "msg", reply->errorString() }
+            });
+            answer["status"] = 502;
+        }
+        else {
+            {
                 // http - 响应状态码
                 int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
                 qDebug() << "服务器返回的Code : " << statusCode;
-                QVariantMap headers;
-                for(auto i : reply->rawHeaderList()) {
-                    if(!request.rawHeader(i).isNull()) headers[i] = request.rawHeader(i);
-                }
-                qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
+            }
 
-                if(statusCode == 200) { // http请求响应正常
-                    // 读取响应内容
-                    auto body = reply->readAll();
-                    if(reply->hasRawHeader("set-cookie")) {
-                        answer["cookie"] = reply->rawHeader("set-cookie");
-                    }
-                    if(options["crypto"].toString() == "eapi") {
-                        answer["body"] = QJsonDocument::fromJson(
-                                             Crypto::aesDecrypt(body, EVP_aes_128_ecb, Crypto::eapiKey, "")
-                                             ).toVariant().toMap();
-                        if(answer["body"].toMap().isEmpty()) {
-                            answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
-                        }
-                    }
-                    else {
-                        answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
-                    }
-                    answer["status"] = answer["body"].toMap().contains("code")
-                                           ? answer["body"].toMap()["code"]
-                                           : reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-                    if(QList<int>({201, 302, 400, 502, 800, 801, 802, 803}).indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
-                        answer["status"] = 200;
-                    }
+            QVariantMap headers;
+            for(auto i : reply->rawHeaderList()) {
+                if(!request.rawHeader(i).isNull()) headers[i] = request.rawHeader(i);
+            }
+            qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
-                    answer["status"] = 100 < answer["status"].toInt() && answer["status"].toInt() < 600
-                                           ? answer["status"]
-                                           : 400;
-                    return QJsonDocument::fromVariant(answer).toJson(QJsonDocument::Indented);
+            // 读取响应内容
+            auto body = reply->readAll();
+            qDebug() << "body" << body;
+
+            if(reply->hasRawHeader("set-cookie")) {
+                QStringList setCookie;
+                for (QNetworkCookie cookie : reply->header(QNetworkRequest::SetCookieHeader).value<QList<QNetworkCookie>>()) {
+                    // 去掉cookie中的domain属性
+                    cookie.setDomain("");
+                    setCookie.append(QString::fromUtf8(cookie.toRawForm()));
                 }
-                else {
-                    reply->deleteLater();
+                answer["cookie"] = setCookie;
+            }
+            if(options["crypto"].toString() == "eapi") {
+                answer["body"] = QJsonDocument::fromJson(
+                                     Crypto::aesDecrypt(body, EVP_aes_128_ecb, Crypto::eapiKey, "")
+                                     ).toVariant().toMap();
+                if(answer["body"].toMap().isEmpty()) {
+                    answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
                 }
             }
+            else {
+                answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+            }
+            answer["status"] = answer["body"].toMap().contains("code")
+                                   ? answer["body"].toMap()["code"]
+                                   : reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            if(QList<int>({201, 302, 400, 502, 800, 801, 802, 803}).indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
+                answer["status"] = 200;
+            }
+
+            answer["status"] = 100 < answer["status"].toInt() && answer["status"].toInt() < 600
+                                   ? answer["status"]
+                                   : 400;
         }
-        else { // 超时处理
-            QObject::disconnect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 断开连接
-            reply->abort(); // 中止请求
-            qDebug() << "http请求超时 ";
-        }
+
         reply->deleteLater();
-        return result;
+        return QJsonDocument::fromVariant(answer).toJson(QJsonDocument::Indented);
     };
     request.setUrl(url);
     if (method == QNetworkAccessManager::PostOperation) {

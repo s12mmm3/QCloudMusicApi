@@ -323,7 +323,7 @@ const QByteArray NeteaseCloudMusicApi::artist_follow_count(QVariantMap query) {
 */
 const QByteArray NeteaseCloudMusicApi::artist_list(QVariantMap query) {
     const QVariantMap data = {
-        { "initial", (quint16)((query.contains("initial") ? query["initial"].toString()[0] : '\0').toUpper()).unicode() },
+        { "initial", (quint16)((query.contains("initial") ? query["initial"].toString()[0] : QChar('\0')).toUpper()).unicode() },
         { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
         { "limit", query.contains("limit") ? query["limit"].toInt() : 30 },
         { "total", true },
