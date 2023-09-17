@@ -20,8 +20,8 @@
 #include <QUrlQuery>
 #include <QRegularExpression>
 
-#include "crypto.hpp"
-#include "config.h"
+#include "util/crypto.hpp"
+#include "util/config.h"
 
 static QString chooseUserAgent(QString ua = "") {
     const QVariantMap userAgentList = {
