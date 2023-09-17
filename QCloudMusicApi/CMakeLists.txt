@@ -15,6 +15,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
 add_library(QCloudMusicApi SHARED
     ./util/crypto.h
     ./util/config.h
+    ./util/index.h
     module.h
     module.cpp
     request.hpp
