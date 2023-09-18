@@ -57,18 +57,21 @@ int main(int argc, char *argv[])
                 return QtConcurrent::run([=]() {
                     NeteaseCloudMusicApi api;
                     QVariantMap ret;
-                    QByteArray result;
                     bool ok = QMetaObject::invokeMethod(&api, funName
                                                         , Qt::DirectConnection
                                                         , Q_RETURN_ARG(QVariantMap, ret)
                                                         , Q_ARG(QVariantMap, query));
-                    if(!ok) {
-                        result = QString(u8"函数调用错误").toUtf8();
+                    QByteArray result;
+                    if(ok) {
+                        result = QJsonDocument::fromVariant(ret["body"].toMap()).toJson();
                     }
                     else {
-                        result = QJsonDocument::fromVariant(ret).toJson();
+                        //函数调用错误
                     }
-                    return QHttpServerResponse(result);
+                    auto response = QHttpServerResponse(result, (QHttpServerResponse::StatusCode)ret["status"].toInt());
+                    const auto cookies = ret["cookie"].toString();
+                    response.setHeader("Set-Cookie", cookies.toUtf8());
+                    return response;
                 });
 
             });

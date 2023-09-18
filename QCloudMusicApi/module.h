@@ -119,11 +119,14 @@ public:
     // 手机登录
     Q_INVOKABLE const QVariantMap login_cellphone(QVariantMap query);
 
-    // 歌词
-    Q_INVOKABLE const QVariantMap lyric(QVariantMap query);
+    // 退出登录
+    Q_INVOKABLE const QVariantMap logout(QVariantMap query);
 
     // 新版歌词 - 包含逐字歌词
     Q_INVOKABLE const QVariantMap lyric_new(QVariantMap query);
+
+    // 歌词
+    Q_INVOKABLE const QVariantMap lyric(QVariantMap query);
 
     // 相关歌单
     Q_INVOKABLE const QVariantMap related_playlist(QVariantMap query);
@@ -136,6 +139,9 @@ public:
 
     // 所有榜单介绍
     Q_INVOKABLE const QVariantMap toplist(QVariantMap query);
+
+    // 获取账号信息
+    Q_INVOKABLE const QVariantMap user_account(QVariantMap query);
 
     // 用户详情
     Q_INVOKABLE const QVariantMap user_detail(QVariantMap query);

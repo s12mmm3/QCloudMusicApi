@@ -591,25 +591,15 @@ const QVariantMap NeteaseCloudMusicApi::login_cellphone(QVariantMap query) {
     return result;
 }
 
-// 歌词
-const QVariantMap NeteaseCloudMusicApi::lyric(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    query["cookie"] = cookie;
-
-    const QVariantMap data = {
-        { "id", query["id"] },
-        { "tv", -1 },
-        { "lv", -1 },
-        { "rv", -1 },
-        { "kv", -1 }
-    };
+// 退出登录
+const QVariantMap NeteaseCloudMusicApi::logout(QVariantMap query) {
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/song/lyric?_nmclfl=1",
-        data,
+        "https://music.163.com/weapi/logout",
+        {},
         QVariantMap({
-            { "crypto", "api" },
+            { "crypto", "eapi" },
+            { "ua", "pc" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] }
@@ -640,6 +630,32 @@ const QVariantMap NeteaseCloudMusicApi::lyric_new(QVariantMap query) {
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
             { "url", "/api/song/lyric/v1" }
+        })
+        );
+}
+
+// 歌词
+const QVariantMap NeteaseCloudMusicApi::lyric(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    query["cookie"] = cookie;
+
+    const QVariantMap data = {
+        { "id", query["id"] },
+        { "tv", -1 },
+        { "lv", -1 },
+        { "rv", -1 },
+        { "kv", -1 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/song/lyric?_nmclfl=1",
+        data,
+        QVariantMap({
+            { "crypto", "api" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
         })
         );
 }
@@ -686,11 +702,11 @@ const QVariantMap NeteaseCloudMusicApi::related_playlist(QVariantMap query) {
                 )
             );
     }
-    QVariantMap response = {
+    result["body"] = QVariantMap({
         { "code", 200 },
         { "playlists", QVariant(playlists) }
-    };
-    return response;
+    });
+    return result;
 }
 
 // 搜索
@@ -748,6 +764,22 @@ const QVariantMap NeteaseCloudMusicApi::toplist(QVariantMap query) {
         {},
         QVariantMap({
             { "crypto", "api" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 获取账号信息
+const QVariantMap NeteaseCloudMusicApi::user_account(QVariantMap query) {
+    const QVariantMap data = {};
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/nuser/account/get",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] }
