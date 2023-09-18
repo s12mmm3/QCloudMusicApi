@@ -110,5 +110,12 @@
     },
     "artist_songs": {
         "id": 15396
+    },
+    "artist_sub": {
+        "id": 6452,
+        "t": 1
+    },
+    "artist_video": {
+        "id": 15396
     }
 }

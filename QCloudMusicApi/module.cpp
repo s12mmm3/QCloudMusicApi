@@ -436,6 +436,48 @@ const QVariantMap NeteaseCloudMusicApi::artist_songs(QVariantMap query) {
         );
 }
 
+// 收藏与取消收藏歌手
+const QVariantMap NeteaseCloudMusicApi::artist_sub(QVariantMap query) {
+    query["t"] = query.contains("t") && query["t"] == 1 ? "sub" : "unsub";
+    QStringList artistIds;
+    artistIds.append(query["id"].toString());
+    const QVariantMap data = {
+        { "artistId", query["id"] },
+        { "artistIds", artistIds }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/artist/" + query["t"].toString(),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 关注歌手列表
+const QVariantMap NeteaseCloudMusicApi::artist_sublist(QVariantMap query) {
+    const QVariantMap data = {
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 25 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "total", true }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/artist/sublist",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 歌手热门 50 首歌曲
 const QVariantMap NeteaseCloudMusicApi::artist_top_song(QVariantMap query) {
     const QVariantMap data = {
@@ -444,6 +486,30 @@ const QVariantMap NeteaseCloudMusicApi::artist_top_song(QVariantMap query) {
     return createRequest(
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/artist/top/song",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 歌手相关视频
+const QVariantMap NeteaseCloudMusicApi::artist_video(QVariantMap query) {
+    const QVariantMap data = {
+        { "artistId", query["id"] },
+        { "page", QJsonDocument::fromVariant(QVariantMap({
+                                                { "size", query.contains("size") ? query["size"] : 10 },
+                                                { "cursor", query.contains("cursor") ? query["cursor"] : 0 }
+                                            })).toJson(QJsonDocument::JsonFormat::Compact) },
+        { "tab", 0 },
+        { "order", query.contains("order") ? query["order"] : 0 },
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/mlog/artist/video",
         data,
         QVariantMap({
             { "crypto", "weapi" },

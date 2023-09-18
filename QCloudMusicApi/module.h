@@ -96,8 +96,17 @@ public:
     // 歌手全部歌曲
     Q_INVOKABLE const QVariantMap artist_songs(QVariantMap query);
 
+    // 收藏与取消收藏歌手
+    Q_INVOKABLE const QVariantMap artist_sub(QVariantMap query);
+
+    // 关注歌手列表
+    Q_INVOKABLE const QVariantMap artist_sublist(QVariantMap query);
+
     // 歌手热门 50 首歌曲
     Q_INVOKABLE const QVariantMap artist_top_song(QVariantMap query);
+
+    // 歌手相关视频
+    Q_INVOKABLE const QVariantMap artist_video(QVariantMap query);
 
     // 歌手单曲
     Q_INVOKABLE const QVariantMap artists(QVariantMap query);
