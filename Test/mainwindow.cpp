@@ -43,16 +43,16 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
     ui->textEdit_2->setText(QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toJson(QJsonDocument::Indented));
-    QByteArray ret;
+    QVariantMap ret;
     QMetaObject::invokeMethod(&api, ui->comboBox->currentText().toUtf8()
                               , Qt::DirectConnection
-                              , Q_RETURN_ARG(QByteArray, ret)
+                              , Q_RETURN_ARG(QVariantMap, ret)
                               , Q_ARG(QVariantMap, QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toVariant().toMap()));
     if(ui->checkBox->isChecked()) {
-        ui->textEdit->setText(QJsonDocument::fromJson(ret).toJson(QJsonDocument::Indented));
+        ui->textEdit->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
     }
     else {
-        ui->textEdit->setText(QJsonDocument::fromJson(ret).toJson(QJsonDocument::Compact));
+        ui->textEdit->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact));
     }
 }
 

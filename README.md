@@ -50,10 +50,10 @@ qDebug() << api.song_url_v1(QVariantMap({ {"id", 1408586353} }));
 也可以通过Qt的反射调用
 ```
 NeteaseCloudMusicApi api;
-QByteArray ret;
+QVariantMap ret;
 QMetaObject::invokeMethod(&api, "song_url_v1"
                               , Qt::DirectConnection
-                              , Q_RETURN_ARG(QByteArray, ret)
+                              , Q_RETURN_ARG(QVariantMap, ret)
                               , Q_ARG(QVariantMap, QVariantMap({ {"id", 1408586353} }));
 qDebug() << ret;
 ```

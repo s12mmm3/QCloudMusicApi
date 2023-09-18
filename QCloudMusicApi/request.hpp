@@ -269,7 +269,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
 
             // 读取响应内容
             auto body = reply->readAll();
-            qDebug() << "body" << body;
+            qDebug().noquote() << "body" << body;
 
             if(reply->hasRawHeader("set-cookie")) {
                 QStringList setCookie;
@@ -289,7 +289,8 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
                 }
             }
             else {
-                answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+                if(!QJsonDocument::fromJson(body).isNull()) answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+                else answer["body"] = QString::fromUtf8(body);
             }
             answer["status"] = answer["body"].toMap().contains("code")
                                    ? answer["body"].toMap()["code"]
@@ -304,7 +305,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
         }
 
         reply->deleteLater();
-        return QJsonDocument::fromVariant(answer).toJson(QJsonDocument::Indented);
+        return answer;
     };
     request.setUrl(url);
     if (method == QNetworkAccessManager::PostOperation) {
