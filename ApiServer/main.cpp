@@ -40,26 +40,38 @@ int main(int argc, char *argv[])
                     query[i.first] = i.second;
                 }
 
+                QVariantMap headers;
+                for(auto i: request.headers()) {
+                    headers[i.first] = i.second;
+                }
                 QVariantMap args = {
                     { "path", path },
                     { "funName", funName },
                     { "localAddress", request.localAddress().toString() + ":" + QString::number(request.localPort())  },
                     { "remoteAddress", request.remoteAddress().toString() + ":" + QString::number(request.remotePort())  },
-                    { "query", query }
+                    { "query", query },
+                    { "headers", headers }
                 };
                 qDebug().noquote() << QJsonDocument::fromVariant(args).toJson();
 
                 return QtConcurrent::run([=]() {
                     NeteaseCloudMusicApi api;
-                    QByteArray ret;
+                    QVariantMap ret;
                     bool ok = QMetaObject::invokeMethod(&api, funName
                                                         , Qt::DirectConnection
-                                                        , Q_RETURN_ARG(QByteArray, ret)
+                                                        , Q_RETURN_ARG(QVariantMap, ret)
                                                         , Q_ARG(QVariantMap, query));
-                    if(!ok) {
-                        ret = QString(u8"函数调用错误").toUtf8();
+                    QByteArray result;
+                    if(ok) {
+                        result = QJsonDocument::fromVariant(ret["body"].toMap()).toJson();
                     }
-                    return QHttpServerResponse(ret);
+                    else {
+                        //函数调用错误
+                    }
+                    auto response = QHttpServerResponse(result, (QHttpServerResponse::StatusCode)ret["status"].toInt());
+                    const auto cookies = ret["cookie"].toString();
+                    response.setHeader("Set-Cookie", cookies.toUtf8());
+                    return response;
                 });
 
             });
