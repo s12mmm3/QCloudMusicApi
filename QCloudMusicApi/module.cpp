@@ -20,6 +20,25 @@ NeteaseCloudMusicApi::~NeteaseCloudMusicApi() {
 
 }
 
+// 初始化名字
+const QVariantMap NeteaseCloudMusicApi::activate_init_profile(QVariantMap query) {
+    QVariantMap data = {
+        { "nickname", query["nickname"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/eapi/activate/initProfile",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/activate/initProfile" }
+        })
+        );
+}
+
 // 专辑动态信息
 const QVariantMap NeteaseCloudMusicApi::album_detail_dynamic(QVariantMap query) {
     const QVariantMap data = {
@@ -535,6 +554,77 @@ const QVariantMap NeteaseCloudMusicApi::artists(QVariantMap query) {
         );
 }
 
+// 首页轮播图
+const QVariantMap NeteaseCloudMusicApi::banner(QVariantMap query) {
+    const auto type0 = query.contains("type") ? query["type"].toInt() : 0;
+    const QMap<int, QString> typeMap = {
+        { 0, "pc" },
+        { 1, "android" },
+        { 2, "iphone" },
+        { 3, "ipad" }
+    };
+    const QString type = typeMap.contains(type0) ? typeMap[type0] : "pc";
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/v2/banner/get",
+        {
+            { "clientType", type }
+        },
+        QVariantMap({
+            { "crypto", "api" },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 搜索
+const QVariantMap NeteaseCloudMusicApi::cloudsearch(QVariantMap query) {
+    const QVariantMap data = {
+        { "s", query["keywords"] },
+        { "type", query.contains("type") ? query["type"].toInt() : 1 },// 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 30 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "total", true }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/eapi/cloudsearch/pc",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "url", "/api/cloudsearch/pc" },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 歌曲评论
+const QVariantMap NeteaseCloudMusicApi::comment_music(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "rid", query["id"] },
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 20 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "beforeTime", query.contains("beforeTime") ? query["beforeTime"].toInt() : 0 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/v1/resource/comments/R_SO_4_" + QString::number(query["id"].toInt()),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 国家编码列表
 const QVariantMap NeteaseCloudMusicApi::countries_code_list(QVariantMap query) {
     const QVariantMap data = { };
@@ -548,71 +638,6 @@ const QVariantMap NeteaseCloudMusicApi::countries_code_list(QVariantMap query) {
             { "proxy", query["proxy"] },
             { "url", "/api/lbs/countries/v1" },
             { "realIP", query["realIP"] }
-        })
-        );
-}
-
-// 获取客户端歌曲下载链接
-const QVariantMap NeteaseCloudMusicApi::song_download_url(QVariantMap query) {
-    QVariantMap data = {
-        { "id", query["id"] },
-        { "br", query.contains("br") ? query["br"] : 999000 }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://interface.music.163.com/eapi/song/enhance/download/url",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/song/enhance/download/url" }
-        })
-        );
-}
-
-// 歌曲链接 - v1
-// 此版本不再采用 br 作为音质区分的标准
-// 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
-const QVariantMap NeteaseCloudMusicApi::song_url_v1(QVariantMap query) {
-    QVariantMap data = {
-        { "ids", query["id"].toList() },
-        { "level", query["level"].toString() },
-        { "encodeType", "flac" }
-    };
-    if(data["level"].toString() == "sky") {
-        data["immerseType"] = "c51";
-    }
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://interface.music.163.com/eapi/song/enhance/player/url/v1",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/song/enhance/player/url/v1" }
-        })
-        );
-}
-
-// 音乐百科基础信息
-const QVariantMap NeteaseCloudMusicApi::song_wiki_summary(QVariantMap query) {
-    QVariantMap data = {
-        { "songId", query["id"].toInt() }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://interface3.music.163.com/eapi/music/wiki/home/song/get",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/song/play/about/block/page" }
         })
         );
 }
@@ -726,159 +751,14 @@ const QVariantMap NeteaseCloudMusicApi::lyric(QVariantMap query) {
         );
 }
 
-// 相关歌单
-const QVariantMap NeteaseCloudMusicApi::related_playlist(QVariantMap query) {
-    QVariantMap result = createRequest(
-        QNetworkAccessManager::GetOperation,
-        "https://music.163.com/playlist?id=" + query["id"].toString(),
-        {},
-        QVariantMap({
-            { "ua", "pc" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-    QRegularExpression pattern("<div class=\"cver u-cover u-cover-3\">[\\s\\S]*?<img src=\"([^\"]+)\">[\\s\\S]*?<a class=\"sname f-fs1 s-fc0\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>[\\s\\S]*?<a class=\"nm nm f-thide s-fc3\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>");
-    QRegularExpressionMatchIterator it = pattern.globalMatch(result["body"].toString());
-    QJsonArray playlists;
-    while (it.hasNext()) {
-        auto result = it.next().capturedTexts();
-        playlists.push_back(
-            QJsonValue::fromVariant(
-                QVariantMap({
-                    {
-                        "creator", {
-                            QVariantMap({
-                                { "userId", result[4].split("/user/home?id=")[1] },
-                                { "nickname", result[5] }
-                            })
-                        }
-                    },
-                    {
-                        "coverImgUrl", result[1].split("?param=50y50")[0]
-                    },
-                    {
-                        "name", result[3]
-                    },
-                    {
-                        "id", result[2].split("/playlist?id=")[1]
-                    }
-                })
-                )
-            );
-    }
-    result["body"] = QVariantMap({
-        { "code", 200 },
-        { "playlists", QVariant(playlists) }
-    });
-    return result;
-}
-
-// 搜索
-const QVariantMap NeteaseCloudMusicApi::cloudsearch(QVariantMap query) {
-    const QVariantMap data = {
-        { "s", query["keywords"] },
-        { "type", query.contains("type") ? query["type"].toInt() : 1 },// 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
-        { "limit", query.contains("limit") ? query["limit"].toInt() : 30 },
-        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
-        { "total", true }
+// 重复昵称检测
+const QVariantMap NeteaseCloudMusicApi::nickname_check(QVariantMap query) {
+    QVariantMap data = {
+        { "nickname", query["nickname"] }
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://interface.music.163.com/eapi/cloudsearch/pc",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "url", "/api/cloudsearch/pc" },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-// 歌曲评论
-const QVariantMap NeteaseCloudMusicApi::comment_music(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "pc";
-    query["cookie"] = cookie;
-    const QVariantMap data = {
-        { "rid", query["id"] },
-        { "limit", query.contains("limit") ? query["limit"].toInt() : 20 },
-        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
-        { "beforeTime", query.contains("beforeTime") ? query["beforeTime"].toInt() : 0 }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/v1/resource/comments/R_SO_4_" + QString::number(query["id"].toInt()),
-        data,
-        QVariantMap({
-            { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-// 所有榜单介绍
-const QVariantMap NeteaseCloudMusicApi::toplist(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/toplist",
-        {},
-        QVariantMap({
-            { "crypto", "api" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-// 获取账号信息
-const QVariantMap NeteaseCloudMusicApi::user_account(QVariantMap query) {
-    const QVariantMap data = {};
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/nuser/account/get",
-        data,
-        QVariantMap({
-            { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-// 用户详情
-const QVariantMap NeteaseCloudMusicApi::user_detail(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/v1/user/detail/" + query["uid"].toString(),
-        {},
-        QVariantMap({
-            { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-// 用户歌单
-const QVariantMap NeteaseCloudMusicApi::user_playlist(QVariantMap query) {
-    const QVariantMap data = {
-        { "uid", query["uid"] },
-        { "limit", query.contains("limit") ? query["limit"] : 30 },
-        { "offset", query.contains("offset") ? query["offset"] : 0 },
-        { "includeVideo", true },
-        };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/user/playlist",
+        "https://music.163.com/api/nickname/duplicated",
         data,
         QVariantMap({
             { "crypto", "weapi" },
@@ -945,6 +825,55 @@ const QVariantMap NeteaseCloudMusicApi::register_anonimous(QVariantMap query) {
     return result;
 }
 
+// 相关歌单
+const QVariantMap NeteaseCloudMusicApi::related_playlist(QVariantMap query) {
+    QVariantMap result = createRequest(
+        QNetworkAccessManager::GetOperation,
+        "https://music.163.com/playlist?id=" + query["id"].toString(),
+        {},
+        QVariantMap({
+            { "ua", "pc" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+    QRegularExpression pattern("<div class=\"cver u-cover u-cover-3\">[\\s\\S]*?<img src=\"([^\"]+)\">[\\s\\S]*?<a class=\"sname f-fs1 s-fc0\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>[\\s\\S]*?<a class=\"nm nm f-thide s-fc3\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>");
+    QRegularExpressionMatchIterator it = pattern.globalMatch(result["body"].toString());
+    QJsonArray playlists;
+    while (it.hasNext()) {
+        auto result = it.next().capturedTexts();
+        playlists.push_back(
+            QJsonValue::fromVariant(
+                QVariantMap({
+                    {
+                        "creator", {
+                            QVariantMap({
+                                { "userId", result[4].split("/user/home?id=")[1] },
+                                { "nickname", result[5] }
+                            })
+                        }
+                    },
+                    {
+                        "coverImgUrl", result[1].split("?param=50y50")[0]
+                    },
+                    {
+                        "name", result[3]
+                    },
+                    {
+                        "id", result[2].split("/playlist?id=")[1]
+                    }
+                })
+                )
+            );
+    }
+    result["body"] = QVariantMap({
+        { "code", 200 },
+        { "playlists", QVariant(playlists) }
+    });
+    return result;
+}
+
 // 搜索
 const QVariantMap NeteaseCloudMusicApi::search(QVariantMap query) {
     if (query.contains("type") && query["type"].toString() == "2000") {
@@ -975,6 +904,138 @@ const QVariantMap NeteaseCloudMusicApi::search(QVariantMap query) {
     return createRequest(
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/search/get",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 获取客户端歌曲下载链接
+const QVariantMap NeteaseCloudMusicApi::song_download_url(QVariantMap query) {
+    QVariantMap data = {
+        { "id", query["id"] },
+        { "br", query.contains("br") ? query["br"] : 999000 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/eapi/song/enhance/download/url",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/song/enhance/download/url" }
+        })
+        );
+}
+
+// 歌曲链接 - v1
+// 此版本不再采用 br 作为音质区分的标准
+// 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
+const QVariantMap NeteaseCloudMusicApi::song_url_v1(QVariantMap query) {
+    QVariantMap data = {
+        { "ids", query["id"].toList() },
+        { "level", query["level"].toString() },
+        { "encodeType", "flac" }
+    };
+    if(data["level"].toString() == "sky") {
+        data["immerseType"] = "c51";
+    }
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/eapi/song/enhance/player/url/v1",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/song/enhance/player/url/v1" }
+        })
+        );
+}
+
+// 音乐百科基础信息
+const QVariantMap NeteaseCloudMusicApi::song_wiki_summary(QVariantMap query) {
+    QVariantMap data = {
+        { "songId", query["id"].toInt() }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface3.music.163.com/eapi/music/wiki/home/song/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/song/play/about/block/page" }
+        })
+        );
+}
+
+// 所有榜单介绍
+const QVariantMap NeteaseCloudMusicApi::toplist(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/toplist",
+        {},
+        QVariantMap({
+            { "crypto", "api" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 获取账号信息
+const QVariantMap NeteaseCloudMusicApi::user_account(QVariantMap query) {
+    const QVariantMap data = {};
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/nuser/account/get",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 用户详情
+const QVariantMap NeteaseCloudMusicApi::user_detail(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/v1/user/detail/" + query["uid"].toString(),
+        {},
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 用户歌单
+const QVariantMap NeteaseCloudMusicApi::user_playlist(QVariantMap query) {
+    const QVariantMap data = {
+        { "uid", query["uid"] },
+        { "limit", query.contains("limit") ? query["limit"] : 30 },
+        { "offset", query.contains("offset") ? query["offset"] : 0 },
+        { "includeVideo", true },
+        };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/user/playlist",
         data,
         QVariantMap({
             { "crypto", "weapi" },

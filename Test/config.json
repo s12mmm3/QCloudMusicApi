@@ -117,5 +117,14 @@
     },
     "artist_video": {
         "id": 15396
+    },
+    "banner": {
+        "type": 2
+    },
+    "activate_init_profile": {
+        "nickname": "testUser2019"
+    },
+    "nickname_check": {
+        "nickname": "testUser2019"
     }
 }
