@@ -601,6 +601,74 @@ const QVariantMap NeteaseCloudMusicApi::cloudsearch(QVariantMap query) {
         );
 }
 
+// 专辑评论
+const QVariantMap NeteaseCloudMusicApi::comment_album(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "rid", query["id"] },
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 20 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "beforeTime", query.contains("before") ? query["before"].toInt() : 0 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/v1/resource/comments/R_AL_3_" + QString::number(query["id"].toInt()),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 电台评论
+const QVariantMap NeteaseCloudMusicApi::comment_dj(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "rid", query["id"] },
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 20 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "beforeTime", query.contains("before") ? query["before"].toInt() : 0 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/v1/resource/comments/A_DJ_1_" + QString::number(query["id"].toInt()),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 获取动态评论
+const QVariantMap NeteaseCloudMusicApi::comment_event(QVariantMap query) {
+    const QVariantMap data = {
+        { "limit", query.contains("limit") ? query["limit"].toInt() : 20 },
+        { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
+        { "beforeTime", query.contains("before") ? query["before"].toInt() : 0 }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/v1/resource/comments/" + QString::number(query["threadId"].toInt()),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 歌曲评论
 const QVariantMap NeteaseCloudMusicApi::comment_music(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
@@ -610,7 +678,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_music(QVariantMap query) {
         { "rid", query["id"] },
         { "limit", query.contains("limit") ? query["limit"].toInt() : 20 },
         { "offset", query.contains("offset") ? query["offset"].toInt() : 0 },
-        { "beforeTime", query.contains("beforeTime") ? query["beforeTime"].toInt() : 0 }
+        { "beforeTime", query.contains("before") ? query["before"].toInt() : 0 }
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,

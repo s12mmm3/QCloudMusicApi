@@ -126,5 +126,14 @@
     },
     "nickname_check": {
         "nickname": "testUser2019"
+    },
+    "comment_album": {
+        "id": 149114512
+    },
+    "comment_dj": {
+        "id": 794062371
+    },
+    "comment_event": {
+        "threadId": "A_EV_2_6559519868_32953014"
     }
 }

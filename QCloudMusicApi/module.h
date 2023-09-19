@@ -120,6 +120,15 @@ public:
     // 搜索
     Q_INVOKABLE const QVariantMap cloudsearch(QVariantMap query);
 
+    // 专辑评论
+    Q_INVOKABLE const QVariantMap comment_album(QVariantMap query);
+
+    // 电台评论
+    Q_INVOKABLE const QVariantMap comment_dj(QVariantMap query);
+
+    // 获取动态评论
+    Q_INVOKABLE const QVariantMap comment_event(QVariantMap query);
+
     // 歌曲评论
     Q_INVOKABLE const QVariantMap comment_music(QVariantMap query);
 
