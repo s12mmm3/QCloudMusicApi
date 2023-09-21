@@ -176,6 +176,9 @@ public:
     // 获取账号信息
     Q_INVOKABLE const QVariantMap user_account(QVariantMap query);
 
+    // 获取用户历史评论
+    Q_INVOKABLE const QVariantMap user_comment_history(QVariantMap query);
+
     // 用户详情
     Q_INVOKABLE const QVariantMap user_detail(QVariantMap query);
 
