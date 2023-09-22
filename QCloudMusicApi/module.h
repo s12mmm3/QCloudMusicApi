@@ -28,6 +28,9 @@ public:
     // 数字专辑详情
     Q_INVOKABLE const QVariantMap album_detail(QVariantMap query);
 
+    // 专辑简要百科信息
+    Q_INVOKABLE const QVariantMap album_get(QVariantMap query);
+
     // 数字专辑-语种风格馆
     Q_INVOKABLE const QVariantMap album_list_style(QVariantMap query);
 
@@ -67,6 +70,9 @@ public:
     // 歌手粉丝数量
     Q_INVOKABLE const QVariantMap artist_follow_count(QVariantMap query);
 
+    // 歌手简要百科信息
+    Q_INVOKABLE const QVariantMap artist_get(QVariantMap query);
+
     // 歌手分类
 
     /*
@@ -95,6 +101,10 @@ public:
 
     // 关注歌手新歌
     Q_INVOKABLE const QVariantMap artist_new_song(QVariantMap query);
+
+    // 搜索歌手
+    // 可传关键字或者歌手id
+    Q_INVOKABLE const QVariantMap artist_search(QVariantMap query);
 
     // 歌手全部歌曲
     Q_INVOKABLE const QVariantMap artist_songs(QVariantMap query);
@@ -147,6 +157,9 @@ public:
     // 歌词
     Q_INVOKABLE const QVariantMap lyric(QVariantMap query);
 
+    // mv简要百科信息
+    Q_INVOKABLE const QVariantMap mv_get(QVariantMap query);
+
     // 重复昵称检测
     Q_INVOKABLE const QVariantMap nickname_check(QVariantMap query);
 
@@ -161,6 +174,9 @@ public:
 
     // 获取客户端歌曲下载链接
     Q_INVOKABLE const QVariantMap song_download_url(QVariantMap query);
+
+    // 歌曲简要百科信息
+    Q_INVOKABLE const QVariantMap song_get(QVariantMap query);
 
     // 歌曲链接 - v1
     // 此版本不再采用 br 作为音质区分的标准
