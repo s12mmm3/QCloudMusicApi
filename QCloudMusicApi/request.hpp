@@ -154,8 +154,8 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
         })));
     }
     else if(options["crypto"].toString() == "eapi") {
-        const QVariantMap cookie = options.contains("cookie") ? options["cookie"].toMap() : QVariantMap();
-        const QString csrfToken = cookie.contains("__csrf") ? cookie["__csrf"].toString() : "";
+        const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
+        const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header =
             {
              //系统版本
@@ -164,18 +164,14 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
              // app版本
              { "appver", cookie["appver"] },
              //版本号
-             { "versioncode", cookie.contains("versioncode") ? cookie["versioncode"]
-                                                            : "" },
+             { "versioncode", cookie.value("versioncode", "") },
              //设备model
              { "mobilename", cookie["mobilename"] },
-             { "buildver", cookie.contains("buildver") ? cookie["buildver"]
-                                                      : QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10) },
+             { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
              //设备分辨率
-             { "resolution", cookie.contains("resolution") ? cookie["resolution"]
-                                                          : "1920x1080" },
+             { "resolution", cookie.value("resolution", "1920x1080") },
              { "__csrf", csrfToken },
-             { "os", cookie.contains("os") ? cookie["os"]
-                                          : "android" },
+             { "os", cookie.value("os", "android") },
              { "channel", cookie["channel"] },
              { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
                                   + "_"
