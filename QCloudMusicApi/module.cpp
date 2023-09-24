@@ -75,25 +75,6 @@ const QVariantMap NeteaseCloudMusicApi::album_detail(QVariantMap query) {
         );
 }
 
-// 专辑简要百科信息
-const QVariantMap NeteaseCloudMusicApi::album_get(QVariantMap query) {
-    const QVariantMap data = {
-        { "albumId", query["id"] }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/rep/ugc/album/get",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/rep/ugc/album/get" }
-        })
-        );
-}
-
 // 数字专辑-语种风格馆
 const QVariantMap NeteaseCloudMusicApi::album_list_style(QVariantMap query) {
     const QVariantMap data = {
@@ -341,25 +322,6 @@ const QVariantMap NeteaseCloudMusicApi::artist_follow_count(QVariantMap query) {
         );
 }
 
-// 歌手简要百科信息
-const QVariantMap NeteaseCloudMusicApi::artist_get(QVariantMap query) {
-    const QVariantMap data = {
-        { "artistId", query["id"] }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/rep/ugc/artist/get",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/rep/ugc/artist/get" }
-        })
-        );
-}
-
 // 歌手分类
 
 /*
@@ -457,26 +419,6 @@ const QVariantMap NeteaseCloudMusicApi::artist_new_song(QVariantMap query) {
     return createRequest(
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/sub/artist/new/works/song/list",
-        data,
-        QVariantMap({
-            { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-// 搜索歌手
-// 可传关键字或者歌手id
-const QVariantMap NeteaseCloudMusicApi::artist_search(QVariantMap query) {
-    const QVariantMap data = {
-        { "keyword", query["keyword"] },
-        { "limit", query.value("limit", 40) }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/rep/ugc/artist/search",
         data,
         QVariantMap({
             { "crypto", "weapi" },
@@ -877,25 +819,6 @@ const QVariantMap NeteaseCloudMusicApi::lyric(QVariantMap query) {
         );
 }
 
-// mv简要百科信息
-const QVariantMap NeteaseCloudMusicApi::mv_get(QVariantMap query) {
-    const QVariantMap data = {
-        { "mvId", query["id"] }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/rep/ugc/mv/get",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/rep/ugc/mv/get" }
-        })
-        );
-}
-
 // 重复昵称检测
 const QVariantMap NeteaseCloudMusicApi::nickname_check(QVariantMap query) {
     QVariantMap data = {
@@ -1079,8 +1002,85 @@ const QVariantMap NeteaseCloudMusicApi::song_download_url(QVariantMap query) {
         );
 }
 
+// 专辑简要百科信息
+const QVariantMap NeteaseCloudMusicApi::ugc_album_get(QVariantMap query) {
+    const QVariantMap data = {
+        { "albumId", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/rep/ugc/album/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/rep/ugc/album/get" }
+        })
+        );
+}
+
+// 歌手简要百科信息
+const QVariantMap NeteaseCloudMusicApi::ugc_artist_get(QVariantMap query) {
+    const QVariantMap data = {
+        { "artistId", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/rep/ugc/artist/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/rep/ugc/artist/get" }
+        })
+        );
+}
+
+// 搜索歌手
+// 可传关键字或者歌手id
+const QVariantMap NeteaseCloudMusicApi::ugc_artist_search(QVariantMap query) {
+    const QVariantMap data = {
+        { "keyword", query["keyword"] },
+        { "limit", query.value("limit", 40) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/rep/ugc/artist/search",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// mv简要百科信息
+const QVariantMap NeteaseCloudMusicApi::ugc_mv_get(QVariantMap query) {
+    const QVariantMap data = {
+        { "mvId", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/rep/ugc/mv/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/rep/ugc/mv/get" }
+        })
+        );
+}
+
 // 歌曲简要百科信息
-const QVariantMap NeteaseCloudMusicApi::song_get(QVariantMap query) {
+const QVariantMap NeteaseCloudMusicApi::ugc_song_get(QVariantMap query) {
     const QVariantMap data = {
         { "songId", query["id"] }
     };
