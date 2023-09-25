@@ -139,19 +139,22 @@
     "user_comment_history": {
         "uid": 79248480
     },
-    "artist_search": {
+    "ugc_artist_search": {
         "keyword": "sasa"
     },
-    "album_get": {
+    "ugc_album_get": {
         "id": 149114512
     },
-    "artist_get": {
+    "ugc_artist_get": {
         "id": 15396
     },
-    "mv_get": {
+    "ugc_mv_get": {
         "id": 14572641
     },
-    "song_get": {
+    "ugc_song_get": {
         "id": 2058263032
+    },
+    "summary_annual": {
+        "year": "2020"
     }
 }
