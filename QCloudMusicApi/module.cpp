@@ -1254,39 +1254,3 @@ const QVariantMap NeteaseCloudMusicApi::user_playlist(QVariantMap query) {
         );
 }
 
-    const QVariantMap data = {
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        data,
-        QVariantMap({
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        QVariantMap({
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
-    const QVariantMap data = {
-        };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        data,
-        QVariantMap({
-            { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
