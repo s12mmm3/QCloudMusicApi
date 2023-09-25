@@ -162,6 +162,20 @@ public:
     // 获取客户端歌曲下载链接
     Q_INVOKABLE const QVariantMap song_download_url(QVariantMap query);
 
+    // 歌曲链接 - v1
+    // 此版本不再采用 br 作为音质区分的标准
+    // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
+    Q_INVOKABLE const QVariantMap song_url_v1(QVariantMap query);
+
+    // 音乐百科基础信息
+    Q_INVOKABLE const QVariantMap song_wiki_summary(QVariantMap query);
+
+    // 年度听歌报告2017-2022
+    Q_INVOKABLE const QVariantMap summary_annual(QVariantMap query);
+
+    // 所有榜单介绍
+    Q_INVOKABLE const QVariantMap toplist(QVariantMap query);
+
     // 专辑简要百科信息
     Q_INVOKABLE const QVariantMap ugc_album_get(QVariantMap query);
 
@@ -177,17 +191,6 @@ public:
 
     // 歌曲简要百科信息
     Q_INVOKABLE const QVariantMap ugc_song_get(QVariantMap query);
-
-    // 歌曲链接 - v1
-    // 此版本不再采用 br 作为音质区分的标准
-    // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
-    Q_INVOKABLE const QVariantMap song_url_v1(QVariantMap query);
-
-    // 音乐百科基础信息
-    Q_INVOKABLE const QVariantMap song_wiki_summary(QVariantMap query);
-
-    // 所有榜单介绍
-    Q_INVOKABLE const QVariantMap toplist(QVariantMap query);
 
     // 获取账号信息
     Q_INVOKABLE const QVariantMap user_account(QVariantMap query);

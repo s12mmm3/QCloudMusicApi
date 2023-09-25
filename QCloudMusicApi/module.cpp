@@ -1002,6 +1002,84 @@ const QVariantMap NeteaseCloudMusicApi::song_download_url(QVariantMap query) {
         );
 }
 
+// 歌曲链接 - v1
+// 此版本不再采用 br 作为音质区分的标准
+// 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
+const QVariantMap NeteaseCloudMusicApi::song_url_v1(QVariantMap query) {
+    QVariantMap data = {
+        { "ids", query["id"].toList() },
+        { "level", query["level"].toString() },
+        { "encodeType", "flac" }
+    };
+    if(data["level"].toString() == "sky") {
+        data["immerseType"] = "c51";
+    }
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/eapi/song/enhance/player/url/v1",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/song/enhance/player/url/v1" }
+        })
+        );
+}
+
+// 音乐百科基础信息
+const QVariantMap NeteaseCloudMusicApi::song_wiki_summary(QVariantMap query) {
+    QVariantMap data = {
+        { "songId", query["id"].toInt() }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface3.music.163.com/eapi/music/wiki/home/song/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/song/play/about/block/page" }
+        })
+        );
+}
+
+// 年度听歌报告2017-2022
+const QVariantMap NeteaseCloudMusicApi::summary_annual(QVariantMap query) {
+    QVariantMap data = { };
+    const QString key = QList<QString>({ "2017", "2018", "2019 "}).indexOf(query["year"].toString()) > -1 ? "userdata" : "data";
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/activity/summary/annual/" + query["year"].toString() + "/" + key,
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/activity/summary/annual/" + query["year"].toString() + "/" + key }
+        })
+        );
+}
+
+// 所有榜单介绍
+const QVariantMap NeteaseCloudMusicApi::toplist(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/toplist",
+        {},
+        QVariantMap({
+            { "crypto", "api" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 专辑简要百科信息
 const QVariantMap NeteaseCloudMusicApi::ugc_album_get(QVariantMap query) {
     const QVariantMap data = {
@@ -1098,66 +1176,6 @@ const QVariantMap NeteaseCloudMusicApi::ugc_song_get(QVariantMap query) {
         );
 }
 
-// 歌曲链接 - v1
-// 此版本不再采用 br 作为音质区分的标准
-// 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
-const QVariantMap NeteaseCloudMusicApi::song_url_v1(QVariantMap query) {
-    QVariantMap data = {
-        { "ids", query["id"].toList() },
-        { "level", query["level"].toString() },
-        { "encodeType", "flac" }
-    };
-    if(data["level"].toString() == "sky") {
-        data["immerseType"] = "c51";
-    }
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://interface.music.163.com/eapi/song/enhance/player/url/v1",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/song/enhance/player/url/v1" }
-        })
-        );
-}
-
-// 音乐百科基础信息
-const QVariantMap NeteaseCloudMusicApi::song_wiki_summary(QVariantMap query) {
-    QVariantMap data = {
-        { "songId", query["id"].toInt() }
-    };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://interface3.music.163.com/eapi/music/wiki/home/song/get",
-        data,
-        QVariantMap({
-            { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/song/play/about/block/page" }
-        })
-        );
-}
-
-// 所有榜单介绍
-const QVariantMap NeteaseCloudMusicApi::toplist(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/toplist",
-        {},
-        QVariantMap({
-            { "crypto", "api" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
-        })
-        );
-}
-
 // 获取账号信息
 const QVariantMap NeteaseCloudMusicApi::user_account(QVariantMap query) {
     const QVariantMap data = {};
@@ -1226,6 +1244,43 @@ const QVariantMap NeteaseCloudMusicApi::user_playlist(QVariantMap query) {
     return createRequest(
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/user/playlist",
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+    const QVariantMap data = {
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        data,
+        QVariantMap({
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        QVariantMap({
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+    const QVariantMap data = {
+        };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
         data,
         QVariantMap({
             { "crypto", "weapi" },
