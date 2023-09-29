@@ -782,6 +782,112 @@ const QVariantMap NeteaseCloudMusicApi::countries_code_list(QVariantMap query) {
         );
 }
 
+// 获取达人用户信息
+const QVariantMap NeteaseCloudMusicApi::creator_authinfo_get(QVariantMap query) {
+    const QVariantMap data = { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/weapi/user/creator/authinfo/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/user/creator/authinfo/get" }
+        })
+        );
+}
+
+// 粉丝年龄比例
+const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_age_get(QVariantMap query) {
+    const QVariantMap data = { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/weapi/fanscenter/basicinfo/age/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        })
+        );
+}
+
+// 粉丝性别比例
+const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_gender_get(QVariantMap query) {
+    const QVariantMap data = { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/weapi/fanscenter/basicinfo/gender/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/gender/get" }
+        })
+        );
+}
+
+// 粉丝省份比例
+const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_province_get(QVariantMap query) {
+    const QVariantMap data = { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/weapi/fanscenter/basicinfo/province/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/province/get" }
+        })
+        );
+}
+
+// 粉丝数量
+const QVariantMap NeteaseCloudMusicApi::fanscenter_overview_get(QVariantMap query) {
+    const QVariantMap data = { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/weapi/fanscenter/overview/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/overview/get" }
+        })
+        );
+}
+
+// 粉丝来源
+const QVariantMap NeteaseCloudMusicApi::fanscenter_trend_list(QVariantMap query) {
+    const QVariantMap data = {
+        { "startTime", query.value("startTime", QDateTime::currentDateTime().toMSecsSinceEpoch() - 7 * 24 * 3600 * 1000) },
+        { "endTime", query.value("endTime", QDateTime::currentDateTime().toMSecsSinceEpoch()) },
+        { "type", query.value("type", 0) }//新增关注:0 新增取关:1
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://interface.music.163.com/weapi/fanscenter/trend/list",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/trend/list" }
+        })
+        );
+}
+
 // 手机登录
 const QVariantMap NeteaseCloudMusicApi::login_cellphone(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
@@ -1133,6 +1239,23 @@ const QVariantMap NeteaseCloudMusicApi::summary_annual(QVariantMap query) {
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
             { "url", "/api/activity/summary/annual/" + query["year"].toString() + "/" + key }
+        })
+        );
+}
+
+// 获取达人达标信息
+const QVariantMap NeteaseCloudMusicApi::threshold_detail_get(QVariantMap query) {
+    const QVariantMap data = { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/influencer/web/apply/threshold/detail/get",
+        data,
+        QVariantMap({
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/influencer/web/apply/threshold/detail/get" }
         })
         );
 }
