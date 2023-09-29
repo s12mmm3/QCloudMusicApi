@@ -237,7 +237,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_album(QVariantMap query) {
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/artist/albums/" + QString::number(query["id"].toInt()),
+        "https://music.163.com/weapi/artist/albums/" + query["id"].toString(),
         data,
         QVariantMap({
             { "crypto", "weapi" },
@@ -543,7 +543,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_video(QVariantMap query) {
 const QVariantMap NeteaseCloudMusicApi::artists(QVariantMap query) {
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/v1/artist/" + QString::number(query["id"].toInt()),
+        "https://music.163.com/weapi/v1/artist/" + query["id"].toString(),
         {},
         QVariantMap({
             { "crypto", "weapi" },
@@ -614,7 +614,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_album(QVariantMap query) {
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/v1/resource/comments/R_AL_3_" + QString::number(query["id"].toInt()),
+        "https://music.163.com/weapi/v1/resource/comments/R_AL_3_" + query["id"].toString(),
         data,
         QVariantMap({
             { "crypto", "weapi" },
@@ -638,7 +638,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_dj(QVariantMap query) {
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/v1/resource/comments/A_DJ_1_" + QString::number(query["id"].toInt()),
+        "https://music.163.com/weapi/v1/resource/comments/A_DJ_1_" + query["id"].toString(),
         data,
         QVariantMap({
             { "crypto", "weapi" },
@@ -658,7 +658,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_event(QVariantMap query) {
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/v1/resource/comments/" + QString::number(query["threadId"].toInt()),
+        "https://music.163.com/weapi/v1/resource/comments/" + query["threadId"].toString(),
         data,
         QVariantMap({
             { "crypto", "weapi" },
@@ -682,7 +682,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_music(QVariantMap query) {
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/api/v1/resource/comments/R_SO_4_" + QString::number(query["id"].toInt()),
+        "https://music.163.com/api/v1/resource/comments/R_SO_4_" + query["id"].toString(),
         data,
         QVariantMap({
             { "crypto", "weapi" },
@@ -706,7 +706,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_mv(QVariantMap query) {
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/v1/resource/comments/R_MV_5_" + QString::number(query["id"].toInt()),
+        "https://music.163.com/weapi/v1/resource/comments/R_MV_5_" + query["id"].toString(),
         data,
         QVariantMap({
             { "crypto", "weapi" },
@@ -730,7 +730,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_playlist(QVariantMap query) {
     };
     return createRequest(
         QNetworkAccessManager::PostOperation,
-        "https://music.163.com/weapi/v1/resource/comments/A_PL_0_" + QString::number(query["id"].toInt()),
+        "https://music.163.com/weapi/v1/resource/comments/A_PL_0_" + query["id"].toString(),
         data,
         QVariantMap({
             { "crypto", "weapi" },

@@ -1,65 +1,65 @@
 {
     "song_url_v1": {
         "id": [
-            2058263032,
-            2057797340
+            "2058263032",
+            "2057797340"
         ],
         "level": "exhigh"
     },
     "lyric": {
-        "id": 2058263032
+        "id": "2058263032"
     },
     "lyric_new": {
-        "id": 2058263032
+        "id": "2058263032"
     },
     "related_playlist": {
-        "id": 2057797340
+        "id": "2057797340"
     },
     "register_anonimous": {},
     "album": {
-        "id": 149114512
+        "id": "149114512"
     },
     "comment_music": {
-        "id": 2058263032
+        "id": "2058263032"
     },
     "artists": {
-        "id": 15396
+        "id": "15396"
     },
     "toplist": {},
     "user_detail": {
-        "uid": 79248480
+        "uid": "79248480"
     },
     "artist_detail": {
-        "id": 15396
+        "id": "15396"
     },
     "artist_album": {
-        "id": 15396,
+        "id": "15396",
         "limit": 5
     },
     "artist_top_song": {
-        "id": 15396
+        "id": "15396"
     },
     "search": {
         "keywords": "電音部"
     },
     "countries_code_list": {},
     "user_playlist": {
-        "uid": 79248480
+        "uid": "79248480"
     },
     "song_wiki_summary": {
-        "id": 2058263032
+        "id": "2058263032"
     },
     "song_download_url": {
-        "id": 2058263032
+        "id": "2058263032"
     },
     "cloudsearch": {
         "keywords": "電音部"
     },
     "album_detail_dynamic": {
-        "id": 149114512
+        "id": "149114512"
     },
     "album_detail": {
-        "id": 149114512
+        "id": "149114512"
     },
     "album_list_style": {
         "area": "Z_H",
@@ -79,18 +79,18 @@
         "albumType": 0
     },
     "album_sub": {
-        "id": 149114512,
+        "id": "149114512",
         "t": 1
     },
     "album_sublist": {},
     "artist_desc": {
-        "id": 15396
+        "id": "15396"
     },
     "artist_fans": {
-        "id": 15396
+        "id": "15396"
     },
     "artist_follow_count": {
-        "id": 15396
+        "id": "15396"
     },
     "artist_list": {
         "type": "1",
@@ -98,7 +98,7 @@
         "initial": "b"
     },
     "artist_mv": {
-        "id": 15396
+        "id": "15396"
     },
     "artist_new_mv": {
         "before": 1602777625000,
@@ -109,14 +109,14 @@
         "limit": 1
     },
     "artist_songs": {
-        "id": 15396
+        "id": "15396"
     },
     "artist_sub": {
         "id": 6452,
         "t": 1
     },
     "artist_video": {
-        "id": 15396
+        "id": "15396"
     },
     "banner": {
         "type": 2
@@ -128,40 +128,40 @@
         "nickname": "testUser2019"
     },
     "comment_album": {
-        "id": 149114512
+        "id": "149114512"
     },
     "comment_dj": {
-        "id": 794062371
+        "id": "794062371"
     },
     "comment_event": {
         "threadId": "A_EV_2_6559519868_32953014"
     },
     "user_comment_history": {
-        "uid": 79248480
+        "uid": "79248480"
     },
     "ugc_artist_search": {
         "keyword": "sasa"
     },
     "ugc_album_get": {
-        "id": 149114512
+        "id": "149114512"
     },
     "ugc_artist_get": {
-        "id": 15396
+        "id": "15396"
     },
     "ugc_mv_get": {
-        "id": 14572641
+        "id": "14572641"
     },
     "ugc_song_get": {
-        "id": 2058263032
+        "id": "2058263032"
     },
     "summary_annual": {
         "year": "2020"
     },
     "comment_mv": {
-        "id": 14572641
+        "id": "14572641"
     },
     "comment_playlist": {
-        "id": 705123491
+        "id": "705123491"
     },
     "comment_video": {
         "id": "89ADDE33C0AAE8EC14B99F6750DB954D"
