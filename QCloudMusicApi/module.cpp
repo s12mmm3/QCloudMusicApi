@@ -693,6 +693,78 @@ const QVariantMap NeteaseCloudMusicApi::comment_music(QVariantMap query) {
         );
 }
 
+// MV评论
+const QVariantMap NeteaseCloudMusicApi::comment_mv(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "rid", query["id"] },
+        { "limit", query.value("limit", 20) },
+        { "offset", query.value("offset", 0) },
+        { "beforeTime", query.value("before", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/v1/resource/comments/R_MV_5_" + QString::number(query["id"].toInt()),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 歌单评论
+const QVariantMap NeteaseCloudMusicApi::comment_playlist(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "rid", query["id"] },
+        { "limit", query.value("limit", 20) },
+        { "offset", query.value("offset", 0) },
+        { "beforeTime", query.value("before", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/v1/resource/comments/A_PL_0_" + QString::number(query["id"].toInt()),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
+// 视频评论
+const QVariantMap NeteaseCloudMusicApi::comment_video(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data = {
+        { "rid", query["id"] },
+        { "limit", query.value("limit", 20) },
+        { "offset", query.value("offset", 0) },
+        { "beforeTime", query.value("before", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/v1/resource/comments/R_VI_62_" + query["id"].toString(),
+        data,
+        QVariantMap({
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        })
+        );
+}
+
 // 国家编码列表
 const QVariantMap NeteaseCloudMusicApi::countries_code_list(QVariantMap query) {
     const QVariantMap data = { };

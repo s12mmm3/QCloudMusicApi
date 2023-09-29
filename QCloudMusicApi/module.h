@@ -132,6 +132,15 @@ public:
     // 歌曲评论
     Q_INVOKABLE const QVariantMap comment_music(QVariantMap query);
 
+    // MV评论
+    Q_INVOKABLE const QVariantMap comment_mv(QVariantMap query);
+
+    // 歌单评论
+    Q_INVOKABLE const QVariantMap comment_playlist(QVariantMap query);
+
+    // 视频评论
+    Q_INVOKABLE const QVariantMap comment_video(QVariantMap query);
+
     // 国家编码列表
     Q_INVOKABLE const QVariantMap countries_code_list(QVariantMap query);
 
