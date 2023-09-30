@@ -15,6 +15,20 @@ int main(int argc, char *argv[])
     NeteaseCloudMusicApi api;
 
     QHttpServer server;
+    auto getQuery = [](const QHttpServerRequest &request) {
+        QVariantMap query;
+        for(auto i: request.query().queryItems()) {
+            query[i.first] = i.second;
+        }
+        return query;
+    };
+    auto getHeaders = [](const QHttpServerRequest &request) {
+        QVariantMap headers;
+        for(auto i: request.headers()) {
+            headers[i.first] = i.second;
+        }
+        return headers;
+    };
     //设置请求的路径和方法未知时的错误提示
     server.setMissingHandler([] (const QHttpServerRequest &request, QHttpServerResponder &&responder) {
         QHttpServerResponse response(("Cannot GET "
@@ -24,8 +38,7 @@ int main(int argc, char *argv[])
     });
 
     auto parseRoute = [](QString funName) {
-        QString path = funName.replace("_", "/").trimmed();
-        return path;
+        return funName.replace("_", "/").trimmed();
     };
     for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
         auto funName = api.metaObject()->method(i).name();
@@ -34,16 +47,10 @@ int main(int argc, char *argv[])
             path,
             QHttpServerRequest::Method::Get,
             [=](const QHttpServerRequest &request) {
-                QVariantMap query;
+                QVariantMap query = getQuery(request);
 
-                for(auto i: request.query().queryItems()) {
-                    query[i.first] = i.second;
-                }
-
-                QVariantMap headers;
-                for(auto i: request.headers()) {
-                    headers[i.first] = i.second;
-                }
+                QVariantMap headers = getHeaders(request);
+                query["cookie"] = headers["Cookie"];
                 QVariantMap args = {
                     { "path", path },
                     { "funName", funName },

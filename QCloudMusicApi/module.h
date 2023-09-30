@@ -132,8 +132,35 @@ public:
     // 歌曲评论
     Q_INVOKABLE const QVariantMap comment_music(QVariantMap query);
 
+    // MV评论
+    Q_INVOKABLE const QVariantMap comment_mv(QVariantMap query);
+
+    // 歌单评论
+    Q_INVOKABLE const QVariantMap comment_playlist(QVariantMap query);
+
+    // 视频评论
+    Q_INVOKABLE const QVariantMap comment_video(QVariantMap query);
+
     // 国家编码列表
     Q_INVOKABLE const QVariantMap countries_code_list(QVariantMap query);
+
+    // 获取达人用户信息
+    Q_INVOKABLE const QVariantMap creator_authinfo_get(QVariantMap query);
+
+    // 粉丝年龄比例
+    Q_INVOKABLE const QVariantMap fanscenter_basicinfo_age_get(QVariantMap query);
+
+    // 粉丝性别比例
+    Q_INVOKABLE const QVariantMap fanscenter_basicinfo_gender_get(QVariantMap query);
+
+    // 粉丝省份比例
+    Q_INVOKABLE const QVariantMap fanscenter_basicinfo_province_get(QVariantMap query);
+
+    // 粉丝数量
+    Q_INVOKABLE const QVariantMap fanscenter_overview_get(QVariantMap query);
+
+    // 粉丝来源
+    Q_INVOKABLE const QVariantMap fanscenter_trend_list(QVariantMap query);
 
     // 手机登录
     Q_INVOKABLE const QVariantMap login_cellphone(QVariantMap query);
@@ -172,6 +199,9 @@ public:
 
     // 年度听歌报告2017-2022
     Q_INVOKABLE const QVariantMap summary_annual(QVariantMap query);
+
+    // 获取达人达标信息
+    Q_INVOKABLE const QVariantMap threshold_detail_get(QVariantMap query);
 
     // 所有榜单介绍
     Q_INVOKABLE const QVariantMap toplist(QVariantMap query);
