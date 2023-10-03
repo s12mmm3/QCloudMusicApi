@@ -67,14 +67,12 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
     QUrl url(urlStr);
     qDebug().noquote() <<
         QJsonDocument::fromVariant(
-            QVariantMap(
-                {
+            QVariantMap {
                     { "method", method },
                     { "url", url },
                     { "data", data },
                     { "options", options}
                 }
-                )
             ).toJson();
     QNetworkRequest request;
 
@@ -147,11 +145,11 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
         url.setPath(url.path().replace(QRegularExpression("\\w*api"), "weapi"));
     }
     else if(options["crypto"].toString() == "linuxapi") {
-        data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap({
+        data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap {
             { "method", method },
             { "url", url.path().replace(QRegularExpression("\\w*api"), "api") },
             { "params", data }
-        })));
+        }));
     }
     else if(options["crypto"].toString() == "eapi") {
         const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
@@ -243,10 +241,10 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
         eventLoop.exec(); // 启动事件循环
 
         if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
-            answer["body"] = QVariantMap({
+            answer["body"] = QVariantMap {
                 { "code", 502 },
                 { "msg", reply->errorString() }
-            });
+            };
             answer["status"] = 502;
         }
         else {
