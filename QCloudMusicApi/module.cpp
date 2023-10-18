@@ -799,6 +799,42 @@ const QVariantMap NeteaseCloudMusicApi::creator_authinfo_get(QVariantMap query) 
         );
 }
 
+// 数字专辑详情
+const QVariantMap NeteaseCloudMusicApi::digitalAlbum_detail(QVariantMap query) {
+    const QVariantMap data {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/vipmall/albumproduct/detail",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 数字专辑销量
+const QVariantMap NeteaseCloudMusicApi::digitalAlbum_sales(QVariantMap query) {
+    const QVariantMap data {
+        { "albumIds", query["ids"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/vipmall/albumproduct/album/query/sales",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
 // 粉丝年龄比例
 const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_age_get(QVariantMap query) {
     const QVariantMap data { };

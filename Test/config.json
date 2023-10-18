@@ -165,5 +165,11 @@
     },
     "comment_video": {
         "id": "89ADDE33C0AAE8EC14B99F6750DB954D"
+    },
+    "digitalAlbum_detail": {
+        "id": "86433402"
+    },
+    "digitalAlbum_sales": {
+        "ids": ["86433402"]
     }
 }
