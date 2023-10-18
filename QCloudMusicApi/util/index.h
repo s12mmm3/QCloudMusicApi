@@ -1,5 +1,6 @@
 ﻿#ifndef INDEX_H
 #define INDEX_H
+#include <QNetworkCookie>
 #include <QVariantMap>
 
 namespace Index{
@@ -37,6 +38,17 @@ QVariantMap cookieStrToJsonMap(const QString &cookie) {
         obj.insert(arr[0], arr[1]);
     }
     return obj;
+}
+QList<QNetworkCookie> strToCookie(const QString &cookie) {
+    if (cookie.isEmpty()) return QList<QNetworkCookie>();
+    QList<QNetworkCookie> list;
+    for (const QString &i : cookie.split(";")) {
+        QStringList arr = i.trimmed().split("=");
+        // 如果子串的个数不等于2，跳过这个元素
+        if (arr.size() != 2) continue;
+        list.append(QNetworkCookie(arr[0].toUtf8(), arr[1].toUtf8()));
+    }
+    return list;
 }
 QStringList jsonMapToCookieList(const QVariantMap &obj) {
     if (obj.isEmpty()) return QStringList();

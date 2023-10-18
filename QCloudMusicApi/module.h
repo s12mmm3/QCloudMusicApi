@@ -147,6 +147,12 @@ public:
     // 获取达人用户信息
     Q_INVOKABLE const QVariantMap creator_authinfo_get(QVariantMap query);
 
+    // 数字专辑详情
+    Q_INVOKABLE const QVariantMap digitalAlbum_detail(QVariantMap query);
+
+    // 数字专辑销量
+    Q_INVOKABLE const QVariantMap digitalAlbum_sales(QVariantMap query);
+
     // 粉丝年龄比例
     Q_INVOKABLE const QVariantMap fanscenter_basicinfo_age_get(QVariantMap query);
 
