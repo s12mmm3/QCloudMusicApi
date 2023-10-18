@@ -22,6 +22,7 @@
 
 #include "util/crypto.h"
 #include "util/config.h"
+#include "util/index.h"
 
 static QString chooseUserAgent(QString ua = "") {
     const QVariantMap userAgentList = {
@@ -120,7 +121,9 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(cookieList));
     }
     else if(options.contains("cookie")) {
-        request.setHeader(QNetworkRequest::CookieHeader, options["cookie"]);
+        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(
+                                                             Index::strToCookie(options["cookie"].toString().toUtf8())
+                                                                             ));
     }
     else {
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(QList<QNetworkCookie>({
@@ -152,7 +155,9 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
         }));
     }
     else if(options["crypto"].toString() == "eapi") {
-        const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
+        const QVariantMap cookie = options["cookie"].userType() == QMetaType::QVariantMap
+            ? options["cookie"].toMap()
+            : Index::cookieToJson(options.value("cookie", "").toString());
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header =
             {
@@ -265,14 +270,11 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
             auto body = reply->readAll();
             qDebug().noquote() << "body" << body;
 
-            if(reply->hasRawHeader("set-cookie")) {
-                QStringList setCookie;
-                for (QNetworkCookie cookie : reply->header(QNetworkRequest::SetCookieHeader).value<QList<QNetworkCookie>>()) {
-                    // 去掉cookie中的domain属性
-                    cookie.setDomain("");
-                    setCookie.append(QString::fromUtf8(cookie.toRawForm()));
-                }
-                answer["cookie"] = setCookie;
+            if(reply->header(QNetworkRequest::SetCookieHeader).isValid()) {
+                // 去掉cookie中的domain属性
+                auto cookie = reply->header(QNetworkRequest::SetCookieHeader).value<QList<QNetworkCookie>>()[0];
+                cookie.setDomain("");
+                answer["cookie"] = cookie.toRawForm();
             }
             if(options["crypto"].toString() == "eapi") {
                 answer["body"] = QJsonDocument::fromJson(
