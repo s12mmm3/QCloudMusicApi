@@ -113,16 +113,11 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
                 cookie["MUSIC_A"] = Config::anonymous_token;
             }
         }
-        QList<QNetworkCookie> cookieList;
-        for(QMap<QString, QVariant>::iterator i = cookie.begin(); i != cookie.end(); ++i) {
-            if(!i.value().isValid()) continue;
-            cookieList.append(QNetworkCookie(i.key().toUtf8(), i.value().toByteArray()));
-        }
-        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(cookieList));
+        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(Index::mapToCookie(cookie)));
     }
     else if(options.contains("cookie")) {
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(
-                                                             Index::strToCookie(options["cookie"].toString().toUtf8())
+                                                             Index::stringToCookie(options["cookie"].toString())
                                                                              ));
     }
     else {
@@ -157,7 +152,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
     else if(options["crypto"].toString() == "eapi") {
         const QVariantMap cookie = options["cookie"].userType() == QMetaType::QVariantMap
             ? options["cookie"].toMap()
-            : Index::cookieToJson(options.value("cookie", "").toString());
+            : Index::stringToMap(options.value("cookie", "").toString());
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header =
             {
@@ -201,25 +196,16 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
     QNetworkAccessManager manager;
 
     if (options.contains("proxy") && !options["proxy"].isNull()) {
-        if (options["proxy"].toString().contains("pac")) {
-            QNetworkProxyFactory::setUseSystemConfiguration(true);
-            QNetworkProxyQuery query(url);
-            QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
-            if (!proxies.isEmpty()) {
-                manager.setProxy(proxies.first());
-            }
+        QUrl purl(options["proxy"].toString());
+        if (!purl.host().isEmpty()) {
+            QNetworkProxy proxy;
+            proxy.setType(QNetworkProxy::HttpProxy);
+            proxy.setHostName(purl.host());
+            proxy.setPort(purl.port(80));
+            manager.setProxy(proxy);
         } else {
-            QUrl purl(options["proxy"].toString());
-            if (!purl.host().isEmpty()) {
-                QNetworkProxy proxy;
-                proxy.setType(QNetworkProxy::HttpProxy);
-                proxy.setHostName(purl.host());
-                proxy.setPort(purl.port() > 0 ? purl.port() : 80);
-                manager.setProxy(proxy);
-            } else {
-                manager.setProxy (QNetworkProxy::NoProxy);
-                qDebug() << "代理配置无效，不使用代理";
-            }
+            manager.setProxy (QNetworkProxy::NoProxy);
+            qDebug() << "代理配置无效，不使用代理";
         }
     }
 
