@@ -15,6 +15,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # 添加子目录
 add_subdirectory(QCloudMusicApi)
 add_subdirectory(Test)
+add_subdirectory(CApi)
 
 find_package(QT NAMES Qt6 Qt5)
 find_package(Qt${QT_VERSION_MAJOR})
