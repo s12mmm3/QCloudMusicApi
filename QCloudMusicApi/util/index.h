@@ -4,42 +4,32 @@
 #include <QVariantMap>
 
 namespace Index{
-QVariantMap cookieToJson(const QString &cookie) {
+QVariantMap stringToMap(const QString &cookie) {
     if (cookie.isEmpty()) return QVariantMap();
-    QVariantMap obj;
+    QVariantMap map;
     for (const QString &i : cookie.split(";")) {
         QStringList arr = i.trimmed().split("=");
         // 如果子串的个数不等于2，跳过这个元素
         if (arr.size() != 2) continue;
-        obj.insert(arr[0], arr[1]);
+        map.insert(arr[0], arr[1]);
     }
-    return obj;
+    return map;
 }
-QVariantMap cookieListToJsonMap(const QStringList &cookieList) {
-    if (cookieList.isEmpty()) return QVariantMap();
-    QVariantMap obj;
-    for(QString cookie: cookieList) {
-        for (const QString &i : cookie.split(";")) {
-            QStringList arr = i.trimmed().split("=");
-            // 如果子串的个数不等于2，跳过这个元素
-            if (arr.size() != 2) continue;
-            obj.insert(arr[0], arr[1]);
-        }
+QString mapToString(const QVariantMap &cookie) {
+    QString string;
+    for(auto i = cookie.begin(); i != cookie.end(); ++i) {
+        string.append(i.key() + "=" + i.value().toString() + ";");
     }
-    return obj;
+    return string;
 }
-QVariantMap cookieStrToJsonMap(const QString &cookie) {
-    if (cookie.isEmpty()) return QVariantMap();
-    QVariantMap obj;
-    for (const QString &i : cookie.split(";")) {
-        QStringList arr = i.trimmed().split("=");
-        // 如果子串的个数不等于2，跳过这个元素
-        if (arr.size() != 2) continue;
-        obj.insert(arr[0], arr[1]);
+QString cookieToString(const QList<QNetworkCookie> &cookie) {
+    QString string;
+    for (const QNetworkCookie &i : cookie) {
+        string.append(i.toRawForm() + ";");
     }
-    return obj;
+    return string;
 }
-QList<QNetworkCookie> strToCookie(const QString &cookie) {
+QList<QNetworkCookie> stringToCookie(const QString &cookie) {
     if (cookie.isEmpty()) return QList<QNetworkCookie>();
     QList<QNetworkCookie> list;
     for (const QString &i : cookie.split(";")) {
@@ -50,23 +40,13 @@ QList<QNetworkCookie> strToCookie(const QString &cookie) {
     }
     return list;
 }
-QStringList jsonMapToCookieList(const QVariantMap &obj) {
-    if (obj.isEmpty()) return QStringList();
-    QStringList cookieList;
-    for (auto it = obj.begin(); it != obj.end(); ++it) {
-        QString cookie = it.key() + "=" + it.value().toString();
-        cookieList.append(cookie);
+QList<QNetworkCookie> mapToCookie(QVariantMap &cookie) {
+    QList<QNetworkCookie> list;
+    for(QMap<QString, QVariant>::iterator i = cookie.begin(); i != cookie.end(); ++i) {
+        if(!i.value().isValid()) continue;
+        list.append(QNetworkCookie(i.key().toUtf8(), i.value().toByteArray()));
     }
-    return cookieList;
-}
-QString jsonMapToCookieStr(const QVariantMap &obj) {
-    if (obj.isEmpty()) return QString();
-    QStringList cookieList;
-    for (auto it = obj.begin(); it != obj.end(); ++it) {
-        QString cookie = it.key() + "=" + it.value().toString();
-        cookieList.append(cookie);
-    }
-    return cookieList.join("; ");
+    return list;
 }
 }
 #endif // INDEX_H

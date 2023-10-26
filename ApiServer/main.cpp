@@ -15,14 +15,14 @@ int main(int argc, char *argv[])
     NeteaseCloudMusicApi api;
 
     QHttpServer server;
-    auto getQuery = [](const QHttpServerRequest &request) {
+    auto getQuery = [](const QHttpServerRequest &request) -> QVariantMap {
         QVariantMap query;
         for(auto i: request.query().queryItems()) {
             query[i.first] = i.second;
         }
         return query;
     };
-    auto getHeaders = [](const QHttpServerRequest &request) {
+    auto getHeaders = [](const QHttpServerRequest &request) -> QVariantMap {
         QVariantMap headers;
         for(auto i: request.headers()) {
             headers[i.first] = i.second;

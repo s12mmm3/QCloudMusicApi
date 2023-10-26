@@ -5,10 +5,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
-//#include <QNetworkCookie>
 
-//#include "../QCloudMusicApi/config.h"
 #include "../QCloudMusicApi/module.h"
+#include "../QCloudMusicApi/util/index.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,20 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
     for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
         ui->comboBox->addItem(api.metaObject()->method(i).name());
     }
-
-//    auto register_anonimous = api.register_anonimous({});
-//    qDebug() << "register_anonimous" << register_anonimous;
-//    QString cookieStr = QJsonDocument::fromJson(register_anonimous).toVariant()
-//                            .toMap()["body"].toMap()["cookie"].toString();
-//    auto cookie = QNetworkCookie(cookieStr.toUtf8());
-
-//    qDebug () << "Name:" << cookie.name ();
-//    qDebug () << "Value:" << cookie.value ();
-//    Config::anonymous_token = cookie.value ();
-//    qDebug () << "Max-Age:" << cookie.expirationDate ().toSecsSinceEpoch () - QDateTime::currentSecsSinceEpoch ();
-//    qDebug () << "Expires:" << cookie.expirationDate ();
-//    qDebug () << "Path:" << cookie.path ();
-//    qDebug () << "Domain:" << cookie.domain ();
 }
 
 MainWindow::~MainWindow()
@@ -39,15 +24,33 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::updateCookie(QVariantMap ret) {
+    auto newMap = Index::stringToMap(ret["cookie"].toString());
+    auto map = Index::stringToMap(cookie);
+    if (ret["body"].toMap()["token"].isValid()) {
+        map["MUSIC_A"] = ret["body"].toMap()["token"];
+    }
+    map.insert(newMap);
+    cookie = Index::mapToString(map);
+}
+
+QVariantMap MainWindow::invoke(QString funName, QVariantMap arg) {
+    arg["cookie"] = arg.value("cookie", cookie);
+    cookie = arg["cookie"].toString() + " SameSite=None; Secure";
+    QVariantMap ret;
+    QMetaObject::invokeMethod(&api, funName.toUtf8()
+                              , Qt::DirectConnection
+                              , Q_RETURN_ARG(QVariantMap, ret)
+                              , Q_ARG(QVariantMap, arg));
+    this->updateCookie(ret);
+    return ret;
+}
 
 void MainWindow::on_pushButton_clicked()
 {
     ui->textEdit_2->setText(QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toJson(QJsonDocument::Indented));
-    QVariantMap ret;
-    QMetaObject::invokeMethod(&api, ui->comboBox->currentText().toUtf8()
-                              , Qt::DirectConnection
-                              , Q_RETURN_ARG(QVariantMap, ret)
-                              , Q_ARG(QVariantMap, QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toVariant().toMap()));
+    QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toVariant().toMap();
+    QVariantMap ret = this->invoke(ui->comboBox->currentText(), arg);
     if(ui->checkBox->isChecked()) {
         ui->textEdit->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
     }

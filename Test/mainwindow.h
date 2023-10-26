@@ -28,5 +28,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
     NeteaseCloudMusicApi api;
+
+    QVariantMap invoke(QString funName, QVariantMap arg);
+    void updateCookie(QVariantMap ret);
+    QString cookie = "";
 };
 #endif // MAINWINDOW_H
