@@ -15,10 +15,17 @@ QVariantMap stringToMap(const QString &cookie) {
     }
     return map;
 }
+QString mapToString(const QVariantMap &cookie) {
+    QString string;
+    for(auto i = cookie.begin(); i != cookie.end(); ++i) {
+        string.append(i.key() + "=" + i.value().toString() + ";");
+    }
+    return string;
+}
 QString cookieToString(const QList<QNetworkCookie> &cookie) {
-    QString string("");
+    QString string;
     for (const QNetworkCookie &i : cookie) {
-        string += i.name() + "=" + i.value() + ";";
+        string.append(i.toRawForm() + ";");
     }
     return string;
 }

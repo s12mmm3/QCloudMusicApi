@@ -7,6 +7,7 @@
 #include <QFile>
 
 #include "../QCloudMusicApi/module.h"
+#include "../QCloudMusicApi/util/index.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,15 +24,33 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::updateCookie(QVariantMap ret) {
+    auto newMap = Index::stringToMap(ret["cookie"].toString());
+    auto map = Index::stringToMap(cookie);
+    if (ret["body"].toMap()["token"].isValid()) {
+        map["MUSIC_A"] = ret["body"].toMap()["token"];
+    }
+    map.insert(newMap);
+    cookie = Index::mapToString(map);
+}
+
+QVariantMap MainWindow::invoke(QString funName, QVariantMap arg) {
+    arg["cookie"] = arg.value("cookie", cookie);
+    cookie = arg["cookie"].toString() + " SameSite=None; Secure";
+    QVariantMap ret;
+    QMetaObject::invokeMethod(&api, funName.toUtf8()
+                              , Qt::DirectConnection
+                              , Q_RETURN_ARG(QVariantMap, ret)
+                              , Q_ARG(QVariantMap, arg));
+    this->updateCookie(ret);
+    return ret;
+}
 
 void MainWindow::on_pushButton_clicked()
 {
     ui->textEdit_2->setText(QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toJson(QJsonDocument::Indented));
-    QVariantMap ret;
-    QMetaObject::invokeMethod(&api, ui->comboBox->currentText().toUtf8()
-                              , Qt::DirectConnection
-                              , Q_RETURN_ARG(QVariantMap, ret)
-                              , Q_ARG(QVariantMap, QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toVariant().toMap()));
+    QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toVariant().toMap();
+    QVariantMap ret = this->invoke(ui->comboBox->currentText(), arg);
     if(ui->checkBox->isChecked()) {
         ui->textEdit->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
     }
