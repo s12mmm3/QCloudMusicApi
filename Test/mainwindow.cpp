@@ -30,7 +30,7 @@ void MainWindow::updateCookie(QVariantMap ret) {
     if (ret["body"].toMap()["token"].isValid()) {
         map["MUSIC_A"] = ret["body"].toMap()["token"];
     }
-    map.insert(newMap);
+    Index::mergeMap(map, newMap);
     cookie = Index::mapToString(map);
 }
 

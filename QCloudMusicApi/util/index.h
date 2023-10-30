@@ -48,5 +48,13 @@ QList<QNetworkCookie> mapToCookie(QVariantMap &cookie) {
     }
     return list;
 }
+QVariantMap mergeMap(const QVariantMap &map0, const QVariantMap &map1)
+{
+    QVariantMap result = map0; //复制第一个map
+    for (auto i = map1.constBegin(); i != map1.constEnd(); ++i) {
+        result.insert(i.key(), i.value()); //插入或覆盖第二个map的键值对
+    }
+    return result;
+}
 }
 #endif // INDEX_H

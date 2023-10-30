@@ -19,3 +19,8 @@ add_library(CApi SHARED
 target_link_libraries(CApi PRIVATE Qt${QT_VERSION_MAJOR}::Core QCloudMusicApi)
 
 target_compile_definitions(CApi PRIVATE CAPI_LIBRARY)
+
+set(PUBLIC_HEADERS
+    capi.h
+)
+install(FILES ${PUBLIC_HEADERS} DESTINATION ${CMAKE_HEADER_OUTPUT_DIRECTORY})

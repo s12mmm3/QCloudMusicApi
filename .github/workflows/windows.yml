@@ -1,0 +1,139 @@
+name: Windows
+on: 
+  # push代码时触发workflow
+  push:
+    paths:
+      - '**'
+  pull_request:
+    paths:
+      - '**'
+jobs:
+  build:
+    name: Build
+    # 运行平台， windows-latest目前是windows server 2019 
+    # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
+    runs-on: windows-2019
+    strategy:
+      # 矩阵配置
+      matrix:
+        include:
+          # 5.12.12
+          - qt_ver: 5.12.12
+            qt_arch: win64_msvc2015_64
+            tools: 'tools_opensslv3_x64'
+          - qt_ver: 5.12.12
+            qt_arch: win64_msvc2017_64
+            tools: 'tools_opensslv3_x64'
+          # 5.15.2
+          # - qt_ver: 5.15.2
+          #   qt_arch: win32_msvc2019
+          - qt_ver: 5.15.2
+            qt_arch: win64_msvc2019_64
+            tools: 'tools_opensslv3_x64'
+          # 6.2.4
+          - qt_ver: 6.2.4
+            qt_arch: win64_msvc2019_64
+            tools: 'tools_opensslv3_x64'
+          # 6.6.0
+          - qt_ver: 6.6.0
+            qt_arch: win64_msvc2019_64
+            tools: 'tools_opensslv3_x64'
+            modules: 'qthttpserver qtwebsockets'
+    env:
+      targetName: Test.exe
+    # 步骤
+    steps:
+      # 安装Qt
+      - name: Install Qt
+        if: 'true'
+        # 使用外部action。这个action专门用来安装Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          # Version of Qt to install
+          version: ${{ matrix.qt_ver }}
+          # Target platform for build
+          # target: ${{ matrix.qt_target }}
+          arch: ${{ matrix.qt_arch }}
+          cache: 'true'
+          aqtversion: '==2.0.5'
+          modules: ${{ matrix.modules }}
+          tools: ${{ matrix.tools }}
+      # 拉取代码
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      # # Conan Install
+      # - name: Conan Install
+      #   id: conanInstall
+      #   shell: pwsh
+      #   run: |
+      #     pip install conan
+      #     conan -v
+      #     conan profile detect --force
+      # # Conan Run
+      # - name: Conan Run
+      #   id: conanRun
+      #   shell: pwsh
+      #   run: |
+      #     conan install .
+      #     ls build/generators/
+      #     build/generators/conanrun.bat
+      # CMake Build
+      - name: CMake Build
+        id: build
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
+          mkdir build
+          cd build
+          cmake --version
+          cmake -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} ../
+          ls
+      # CMake Install
+      - name: CMake Install
+        env:
+          prefix: ${{ github.workspace }}
+        shell: pwsh
+        run: |
+          cd ${{ github.workspace }}/build
+          cmake --build . --target INSTALL --config release
+          ls
+      # 打包 
+      - name: Package
+        id: package      
+        env:
+          archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}'
+        shell: pwsh
+        run: |
+          cd ${{ github.workspace }}/build
+          ls
+          Tree output /F
+
+          # 拷贝依赖
+          windeployqt --qmldir . --no-translations --compiler-runtime output\bin\QCloudMusicApi.dll
+          windeployqt --qmldir . --no-translations --compiler-runtime output\bin\Test.exe
+          windeployqt --qmldir . --no-translations --compiler-runtime output\bin\ApiServer.exe
+          # 打包zip
+          Compress-Archive -Path output\* ${env:archiveName}'.zip'
+          Tree output /F
+
+          # 记录packageName给后续step
+          $name = ${env:archiveName}
+          echo "::set-output name=packageName::$name"
+          ls
+      # tag 查询github-Release
+      # 上传artifacts          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.package.outputs.packageName }}
+          path: ${{ github.workspace }}/build/output
+      # tag 上传Release
+      - name: Upload Release
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}/build/${{ steps.package.outputs.packageName }}.zip
+          asset_name: ${{ steps.package.outputs.packageName }}.zip
+          tag: ${{ github.ref }}
+          overwrite: true 
