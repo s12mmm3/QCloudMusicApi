@@ -223,9 +223,6 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
             { "cookie", {} }
         };
 
-        //设置默认超时时间
-        reply->manager()->setTransferTimeout(QNetworkRequest::DefaultTransferTimeoutConstant);
-
         // 开启一个局部的事件循环，等待响应结束，退出
         QEventLoop eventLoop;
         QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
