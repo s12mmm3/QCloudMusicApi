@@ -799,6 +799,31 @@ const QVariantMap NeteaseCloudMusicApi::creator_authinfo_get(QVariantMap query) 
         );
 }
 
+// 签到
+
+/*
+    0为安卓端签到 3点经验, 1为网页签到,2点经验
+    签到成功 {'android': {'point': 3, 'code': 200}, 'web': {'point': 2, 'code': 200}}
+    重复签到 {'android': {'code': -2, 'msg': '重复签到'}, 'web': {'code': -2, 'msg': '重复签到'}}
+    未登录 {'android': {'code': 301}, 'web': {'code': 301}}
+    */
+const QVariantMap NeteaseCloudMusicApi::daily_signin(QVariantMap query) {
+    const QVariantMap data {
+        { "type", query.value("type", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/point/dailyTask",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
 // 数字专辑详情
 const QVariantMap NeteaseCloudMusicApi::digitalAlbum_detail(QVariantMap query) {
     const QVariantMap data {
