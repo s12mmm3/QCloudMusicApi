@@ -184,6 +184,18 @@ public:
     // 电台详情
     Q_INVOKABLE const QVariantMap dj_detail(QVariantMap query);
 
+    // 热门电台
+    Q_INVOKABLE const QVariantMap dj_hot(QVariantMap query);
+
+    // 付费电台
+    Q_INVOKABLE const QVariantMap dj_paygift(QVariantMap query);
+
+    // 电台个性推荐
+    Q_INVOKABLE const QVariantMap dj_personalize_recommend(QVariantMap query);
+
+    // 电台节目详情
+    Q_INVOKABLE const QVariantMap dj_program_detail(QVariantMap query);
+
     // 粉丝年龄比例
     Q_INVOKABLE const QVariantMap fanscenter_basicinfo_age_get(QVariantMap query);
 

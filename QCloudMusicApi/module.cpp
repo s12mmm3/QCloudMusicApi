@@ -916,7 +916,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_banner(QVariantMap query) {
         "https://music.163.com/weapi/djradio/banner/get",
         data,
         QVariantMap {
-            { "crypto", "eapi" },
+            { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
@@ -933,7 +933,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_category_excludehot(QVariantMap query
         "https://music.163.com/weapi/djradio/category/excludehot",
         data,
         QVariantMap {
-            { "crypto", "eapi" },
+            { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
@@ -950,7 +950,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_category_recommend(QVariantMap query)
         "https://music.163.com/weapi/djradio/home/category/recommend",
         data,
         QVariantMap {
-            { "crypto", "eapi" },
+            { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
@@ -967,7 +967,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_catelist(QVariantMap query) {
         "https://music.163.com/weapi/djradio/category/get",
         data,
         QVariantMap {
-            { "crypto", "eapi" },
+            { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
@@ -986,7 +986,85 @@ const QVariantMap NeteaseCloudMusicApi::dj_detail(QVariantMap query) {
         "https://music.163.com/api/djradio/v2/get",
         data,
         QVariantMap {
-            { "crypto", "eapi" },
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
+// 热门电台
+const QVariantMap NeteaseCloudMusicApi::dj_hot(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 30) },
+        { "offset", query.value("offset", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/hot/v1",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
+// 付费电台
+const QVariantMap NeteaseCloudMusicApi::dj_paygift(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 30) },
+        { "offset", query.value("offset", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/home/paygift/list?_nmclfl=1",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
+// 电台个性推荐
+const QVariantMap NeteaseCloudMusicApi::dj_personalize_recommend(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 6) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/djradio/personalize/rcmd",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
+// 电台节目详情
+const QVariantMap NeteaseCloudMusicApi::dj_program_detail(QVariantMap query) {
+    const QVariantMap data {
+        { "id", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/dj/program/detail",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
