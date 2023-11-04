@@ -6,7 +6,7 @@ Qt版 网易云音乐 API
 
 更新尽量与原项目同步，暂时只实现了部分接口，底层的加解密逻辑已实现
 
-使用方式请参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致；支持设置Http服务器，运行ApiServer即可启动本地Http服务器
+使用方式请参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致；支持设置Http服务器（需要Qt6.4及以上），运行ApiServer即可启动本地Http服务器
 
 ## 需求和依赖
 本项目需要以下库和工具：
