@@ -905,6 +905,96 @@ const QVariantMap NeteaseCloudMusicApi::digitalAlbum_sales(QVariantMap query) {
         );
 }
 
+// 电台banner
+const QVariantMap NeteaseCloudMusicApi::dj_banner(QVariantMap query) {
+    const QVariantMap data { };
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/banner/get",
+        data,
+        QVariantMap {
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
+// 电台非热门类型
+const QVariantMap NeteaseCloudMusicApi::dj_category_excludehot(QVariantMap query) {
+    const QVariantMap data { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/category/excludehot",
+        data,
+        QVariantMap {
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
+// 电台推荐类型
+const QVariantMap NeteaseCloudMusicApi::dj_category_recommend(QVariantMap query) {
+    const QVariantMap data { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/home/category/recommend",
+        data,
+        QVariantMap {
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
+// 电台分类列表
+const QVariantMap NeteaseCloudMusicApi::dj_catelist(QVariantMap query) {
+    const QVariantMap data { };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/category/get",
+        data,
+        QVariantMap {
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
+// 电台详情
+const QVariantMap NeteaseCloudMusicApi::dj_detail(QVariantMap query) {
+    const QVariantMap data {
+        { "id", query["rid"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/djradio/v2/get",
+        data,
+        QVariantMap {
+            { "crypto", "eapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] },
+            { "url", "/api/fanscenter/basicinfo/age/get" }
+        }
+        );
+}
+
 // 粉丝年龄比例
 const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_age_get(QVariantMap query) {
     const QVariantMap data { };

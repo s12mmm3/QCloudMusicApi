@@ -169,6 +169,21 @@ public:
     // 数字专辑销量
     Q_INVOKABLE const QVariantMap digitalAlbum_sales(QVariantMap query);
 
+    // 电台banner
+    Q_INVOKABLE const QVariantMap dj_banner(QVariantMap query);
+
+    // 电台非热门类型
+    Q_INVOKABLE const QVariantMap dj_category_excludehot(QVariantMap query);
+
+    // 电台推荐类型
+    Q_INVOKABLE const QVariantMap dj_category_recommend(QVariantMap query);
+
+    // 电台分类列表
+    Q_INVOKABLE const QVariantMap dj_catelist(QVariantMap query);
+
+    // 电台详情
+    Q_INVOKABLE const QVariantMap dj_detail(QVariantMap query);
+
     // 粉丝年龄比例
     Q_INVOKABLE const QVariantMap fanscenter_basicinfo_age_get(QVariantMap query);
 
