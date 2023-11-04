@@ -919,8 +919,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_banner(QVariantMap query) {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
         }
         );
 }
@@ -936,8 +935,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_category_excludehot(QVariantMap query
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
         }
         );
 }
@@ -953,8 +951,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_category_recommend(QVariantMap query)
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
         }
         );
 }
@@ -970,8 +967,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_catelist(QVariantMap query) {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
         }
         );
 }
@@ -989,8 +985,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_detail(QVariantMap query) {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
         }
         );
 }
@@ -1009,8 +1004,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_hot(QVariantMap query) {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
         }
         );
 }
@@ -1029,8 +1023,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_paygift(QVariantMap query) {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
         }
         );
 }
@@ -1048,8 +1041,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_personalize_recommend(QVariantMap que
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
         }
         );
 }
@@ -1067,8 +1059,86 @@ const QVariantMap NeteaseCloudMusicApi::dj_program_detail(QVariantMap query) {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "url", "/api/fanscenter/basicinfo/age/get" }
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 电台24小时节目榜
+const QVariantMap NeteaseCloudMusicApi::dj_program_toplist_hours(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+        // 不支持 offset
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/djprogram/toplist/hours",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 电台节目榜
+const QVariantMap NeteaseCloudMusicApi::dj_program_toplist(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) },
+        { "offset", query.value("offset", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/program/toplist/v1",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 电台节目列表
+const QVariantMap NeteaseCloudMusicApi::dj_program(QVariantMap query) {
+    const QVariantMap data {
+        { "radioId", query["rid"] },
+        { "limit", query.value("limit", 30) },
+        { "offset", query.value("offset", 0) },
+        { "asc", query["asc"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/dj/program/byradio",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 类别热门电台
+const QVariantMap NeteaseCloudMusicApi::dj_radio_hot(QVariantMap query) {
+    const QVariantMap data {
+        { "cateId", query["cateId"] },
+        { "limit", query.value("limit", 30) },
+        { "offset", query.value("offset", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/djradio/hot",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
         }
         );
 }

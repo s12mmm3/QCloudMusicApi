@@ -182,5 +182,11 @@
     },
     "dj_program_detail": {
         "id": "1367665101"
+    },
+    "dj_program": {
+        "rid": "336355127"
+    },
+    "dj_radio_hot": {
+        "cateId": "2001"
     }
 }
