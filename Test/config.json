@@ -171,5 +171,10 @@
     },
     "digitalAlbum_sales": {
         "ids": ["86433402"]
+    },
+    "digitalAlbum_ordering": {
+        "id": "86286082",
+        "payment": "3",
+        "quantity": "1"
     }
 }

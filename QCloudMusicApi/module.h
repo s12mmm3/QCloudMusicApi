@@ -160,6 +160,12 @@ public:
     // 数字专辑详情
     Q_INVOKABLE const QVariantMap digitalAlbum_detail(QVariantMap query);
 
+    // 购买数字专辑
+    Q_INVOKABLE const QVariantMap digitalAlbum_ordering(QVariantMap query);
+
+    // 我的数字专辑
+    Q_INVOKABLE const QVariantMap digitalAlbum_purchased(QVariantMap query);
+
     // 数字专辑销量
     Q_INVOKABLE const QVariantMap digitalAlbum_sales(QVariantMap query);
 
