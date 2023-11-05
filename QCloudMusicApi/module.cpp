@@ -12,14 +12,6 @@
 
 #include "request.hpp"
 
-NeteaseCloudMusicApi::NeteaseCloudMusicApi() {
-
-}
-
-NeteaseCloudMusicApi::~NeteaseCloudMusicApi() {
-
-}
-
 // 初始化名字
 const QVariantMap NeteaseCloudMusicApi::activate_init_profile(QVariantMap query) {
     QVariantMap data {
@@ -1133,6 +1125,101 @@ const QVariantMap NeteaseCloudMusicApi::dj_radio_hot(QVariantMap query) {
     return createRequest(
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/djradio/hot",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 精选电台分类
+
+/*
+    有声书 10001
+    知识技能 453050
+    商业财经 453051
+    人文历史 11
+    外语世界 13
+    亲子宝贝 14
+    创作|翻唱 2001
+    音乐故事 2
+    3D|电子 10002
+    相声曲艺 8
+    情感调频 3
+    美文读物 6
+    脱口秀 5
+    广播剧 7
+    二次元 3001
+    明星做主播 1
+    娱乐|影视 4
+    科技科学 453052
+    校园|教育 4001
+    旅途|城市 12
+*/
+const QVariantMap NeteaseCloudMusicApi::dj_recommend_type(QVariantMap query) {
+    const QVariantMap data {
+        { "cateId", query["type"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/recommend",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 精选电台
+const QVariantMap NeteaseCloudMusicApi::dj_recommend(QVariantMap query) {
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/recommend/v1",
+        {},
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 订阅与取消电台
+const QVariantMap NeteaseCloudMusicApi::dj_sub(QVariantMap query) {
+    query["t"] = query["t"].toInt() == 1 ? "sub" : "unsub";
+    const QVariantMap data {
+        { "id", query["rid"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/" + query["t"].toString(),
+        {},
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 订阅电台列表
+const QVariantMap NeteaseCloudMusicApi::dj_sublist(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 30) },
+        { "offset", query.value("offset", 0) },
+        { "total", true }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/get/subed",
         data,
         QVariantMap {
             { "crypto", "weapi" },

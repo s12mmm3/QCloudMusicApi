@@ -188,5 +188,12 @@
     },
     "dj_radio_hot": {
         "cateId": "2001"
+    },
+    "dj_recommend_type": {
+        "type": "2001"
+    },
+    "dj_sub": {
+        "rid": "336355127",
+        "t": 1
     }
 }
