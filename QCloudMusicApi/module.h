@@ -241,6 +241,27 @@ public:
     // 订阅电台列表
     Q_INVOKABLE const QVariantMap dj_sublist(QVariantMap query);
 
+    // 电台详情
+    Q_INVOKABLE const QVariantMap dj_subscriber(QVariantMap query);
+
+    // 电台今日优选
+    Q_INVOKABLE const QVariantMap dj_today_perfered(QVariantMap query);
+
+    // 电台24小时主播榜
+    Q_INVOKABLE const QVariantMap dj_toplist_hours(QVariantMap query);
+
+    // 电台新人榜
+    Q_INVOKABLE const QVariantMap dj_toplist_newcomer(QVariantMap query);
+
+    // 付费精品
+    Q_INVOKABLE const QVariantMap dj_toplist_pay(QVariantMap query);
+
+    // 电台最热主播榜
+    Q_INVOKABLE const QVariantMap dj_toplist_popular(QVariantMap query);
+
+    // 新晋电台榜/热门电台榜
+    Q_INVOKABLE const QVariantMap dj_toplist(QVariantMap query);
+
     // 粉丝年龄比例
     Q_INVOKABLE const QVariantMap fanscenter_basicinfo_age_get(QVariantMap query);
 

@@ -237,9 +237,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
         else {
             {
                 // http - 响应状态码
-                int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-
-                qDebug() << "服务器返回的Code : " << statusCode;
+                qDebug() << "服务器返回的Code : " << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
             }
 
             QVariantMap headers;

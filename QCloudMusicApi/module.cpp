@@ -1230,6 +1230,145 @@ const QVariantMap NeteaseCloudMusicApi::dj_sublist(QVariantMap query) {
         );
 }
 
+// 电台详情
+const QVariantMap NeteaseCloudMusicApi::dj_subscriber(QVariantMap query) {
+    const QVariantMap data {
+        { "time", query.value("time", "-1") },
+        { "id", query["id"] },
+        { "limit", query.value("limit", 20) },
+        { "total", true }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/djradio/subscriber",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 电台今日优选
+const QVariantMap NeteaseCloudMusicApi::dj_today_perfered(QVariantMap query) {
+    const QVariantMap data {
+        { "page", query.value("page", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/djradio/home/today/perfered",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 电台24小时主播榜
+const QVariantMap NeteaseCloudMusicApi::dj_toplist_hours(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+        // 不支持 offset
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/dj/toplist/hours",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 电台新人榜
+const QVariantMap NeteaseCloudMusicApi::dj_toplist_newcomer(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) },
+        { "offset", query.value("offset", 0) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/dj/toplist/newcomer",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 付费精品
+const QVariantMap NeteaseCloudMusicApi::dj_toplist_pay(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+        // 不支持 offset
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/djradio/toplist/pay",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 电台最热主播榜
+const QVariantMap NeteaseCloudMusicApi::dj_toplist_popular(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+        // 不支持 offset
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/dj/toplist/popular",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 新晋电台榜/热门电台榜
+const QVariantMap NeteaseCloudMusicApi::dj_toplist(QVariantMap query) {
+    const QVariantMap typeMap {
+        { "new", 0 },
+        { "hot", 1 }
+    };
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) },
+        { "offset", query.value("offset", 0) },
+        { "type", typeMap.value(query.value("type", "new").toString(), "0") } //0为新晋,1为热门
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/api/djradio/toplist",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
 // 粉丝年龄比例
 const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_age_get(QVariantMap query) {
     const QVariantMap data { };
