@@ -1369,6 +1369,66 @@ const QVariantMap NeteaseCloudMusicApi::dj_toplist(QVariantMap query) {
         );
 }
 
+// 删除动态
+const QVariantMap NeteaseCloudMusicApi::event_del(QVariantMap query) {
+    const QVariantMap data {
+        { "id", query["evId"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/eapi/event/delete",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 转发动态
+const QVariantMap NeteaseCloudMusicApi::event_forward(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data {
+        { "forwards", query["forwards"] },
+        { "id", query["evId"] },
+        { "eventUserId", query["uid"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/event/forward",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 动态
+const QVariantMap NeteaseCloudMusicApi::event(QVariantMap query) {
+    const QVariantMap data {
+        { "pagesize", query.value("pagesize", 20) },
+        { "lasttime", query.value("lasttime", -1) }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/v1/event/get",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
 // 粉丝年龄比例
 const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_age_get(QVariantMap query) {
     const QVariantMap data { };

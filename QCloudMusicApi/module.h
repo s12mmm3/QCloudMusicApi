@@ -262,6 +262,15 @@ public:
     // 新晋电台榜/热门电台榜
     Q_INVOKABLE const QVariantMap dj_toplist(QVariantMap);
 
+    // 删除动态
+    Q_INVOKABLE const QVariantMap event_del(QVariantMap);
+
+    // 转发动态
+    Q_INVOKABLE const QVariantMap event_forward(QVariantMap);
+
+    // 动态
+    Q_INVOKABLE const QVariantMap event(QVariantMap);
+
     // 粉丝年龄比例
     Q_INVOKABLE const QVariantMap fanscenter_basicinfo_age_get(QVariantMap);
 
