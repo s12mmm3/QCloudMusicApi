@@ -1429,6 +1429,49 @@ const QVariantMap NeteaseCloudMusicApi::event(QVariantMap query) {
         );
 }
 
+// 垃圾桶
+const QVariantMap NeteaseCloudMusicApi::fm_trash(QVariantMap query) {
+    const QVariantMap data {
+        { "songId", query["id"] }
+    };
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/radio/trash/add?alg=RT&songId="
+            + query["id"].toString()
+            + QStringLiteral("&time=")
+            + query.value("time", 25).toString(),
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 关注与取消关注用户
+const QVariantMap NeteaseCloudMusicApi::follow(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    query["t"] = query["t"].toInt() == 1 ? "follow" : "delfollow";
+    return createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/user/"
+            + query["t"].toString()
+            + QStringLiteral("/")
+            + query["id"].toString(),
+        {},
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
 // 粉丝年龄比例
 const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_age_get(QVariantMap query) {
     const QVariantMap data { };
@@ -1555,6 +1598,76 @@ const QVariantMap NeteaseCloudMusicApi::login_cellphone(QVariantMap query) {
             { "cookie", result["cookie"] }
         };
     }
+    return result;
+}
+
+// 二维码检测扫码状态接口
+const QVariantMap NeteaseCloudMusicApi::login_qr_check(QVariantMap query) {
+    const QVariantMap data {
+        { "key", query["key"] },
+        { "type", 1 }
+    };
+    QVariantMap result = createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/login/qrcode/client/login",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+    auto body = result["body"].toMap();
+    body["cookie"] = result["cookie"];
+    result = QVariantMap {
+        { "status", 200 },
+        { "body", body },
+        { "cookie", result["cookie"] }
+    };
+    return result;
+}
+
+// 二维码 key 生成接口
+const QVariantMap NeteaseCloudMusicApi::login_qr_key(QVariantMap query) {
+    const QVariantMap data {
+        { "type", 1 }
+    };
+    QVariantMap result = createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/login/qrcode/unikey",
+        data,
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+    result = QVariantMap {
+        { "status", 200 },
+        { "body", QVariantMap {
+                     { "data", result["body"] },
+                     { "code", 200}
+                 } },
+        { "cookie", result["cookie"] }
+    };
+    return result;
+}
+
+// 二维码生成接口
+const QVariantMap NeteaseCloudMusicApi::login_qr_create(QVariantMap query) {
+    const QString url = "https://music.163.com/login?codekey=" + query["key"].toString();
+    auto result = QVariantMap {
+        { "code", 200 },
+        { "status", 200 },
+        { "body", QVariantMap {
+                     { "code", 200},
+                     { "data", QVariantMap {
+                                  { "qrurl", url }
+                              } }
+                 } }
+    };
     return result;
 }
 
@@ -1858,7 +1971,7 @@ const QVariantMap NeteaseCloudMusicApi::song_wiki_summary(QVariantMap query) {
 // 年度听歌报告2017-2022
 const QVariantMap NeteaseCloudMusicApi::summary_annual(QVariantMap query) {
     QVariantMap data { };
-    const QString key = QList<QString>({ "2017", "2018", "2019 "}).indexOf(query["year"].toString()) > -1 ? "userdata" : "data";
+    const QString key = QStringList { "2017", "2018", "2019 "}.indexOf(query["year"].toString()) > -1 ? "userdata" : "data";
     return createRequest(
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/activity/summary/annual/" + query["year"].toString() + "/" + key,

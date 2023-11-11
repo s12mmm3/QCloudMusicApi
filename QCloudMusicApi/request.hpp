@@ -121,10 +121,10 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
                                                                              ));
     }
     else {
-        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(QList<QNetworkCookie>({
+        request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(QList<QNetworkCookie> {
                                                              QNetworkCookie("__remember_me", QVariant(true).toByteArray()),
                                                              QNetworkCookie("NMTID", "xxx")
-                                                         })));
+                                                         }));
     }
 
     if(options["crypto"].toString() == "weapi") {
@@ -268,10 +268,8 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
                 if(!QJsonDocument::fromJson(body).isNull()) answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
                 else answer["body"] = QString::fromUtf8(body);
             }
-            answer["status"] = answer["body"].toMap().contains("code")
-                                   ? answer["body"].toMap()["code"]
-                                   : reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            if(QList<int>({201, 302, 400, 502, 800, 801, 802, 803}).indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
+            answer["status"] = answer["body"].toMap().value("code", reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
+            if(QList<int> { 201, 302, 400, 502, 800, 801, 802, 803 }.indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
                 answer["status"] = 200;
             }
 
@@ -286,7 +284,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
     request.setUrl(url);
     if (method == QNetworkAccessManager::PostOperation) {
         QUrlQuery urlQuery;
-        for(QMap<QString, QVariant>::iterator i = data.begin(); i != data.end(); ++i) {
+        for(QVariantMap::iterator i = data.begin(); i != data.end(); ++i) {
             urlQuery.addQueryItem(i.key(), i.value().toString());
         }
         QNetworkReply* reply = manager.post(request, urlQuery.toString().toUtf8());

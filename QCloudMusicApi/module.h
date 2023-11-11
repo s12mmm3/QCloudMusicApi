@@ -271,6 +271,12 @@ public:
     // 动态
     Q_INVOKABLE const QVariantMap event(QVariantMap);
 
+    // 垃圾桶
+    Q_INVOKABLE const QVariantMap fm_trash(QVariantMap);
+
+    // 关注与取消关注用户
+    Q_INVOKABLE const QVariantMap follow(QVariantMap);
+
     // 粉丝年龄比例
     Q_INVOKABLE const QVariantMap fanscenter_basicinfo_age_get(QVariantMap);
 
@@ -288,6 +294,15 @@ public:
 
     // 手机登录
     Q_INVOKABLE const QVariantMap login_cellphone(QVariantMap);
+
+    // 二维码检测扫码状态接口
+    Q_INVOKABLE const QVariantMap login_qr_check(QVariantMap);
+
+    // 二维码生成接口
+    Q_INVOKABLE const QVariantMap login_qr_create(QVariantMap);
+
+    // 二维码 key 生成接口
+    Q_INVOKABLE const QVariantMap login_qr_key(QVariantMap);
 
     // 退出登录
     Q_INVOKABLE const QVariantMap logout(QVariantMap);
