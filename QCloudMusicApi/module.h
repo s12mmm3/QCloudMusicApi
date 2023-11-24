@@ -304,6 +304,12 @@ public:
     // 二维码 key 生成接口
     Q_INVOKABLE const QVariantMap login_qr_key(QVariantMap);
 
+    // 登录刷新
+    Q_INVOKABLE const QVariantMap login_refresh(QVariantMap);
+
+    // 登录状态
+    Q_INVOKABLE const QVariantMap login_status(QVariantMap);
+
     // 退出登录
     Q_INVOKABLE const QVariantMap logout(QVariantMap);
 

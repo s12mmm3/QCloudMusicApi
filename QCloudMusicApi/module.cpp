@@ -1671,6 +1671,59 @@ const QVariantMap NeteaseCloudMusicApi::login_qr_create(QVariantMap query) {
     return result;
 }
 
+// 登录刷新
+const QVariantMap NeteaseCloudMusicApi::login_refresh(QVariantMap query) {
+    QVariantMap result = createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/login/token/refresh",
+        {},
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "ua", "pc" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+    if(result["body"].toMap()["code"].toInt() == 200) {
+        auto body = result["body"].toMap();
+        body["cookie"] = result["cookie"];
+        result = QVariantMap {
+            { "status", 200 },
+            { "body", body },
+            { "cookie", result["cookie"] }
+        };
+    }
+    return result;
+}
+
+// 登录状态
+const QVariantMap NeteaseCloudMusicApi::login_status(QVariantMap query) {
+    QVariantMap result = createRequest(
+        QNetworkAccessManager::PostOperation,
+        "https://music.163.com/weapi/w/nuser/account/get",
+        {},
+        QVariantMap {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+    if(result["body"].toMap()["code"].toInt() == 200) {
+        auto body = result["body"].toMap();
+        body["cookie"] = result["cookie"];
+        result = QVariantMap {
+            { "status", 200 },
+            { "body", {
+                         { "data", result["body"] }
+                     } },
+            { "cookie", result["cookie"] }
+        };
+    }
+    return result;
+}
+
 // 退出登录
 const QVariantMap NeteaseCloudMusicApi::logout(QVariantMap query) {
     return createRequest(
