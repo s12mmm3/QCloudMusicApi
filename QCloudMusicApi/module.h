@@ -378,5 +378,11 @@ public:
 
     // 用户歌单
     Q_INVOKABLE const QVariantMap user_playlist(QVariantMap);
+
+    // 云贝今日签到信息
+    Q_INVOKABLE const QVariantMap yunbei_today(QVariantMap);
+
+    // 云贝
+    Q_INVOKABLE const QVariantMap yunbei(QVariantMap);
 };
 #endif // MODULE_H

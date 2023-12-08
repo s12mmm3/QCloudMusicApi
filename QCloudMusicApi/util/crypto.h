@@ -19,16 +19,16 @@ extern "C" {
 
 namespace Crypto {
 
-const static QString iv = QStringLiteral("0102030405060708");
-const static QString presetKey = QStringLiteral("0CoJUm6Qyw8W8jud");
-const static QString linuxapiKey = QStringLiteral("rFgB&h#%2?^eDg:Q");
-const static QString base62 = QStringLiteral("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-const static QString publicKey = QStringLiteral(
+const static auto iv = QStringLiteral("0102030405060708");
+const static auto presetKey = QStringLiteral("0CoJUm6Qyw8W8jud");
+const static auto linuxapiKey = QStringLiteral("rFgB&h#%2?^eDg:Q");
+const static auto base62 = QStringLiteral("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+const static auto publicKey = QStringLiteral(
     "-----BEGIN PUBLIC KEY-----\n"
     "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB"
     "\n-----END PUBLIC KEY-----"
     );
-const static QString eapiKey = QStringLiteral("e82ckenh8dichen8");
+const static auto eapiKey = QStringLiteral("e82ckenh8dichen8");
 
 /**
  * @brief 使用AES算法加密数据的函数
@@ -206,25 +206,33 @@ static const QVariantMap weapi(QJsonDocument object) {
     auto encSecKey = rsaEncrypt(secretKey, publicKey).toHex();
 
     return {
-        { "params", params },
-        { "encSecKey", encSecKey }
+        { QStringLiteral("params"), params },
+        { QStringLiteral("encSecKey"), encSecKey }
     };
 }
 
 static const QVariantMap linuxapi(QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Indented);
     return {
-        { "eparams", aesEncrypt(text.toUtf8(), EVP_aes_128_ecb, linuxapiKey, "").toHex().toUpper() }
+        { QStringLiteral("eparams"), aesEncrypt(text.toUtf8(), EVP_aes_128_ecb, linuxapiKey, QStringLiteral("")).toHex().toUpper() }
     };
 }
 
 static const QVariantMap eapi(QString url, QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Indented);
-    const QString message = "nobody" + url + "use" + text + "md5forencrypt";
+    const QString message = QStringLiteral("nobody")
+                            + url
+                            + QStringLiteral("use")
+                            + text
+                            + QStringLiteral("md5forencrypt");
     const QByteArray digest = QCryptographicHash::hash(message.toUtf8(), QCryptographicHash::Md5).toHex();
-    const QString data = url + "-36cd479b6b5-" + text + "-36cd479b6b5-" + digest;
+    const QString data = url
+                         + QStringLiteral("-36cd479b6b5-")
+                         + text
+                         + QStringLiteral("-36cd479b6b5-")
+                         + digest;
     return {
-        { "params", aesEncrypt(data.toUtf8(), EVP_aes_128_ecb, eapiKey, "").toHex().toUpper() }
+        { "params", aesEncrypt(data.toUtf8(), EVP_aes_128_ecb, eapiKey, QStringLiteral("")).toHex().toUpper() }
     };
 }
 
