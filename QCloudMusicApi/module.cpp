@@ -21,7 +21,7 @@ const QVariantMap NeteaseCloudMusicApi::activate_init_profile(QVariantMap query)
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/eapi/activate/initProfile",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -40,7 +40,7 @@ const QVariantMap NeteaseCloudMusicApi::album_detail_dynamic(QVariantMap query) 
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/album/detail/dynamic",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -58,7 +58,7 @@ const QVariantMap NeteaseCloudMusicApi::album_detail(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/vipmall/albumproduct/detail",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -79,7 +79,7 @@ const QVariantMap NeteaseCloudMusicApi::album_list_style(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/vipmall/appalbum/album/style",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -101,7 +101,7 @@ const QVariantMap NeteaseCloudMusicApi::album_list(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/vipmall/albumproduct/list",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -122,7 +122,7 @@ const QVariantMap NeteaseCloudMusicApi::album_new(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/album/new",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -137,7 +137,7 @@ const QVariantMap NeteaseCloudMusicApi::album_newest(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/discovery/newAlbum",
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -157,7 +157,7 @@ const QVariantMap NeteaseCloudMusicApi::album_songsaleboard(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/feealbum/songsaleboard/" + type + "/type",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -176,7 +176,7 @@ const QVariantMap NeteaseCloudMusicApi::album_sub(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/album/" + query["t"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -196,7 +196,7 @@ const QVariantMap NeteaseCloudMusicApi::album_sublist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/album/sublist",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -211,7 +211,7 @@ const QVariantMap NeteaseCloudMusicApi::album(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/album/" + query["id"].toString(),
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -231,7 +231,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_album(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/artist/albums/" + query["id"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -249,7 +249,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_desc(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/artist/introduction",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -267,7 +267,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_detail(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/artist/head/info/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -287,7 +287,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_fans(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/artist/fans/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -305,7 +305,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_follow_count(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/artist/follow/count/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -345,7 +345,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_list(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/v1/artist/list",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -366,7 +366,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_mv(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/artist/mvs",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -389,7 +389,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_new_mv(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/sub/artist/new/works/mv/list",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -412,7 +412,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_new_song(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/sub/artist/new/works/song/list",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -438,7 +438,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_songs(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/v1/artist/songs",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -460,7 +460,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_sub(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/artist/" + query["t"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -480,7 +480,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_sublist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/artist/sublist",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -498,7 +498,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_top_song(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/artist/top/song",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -522,7 +522,7 @@ const QVariantMap NeteaseCloudMusicApi::artist_video(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/mlog/artist/video",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -537,7 +537,7 @@ const QVariantMap NeteaseCloudMusicApi::artists(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/artist/" + query["id"].toString(),
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -562,7 +562,7 @@ const QVariantMap NeteaseCloudMusicApi::banner(QVariantMap query) {
         {
             { "clientType", type }
         },
-        QVariantMap {
+        {
             { "crypto", "api" },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] }
@@ -583,7 +583,7 @@ const QVariantMap NeteaseCloudMusicApi::cloudsearch(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/eapi/cloudsearch/pc",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -608,7 +608,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_album(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/resource/comments/R_AL_3_" + query["id"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -632,7 +632,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_dj(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/resource/comments/A_DJ_1_" + query["id"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -652,7 +652,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_event(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/resource/comments/" + query["threadId"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -676,7 +676,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_music(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/v1/resource/comments/R_SO_4_" + query["id"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -700,7 +700,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_mv(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/resource/comments/R_MV_5_" + query["id"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -724,7 +724,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_playlist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/resource/comments/A_PL_0_" + query["id"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -748,7 +748,7 @@ const QVariantMap NeteaseCloudMusicApi::comment_video(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/resource/comments/R_VI_62_" + query["id"].toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -764,7 +764,7 @@ const QVariantMap NeteaseCloudMusicApi::countries_code_list(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://interface3.music.163.com/eapi/lbs/countries/v1",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -781,7 +781,7 @@ const QVariantMap NeteaseCloudMusicApi::creator_authinfo_get(QVariantMap query) 
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/weapi/user/creator/authinfo/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -807,7 +807,7 @@ const QVariantMap NeteaseCloudMusicApi::daily_signin(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/point/dailyTask",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -825,7 +825,7 @@ const QVariantMap NeteaseCloudMusicApi::digitalAlbum_detail(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/vipmall/albumproduct/detail",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -850,7 +850,7 @@ const QVariantMap NeteaseCloudMusicApi::digitalAlbum_ordering(QVariantMap query)
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/ordering/web/digital",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -870,7 +870,7 @@ const QVariantMap NeteaseCloudMusicApi::digitalAlbum_purchased(QVariantMap query
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/digitalAlbum/purchased",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -888,7 +888,7 @@ const QVariantMap NeteaseCloudMusicApi::digitalAlbum_sales(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/vipmall/albumproduct/album/query/sales",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -907,7 +907,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_banner(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/banner/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -923,7 +923,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_category_excludehot(QVariantMap query
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/category/excludehot",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -939,7 +939,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_category_recommend(QVariantMap query)
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/home/category/recommend",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -955,7 +955,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_catelist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/category/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -973,7 +973,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_detail(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/djradio/v2/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -992,7 +992,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_hot(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/hot/v1",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1011,7 +1011,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_paygift(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/home/paygift/list?_nmclfl=1",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1029,7 +1029,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_personalize_recommend(QVariantMap que
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/djradio/personalize/rcmd",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1047,7 +1047,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_program_detail(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/dj/program/detail",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1066,7 +1066,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_program_toplist_hours(QVariantMap que
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/djprogram/toplist/hours",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1085,7 +1085,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_program_toplist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/program/toplist/v1",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1106,7 +1106,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_program(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/dj/program/byradio",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1126,7 +1126,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_radio_hot(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/djradio/hot",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1167,7 +1167,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_recommend_type(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/recommend",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1182,7 +1182,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_recommend(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/recommend/v1",
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1201,7 +1201,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_sub(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/" + query["t"].toString(),
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1221,7 +1221,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_sublist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/get/subed",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1242,7 +1242,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_subscriber(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/djradio/subscriber",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1260,7 +1260,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_today_perfered(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/djradio/home/today/perfered",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1279,7 +1279,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_toplist_hours(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/dj/toplist/hours",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1298,7 +1298,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_toplist_newcomer(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/dj/toplist/newcomer",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1317,7 +1317,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_toplist_pay(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/djradio/toplist/pay",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1336,7 +1336,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_toplist_popular(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/dj/toplist/popular",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1360,7 +1360,7 @@ const QVariantMap NeteaseCloudMusicApi::dj_toplist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/djradio/toplist",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1378,7 +1378,7 @@ const QVariantMap NeteaseCloudMusicApi::event_del(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/eapi/event/delete",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1401,7 +1401,7 @@ const QVariantMap NeteaseCloudMusicApi::event_forward(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/event/forward",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1420,7 +1420,7 @@ const QVariantMap NeteaseCloudMusicApi::event(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/event/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1441,7 +1441,7 @@ const QVariantMap NeteaseCloudMusicApi::fm_trash(QVariantMap query) {
             + QStringLiteral("&time=")
             + query.value("time", 25).toString(),
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1463,7 +1463,7 @@ const QVariantMap NeteaseCloudMusicApi::follow(QVariantMap query) {
             + QStringLiteral("/")
             + query["id"].toString(),
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1479,7 +1479,7 @@ const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_age_get(QVariantMap
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/weapi/fanscenter/basicinfo/age/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1496,7 +1496,7 @@ const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_gender_get(QVariant
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/weapi/fanscenter/basicinfo/gender/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1513,7 +1513,7 @@ const QVariantMap NeteaseCloudMusicApi::fanscenter_basicinfo_province_get(QVaria
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/weapi/fanscenter/basicinfo/province/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1530,7 +1530,7 @@ const QVariantMap NeteaseCloudMusicApi::fanscenter_overview_get(QVariantMap quer
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/weapi/fanscenter/overview/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1551,7 +1551,7 @@ const QVariantMap NeteaseCloudMusicApi::fanscenter_trend_list(QVariantMap query)
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/weapi/fanscenter/trend/list",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1581,7 +1581,7 @@ const QVariantMap NeteaseCloudMusicApi::login_cellphone(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/login/cellphone",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "ua", "pc" },
             { "cookie", query["cookie"] },
@@ -1611,7 +1611,7 @@ const QVariantMap NeteaseCloudMusicApi::login_qr_check(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/login/qrcode/client/login",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1637,7 +1637,7 @@ const QVariantMap NeteaseCloudMusicApi::login_qr_key(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/login/qrcode/unikey",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1677,7 +1677,7 @@ const QVariantMap NeteaseCloudMusicApi::login_refresh(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/login/token/refresh",
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "ua", "pc" },
             { "cookie", query["cookie"] },
@@ -1703,7 +1703,7 @@ const QVariantMap NeteaseCloudMusicApi::login_status(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/w/nuser/account/get",
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1730,7 +1730,7 @@ const QVariantMap NeteaseCloudMusicApi::logout(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/logout",
         {},
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "ua", "pc" },
             { "cookie", query["cookie"] },
@@ -1757,7 +1757,7 @@ const QVariantMap NeteaseCloudMusicApi::lyric_new(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://interface3.music.163.com/eapi/song/lyric/v1",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1784,7 +1784,7 @@ const QVariantMap NeteaseCloudMusicApi::lyric(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/song/lyric?_nmclfl=1",
         data,
-        QVariantMap {
+        {
             { "crypto", "api" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1802,7 +1802,7 @@ const QVariantMap NeteaseCloudMusicApi::nickname_check(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/nickname/duplicated",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1848,7 +1848,7 @@ const QVariantMap NeteaseCloudMusicApi::register_anonimous(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/register/anonimous",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1873,7 +1873,7 @@ const QVariantMap NeteaseCloudMusicApi::related_playlist(QVariantMap query) {
         QNetworkAccessManager::GetOperation,
         "https://music.163.com/playlist?id=" + query["id"].toString(),
         {},
-        QVariantMap {
+        {
             { "ua", "pc" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1929,7 +1929,7 @@ const QVariantMap NeteaseCloudMusicApi::search(QVariantMap query) {
             QNetworkAccessManager::PostOperation,
             "https://music.163.com/api/search/voice/get",
             data,
-            QVariantMap {
+            {
                 { "crypto", "weapi" },
                 { "cookie", query["cookie"] },
                 { "proxy", query["proxy"] },
@@ -1947,7 +1947,7 @@ const QVariantMap NeteaseCloudMusicApi::search(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/search/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1966,7 +1966,7 @@ const QVariantMap NeteaseCloudMusicApi::song_download_url(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/eapi/song/enhance/download/url",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -1992,7 +1992,7 @@ const QVariantMap NeteaseCloudMusicApi::song_url_v1(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://interface.music.163.com/eapi/song/enhance/player/url/v1",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2011,7 +2011,7 @@ const QVariantMap NeteaseCloudMusicApi::song_wiki_summary(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://interface3.music.163.com/eapi/music/wiki/home/song/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2029,7 +2029,7 @@ const QVariantMap NeteaseCloudMusicApi::summary_annual(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/activity/summary/annual/" + query["year"].toString() + "/" + key,
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2046,7 +2046,7 @@ const QVariantMap NeteaseCloudMusicApi::threshold_detail_get(QVariantMap query) 
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/influencer/web/apply/threshold/detail/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2062,7 +2062,7 @@ const QVariantMap NeteaseCloudMusicApi::toplist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/toplist",
         {},
-        QVariantMap {
+        {
             { "crypto", "api" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2080,7 +2080,7 @@ const QVariantMap NeteaseCloudMusicApi::ugc_album_get(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/rep/ugc/album/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2099,7 +2099,7 @@ const QVariantMap NeteaseCloudMusicApi::ugc_artist_get(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/rep/ugc/artist/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2120,7 +2120,7 @@ const QVariantMap NeteaseCloudMusicApi::ugc_artist_search(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/rep/ugc/artist/search",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2138,7 +2138,7 @@ const QVariantMap NeteaseCloudMusicApi::ugc_mv_get(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/rep/ugc/mv/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2157,7 +2157,7 @@ const QVariantMap NeteaseCloudMusicApi::ugc_song_get(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/rep/ugc/song/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "eapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2174,7 +2174,7 @@ const QVariantMap NeteaseCloudMusicApi::user_account(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/nuser/account/get",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2200,7 +2200,7 @@ const QVariantMap NeteaseCloudMusicApi::user_comment_history(QVariantMap query) 
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/comment/user/comment/history",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2215,7 +2215,7 @@ const QVariantMap NeteaseCloudMusicApi::user_detail(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/weapi/v1/user/detail/" + query["uid"].toString(),
         {},
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },
@@ -2236,7 +2236,7 @@ const QVariantMap NeteaseCloudMusicApi::user_playlist(QVariantMap query) {
         QNetworkAccessManager::PostOperation,
         "https://music.163.com/api/user/playlist",
         data,
-        QVariantMap {
+        {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
             { "proxy", query["proxy"] },

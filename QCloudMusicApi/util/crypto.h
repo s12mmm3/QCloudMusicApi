@@ -1,4 +1,4 @@
-#ifndef CRYPTO_H
+﻿#ifndef CRYPTO_H
 #define CRYPTO_H
 
 #include <iostream>
@@ -19,14 +19,16 @@ extern "C" {
 
 namespace Crypto {
 
-const static QByteArray iv = QByteArray::fromStdString("0102030405060708");
-const static QByteArray presetKey = QByteArray::fromStdString("0CoJUm6Qyw8W8jud");
-const static QByteArray linuxapiKey = QByteArray::fromStdString("rFgB&h#%2?^eDg:Q");
-const static QString base62 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const static QString publicKey = "-----BEGIN PUBLIC KEY-----\n"
-                          "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB"
-                          "\n-----END PUBLIC KEY-----";
-const static QString eapiKey = "e82ckenh8dichen8";
+const static QString iv = QStringLiteral("0102030405060708");
+const static QString presetKey = QStringLiteral("0CoJUm6Qyw8W8jud");
+const static QString linuxapiKey = QStringLiteral("rFgB&h#%2?^eDg:Q");
+const static QString base62 = QStringLiteral("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+const static QString publicKey = QStringLiteral(
+    "-----BEGIN PUBLIC KEY-----\n"
+    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB"
+    "\n-----END PUBLIC KEY-----"
+    );
+const static QString eapiKey = QStringLiteral("e82ckenh8dichen8");
 
 /**
  * @brief 使用AES算法加密数据的函数
@@ -46,11 +48,9 @@ static QByteArray aesEncrypt(const QByteArray &plainData, const EVP_CIPHER *mode
     }
 
     // 将QString类型的输入参数转换为char*类型
-    QByteArray keyBytes = key.toUtf8();
-    QByteArray ivBytes = iv.toUtf8();
     const char *plainDataChar = plainData.constData();
-    const char *keyChar = keyBytes.constData();
-    const char *ivChar = ivBytes.constData();
+    const char *keyChar = key.toUtf8();
+    const char *ivChar = iv.toUtf8();
 
     // 计算加密后的数据长度，至少要比明文数据长度大一个块大小
     int outBufLen = plainData.size() + EVP_CIPHER_block_size(mode());
@@ -98,11 +98,9 @@ static QByteArray aesDecrypt(const QByteArray &cipherData, const EVP_CIPHER *mod
     }
 
     // 将QString类型的输入参数转换为char*类型
-    QByteArray keyBytes = key.toUtf8();
-    QByteArray ivBytes = iv.toUtf8();
     const char *cipherDataChar = cipherData.constData();
-    const char *keyChar = keyBytes.constData();
-    const char *ivChar = ivBytes.constData();
+    const char *keyChar = key.toUtf8();
+    const char *ivChar = iv.toUtf8();
 
     // 计算解密后的数据长度，至少要和密文数据长度一样大
     int outBufLen = cipherData.size();
