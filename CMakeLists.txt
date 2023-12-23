@@ -8,9 +8,13 @@ project(QCloudMusicApiProject VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 
 # set default output path
+if(NOT ANDROID)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/output/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/output/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/output/lib)
+else()
+
+endif()
 set(CMAKE_HEADER_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/output/include)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -24,12 +28,14 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 # 添加子目录
 add_subdirectory(QCloudMusicApi)
 add_subdirectory(Test)
-add_subdirectory(CApi)
 
 find_package(QT NAMES Qt6 Qt5)
 find_package(Qt${QT_VERSION_MAJOR})
 if(${QT_VERSION} VERSION_GREATER 6.4.0)
-    add_subdirectory(ApiServer)
+    if(NOT ANDROID)
+        add_subdirectory(ApiServer)
+        add_subdirectory(CApi)
+    endif()
 endif()
 
 # 设置安装前缀为二进制目录
