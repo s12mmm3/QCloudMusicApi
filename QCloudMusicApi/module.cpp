@@ -13,14 +13,17 @@
 #include "request.hpp"
 
 using Api = NeteaseCloudMusicApi;
+auto request = createRequest;
+auto POST = QNetworkAccessManager::PostOperation;
+auto GET = QNetworkAccessManager::GetOperation;
 
 // 初始化名字
 const QVariantMap Api::activate_init_profile(QVariantMap query) {
     QVariantMap data {
         { "nickname", query["nickname"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/eapi/activate/initProfile",
         data,
         {
@@ -38,8 +41,8 @@ const QVariantMap Api::album_detail_dynamic(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/album/detail/dynamic",
         data,
         {
@@ -56,8 +59,8 @@ const QVariantMap Api::album_detail(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/vipmall/albumproduct/detail",
         data,
         {
@@ -77,8 +80,8 @@ const QVariantMap Api::album_list_style(QVariantMap query) {
         { "total", true },
         { "area", query.value("area", "Z_H") }//Z_H:华语,E_A:欧美,KR:韩国,JP:日本
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/vipmall/appalbum/album/style",
         data,
         {
@@ -99,8 +102,8 @@ const QVariantMap Api::album_list(QVariantMap query) {
         { "area", query.value("area", "ALL") },//ALL:全部,ZH:华语,EA:欧美,KR:韩国,JP:日本
         { "type", query["type"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/vipmall/albumproduct/list",
         data,
         {
@@ -120,8 +123,8 @@ const QVariantMap Api::album_new(QVariantMap query) {
         { "total", true },
         { "area", query.value("area", "ALL") },//ALL:全部,ZH:华语,EA:欧美,KR:韩国,JP:日本
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/album/new",
         data,
         {
@@ -135,8 +138,8 @@ const QVariantMap Api::album_new(QVariantMap query) {
 
 // 最新专辑
 const QVariantMap Api::album_newest(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/discovery/newAlbum",
         {},
         {
@@ -155,8 +158,8 @@ const QVariantMap Api::album_songsaleboard(QVariantMap query) {
     };
     const QString type = query.value("type", "daily").toString(); // daily,week,year,total
     if(type == "year") data["year"] = query["year"];
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/feealbum/songsaleboard/" + type + "/type",
         data,
         {
@@ -174,8 +177,8 @@ const QVariantMap Api::album_sub(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/album/" + query["t"].toString(),
         data,
         {
@@ -194,8 +197,8 @@ const QVariantMap Api::album_sublist(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "total", true }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/album/sublist",
         data,
         {
@@ -209,8 +212,8 @@ const QVariantMap Api::album_sublist(QVariantMap query) {
 
 // 专辑内容
 const QVariantMap Api::album(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/album/" + query["id"].toString(),
         {},
         {
@@ -229,8 +232,8 @@ const QVariantMap Api::artist_album(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "total", true }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/artist/albums/" + query["id"].toString(),
         data,
         {
@@ -247,8 +250,8 @@ const QVariantMap Api::artist_desc(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/artist/introduction",
         data,
         {
@@ -265,8 +268,8 @@ const QVariantMap Api::artist_detail(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/artist/head/info/get",
         data,
         {
@@ -285,8 +288,8 @@ const QVariantMap Api::artist_fans(QVariantMap query) {
         { "limit", query.value("limit", 20) },
         { "offset", query.value("offset", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/artist/fans/get",
         data,
         {
@@ -303,8 +306,8 @@ const QVariantMap Api::artist_follow_count(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/artist/follow/count/get",
         data,
         {
@@ -343,8 +346,8 @@ const QVariantMap Api::artist_list(QVariantMap query) {
         { "type", query.value("type", "1") },
         { "area", query["area"] },
         };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/v1/artist/list",
         data,
         {
@@ -364,8 +367,8 @@ const QVariantMap Api::artist_mv(QVariantMap query) {
         { "offset", query["offset"] },
         { "total", true }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/artist/mvs",
         data,
         {
@@ -387,8 +390,8 @@ const QVariantMap Api::artist_new_mv(QVariantMap query) {
         { "limit", query.value("limit", 20) },
         { "startTimestamp", query.value("before", QDateTime::currentDateTime().toMSecsSinceEpoch()) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/sub/artist/new/works/mv/list",
         data,
         {
@@ -410,8 +413,8 @@ const QVariantMap Api::artist_new_song(QVariantMap query) {
         { "limit", query.value("limit", 20) },
         { "startTimestamp", query.value("before", QDateTime::currentDateTime().toMSecsSinceEpoch()) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/sub/artist/new/works/song/list",
         data,
         {
@@ -436,8 +439,8 @@ const QVariantMap Api::artist_songs(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "limit", query.value("limit", 100) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/v1/artist/songs",
         data,
         {
@@ -458,8 +461,8 @@ const QVariantMap Api::artist_sub(QVariantMap query) {
         { "artistId", query["id"] },
         { "artistIds", artistIds }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/artist/" + query["t"].toString(),
         data,
         {
@@ -478,8 +481,8 @@ const QVariantMap Api::artist_sublist(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "total", true }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/artist/sublist",
         data,
         {
@@ -496,8 +499,8 @@ const QVariantMap Api::artist_top_song(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/artist/top/song",
         data,
         {
@@ -520,8 +523,8 @@ const QVariantMap Api::artist_video(QVariantMap query) {
         { "tab", 0 },
         { "order", query.value("order", 0) },
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/mlog/artist/video",
         data,
         {
@@ -535,8 +538,8 @@ const QVariantMap Api::artist_video(QVariantMap query) {
 
 // 歌手单曲
 const QVariantMap Api::artists(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/artist/" + query["id"].toString(),
         {},
         {
@@ -558,8 +561,8 @@ const QVariantMap Api::banner(QVariantMap query) {
         { 3, "ipad" }
     };
     const QString type = typeMap.value(type0, "pc");
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/v2/banner/get",
         {
             { "clientType", type }
@@ -581,8 +584,8 @@ const QVariantMap Api::cloudsearch(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "total", true }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/eapi/cloudsearch/pc",
         data,
         {
@@ -606,8 +609,8 @@ const QVariantMap Api::comment_album(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "beforeTime", query.value("before", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/resource/comments/R_AL_3_" + query["id"].toString(),
         data,
         {
@@ -630,8 +633,8 @@ const QVariantMap Api::comment_dj(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "beforeTime", query.value("before", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/resource/comments/A_DJ_1_" + query["id"].toString(),
         data,
         {
@@ -650,8 +653,8 @@ const QVariantMap Api::comment_event(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "beforeTime", query.value("before", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/resource/comments/" + query["threadId"].toString(),
         data,
         {
@@ -674,8 +677,8 @@ const QVariantMap Api::comment_music(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "beforeTime", query.value("before", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/v1/resource/comments/R_SO_4_" + query["id"].toString(),
         data,
         {
@@ -698,8 +701,8 @@ const QVariantMap Api::comment_mv(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "beforeTime", query.value("before", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/resource/comments/R_MV_5_" + query["id"].toString(),
         data,
         {
@@ -722,8 +725,8 @@ const QVariantMap Api::comment_playlist(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "beforeTime", query.value("before", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/resource/comments/A_PL_0_" + query["id"].toString(),
         data,
         {
@@ -746,8 +749,8 @@ const QVariantMap Api::comment_video(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "beforeTime", query.value("before", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/resource/comments/R_VI_62_" + query["id"].toString(),
         data,
         {
@@ -762,8 +765,8 @@ const QVariantMap Api::comment_video(QVariantMap query) {
 // 国家编码列表
 const QVariantMap Api::countries_code_list(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface3.music.163.com/eapi/lbs/countries/v1",
         data,
         {
@@ -779,8 +782,8 @@ const QVariantMap Api::countries_code_list(QVariantMap query) {
 // 获取达人用户信息
 const QVariantMap Api::creator_authinfo_get(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/weapi/user/creator/authinfo/get",
         data,
         {
@@ -805,8 +808,8 @@ const QVariantMap Api::daily_signin(QVariantMap query) {
     const QVariantMap data {
         { "type", query.value("type", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/point/dailyTask",
         data,
         {
@@ -823,8 +826,8 @@ const QVariantMap Api::digitalAlbum_detail(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/vipmall/albumproduct/detail",
         data,
         {
@@ -848,8 +851,8 @@ const QVariantMap Api::digitalAlbum_ordering(QVariantMap query) {
                                                                                     } }) }.toJson(QJsonDocument::Compact) },
         { "from", "web" }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/ordering/web/digital",
         data,
         {
@@ -868,8 +871,8 @@ const QVariantMap Api::digitalAlbum_purchased(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "total", true }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/digitalAlbum/purchased",
         data,
         {
@@ -886,8 +889,8 @@ const QVariantMap Api::digitalAlbum_sales(QVariantMap query) {
     const QVariantMap data {
         { "albumIds", query["ids"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/vipmall/albumproduct/album/query/sales",
         data,
         {
@@ -905,8 +908,8 @@ const QVariantMap Api::dj_banner(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/banner/get",
         data,
         {
@@ -921,8 +924,8 @@ const QVariantMap Api::dj_banner(QVariantMap query) {
 // 电台非热门类型
 const QVariantMap Api::dj_category_excludehot(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/category/excludehot",
         data,
         {
@@ -937,8 +940,8 @@ const QVariantMap Api::dj_category_excludehot(QVariantMap query) {
 // 电台推荐类型
 const QVariantMap Api::dj_category_recommend(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/home/category/recommend",
         data,
         {
@@ -953,8 +956,8 @@ const QVariantMap Api::dj_category_recommend(QVariantMap query) {
 // 电台分类列表
 const QVariantMap Api::dj_catelist(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/category/get",
         data,
         {
@@ -971,8 +974,8 @@ const QVariantMap Api::dj_detail(QVariantMap query) {
     const QVariantMap data {
         { "id", query["rid"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/djradio/v2/get",
         data,
         {
@@ -990,8 +993,8 @@ const QVariantMap Api::dj_hot(QVariantMap query) {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/hot/v1",
         data,
         {
@@ -1009,8 +1012,8 @@ const QVariantMap Api::dj_paygift(QVariantMap query) {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/home/paygift/list?_nmclfl=1",
         data,
         {
@@ -1027,8 +1030,8 @@ const QVariantMap Api::dj_personalize_recommend(QVariantMap query) {
     const QVariantMap data {
         { "limit", query.value("limit", 6) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/djradio/personalize/rcmd",
         data,
         {
@@ -1045,8 +1048,8 @@ const QVariantMap Api::dj_program_detail(QVariantMap query) {
     const QVariantMap data {
         { "id", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/dj/program/detail",
         data,
         {
@@ -1064,8 +1067,8 @@ const QVariantMap Api::dj_program_toplist_hours(QVariantMap query) {
         { "limit", query.value("limit", 100) }
         // 不支持 offset
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/djprogram/toplist/hours",
         data,
         {
@@ -1083,8 +1086,8 @@ const QVariantMap Api::dj_program_toplist(QVariantMap query) {
         { "limit", query.value("limit", 100) },
         { "offset", query.value("offset", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/program/toplist/v1",
         data,
         {
@@ -1104,8 +1107,8 @@ const QVariantMap Api::dj_program(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "asc", query["asc"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/dj/program/byradio",
         data,
         {
@@ -1124,8 +1127,8 @@ const QVariantMap Api::dj_radio_hot(QVariantMap query) {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/djradio/hot",
         data,
         {
@@ -1165,8 +1168,8 @@ const QVariantMap Api::dj_recommend_type(QVariantMap query) {
     const QVariantMap data {
         { "cateId", query["type"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/recommend",
         data,
         {
@@ -1180,8 +1183,8 @@ const QVariantMap Api::dj_recommend_type(QVariantMap query) {
 
 // 精选电台
 const QVariantMap Api::dj_recommend(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/recommend/v1",
         {},
         {
@@ -1199,8 +1202,8 @@ const QVariantMap Api::dj_sub(QVariantMap query) {
     const QVariantMap data {
         { "id", query["rid"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/" + query["t"].toString(),
         {},
         {
@@ -1219,8 +1222,8 @@ const QVariantMap Api::dj_sublist(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "total", true }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/get/subed",
         data,
         {
@@ -1240,8 +1243,8 @@ const QVariantMap Api::dj_subscriber(QVariantMap query) {
         { "limit", query.value("limit", 20) },
         { "total", true }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/djradio/subscriber",
         data,
         {
@@ -1258,8 +1261,8 @@ const QVariantMap Api::dj_today_perfered(QVariantMap query) {
     const QVariantMap data {
         { "page", query.value("page", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/djradio/home/today/perfered",
         data,
         {
@@ -1277,8 +1280,8 @@ const QVariantMap Api::dj_toplist_hours(QVariantMap query) {
         { "limit", query.value("limit", 100) }
         // 不支持 offset
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/dj/toplist/hours",
         data,
         {
@@ -1296,8 +1299,8 @@ const QVariantMap Api::dj_toplist_newcomer(QVariantMap query) {
         { "limit", query.value("limit", 100) },
         { "offset", query.value("offset", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/dj/toplist/newcomer",
         data,
         {
@@ -1315,8 +1318,8 @@ const QVariantMap Api::dj_toplist_pay(QVariantMap query) {
         { "limit", query.value("limit", 100) }
         // 不支持 offset
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/djradio/toplist/pay",
         data,
         {
@@ -1334,8 +1337,8 @@ const QVariantMap Api::dj_toplist_popular(QVariantMap query) {
         { "limit", query.value("limit", 100) }
         // 不支持 offset
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/dj/toplist/popular",
         data,
         {
@@ -1358,8 +1361,8 @@ const QVariantMap Api::dj_toplist(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "type", typeMap.value(query.value("type", "new").toString(), "0") } //0为新晋,1为热门
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/djradio/toplist",
         data,
         {
@@ -1376,8 +1379,8 @@ const QVariantMap Api::event_del(QVariantMap query) {
     const QVariantMap data {
         { "id", query["evId"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/eapi/event/delete",
         data,
         {
@@ -1399,8 +1402,8 @@ const QVariantMap Api::event_forward(QVariantMap query) {
         { "id", query["evId"] },
         { "eventUserId", query["uid"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/event/forward",
         data,
         {
@@ -1418,8 +1421,8 @@ const QVariantMap Api::event(QVariantMap query) {
         { "pagesize", query.value("pagesize", 20) },
         { "lasttime", query.value("lasttime", -1) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/event/get",
         data,
         {
@@ -1436,8 +1439,8 @@ const QVariantMap Api::fm_trash(QVariantMap query) {
     const QVariantMap data {
         { "songId", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/radio/trash/add?alg=RT&songId="
             + query["id"].toString()
             + QStringLiteral("&time=")
@@ -1458,8 +1461,8 @@ const QVariantMap Api::follow(QVariantMap query) {
     cookie["os"] = "pc";
     query["cookie"] = cookie;
     query["t"] = query["t"].toInt() == 1 ? "follow" : "delfollow";
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/user/"
             + query["t"].toString()
             + QStringLiteral("/")
@@ -1477,8 +1480,8 @@ const QVariantMap Api::follow(QVariantMap query) {
 // 粉丝年龄比例
 const QVariantMap Api::fanscenter_basicinfo_age_get(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/weapi/fanscenter/basicinfo/age/get",
         data,
         {
@@ -1494,8 +1497,8 @@ const QVariantMap Api::fanscenter_basicinfo_age_get(QVariantMap query) {
 // 粉丝性别比例
 const QVariantMap Api::fanscenter_basicinfo_gender_get(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/weapi/fanscenter/basicinfo/gender/get",
         data,
         {
@@ -1511,8 +1514,8 @@ const QVariantMap Api::fanscenter_basicinfo_gender_get(QVariantMap query) {
 // 粉丝省份比例
 const QVariantMap Api::fanscenter_basicinfo_province_get(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/weapi/fanscenter/basicinfo/province/get",
         data,
         {
@@ -1528,8 +1531,8 @@ const QVariantMap Api::fanscenter_basicinfo_province_get(QVariantMap query) {
 // 粉丝数量
 const QVariantMap Api::fanscenter_overview_get(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/weapi/fanscenter/overview/get",
         data,
         {
@@ -1549,8 +1552,8 @@ const QVariantMap Api::fanscenter_trend_list(QVariantMap query) {
         { "endTime", query.value("endTime", QDateTime::currentDateTime().toMSecsSinceEpoch()) },
         { "type", query.value("type", 0) }//新增关注:0 新增取关:1
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/weapi/fanscenter/trend/list",
         data,
         {
@@ -1579,8 +1582,8 @@ const QVariantMap Api::login_cellphone(QVariantMap query) {
                                  QCryptographicHash::hash(query["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex())) },
         { "rememberLogin", "true" }
     };
-    QVariantMap result = createRequest(
-        QNetworkAccessManager::PostOperation,
+    QVariantMap result = request(
+        POST,
         "https://music.163.com/weapi/login/cellphone",
         data,
         {
@@ -1609,8 +1612,8 @@ const QVariantMap Api::login_qr_check(QVariantMap query) {
         { "key", query["key"] },
         { "type", 1 }
     };
-    QVariantMap result = createRequest(
-        QNetworkAccessManager::PostOperation,
+    QVariantMap result = request(
+        POST,
         "https://music.163.com/weapi/login/qrcode/client/login",
         data,
         {
@@ -1635,8 +1638,8 @@ const QVariantMap Api::login_qr_key(QVariantMap query) {
     const QVariantMap data {
         { "type", 1 }
     };
-    QVariantMap result = createRequest(
-        QNetworkAccessManager::PostOperation,
+    QVariantMap result = request(
+        POST,
         "https://music.163.com/weapi/login/qrcode/unikey",
         data,
         {
@@ -1675,8 +1678,8 @@ const QVariantMap Api::login_qr_create(QVariantMap query) {
 
 // 登录刷新
 const QVariantMap Api::login_refresh(QVariantMap query) {
-    QVariantMap result = createRequest(
-        QNetworkAccessManager::PostOperation,
+    QVariantMap result = request(
+        POST,
         "https://music.163.com/weapi/login/token/refresh",
         {},
         {
@@ -1701,8 +1704,8 @@ const QVariantMap Api::login_refresh(QVariantMap query) {
 
 // 登录状态
 const QVariantMap Api::login_status(QVariantMap query) {
-    QVariantMap result = createRequest(
-        QNetworkAccessManager::PostOperation,
+    QVariantMap result = request(
+        POST,
         "https://music.163.com/weapi/w/nuser/account/get",
         {},
         {
@@ -1728,8 +1731,8 @@ const QVariantMap Api::login_status(QVariantMap query) {
 
 // 退出登录
 const QVariantMap Api::logout(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/logout",
         {},
         {
@@ -1755,8 +1758,8 @@ const QVariantMap Api::lyric_new(QVariantMap query) {
         { "ytv", 0 },
         { "yrv", 0 }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface3.music.163.com/eapi/song/lyric/v1",
         data,
         {
@@ -1782,8 +1785,8 @@ const QVariantMap Api::lyric(QVariantMap query) {
         { "rv", -1 },
         { "kv", -1 }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/song/lyric?_nmclfl=1",
         data,
         {
@@ -1800,8 +1803,8 @@ const QVariantMap Api::nickname_check(QVariantMap query) {
     QVariantMap data {
         { "nickname", query["nickname"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/nickname/duplicated",
         data,
         {
@@ -1846,8 +1849,8 @@ const QVariantMap Api::register_anonimous(QVariantMap query) {
                               { "username", username },
                               };
 
-    QVariantMap result = createRequest(
-        QNetworkAccessManager::PostOperation,
+    QVariantMap result = request(
+        POST,
         "https://music.163.com/api/register/anonimous",
         data,
         {
@@ -1871,8 +1874,8 @@ const QVariantMap Api::register_anonimous(QVariantMap query) {
 
 // 相关歌单
 const QVariantMap Api::related_playlist(QVariantMap query) {
-    QVariantMap result = createRequest(
-        QNetworkAccessManager::GetOperation,
+    QVariantMap result = request(
+        GET,
         "https://music.163.com/playlist?id=" + query["id"].toString(),
         {},
         {
@@ -1927,8 +1930,8 @@ const QVariantMap Api::search(QVariantMap query) {
             { "limit", query.value("limit", 20) },
             { "offset", query.value("offset", 0) }
         };
-        return createRequest(
-            QNetworkAccessManager::PostOperation,
+        return request(
+            POST,
             "https://music.163.com/api/search/voice/get",
             data,
             {
@@ -1945,8 +1948,8 @@ const QVariantMap Api::search(QVariantMap query) {
         { "limit", query.value("limit", 20) },
         { "offset", query.value("offset", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/search/get",
         data,
         {
@@ -1964,8 +1967,8 @@ const QVariantMap Api::song_download_url(QVariantMap query) {
         { "id", query["id"] },
         { "br", query.value("br", 999000) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/eapi/song/enhance/download/url",
         data,
         {
@@ -1990,8 +1993,8 @@ const QVariantMap Api::song_url_v1(QVariantMap query) {
     if(data["level"].toString() == "sky") {
         data["immerseType"] = "c51";
     }
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface.music.163.com/eapi/song/enhance/player/url/v1",
         data,
         {
@@ -2009,8 +2012,8 @@ const QVariantMap Api::song_wiki_summary(QVariantMap query) {
     QVariantMap data {
         { "songId", query["id"].toInt() }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://interface3.music.163.com/eapi/music/wiki/home/song/get",
         data,
         {
@@ -2027,8 +2030,8 @@ const QVariantMap Api::song_wiki_summary(QVariantMap query) {
 const QVariantMap Api::summary_annual(QVariantMap query) {
     QVariantMap data { };
     const QString key = QStringList { "2017", "2018", "2019 "}.indexOf(query["year"].toString()) > -1 ? "userdata" : "data";
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/activity/summary/annual/" + query["year"].toString() + "/" + key,
         data,
         {
@@ -2044,8 +2047,8 @@ const QVariantMap Api::summary_annual(QVariantMap query) {
 // 获取达人达标信息
 const QVariantMap Api::threshold_detail_get(QVariantMap query) {
     const QVariantMap data { };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/influencer/web/apply/threshold/detail/get",
         data,
         {
@@ -2060,8 +2063,8 @@ const QVariantMap Api::threshold_detail_get(QVariantMap query) {
 
 // 所有榜单介绍
 const QVariantMap Api::toplist(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/toplist",
         {},
         {
@@ -2078,8 +2081,8 @@ const QVariantMap Api::ugc_album_get(QVariantMap query) {
     const QVariantMap data {
         { "albumId", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/rep/ugc/album/get",
         data,
         {
@@ -2097,8 +2100,8 @@ const QVariantMap Api::ugc_artist_get(QVariantMap query) {
     const QVariantMap data {
         { "artistId", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/rep/ugc/artist/get",
         data,
         {
@@ -2118,8 +2121,8 @@ const QVariantMap Api::ugc_artist_search(QVariantMap query) {
         { "keyword", query["keyword"] },
         { "limit", query.value("limit", 40) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/rep/ugc/artist/search",
         data,
         {
@@ -2136,8 +2139,8 @@ const QVariantMap Api::ugc_mv_get(QVariantMap query) {
     const QVariantMap data {
         { "mvId", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/rep/ugc/mv/get",
         data,
         {
@@ -2155,8 +2158,8 @@ const QVariantMap Api::ugc_song_get(QVariantMap query) {
     const QVariantMap data {
         { "songId", query["id"] }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/rep/ugc/song/get",
         data,
         {
@@ -2172,8 +2175,8 @@ const QVariantMap Api::ugc_song_get(QVariantMap query) {
 // 获取账号信息
 const QVariantMap Api::user_account(QVariantMap query) {
     const QVariantMap data {};
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/nuser/account/get",
         data,
         {
@@ -2198,8 +2201,8 @@ const QVariantMap Api::user_comment_history(QVariantMap query) {
         { "user_id", query["uid"] },
         { "time", query.value("time", 0) }
     };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/comment/user/comment/history",
         data,
         {
@@ -2213,8 +2216,8 @@ const QVariantMap Api::user_comment_history(QVariantMap query) {
 
 // 用户详情
 const QVariantMap Api::user_detail(QVariantMap query) {
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/weapi/v1/user/detail/" + query["uid"].toString(),
         {},
         {
@@ -2234,8 +2237,8 @@ const QVariantMap Api::user_playlist(QVariantMap query) {
         { "offset", query.value("offset", 0) },
         { "includeVideo", true },
         };
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/user/playlist",
         data,
         {
@@ -2251,8 +2254,8 @@ const QVariantMap Api::user_playlist(QVariantMap query) {
 const QVariantMap Api::yunbei_today(QVariantMap query) {
     const QVariantMap data {};
     // /api/point/today/get
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/point/today/get",
         data,
         {
@@ -2268,8 +2271,8 @@ const QVariantMap Api::yunbei_today(QVariantMap query) {
 const QVariantMap Api::yunbei(QVariantMap query) {
     const QVariantMap data {};
     // /api/point/today/get
-    return createRequest(
-        QNetworkAccessManager::PostOperation,
+    return request(
+        POST,
         "https://music.163.com/api/point/signed/get",
         data,
         {
