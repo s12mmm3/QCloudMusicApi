@@ -24,6 +24,8 @@
 #include "util/config.h"
 #include "util/index.h"
 
+namespace Request {
+
 static QString chooseUserAgent(QString ua = "") {
     const QVariantMap userAgentList {
         {
@@ -293,4 +295,5 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
         QNetworkReply* reply = manager.get(request);
         return getResult(reply);
     }
+}
 }
