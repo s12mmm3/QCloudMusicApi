@@ -217,7 +217,7 @@ static auto createRequest(QNetworkAccessManager::Operation method, QString urlSt
     qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
     // 发送HTTP请求，并返回一个QNetworkReply对象
-    auto getResult = [&](QNetworkReply* reply) {
+    auto getResult = [&](QNetworkReply* reply) -> QVariantMap {
         QVariantMap answer {
             { "status", 500 },
             { "body", {} },

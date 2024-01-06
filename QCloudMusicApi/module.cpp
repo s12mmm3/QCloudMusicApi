@@ -16,9 +16,9 @@
 #define APICPP(FUNCNAME) \
 const QVariantMap NeteaseCloudMusicApi::FUNCNAME(QVariantMap query)
 
-static auto request = Request::createRequest;
-static auto POST = QNetworkAccessManager::PostOperation;
-static auto GET = QNetworkAccessManager::GetOperation;
+const static auto request = Request::createRequest;
+const static auto POST = QNetworkAccessManager::PostOperation;
+const static auto GET = QNetworkAccessManager::GetOperation;
 
 // 初始化名字
 APICPP(activate_init_profile) {
