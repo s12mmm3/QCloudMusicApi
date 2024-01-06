@@ -12,58 +12,62 @@
 #  define QCLOUDMUSICAPI_EXPORT Q_DECL_IMPORT
 #endif
 
+//入参与返回值类型为QVariantMap
+#define APIH(FUNCNAME) \
+Q_INVOKABLE const QVariantMap FUNCNAME(QVariantMap);
+
 class QCLOUDMUSICAPI_EXPORT NeteaseCloudMusicApi: public QObject {
     Q_OBJECT
 
 public:
 
     // 初始化名字
-    Q_INVOKABLE const QVariantMap activate_init_profile(QVariantMap);
+    APIH(activate_init_profile)
 
     // 专辑动态信息
-    Q_INVOKABLE const QVariantMap album_detail_dynamic(QVariantMap);
+    APIH(album_detail_dynamic)
 
     // 数字专辑详情
-    Q_INVOKABLE const QVariantMap album_detail(QVariantMap);
+    APIH(album_detail)
 
     // 数字专辑-语种风格馆
-    Q_INVOKABLE const QVariantMap album_list_style(QVariantMap);
+    APIH(album_list_style)
 
     // 数字专辑-新碟上架
-    Q_INVOKABLE const QVariantMap album_list(QVariantMap);
+    APIH(album_list)
 
     // 全部新碟
-    Q_INVOKABLE const QVariantMap album_new(QVariantMap);
+    APIH(album_new)
 
     // 最新专辑
-    Q_INVOKABLE const QVariantMap album_newest(QVariantMap);
+    APIH(album_newest)
 
     // 数字专辑&数字单曲-榜单
-    Q_INVOKABLE const QVariantMap album_songsaleboard(QVariantMap);
+    APIH(album_songsaleboard)
 
     // 收藏/取消收藏专辑
-    Q_INVOKABLE const QVariantMap album_sub(QVariantMap);
+    APIH(album_sub)
 
     // 已收藏专辑列表
-    Q_INVOKABLE const QVariantMap album_sublist(QVariantMap);
+    APIH(album_sublist)
 
     // 专辑内容
-    Q_INVOKABLE const QVariantMap album(QVariantMap);
+    APIH(album)
 
     // 歌手专辑列表
-    Q_INVOKABLE const QVariantMap artist_album(QVariantMap);
+    APIH(artist_album)
 
     // 歌手介绍
-    Q_INVOKABLE const QVariantMap artist_desc(QVariantMap);
+    APIH(artist_desc)
 
     // 歌手详情
-    Q_INVOKABLE const QVariantMap artist_detail(QVariantMap);
+    APIH(artist_detail)
 
     // 歌手粉丝
-    Q_INVOKABLE const QVariantMap artist_fans(QVariantMap);
+    APIH(artist_fans)
 
     // 歌手粉丝数量
-    Q_INVOKABLE const QVariantMap artist_follow_count(QVariantMap);
+    APIH(artist_follow_count)
 
     // 歌手分类
 
@@ -83,67 +87,67 @@ public:
 
     initial 取值 a-z/A-Z
 */
-    Q_INVOKABLE const QVariantMap artist_list(QVariantMap);
+    APIH(artist_list)
 
     // 歌手相关MV
-    Q_INVOKABLE const QVariantMap artist_mv(QVariantMap);
+    APIH(artist_mv)
 
     // 关注歌手新 MV
-    Q_INVOKABLE const QVariantMap artist_new_mv(QVariantMap);
+    APIH(artist_new_mv)
 
     // 关注歌手新歌
-    Q_INVOKABLE const QVariantMap artist_new_song(QVariantMap);
+    APIH(artist_new_song)
 
     // 歌手全部歌曲
-    Q_INVOKABLE const QVariantMap artist_songs(QVariantMap);
+    APIH(artist_songs)
 
     // 收藏与取消收藏歌手
-    Q_INVOKABLE const QVariantMap artist_sub(QVariantMap);
+    APIH(artist_sub)
 
     // 关注歌手列表
-    Q_INVOKABLE const QVariantMap artist_sublist(QVariantMap);
+    APIH(artist_sublist)
 
     // 歌手热门 50 首歌曲
-    Q_INVOKABLE const QVariantMap artist_top_song(QVariantMap);
+    APIH(artist_top_song)
 
     // 歌手相关视频
-    Q_INVOKABLE const QVariantMap artist_video(QVariantMap);
+    APIH(artist_video)
 
     // 歌手单曲
-    Q_INVOKABLE const QVariantMap artists(QVariantMap);
+    APIH(artists)
 
     // 首页轮播图
-    Q_INVOKABLE const QVariantMap banner(QVariantMap);
+    APIH(banner)
 
     // 搜索
-    Q_INVOKABLE const QVariantMap cloudsearch(QVariantMap);
+    APIH(cloudsearch)
 
     // 专辑评论
-    Q_INVOKABLE const QVariantMap comment_album(QVariantMap);
+    APIH(comment_album)
 
     // 电台评论
-    Q_INVOKABLE const QVariantMap comment_dj(QVariantMap);
+    APIH(comment_dj)
 
     // 获取动态评论
-    Q_INVOKABLE const QVariantMap comment_event(QVariantMap);
+    APIH(comment_event)
 
     // 歌曲评论
-    Q_INVOKABLE const QVariantMap comment_music(QVariantMap);
+    APIH(comment_music)
 
     // MV评论
-    Q_INVOKABLE const QVariantMap comment_mv(QVariantMap);
+    APIH(comment_mv)
 
     // 歌单评论
-    Q_INVOKABLE const QVariantMap comment_playlist(QVariantMap);
+    APIH(comment_playlist)
 
     // 视频评论
-    Q_INVOKABLE const QVariantMap comment_video(QVariantMap);
+    APIH(comment_video)
 
     // 国家编码列表
-    Q_INVOKABLE const QVariantMap countries_code_list(QVariantMap);
+    APIH(countries_code_list)
 
     // 获取达人用户信息
-    Q_INVOKABLE const QVariantMap creator_authinfo_get(QVariantMap);
+    APIH(creator_authinfo_get)
 
     // 签到
 
@@ -153,58 +157,58 @@ public:
     重复签到 {'android': {'code': -2, 'msg': '重复签到'}, 'web': {'code': -2, 'msg': '重复签到'}}
     未登录 {'android': {'code': 301}, 'web': {'code': 301}}
     */
-    Q_INVOKABLE const QVariantMap daily_signin(QVariantMap);
+    APIH(daily_signin)
 
     // 数字专辑详情
-    Q_INVOKABLE const QVariantMap digitalAlbum_detail(QVariantMap);
+    APIH(digitalAlbum_detail)
 
     // 购买数字专辑
-    Q_INVOKABLE const QVariantMap digitalAlbum_ordering(QVariantMap);
+    APIH(digitalAlbum_ordering)
 
     // 我的数字专辑
-    Q_INVOKABLE const QVariantMap digitalAlbum_purchased(QVariantMap);
+    APIH(digitalAlbum_purchased)
 
     // 数字专辑销量
-    Q_INVOKABLE const QVariantMap digitalAlbum_sales(QVariantMap);
+    APIH(digitalAlbum_sales)
 
     // 电台banner
-    Q_INVOKABLE const QVariantMap dj_banner(QVariantMap);
+    APIH(dj_banner)
 
     // 电台非热门类型
-    Q_INVOKABLE const QVariantMap dj_category_excludehot(QVariantMap);
+    APIH(dj_category_excludehot)
 
     // 电台推荐类型
-    Q_INVOKABLE const QVariantMap dj_category_recommend(QVariantMap);
+    APIH(dj_category_recommend)
 
     // 电台分类列表
-    Q_INVOKABLE const QVariantMap dj_catelist(QVariantMap);
+    APIH(dj_catelist)
 
     // 电台详情
-    Q_INVOKABLE const QVariantMap dj_detail(QVariantMap);
+    APIH(dj_detail)
 
     // 热门电台
-    Q_INVOKABLE const QVariantMap dj_hot(QVariantMap);
+    APIH(dj_hot)
 
     // 付费电台
-    Q_INVOKABLE const QVariantMap dj_paygift(QVariantMap);
+    APIH(dj_paygift)
 
     // 电台个性推荐
-    Q_INVOKABLE const QVariantMap dj_personalize_recommend(QVariantMap);
+    APIH(dj_personalize_recommend)
 
     // 电台节目详情
-    Q_INVOKABLE const QVariantMap dj_program_detail(QVariantMap);
+    APIH(dj_program_detail)
 
     // 电台24小时节目榜
-    Q_INVOKABLE const QVariantMap dj_program_toplist_hours(QVariantMap);
+    APIH(dj_program_toplist_hours)
 
     // 电台节目榜
-    Q_INVOKABLE const QVariantMap dj_program_toplist(QVariantMap);
+    APIH(dj_program_toplist)
 
     // 电台节目列表
-    Q_INVOKABLE const QVariantMap dj_program(QVariantMap);
+    APIH(dj_program)
 
     // 类别热门电台
-    Q_INVOKABLE const QVariantMap dj_radio_hot(QVariantMap);
+    APIH(dj_radio_hot)
 
     // 精选电台分类
 
@@ -230,159 +234,159 @@ public:
     校园|教育 4001
     旅途|城市 12
     */
-    Q_INVOKABLE const QVariantMap dj_recommend_type(QVariantMap);
+    APIH(dj_recommend_type)
 
     // 精选电台
-    Q_INVOKABLE const QVariantMap dj_recommend(QVariantMap);
+    APIH(dj_recommend)
 
     // 订阅与取消电台
-    Q_INVOKABLE const QVariantMap dj_sub(QVariantMap);
+    APIH(dj_sub)
 
     // 订阅电台列表
-    Q_INVOKABLE const QVariantMap dj_sublist(QVariantMap);
+    APIH(dj_sublist)
 
     // 电台详情
-    Q_INVOKABLE const QVariantMap dj_subscriber(QVariantMap);
+    APIH(dj_subscriber)
 
     // 电台今日优选
-    Q_INVOKABLE const QVariantMap dj_today_perfered(QVariantMap);
+    APIH(dj_today_perfered)
 
     // 电台24小时主播榜
-    Q_INVOKABLE const QVariantMap dj_toplist_hours(QVariantMap);
+    APIH(dj_toplist_hours)
 
     // 电台新人榜
-    Q_INVOKABLE const QVariantMap dj_toplist_newcomer(QVariantMap);
+    APIH(dj_toplist_newcomer)
 
     // 付费精品
-    Q_INVOKABLE const QVariantMap dj_toplist_pay(QVariantMap);
+    APIH(dj_toplist_pay)
 
     // 电台最热主播榜
-    Q_INVOKABLE const QVariantMap dj_toplist_popular(QVariantMap);
+    APIH(dj_toplist_popular)
 
     // 新晋电台榜/热门电台榜
-    Q_INVOKABLE const QVariantMap dj_toplist(QVariantMap);
+    APIH(dj_toplist)
 
     // 删除动态
-    Q_INVOKABLE const QVariantMap event_del(QVariantMap);
+    APIH(event_del)
 
     // 转发动态
-    Q_INVOKABLE const QVariantMap event_forward(QVariantMap);
+    APIH(event_forward)
 
     // 动态
-    Q_INVOKABLE const QVariantMap event(QVariantMap);
+    APIH(event)
 
     // 垃圾桶
-    Q_INVOKABLE const QVariantMap fm_trash(QVariantMap);
+    APIH(fm_trash)
 
     // 关注与取消关注用户
-    Q_INVOKABLE const QVariantMap follow(QVariantMap);
+    APIH(follow)
 
     // 粉丝年龄比例
-    Q_INVOKABLE const QVariantMap fanscenter_basicinfo_age_get(QVariantMap);
+    APIH(fanscenter_basicinfo_age_get)
 
     // 粉丝性别比例
-    Q_INVOKABLE const QVariantMap fanscenter_basicinfo_gender_get(QVariantMap);
+    APIH(fanscenter_basicinfo_gender_get)
 
     // 粉丝省份比例
-    Q_INVOKABLE const QVariantMap fanscenter_basicinfo_province_get(QVariantMap);
+    APIH(fanscenter_basicinfo_province_get)
 
     // 粉丝数量
-    Q_INVOKABLE const QVariantMap fanscenter_overview_get(QVariantMap);
+    APIH(fanscenter_overview_get)
 
     // 粉丝来源
-    Q_INVOKABLE const QVariantMap fanscenter_trend_list(QVariantMap);
+    APIH(fanscenter_trend_list)
 
     // 手机登录
-    Q_INVOKABLE const QVariantMap login_cellphone(QVariantMap);
+    APIH(login_cellphone)
 
     // 二维码检测扫码状态接口
-    Q_INVOKABLE const QVariantMap login_qr_check(QVariantMap);
+    APIH(login_qr_check)
 
     // 二维码生成接口
-    Q_INVOKABLE const QVariantMap login_qr_create(QVariantMap);
+    APIH(login_qr_create)
 
     // 二维码 key 生成接口
-    Q_INVOKABLE const QVariantMap login_qr_key(QVariantMap);
+    APIH(login_qr_key)
 
     // 登录刷新
-    Q_INVOKABLE const QVariantMap login_refresh(QVariantMap);
+    APIH(login_refresh)
 
     // 登录状态
-    Q_INVOKABLE const QVariantMap login_status(QVariantMap);
+    APIH(login_status)
 
     // 退出登录
-    Q_INVOKABLE const QVariantMap logout(QVariantMap);
+    APIH(logout)
 
     // 新版歌词 - 包含逐字歌词
-    Q_INVOKABLE const QVariantMap lyric_new(QVariantMap);
+    APIH(lyric_new)
 
     // 歌词
-    Q_INVOKABLE const QVariantMap lyric(QVariantMap);
+    APIH(lyric)
 
     // 重复昵称检测
-    Q_INVOKABLE const QVariantMap nickname_check(QVariantMap);
+    APIH(nickname_check)
 
     // 游客登录
-    Q_INVOKABLE const QVariantMap register_anonimous(QVariantMap);
+    APIH(register_anonimous)
 
     // 相关歌单
-    Q_INVOKABLE const QVariantMap related_playlist(QVariantMap);
+    APIH(related_playlist)
 
     // 搜索
-    Q_INVOKABLE const QVariantMap search(QVariantMap);
+    APIH(search)
 
     // 获取客户端歌曲下载链接
-    Q_INVOKABLE const QVariantMap song_download_url(QVariantMap);
+    APIH(song_download_url)
 
     // 歌曲链接 - v1
     // 此版本不再采用 br 作为音质区分的标准
     // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
-    Q_INVOKABLE const QVariantMap song_url_v1(QVariantMap);
+    APIH(song_url_v1)
 
     // 音乐百科基础信息
-    Q_INVOKABLE const QVariantMap song_wiki_summary(QVariantMap);
+    APIH(song_wiki_summary)
 
     // 年度听歌报告2017-2022
-    Q_INVOKABLE const QVariantMap summary_annual(QVariantMap);
+    APIH(summary_annual)
 
     // 获取达人达标信息
-    Q_INVOKABLE const QVariantMap threshold_detail_get(QVariantMap);
+    APIH(threshold_detail_get)
 
     // 所有榜单介绍
-    Q_INVOKABLE const QVariantMap toplist(QVariantMap);
+    APIH(toplist)
 
     // 专辑简要百科信息
-    Q_INVOKABLE const QVariantMap ugc_album_get(QVariantMap);
+    APIH(ugc_album_get)
 
     // 歌手简要百科信息
-    Q_INVOKABLE const QVariantMap ugc_artist_get(QVariantMap);
+    APIH(ugc_artist_get)
 
     // 搜索歌手
     // 可传关键字或者歌手id
-    Q_INVOKABLE const QVariantMap ugc_artist_search(QVariantMap);
+    APIH(ugc_artist_search)
 
     // mv简要百科信息
-    Q_INVOKABLE const QVariantMap ugc_mv_get(QVariantMap);
+    APIH(ugc_mv_get)
 
     // 歌曲简要百科信息
-    Q_INVOKABLE const QVariantMap ugc_song_get(QVariantMap);
+    APIH(ugc_song_get)
 
     // 获取账号信息
-    Q_INVOKABLE const QVariantMap user_account(QVariantMap);
+    APIH(user_account)
 
     // 获取用户历史评论
-    Q_INVOKABLE const QVariantMap user_comment_history(QVariantMap);
+    APIH(user_comment_history)
 
     // 用户详情
-    Q_INVOKABLE const QVariantMap user_detail(QVariantMap);
+    APIH(user_detail)
 
     // 用户歌单
-    Q_INVOKABLE const QVariantMap user_playlist(QVariantMap);
+    APIH(user_playlist)
 
     // 云贝今日签到信息
-    Q_INVOKABLE const QVariantMap yunbei_today(QVariantMap);
+    APIH(yunbei_today)
 
     // 云贝
-    Q_INVOKABLE const QVariantMap yunbei(QVariantMap);
+    APIH(yunbei)
 };
 #endif // MODULE_H
