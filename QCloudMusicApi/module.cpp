@@ -1,6 +1,4 @@
-﻿#include "module.h"
-
-#include <iostream>
+﻿#include <iostream>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -12,6 +10,7 @@
 #include <QRandomGenerator>
 
 #include "request.h"
+#include "module.h"
 
 //入参与返回值类型为QVariantMap
 #define APICPP(FUNCNAME) \
