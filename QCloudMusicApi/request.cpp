@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include <iostream>
+﻿#include <iostream>
 #include <QObject>
 #include <QEventLoop>
 #include <QJsonDocument>
@@ -26,7 +24,7 @@
 
 namespace Request {
 
-static QString chooseUserAgent(QString ua = "") {
+QString chooseUserAgent(QString ua = "") {
     const QVariantMap userAgentList {
         {
             "mobile",
@@ -66,7 +64,10 @@ static QString chooseUserAgent(QString ua = "") {
                                                               : ua;
 }
 
-static auto createRequest(QNetworkAccessManager::Operation method, QString urlStr, QVariantMap data, QVariantMap options) {
+QVariantMap createRequest(QNetworkAccessManager::Operation method,
+                          QString urlStr,
+                          QVariantMap data,
+                          QVariantMap options) {
     QUrl url(urlStr);
     qDebug().noquote() <<
         QJsonDocument::fromVariant(

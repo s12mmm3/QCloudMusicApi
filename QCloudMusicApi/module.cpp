@@ -9,8 +9,9 @@
 #include <QNetworkInterface>
 #include <QVariantMap>
 #include <QRegularExpression>
+#include <QRandomGenerator>
 
-#include "request.hpp"
+#include "request.h"
 
 //入参与返回值类型为QVariantMap
 #define APICPP(FUNCNAME) \
