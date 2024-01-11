@@ -383,6 +383,12 @@ public:
     // 用户歌单
     APIH(user_playlist)
 
+    // 云贝 todo 任务
+    APIH(yunbei_tasks_todo)
+
+    // 云贝所有任务
+    APIH(yunbei_tasks)
+
     // 云贝今日签到信息
     APIH(yunbei_today)
 

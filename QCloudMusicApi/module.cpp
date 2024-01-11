@@ -2253,6 +2253,40 @@ APICPP(user_playlist) {
         );
 }
 
+// 云贝 todo 任务
+APICPP(yunbei_tasks_todo) {
+    const QVariantMap data {};
+    // /api/point/today/get
+    return request(
+        POST,
+        "https://music.163.com/api/usertool/task/todo/query",
+        data,
+        {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
+// 云贝所有任务
+APICPP(yunbei_tasks) {
+    const QVariantMap data {};
+    // /api/point/today/get
+    return request(
+        POST,
+        "https://music.163.com/api/usertool/task/list/all",
+        data,
+        {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "realIP", query["realIP"] }
+        }
+        );
+}
+
 // 云贝今日签到信息
 APICPP(yunbei_today) {
     const QVariantMap data {};
