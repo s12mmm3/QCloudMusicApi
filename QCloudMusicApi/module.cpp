@@ -554,6 +554,76 @@ APICPP(banner) {
         );
 }
 
+// 音乐日历
+APICPP(calendar) {
+    const QVariantMap data {
+        { "startTime", query.value("startTime", QDateTime::currentDateTime().toMSecsSinceEpoch()) },
+        { "endTime", query.value("endTime", QDateTime::currentDateTime().toMSecsSinceEpoch()) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/mcalendar/detail",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 发送验证码
+APICPP(captcha_sent) {
+    const QVariantMap data {
+        { "ctcode", query.value("ctcode", "86") },
+        { "cellphone", query["cellphone"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/sms/captcha/sent",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 校验验证码
+APICPP(captcha_verify) {
+    const QVariantMap data {
+        { "ctcode", query.value("ctcode", "86") },
+        { "cellphone", query["phone"] },
+        { "captcha", query["captcha"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/sms/captcha/verify",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 检测手机号码是否已注册
+APICPP(cellphone_existence_check) {
+    const QVariantMap data {
+        { "cellphone", query["phone"] },
+        { "countrycode", query["countrycode"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/eapi/cellphone/existence/check",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/cellphone/existence/check" }
+        }
+        );
+}
+
 // 搜索
 APICPP(cloudsearch) {
     const QVariantMap data {

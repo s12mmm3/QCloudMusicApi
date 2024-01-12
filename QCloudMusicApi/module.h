@@ -122,6 +122,18 @@ public:
     // 首页轮播图
     APIH(banner)
 
+    // 音乐日历
+    APIH(calendar)
+
+    // 发送验证码
+    APIH(captcha_sent)
+
+    // 校验验证码
+    APIH(captcha_verify)
+
+    // 检测手机号码是否已注册
+    APIH(cellphone_existence_check)
+
     // 搜索
     APIH(cloudsearch)
 
