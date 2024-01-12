@@ -116,8 +116,26 @@ public:
     // 歌手单曲
     APIH(artists)
 
+    // 批量请求接口
+    APIH(batch)
+
     // 首页轮播图
     APIH(banner)
+
+    // 音乐日历
+    APIH(calendar)
+
+    // 发送验证码
+    APIH(captcha_sent)
+
+    // 校验验证码
+    APIH(captcha_verify)
+
+    // 检测手机号码是否已注册
+    APIH(cellphone_existence_check)
+
+    // 歌曲可用性
+    APIH(check_music)
 
     // 搜索
     APIH(cloudsearch)
@@ -382,6 +400,12 @@ public:
 
     // 用户歌单
     APIH(user_playlist)
+
+    // 云贝 todo 任务
+    APIH(yunbei_tasks_todo)
+
+    // 云贝所有任务
+    APIH(yunbei_tasks)
 
     // 云贝今日签到信息
     APIH(yunbei_today)

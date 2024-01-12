@@ -183,7 +183,7 @@ static QByteArray rsaEncrypt (QString plainText, const QString& strPubKey)
     return encryptData;
 }
 
-static const QVariantMap weapi(QJsonDocument object) {
+QVariantMap weapi(QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Compact);
 
     // 创建一个长度为16的字节数组
@@ -211,14 +211,14 @@ static const QVariantMap weapi(QJsonDocument object) {
     };
 }
 
-static const QVariantMap linuxapi(QJsonDocument object) {
+QVariantMap linuxapi(QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Indented);
     return {
         { QStringLiteral("eparams"), aesEncrypt(text.toUtf8(), EVP_aes_128_ecb, linuxapiKey, QStringLiteral("")).toHex().toUpper() }
     };
 }
 
-static const QVariantMap eapi(QString url, QJsonDocument object) {
+QVariantMap eapi(QString url, QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Indented);
     const QString message = QStringLiteral("nobody")
                             + url
@@ -236,7 +236,7 @@ static const QVariantMap eapi(QString url, QJsonDocument object) {
     };
 }
 
-static const QByteArray decrypt(QByteArray cipherBuffer) {
+QByteArray decrypt(QByteArray cipherBuffer) {
     return aesDecrypt(cipherBuffer, EVP_aes_128_ecb, eapiKey, "");
 }
 }

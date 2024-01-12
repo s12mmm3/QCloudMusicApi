@@ -3,7 +3,8 @@
 #include <QNetworkCookie>
 #include <QVariantMap>
 
-namespace Index{
+namespace Index {
+
 QVariantMap stringToMap(const QString &cookie) {
     if (cookie.isEmpty()) return QVariantMap();
     QVariantMap map;

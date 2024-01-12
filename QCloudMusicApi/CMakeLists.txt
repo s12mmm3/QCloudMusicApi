@@ -34,13 +34,11 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
 #include_directories(openssl-cmake/include)
 
 #message(${OPENSSL_ROOT_DIR})
+FILE(GLOB HEADERS ./*.h ./util/*.h)
+FILE(GLOB SOURCES ./*.cpp ./util/*.cpp)
 add_library(QCloudMusicApi SHARED
-    ./util/crypto.h
-    ./util/config.h
-    ./util/index.h
-    module.h
-    module.cpp
-    request.hpp
+    ${HEADERS}
+    ${SOURCES}
 )
 
 target_link_libraries(QCloudMusicApi Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
