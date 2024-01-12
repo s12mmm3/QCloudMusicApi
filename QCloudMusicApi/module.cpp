@@ -16,6 +16,12 @@
 #define APICPP(FUNCNAME) \
 const QVariantMap NeteaseCloudMusicApi::FUNCNAME(QVariantMap query)
 
+//定义一些重复参数
+#define _PARAM \
+{ "cookie", query["cookie"] }, \
+{ "proxy", query["proxy"] }, \
+{ "realIP", query["realIP"] } \
+
 const static auto request = Request::createRequest;
 const static auto POST = QNetworkAccessManager::PostOperation;
 const static auto GET = QNetworkAccessManager::GetOperation;
@@ -31,9 +37,7 @@ APICPP(activate_init_profile) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/activate/initProfile" }
         }
         );
@@ -50,9 +54,7 @@ APICPP(album_detail_dynamic) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -68,9 +70,7 @@ APICPP(album_detail) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -89,9 +89,7 @@ APICPP(album_list_style) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -111,9 +109,7 @@ APICPP(album_list) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -132,9 +128,7 @@ APICPP(album_new) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -147,9 +141,7 @@ APICPP(album_newest) {
         {},
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -167,9 +159,7 @@ APICPP(album_songsaleboard) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -186,9 +176,7 @@ APICPP(album_sub) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -206,9 +194,7 @@ APICPP(album_sublist) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -221,9 +207,7 @@ APICPP(album) {
         {},
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -241,9 +225,7 @@ APICPP(artist_album) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -259,9 +241,7 @@ APICPP(artist_desc) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -277,9 +257,7 @@ APICPP(artist_detail) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -297,9 +275,7 @@ APICPP(artist_fans) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -315,9 +291,7 @@ APICPP(artist_follow_count) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -355,9 +329,7 @@ APICPP(artist_list) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -376,9 +348,7 @@ APICPP(artist_mv) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -399,9 +369,7 @@ APICPP(artist_new_mv) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -422,9 +390,7 @@ APICPP(artist_new_song) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -448,9 +414,7 @@ APICPP(artist_songs) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -470,9 +434,7 @@ APICPP(artist_sub) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -490,9 +452,7 @@ APICPP(artist_sublist) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -508,9 +468,7 @@ APICPP(artist_top_song) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -532,9 +490,7 @@ APICPP(artist_video) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -547,9 +503,7 @@ APICPP(artists) {
         {},
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -593,10 +547,8 @@ APICPP(cloudsearch) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "url", "/api/cloudsearch/pc" },
-            { "realIP", query["realIP"] }
+            _PARAM,
+            { "url", "/api/cloudsearch/pc" }
         }
         );
 }
@@ -618,9 +570,7 @@ APICPP(comment_album) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -642,9 +592,7 @@ APICPP(comment_dj) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -662,9 +610,7 @@ APICPP(comment_event) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -686,9 +632,7 @@ APICPP(comment_music) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -710,9 +654,7 @@ APICPP(comment_mv) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -734,9 +676,7 @@ APICPP(comment_playlist) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -758,9 +698,7 @@ APICPP(comment_video) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -774,10 +712,8 @@ APICPP(countries_code_list) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "url", "/api/lbs/countries/v1" },
-            { "realIP", query["realIP"] }
+            _PARAM,
+            { "url", "/api/lbs/countries/v1" }
         }
         );
 }
@@ -791,9 +727,7 @@ APICPP(creator_authinfo_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/user/creator/authinfo/get" }
         }
         );
@@ -817,9 +751,7 @@ APICPP(daily_signin) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -835,9 +767,7 @@ APICPP(digitalAlbum_detail) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -860,9 +790,7 @@ APICPP(digitalAlbum_ordering) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -880,9 +808,7 @@ APICPP(digitalAlbum_purchased) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -898,9 +824,7 @@ APICPP(digitalAlbum_sales) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -917,9 +841,7 @@ APICPP(dj_banner) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -933,9 +855,7 @@ APICPP(dj_category_excludehot) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -949,9 +869,7 @@ APICPP(dj_category_recommend) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -965,9 +883,7 @@ APICPP(dj_catelist) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -983,9 +899,7 @@ APICPP(dj_detail) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1002,9 +916,7 @@ APICPP(dj_hot) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1021,9 +933,7 @@ APICPP(dj_paygift) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1039,9 +949,7 @@ APICPP(dj_personalize_recommend) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1057,9 +965,7 @@ APICPP(dj_program_detail) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1076,9 +982,7 @@ APICPP(dj_program_toplist_hours) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1095,9 +999,7 @@ APICPP(dj_program_toplist) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1116,9 +1018,7 @@ APICPP(dj_program) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1136,9 +1036,7 @@ APICPP(dj_radio_hot) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1177,9 +1075,7 @@ APICPP(dj_recommend_type) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1192,9 +1088,7 @@ APICPP(dj_recommend) {
         {},
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1211,9 +1105,7 @@ APICPP(dj_sub) {
         {},
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1231,9 +1123,7 @@ APICPP(dj_sublist) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1252,9 +1142,7 @@ APICPP(dj_subscriber) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1270,9 +1158,7 @@ APICPP(dj_today_perfered) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1289,9 +1175,7 @@ APICPP(dj_toplist_hours) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1308,9 +1192,7 @@ APICPP(dj_toplist_newcomer) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1327,9 +1209,7 @@ APICPP(dj_toplist_pay) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1346,9 +1226,7 @@ APICPP(dj_toplist_popular) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1370,9 +1248,7 @@ APICPP(dj_toplist) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1388,9 +1264,7 @@ APICPP(event_del) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1411,9 +1285,7 @@ APICPP(event_forward) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1430,9 +1302,7 @@ APICPP(event) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1451,9 +1321,7 @@ APICPP(fm_trash) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1473,9 +1341,7 @@ APICPP(follow) {
         {},
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1489,9 +1355,7 @@ APICPP(fanscenter_basicinfo_age_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/fanscenter/basicinfo/age/get" }
         }
         );
@@ -1506,9 +1370,7 @@ APICPP(fanscenter_basicinfo_gender_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/fanscenter/basicinfo/gender/get" }
         }
         );
@@ -1523,9 +1385,7 @@ APICPP(fanscenter_basicinfo_province_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/fanscenter/basicinfo/province/get" }
         }
         );
@@ -1540,9 +1400,7 @@ APICPP(fanscenter_overview_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/fanscenter/overview/get" }
         }
         );
@@ -1561,9 +1419,7 @@ APICPP(fanscenter_trend_list) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/fanscenter/trend/list" }
         }
         );
@@ -1592,9 +1448,7 @@ APICPP(login_cellphone) {
         {
             { "crypto", "weapi" },
             { "ua", "pc" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
     if(result["body"].toMap()["code"].toInt() == 200) {
@@ -1621,9 +1475,7 @@ APICPP(login_qr_check) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
     auto body = result["body"].toMap();
@@ -1647,9 +1499,7 @@ APICPP(login_qr_key) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
     result = QVariantMap {
@@ -1688,9 +1538,7 @@ APICPP(login_refresh) {
         {
             { "crypto", "weapi" },
             { "ua", "pc" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
     if(result["body"].toMap()["code"].toInt() == 200) {
@@ -1713,9 +1561,7 @@ APICPP(login_status) {
         {},
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
     if(result["body"].toMap()["code"].toInt() == 200) {
@@ -1741,9 +1587,7 @@ APICPP(logout) {
         {
             { "crypto", "eapi" },
             { "ua", "pc" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1767,9 +1611,7 @@ APICPP(lyric_new) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/song/lyric/v1" }
         }
         );
@@ -1794,9 +1636,7 @@ APICPP(lyric) {
         data,
         {
             { "crypto", "api" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1812,9 +1652,7 @@ APICPP(nickname_check) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1858,9 +1696,7 @@ APICPP(register_anonimous) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
     if(result["body"].toMap()["code"].toInt() == 200) {
@@ -1883,9 +1719,7 @@ APICPP(related_playlist) {
         {},
         {
             { "ua", "pc" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
     QRegularExpression pattern("<div class=\"cver u-cover u-cover-3\">[\\s\\S]*?<img src=\"([^\"]+)\">[\\s\\S]*?<a class=\"sname f-fs1 s-fc0\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>[\\s\\S]*?<a class=\"nm nm f-thide s-fc3\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>");
@@ -1939,9 +1773,7 @@ APICPP(search) {
             data,
             {
                 { "crypto", "weapi" },
-                { "cookie", query["cookie"] },
-                { "proxy", query["proxy"] },
-                { "realIP", query["realIP"] }
+                _PARAM
             }
             );
     }
@@ -1957,9 +1789,7 @@ APICPP(search) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -1976,9 +1806,7 @@ APICPP(song_download_url) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/song/enhance/download/url" }
         }
         );
@@ -2002,9 +1830,7 @@ APICPP(song_url_v1) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/song/enhance/player/url/v1" }
         }
         );
@@ -2021,9 +1847,7 @@ APICPP(song_wiki_summary) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/song/play/about/block/page" }
         }
         );
@@ -2039,9 +1863,7 @@ APICPP(summary_annual) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/activity/summary/annual/" + query["year"].toString() + "/" + key }
         }
         );
@@ -2056,9 +1878,7 @@ APICPP(threshold_detail_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/influencer/web/apply/threshold/detail/get" }
         }
         );
@@ -2072,9 +1892,7 @@ APICPP(toplist) {
         {},
         {
             { "crypto", "api" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2090,9 +1908,7 @@ APICPP(ugc_album_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/rep/ugc/album/get" }
         }
         );
@@ -2109,9 +1925,7 @@ APICPP(ugc_artist_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/rep/ugc/artist/get" }
         }
         );
@@ -2130,9 +1944,7 @@ APICPP(ugc_artist_search) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2148,9 +1960,7 @@ APICPP(ugc_mv_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/rep/ugc/mv/get" }
         }
         );
@@ -2167,9 +1977,7 @@ APICPP(ugc_song_get) {
         data,
         {
             { "crypto", "eapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
+            _PARAM,
             { "url", "/api/rep/ugc/song/get" }
         }
         );
@@ -2184,9 +1992,7 @@ APICPP(user_account) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2210,9 +2016,7 @@ APICPP(user_comment_history) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2225,9 +2029,7 @@ APICPP(user_detail) {
         {},
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2246,9 +2048,7 @@ APICPP(user_playlist) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2263,9 +2063,7 @@ APICPP(yunbei_tasks_todo) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2280,9 +2078,7 @@ APICPP(yunbei_tasks) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2297,9 +2093,7 @@ APICPP(yunbei_today) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2314,9 +2108,7 @@ APICPP(yunbei) {
         data,
         {
             { "crypto", "weapi" },
-            { "cookie", query["cookie"] },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
