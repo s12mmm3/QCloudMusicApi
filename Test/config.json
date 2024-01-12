@@ -205,5 +205,8 @@
     "follow": {
         "id": "79248480",
         "t": 1
+    },
+    "batch": {
+        "/api/v2/banner/get": "{\"clientType\":\"pc\"}"
     }
 }

@@ -508,6 +508,28 @@ APICPP(artists) {
         );
 }
 
+// 批量请求接口
+APICPP(batch) {
+    QVariantMap data {
+        { "e_r", true }
+    };
+    for(auto i = query.begin(); i != query.end(); i++) {
+        if(i.key().indexOf("/api/") == 0) {
+            data[i.key()] = i.value();
+        }
+    }
+    return request(
+        POST,
+        "https://music.163.com/eapi/batch",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/batch" }
+        }
+        );
+}
+
 // 首页轮播图
 APICPP(banner) {
     const auto type0 = query.value("type", 0).toInt();

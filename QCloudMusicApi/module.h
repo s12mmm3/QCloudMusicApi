@@ -116,6 +116,9 @@ public:
     // 歌手单曲
     APIH(artists)
 
+    // 批量请求接口
+    APIH(batch)
+
     // 首页轮播图
     APIH(banner)
 
