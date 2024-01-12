@@ -27,7 +27,7 @@ namespace Request {
 QString chooseUserAgent(QString ua = "") {
     const QVariantMap userAgentList {
         {
-            "mobile",
+            QStringLiteral("mobile"),
             QStringList {
                 // iOS 13.5.1 14.0 beta with safari
                 QStringLiteral(R"(Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1)"),
@@ -44,7 +44,7 @@ QString chooseUserAgent(QString ua = "") {
             }
         },
         {
-            "pc",
+            QStringLiteral("pc"),
             QStringList {
                 // macOS 10.15.6  Firefox / Chrome / Safari
                 QStringLiteral(R"(Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:80.0) Gecko/20100101 Firefox/80.0)"),

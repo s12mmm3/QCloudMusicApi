@@ -624,6 +624,45 @@ APICPP(cellphone_existence_check) {
         );
 }
 
+// 歌曲可用性
+APICPP(check_music) {
+    const QVariantMap data {
+        { "ids", QStringList { query["id"].toString() } },
+        { "br", query.value("br", 999000) }
+    };
+    QVariantMap result = request(
+        POST,
+        "https://music.163.com/weapi/song/enhance/player/url",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+    auto playable = false;
+    if(result["body"].toMap()["code"].toInt() == 200) {
+        if(result["body"].toMap()["data"].toList()[0].toMap()["code"].toInt() == 200) {
+            playable = true;
+        }
+    }
+    if(playable) {
+        result["body"] = QVariantMap {
+            { "code", 200 },
+            { "success", true },
+            { "message", "ok" }
+        };
+        return result;
+    }
+    else {
+        result["body"] = QVariantMap {
+            { "code", 200 },
+            { "success", false },
+            { "message", "亲爱的,暂无版权" }
+        };
+        return result;
+    }
+}
+
 // 搜索
 APICPP(cloudsearch) {
     const QVariantMap data {

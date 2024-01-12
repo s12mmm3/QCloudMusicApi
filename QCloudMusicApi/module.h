@@ -134,6 +134,9 @@ public:
     // 检测手机号码是否已注册
     APIH(cellphone_existence_check)
 
+    // 歌曲可用性
+    APIH(check_music)
+
     // 搜索
     APIH(cloudsearch)
 
