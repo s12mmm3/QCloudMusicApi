@@ -2,9 +2,6 @@
 #define MODULE_H
 
 #include <QVariantMap>
-#include <QObject>
-#include <QByteArray>
-#include <QtCore/qglobal.h>
 
 #if defined(QCLOUDMUSICAPI_LIBRARY)
 #  define QCLOUDMUSICAPI_EXPORT Q_DECL_EXPORT
@@ -154,6 +151,12 @@ public:
 
     // 获取动态评论
     APIH(comment_event)
+
+    // 楼层评论
+    APIH(comment_floor)
+
+    // 热门评论
+    APIH(comment_hot)
 
     // 歌曲评论
     APIH(comment_music)

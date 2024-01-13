@@ -8,6 +8,7 @@
 #include <QRegularExpression>
 #include <QRandomGenerator>
 
+#include "util/config.h"
 #include "request.h"
 #include "module.h"
 
@@ -759,6 +760,49 @@ APICPP(comment_event) {
     return request(
         POST,
         "https://music.163.com/weapi/v1/resource/comments/" + query["threadId"].toString(),
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 楼层评论
+APICPP(comment_floor) {
+    query["type"] = Config::resourceTypeMap[query["type"].toString()];
+    const QVariantMap data {
+        { "parentCommentId", query["parentCommentId"] },
+        { "threadId", query["type"].toString() + query["id"].toString() },
+        { "time", query.value("time", -1) },
+        { "limit", query.value("limit", 20) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/resource/comment/floor/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 热门评论
+APICPP(comment_hot) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    query["type"] = Config::resourceTypeMap[query["type"].toString()];
+    const QVariantMap data {
+        { "rid", query["id"] },
+        { "limit", query.value("limit", 20) },
+        { "offset", query.value("offset", 0) },
+        { "beforeTime", query.value("before", 0) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/v1/resource/hotcomments/" + query["type"].toString() + query["id"].toString(),
         data,
         {
             { "crypto", "weapi" },
