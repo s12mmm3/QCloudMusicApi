@@ -1,5 +1,4 @@
-﻿#include <iostream>
-#include <QJsonDocument>
+﻿#include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QNetworkRequest>
@@ -661,6 +660,28 @@ APICPP(check_music) {
         };
         return result;
     }
+}
+
+// 云盘歌曲信息匹配纠正
+APICPP(cloud_match) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.10.90";
+    query["cookie"] = cookie;
+    const QVariantMap data {
+        { "userId", query["uid"] },
+        { "songId", query["sid"] },
+        { "adjustSongId", query["asid"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/cloud/user/song/match",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
 }
 
 // 搜索

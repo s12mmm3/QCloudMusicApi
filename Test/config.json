@@ -208,5 +208,8 @@
     },
     "batch": {
         "/api/v2/banner/get": "{\"clientType\":\"pc\"}"
+    },
+    "check_music": {
+        "id": "2058263032"
     }
 }

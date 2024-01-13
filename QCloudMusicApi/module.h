@@ -137,6 +137,12 @@ public:
     // 歌曲可用性
     APIH(check_music)
 
+    // 云盘歌曲信息匹配纠正
+    APIH(cloud_match)
+
+    // 云盘上传
+    // APIH(cloud)
+
     // 搜索
     APIH(cloudsearch)
 

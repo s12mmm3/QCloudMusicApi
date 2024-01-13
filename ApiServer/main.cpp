@@ -1,12 +1,12 @@
-﻿#include "../QCloudMusicApi/module.h"
-
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include <QHttpServer>
 #include <QJsonDocument>
 #include <QMetaMethod>
 #include <QMetaObject>
 #include <QUrlQuery>
 #include <QtConcurrent>
+
+#include "../QCloudMusicApi/module.h"
 
 int main(int argc, char *argv[])
 {

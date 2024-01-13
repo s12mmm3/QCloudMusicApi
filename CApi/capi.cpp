@@ -1,11 +1,11 @@
-﻿#include "capi.h"
-#include "../QCloudMusicApi/module.h"
-
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include <QSslSocket>
 #include <QJsonDocument>
 #include <QMetaMethod>
 #include <QMetaObject>
+
+#include "capi.h"
+#include "../QCloudMusicApi/module.h"
 
 CAPI_EXPORT char* invoke(char* funName, char* value) {
     QString result;
