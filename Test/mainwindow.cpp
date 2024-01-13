@@ -8,6 +8,7 @@
 
 #include "../QCloudMusicApi/module.h"
 #include "../QCloudMusicApi/util/index.h"
+#include "../QCloudMusicApi/util/crypto.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,6 +18,15 @@ MainWindow::MainWindow(QWidget *parent)
     for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
         ui->comboBox->addItem(api.metaObject()->method(i).name());
     }
+    []() {//测试aes加解密
+        QString body = "This is a text";
+        auto bodyEncrypt = Crypto::aesEncrypt(body.toUtf8(), EVP_aes_128_ecb, Crypto::eapiKey, "");
+        auto bodyDecrypt = Crypto::aesDecrypt(bodyEncrypt, EVP_aes_128_ecb, Crypto::eapiKey, "");
+        qDebug() << body;
+        qDebug() << bodyEncrypt;
+        qDebug() << bodyDecrypt;
+        qDebug() << (body == bodyDecrypt);
+    }();
 }
 
 MainWindow::~MainWindow()
