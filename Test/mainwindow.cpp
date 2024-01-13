@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
+#include <QDebug>
 
 #include "../QCloudMusicApi/module.h"
 #include "../QCloudMusicApi/util/index.h"
