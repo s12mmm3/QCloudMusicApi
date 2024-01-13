@@ -26,11 +26,24 @@ private slots:
     void on_checkBox_stateChanged(int arg1);
 
 private:
+
+    /**
+     * @brief 反射调用API中的方法
+     * @param funName 函数名称
+     * @param arg 参数
+     * @return QVariantMap 返回的数据
+     */
+    QVariantMap invoke(const QString funName, const QVariantMap arg);
+
+    /**
+     * @brief 更新储存的cookie
+     * @param ret Api返回的数据
+     * @return void
+     */
+    void updateCookie(const QVariantMap ret);
+
     Ui::MainWindow *ui;
     NeteaseCloudMusicApi api;
-
-    QVariantMap invoke(QString funName, QVariantMap arg);
-    void updateCookie(QVariantMap ret);
-    QString cookie = "";
+    QVariantMap cookie;
 };
 #endif // MAINWINDOW_H

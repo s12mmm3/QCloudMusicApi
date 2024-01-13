@@ -1,5 +1,4 @@
-﻿#include <QObject>
-#include <QNetworkAccessManager>
+﻿#include <QNetworkAccessManager>
 
 namespace Request {
 

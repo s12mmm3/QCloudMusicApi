@@ -1,6 +1,4 @@
-﻿#include <iostream>
-#include <QObject>
-#include <QEventLoop>
+﻿#include <QEventLoop>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -10,7 +8,6 @@
 #include <QTimer>
 #include <QVariantMap>
 #include <QByteArray>
-#include <QObject>
 #include <QRandomGenerator>
 #include <QNetworkCookie>
 #include <QNetworkProxyFactory>
