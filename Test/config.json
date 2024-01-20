@@ -220,5 +220,29 @@
     "comment_hot": {
         "id": "2058263032",
         "type": "0"
+    },
+    "comment_hug_list": {
+        "uid": "285516405",
+        "cid": "1167145843",
+        "sid": "863481066",
+        "pageSize": 2,
+        "page": 1
+    },
+    "comment_like": {
+        "id": "29178366",
+        "cid": "12840183",
+        "t": 1,
+        "type": "0"
+    },
+    "comment_new": {
+        "id": "2058263032",
+        "sortType": 3,
+        "type": "0"
+    },
+    "comment": {
+        "id": "5436712",
+        "t": 1,
+        "type": "1",
+        "content": "test"
     }
 }

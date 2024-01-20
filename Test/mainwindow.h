@@ -1,10 +1,11 @@
 ﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "../QCloudMusicApi/module.h"
-
+#include <QJsonDocument>
 #include <QMainWindow>
 #include <QObject>
+
+#include "../QCloudMusicApi/module.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -45,5 +46,6 @@ private:
     Ui::MainWindow *ui;
     NeteaseCloudMusicApi api;
     QVariantMap cookie;
+    QJsonDocument config;
 };
 #endif // MAINWINDOW_H

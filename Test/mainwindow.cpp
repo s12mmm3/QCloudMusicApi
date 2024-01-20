@@ -1,11 +1,12 @@
-﻿#include "mainwindow.h"
-#include "./ui_mainwindow.h"
-#include <QMetaMethod>
+﻿#include <QMetaMethod>
 #include <QTextEdit>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
 #include <QDebug>
+
+#include "mainwindow.h"
+#include "./ui_mainwindow.h"
 
 #include "../QCloudMusicApi/module.h"
 #include "../QCloudMusicApi/util/index.h"
@@ -16,9 +17,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //将Api中的方法名称取出
     for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
         ui->comboBox->addItem(api.metaObject()->method(i).name());
     }
+
+    //读取配置
+    QFile file(":/config.json");
+    file.open(QIODevice::ReadOnly);
+    config = QJsonDocument::fromJson(file.readAll());
+
     []() {//测试aes加解密
         QString body = "This is a text";
         auto bodyEncrypt = Crypto::aesEncrypt(body.toUtf8(), EVP_aes_128_ecb, Crypto::eapiKey, "");
@@ -89,9 +97,6 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 {
-    QFile file(":/config.json");
-    file.open(QIODevice::ReadOnly);
-    auto config = QJsonDocument::fromJson(file.readAll());
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_2->setText(
         QJsonDocument(config[arg1].toObject())

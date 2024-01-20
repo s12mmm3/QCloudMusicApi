@@ -158,17 +158,29 @@ public:
     // 热门评论
     APIH(comment_hot)
 
+    // 评论抱一抱列表
+    APIH(comment_hug_list)
+
+    // 点赞与取消点赞评论
+    APIH(comment_like)
+
     // 歌曲评论
     APIH(comment_music)
 
     // MV评论
     APIH(comment_mv)
 
+    // 新版评论接口
+    APIH(comment_new)
+
     // 歌单评论
     APIH(comment_playlist)
 
     // 视频评论
     APIH(comment_video)
+
+    // 发送与删除评论
+    APIH(comment)
 
     // 国家编码列表
     APIH(countries_code_list)
