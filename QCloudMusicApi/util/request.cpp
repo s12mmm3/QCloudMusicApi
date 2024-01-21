@@ -111,6 +111,8 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
             if(!cookie.contains("MUSIC_A")) {
                 //options.cookie.MUSIC_A = config.anonymous_token
                 cookie["MUSIC_A"] = Config::anonymous_token;
+                cookie["os"] = cookie.value("os", "ios");
+                cookie["appver"] = cookie.value("appver", "8.10.90");
             }
         }
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(Index::mapToCookie(cookie)));
