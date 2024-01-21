@@ -62,10 +62,9 @@ QString chooseUserAgent(QString ua = "") {
 }
 
 QVariantMap createRequest(QNetworkAccessManager::Operation method,
-                          QString urlStr,
+                          QString url,
                           QVariantMap data,
                           QVariantMap options) {
-    QUrl url(urlStr);
     qDebug().noquote() <<
         QJsonDocument::fromVariant(
             QVariantMap {
@@ -82,7 +81,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
     if(method == QNetworkAccessManager::PostOperation) {
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     }
-    if(url.toString().contains("music.163.com")) {
+    if(url.contains("music.163.com")) {
         request.setRawHeader("Referer", "https://music.163.com");
     }
     QString ip;
@@ -142,14 +141,16 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
         data["csrf_token"] = csrfToken;
 
         data = Crypto::weapi(QJsonDocument::fromVariant(data));
-        url.setPath(url.path().replace(QRegularExpression("\\w*api"), "weapi"));
+        url = url.replace(QRegularExpression("\\w*api"), "weapi");
     }
     else if(options["crypto"].toString() == "linuxapi") {
         data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap {
             { "method", method },
-            { "url", url.path().replace(QRegularExpression("\\w*api"), "api") },
+            { "url", url.replace(QRegularExpression("\\w*api"), "api") },
             { "params", data }
         }));
+        request.setHeader(QNetworkRequest::UserAgentHeader, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36");
+        url = "https://music.163.com/api/linux/forward";
     }
     else if(options["crypto"].toString() == "eapi") {
         const QVariantMap cookie = options["cookie"].userType() == QMetaType::QVariantMap
@@ -182,7 +183,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
 
         auto getCookies = [](QVariantMap header) {
             QList<QNetworkCookie> l;
-            for(QMap<QString, QVariant>::iterator i = header.begin(); i != header.end(); ++i) {
+            for(auto i = header.constBegin(); i != header.constEnd(); ++i) {
                 l.append(QNetworkCookie(i.key().toUtf8(), i.value().toByteArray()));
             }
             return l;
@@ -190,7 +191,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(getCookies(header)));
         data["header"] = QVariant::fromValue(header);
         data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
-        url.setPath(url.path().replace(QRegularExpression("\\w*api"), "eapi"));
+        url = url.replace(QRegularExpression("\\w*api"), "eapi");
     }
 
     // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
@@ -216,7 +217,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
     }
     qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
-    // 发送HTTP请求，并返回一个QNetworkReply对象
+    // 发送HTTP请求
     auto getResult = [&](QNetworkReply* reply) -> QVariantMap {
         QVariantMap answer {
             { "status", 500 },
@@ -238,15 +239,13 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
         }
         else {
             {
-                // http - 响应状态码
-                qDebug() << "服务器返回的Code : " << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+                //打印响应头
+                QVariantMap headers;
+                for(auto i : reply->rawHeaderList()) {
+                    if(!request.rawHeader(i).isNull()) headers[i] = request.rawHeader(i);
+                }
+                qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
             }
-
-            QVariantMap headers;
-            for(auto i : reply->rawHeaderList()) {
-                if(!request.rawHeader(i).isNull()) headers[i] = request.rawHeader(i);
-            }
-            qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
             // 读取响应内容
             auto body = reply->readAll();
@@ -284,16 +283,16 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
         return answer;
     };
     request.setUrl(url);
+    QNetworkReply* reply;
     if (method == QNetworkAccessManager::PostOperation) {
         QUrlQuery urlQuery;
-        for(QVariantMap::iterator i = data.begin(); i != data.end(); ++i) {
+        for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
             urlQuery.addQueryItem(i.key(), i.value().toString());
         }
-        QNetworkReply* reply = manager.post(request, urlQuery.toString().toUtf8());
-        return getResult(reply);
+        reply = manager.post(request, urlQuery.toString().toUtf8());
     } else {
-        QNetworkReply* reply = manager.get(request);
-        return getResult(reply);
+        reply = manager.get(request);
     }
+    return getResult(reply);
 }
 }

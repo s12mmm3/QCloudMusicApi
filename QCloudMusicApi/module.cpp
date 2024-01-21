@@ -478,10 +478,10 @@ APICPP(artist_top_song) {
 APICPP(artist_video) {
     const QVariantMap data {
         { "artistId", query["id"] },
-        { "page", QJsonDocument::fromVariant(QVariantMap {
+        { "page", QJsonDocument(QJsonObject::fromVariantMap({
                                                 { "size", query.value("size", 10) },
                                                 { "cursor", query.value("cursor", 0) }
-                                            }).toJson(QJsonDocument::JsonFormat::Compact) },
+                               })).toJson(QJsonDocument::JsonFormat::Compact) },
         { "tab", 0 },
         { "order", query.value("order", 0) },
     };
