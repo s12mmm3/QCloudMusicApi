@@ -15,9 +15,9 @@
 #include <QUrlQuery>
 #include <QRegularExpression>
 
-#include "util/crypto.h"
-#include "util/config.h"
-#include "util/index.h"
+#include "crypto.h"
+#include "config.h"
+#include "index.h"
 
 namespace Request {
 

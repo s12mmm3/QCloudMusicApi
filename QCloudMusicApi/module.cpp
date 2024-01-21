@@ -9,7 +9,7 @@
 #include <QRandomGenerator>
 
 #include "util/config.h"
-#include "request.h"
+#include "util/request.h"
 #include "module.h"
 
 //入参与返回值类型为QVariantMap
