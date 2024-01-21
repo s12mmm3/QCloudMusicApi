@@ -1,5 +1,4 @@
-﻿#include <iostream>
-#include <QJsonDocument>
+﻿#include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QNetworkRequest>
@@ -9,7 +8,8 @@
 #include <QRegularExpression>
 #include <QRandomGenerator>
 
-#include "request.h"
+#include "util/config.h"
+#include "util/request.h"
 #include "module.h"
 
 //入参与返回值类型为QVariantMap
@@ -22,9 +22,10 @@ const QVariantMap NeteaseCloudMusicApi::FUNCNAME(QVariantMap query)
 { "proxy", query["proxy"] }, \
 { "realIP", query["realIP"] } \
 
-const static auto request = Request::createRequest;
-const static auto POST = QNetworkAccessManager::PostOperation;
-const static auto GET = QNetworkAccessManager::GetOperation;
+const static auto &request = Request::createRequest;
+const static auto &POST = QNetworkAccessManager::PostOperation;
+const static auto &GET = QNetworkAccessManager::GetOperation;
+const static auto &resourceTypeMap = Config::resourceTypeMap;
 
 // 初始化名字
 APICPP(activate_init_profile) {
@@ -663,6 +664,28 @@ APICPP(check_music) {
     }
 }
 
+// 云盘歌曲信息匹配纠正
+APICPP(cloud_match) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.10.90";
+    query["cookie"] = cookie;
+    const QVariantMap data {
+        { "userId", query["uid"] },
+        { "songId", query["sid"] },
+        { "adjustSongId", query["asid"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/cloud/user/song/match",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 搜索
 APICPP(cloudsearch) {
     const QVariantMap data {
@@ -746,6 +769,102 @@ APICPP(comment_event) {
         );
 }
 
+// 楼层评论
+APICPP(comment_floor) {
+    query["type"] = resourceTypeMap[query["type"].toString()];
+    const QVariantMap data {
+        { "parentCommentId", query["parentCommentId"] },
+        { "threadId", query["type"].toString() + query["id"].toString() },
+        { "time", query.value("time", -1) },
+        { "limit", query.value("limit", 20) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/resource/comment/floor/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 热门评论
+APICPP(comment_hot) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    query["type"] = resourceTypeMap[query["type"].toString()];
+    const QVariantMap data {
+        { "rid", query["id"] },
+        { "limit", query.value("limit", 20) },
+        { "offset", query.value("offset", 0) },
+        { "beforeTime", query.value("before", 0) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/v1/resource/hotcomments/" + query["type"].toString() + query["id"].toString(),
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 评论抱一抱列表
+APICPP(comment_hug_list) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.10.90";
+    query["cookie"] = cookie;
+    query["type"] = resourceTypeMap[query.value("type", "0").toString()];
+    const QString threadId = query["type"].toString() + query["sid"].toString();
+    const QVariantMap data {
+        { "targetUserId", query["uid"] },
+        { "commentId", query["cid"] },
+        { "cursor", query.value("cursor", "-1") },
+        { "threadId", threadId },
+        { "pageNo", query.value("page", 1) },
+        { "idCursor", query.value("idCursor", -1) },
+        { "pageSize", query.value("pageSize", 100) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/v2/resource/comments/hug/list",
+        data,
+        {
+            { "crypto", "api" },
+            _PARAM
+        }
+        );
+}
+
+// 点赞与取消点赞评论
+APICPP(comment_like) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    query["t"] = query["t"].toInt() == 1 ? "like" : "unlike";
+    query["type"] = resourceTypeMap[query["type"].toString()];
+    QVariantMap data {
+        { "threadId", query["type"].toString() + query["sid"].toString() },
+        { "commentId", query["cid"] }
+    };
+    if(query["type"].toString() == "A_EV_2_") {
+        data["threadId"] = query["threadId"];
+    }
+    return request(
+        POST,
+        "https://music.163.com/weapi/v1/comment/" + query["t"].toString(),
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 歌曲评论
 APICPP(comment_music) {
     QVariantMap cookie = query["cookie"].toMap();
@@ -790,6 +909,53 @@ APICPP(comment_mv) {
         );
 }
 
+// 新版评论接口
+APICPP(comment_new) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    query["type"] = resourceTypeMap[query["type"].toString()];
+    const QString threadId = query["type"].toString() + query["id"].toString();
+    const int pageSize = query.value("pageSize", 20).toInt();
+    const int pageNo = query.value("pageNo", 1).toInt();
+    int sortType = query.value("sortType", 99).toInt();
+    if(sortType == 1) {
+        sortType = 99;
+    }
+    QString cursor = "";
+    switch (sortType) {
+    case 99:
+        cursor = QString::number((pageNo - 1) * pageSize);
+        break;
+    case 2:
+        cursor = "normalHot#" + QString::number((pageNo - 1) * pageSize);
+        break;
+    case 3:
+        cursor = query.value("cursor", "0").toString();
+        break;
+    default:
+        break;
+    }
+    const QVariantMap data {
+        { "threadId", threadId },
+        { "pageNo", pageNo },
+        { "showInner", query.value("showInner", true) },
+        { "pageSize", pageSize },
+        { "cursor", cursor },
+        { "sortType", sortType } //99:按推荐排序,2:按热度排序,3:按时间排序
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/v2/resource/comments",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/v2/resource/comments" }
+        }
+        );
+}
+
 // 歌单评论
 APICPP(comment_playlist) {
     QVariantMap cookie = query["cookie"].toMap();
@@ -826,6 +992,40 @@ APICPP(comment_video) {
     return request(
         POST,
         "https://music.163.com/weapi/v1/resource/comments/R_VI_62_" + query["id"].toString(),
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 发送与删除评论
+APICPP(comment) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "android";
+    query["cookie"] = cookie;
+    query["t"] = QMap<int, QString> {
+        { 1, "add" },
+        { 0, "delete" },
+        { 2, "reply" }
+    }[query["t"].toInt()];
+    query["type"] = resourceTypeMap[query["type"].toString()];
+    QVariantMap data {
+        { "threadId", query["type"].toString() + query["id"].toString() }
+    };
+    if(query["type"].toString() == "A_EV_2_") {
+        data["threadId"] = query["threadId"];
+    }
+    if(query["t"].toString() == "add") data["content"] = query["content"];
+    else if(query["t"].toString() == "delete") data["commentId"] = query["commentId"];
+    else if(query["t"].toString() == "reply") {
+        data["commentId"] = query["commentId"];
+        data["content"] = query["content"];
+    }
+    return request(
+        POST,
+        "https://music.163.com/weapi/resource/comments/" + query["t"].toString(),
         data,
         {
             { "crypto", "weapi" },

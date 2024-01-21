@@ -1,7 +1,6 @@
 ﻿#ifndef CRYPTO_H
 #define CRYPTO_H
 
-#include <iostream>
 #include <QByteArray>
 #include <QObject>
 #include <QVariantMap>

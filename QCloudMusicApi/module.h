@@ -2,9 +2,6 @@
 #define MODULE_H
 
 #include <QVariantMap>
-#include <QObject>
-#include <QByteArray>
-#include <QtCore/qglobal.h>
 
 #if defined(QCLOUDMUSICAPI_LIBRARY)
 #  define QCLOUDMUSICAPI_EXPORT Q_DECL_EXPORT
@@ -137,6 +134,12 @@ public:
     // 歌曲可用性
     APIH(check_music)
 
+    // 云盘歌曲信息匹配纠正
+    APIH(cloud_match)
+
+    // 云盘上传
+    // APIH(cloud)
+
     // 搜索
     APIH(cloudsearch)
 
@@ -149,17 +152,35 @@ public:
     // 获取动态评论
     APIH(comment_event)
 
+    // 楼层评论
+    APIH(comment_floor)
+
+    // 热门评论
+    APIH(comment_hot)
+
+    // 评论抱一抱列表
+    APIH(comment_hug_list)
+
+    // 点赞与取消点赞评论
+    APIH(comment_like)
+
     // 歌曲评论
     APIH(comment_music)
 
     // MV评论
     APIH(comment_mv)
 
+    // 新版评论接口
+    APIH(comment_new)
+
     // 歌单评论
     APIH(comment_playlist)
 
     // 视频评论
     APIH(comment_video)
+
+    // 发送与删除评论
+    APIH(comment)
 
     // 国家编码列表
     APIH(countries_code_list)

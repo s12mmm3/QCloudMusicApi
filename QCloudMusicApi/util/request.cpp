@@ -1,6 +1,4 @@
-﻿#include <iostream>
-#include <QObject>
-#include <QEventLoop>
+﻿#include <QEventLoop>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -10,7 +8,6 @@
 #include <QTimer>
 #include <QVariantMap>
 #include <QByteArray>
-#include <QObject>
 #include <QRandomGenerator>
 #include <QNetworkCookie>
 #include <QNetworkProxyFactory>
@@ -18,9 +15,9 @@
 #include <QUrlQuery>
 #include <QRegularExpression>
 
-#include "util/crypto.h"
-#include "util/config.h"
-#include "util/index.h"
+#include "crypto.h"
+#include "config.h"
+#include "index.h"
 
 namespace Request {
 
@@ -114,6 +111,8 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
             if(!cookie.contains("MUSIC_A")) {
                 //options.cookie.MUSIC_A = config.anonymous_token
                 cookie["MUSIC_A"] = Config::anonymous_token;
+                cookie["os"] = cookie.value("os", "ios");
+                cookie["appver"] = cookie.value("appver", "8.10.90");
             }
         }
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(Index::mapToCookie(cookie)));
