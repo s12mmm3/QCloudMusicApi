@@ -314,12 +314,6 @@ public:
     // 动态
     APIH(event)
 
-    // 垃圾桶
-    APIH(fm_trash)
-
-    // 关注与取消关注用户
-    APIH(follow)
-
     // 粉丝年龄比例
     APIH(fanscenter_basicinfo_age_get)
 
@@ -334,6 +328,21 @@ public:
 
     // 粉丝来源
     APIH(fanscenter_trend_list)
+
+    // 垃圾桶
+    APIH(fm_trash)
+
+    // 关注与取消关注用户
+    APIH(follow)
+
+    // 根据nickname获取userid
+    APIH(get_userids)
+
+    // 历史每日推荐歌曲详情
+    APIH(history_recommend_songs_detail)
+
+    // 历史每日推荐歌曲
+    APIH(history_recommend_songs)
 
     // 手机登录
     APIH(login_cellphone)

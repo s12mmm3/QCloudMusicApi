@@ -1638,45 +1638,6 @@ APICPP(event) {
         );
 }
 
-// 垃圾桶
-APICPP(fm_trash) {
-    const QVariantMap data {
-        { "songId", query["id"] }
-    };
-    return request(
-        POST,
-        "https://music.163.com/weapi/radio/trash/add?alg=RT&songId="
-            + query["id"].toString()
-            + QStringLiteral("&time=")
-            + query.value("time", 25).toString(),
-        data,
-        {
-            { "crypto", "weapi" },
-            _PARAM
-        }
-        );
-}
-
-// 关注与取消关注用户
-APICPP(follow) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "pc";
-    query["cookie"] = cookie;
-    query["t"] = query["t"].toInt() == 1 ? "follow" : "delfollow";
-    return request(
-        POST,
-        "https://music.163.com/weapi/user/"
-            + query["t"].toString()
-            + QStringLiteral("/")
-            + query["id"].toString(),
-        {},
-        {
-            { "crypto", "weapi" },
-            _PARAM
-        }
-        );
-}
-
 // 粉丝年龄比例
 APICPP(fanscenter_basicinfo_age_get) {
     const QVariantMap data { };
@@ -1752,6 +1713,97 @@ APICPP(fanscenter_trend_list) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/fanscenter/trend/list" }
+        }
+        );
+}
+
+// 垃圾桶
+APICPP(fm_trash) {
+    const QVariantMap data {
+        { "songId", query["id"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/radio/trash/add?alg=RT&songId="
+            + query["id"].toString()
+            + QStringLiteral("&time=")
+            + query.value("time", 25).toString(),
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 关注与取消关注用户
+APICPP(follow) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    query["t"] = query["t"].toInt() == 1 ? "follow" : "delfollow";
+    return request(
+        POST,
+        "https://music.163.com/weapi/user/"
+            + query["t"].toString()
+            + QStringLiteral("/")
+            + query["id"].toString(),
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 根据nickname获取userid
+APICPP(get_userids) {
+    const QVariantMap data {
+        { "nicknames", query["nicknames"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/user/getUserIds",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 历史每日推荐歌曲详情
+APICPP(history_recommend_songs_detail) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    query["cookie"] = cookie;
+    const QVariantMap data {
+        { "date", query.value("date", "") }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/discovery/recommend/songs/history/detail",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 历史每日推荐歌曲
+APICPP(history_recommend_songs) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    query["cookie"] = cookie;
+    const QVariantMap data { };
+    return request(
+        POST,
+        "https://music.163.com/api/discovery/recommend/songs/history/recent",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
         }
         );
 }
