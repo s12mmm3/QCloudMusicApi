@@ -1805,6 +1805,68 @@ QVariantMap Api::history_recommend_songs(QVariantMap query) {
         );
 }
 
+// 首页-发现 block page
+// 这个接口为移动端接口，首页-发现页，数据结构可以参考 https://github.com/hcanyz/flutter-netease-music-api/blob/master/lib/src/api/uncategorized/bean.dart#L259 HomeBlockPageWrap
+// query.refresh 是否刷新数据
+QVariantMap Api::homepage_block_page(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.10.90";
+    query["cookie"] = cookie;
+    const QVariantMap data {
+        { "refresh", query.value("refresh", false) },
+        { "cursor", query["cursor"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/homepage/block/page",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 首页-发现 dragon ball
+// 这个接口为移动端接口，首页-发现页（每日推荐、歌单、排行榜 那些入口）
+// 数据结构可以参考 https://github.com/hcanyz/flutter-netease-music-api/blob/master/lib/src/api/uncategorized/bean.dart#L290 HomeDragonBallWrap
+// !需要登录或者游客登录，非登录返回 []
+QVariantMap Api::homepage_dragon_ball(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.10.90";
+    query["cookie"] = cookie;
+    const QVariantMap data { };
+    return request(
+        POST,
+        "https://music.163.com/eapi/homepage/dragon/ball/static",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/homepage/dragon/ball/static"}
+        }
+        );
+}
+
+//热门话题
+QVariantMap Api::hot_topic(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 20) },
+        { "offset", query.value("offset", 0) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/act/hot",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 手机登录
 QVariantMap Api::login_cellphone(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();

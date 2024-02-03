@@ -339,6 +339,20 @@ public:
     // 历史每日推荐歌曲
     Q_INVOKABLE QVariantMap history_recommend_songs(QVariantMap);
 
+    // 首页-发现 block page
+    // 这个接口为移动端接口，首页-发现页，数据结构可以参考 https://github.com/hcanyz/flutter-netease-music-api/blob/master/lib/src/api/uncategorized/bean.dart#L259 HomeBlockPageWrap
+    // query.refresh 是否刷新数据
+    Q_INVOKABLE QVariantMap homepage_block_page(QVariantMap);
+
+    // 首页-发现 dragon ball
+    // 这个接口为移动端接口，首页-发现页（每日推荐、歌单、排行榜 那些入口）
+    // 数据结构可以参考 https://github.com/hcanyz/flutter-netease-music-api/blob/master/lib/src/api/uncategorized/bean.dart#L290 HomeDragonBallWrap
+    // !需要登录或者游客登录，非登录返回 []
+    Q_INVOKABLE QVariantMap homepage_dragon_ball(QVariantMap);
+
+    //热门话题
+    Q_INVOKABLE QVariantMap hot_topic(QVariantMap);
+
     // 手机登录
     Q_INVOKABLE QVariantMap login_cellphone(QVariantMap);
 
