@@ -1,6 +1,3 @@
-[submodule "QCloudMusicApi/GmSSL"]
-	path = QCloudMusicApi/GmSSL
-	url = git@github.com:guanzhi/GmSSL.git
 [submodule "QCloudMusicApi/openssl-cmake"]
 	path = QCloudMusicApi/openssl-cmake
 	url = git@github.com:janbar/openssl-cmake.git
