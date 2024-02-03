@@ -20,27 +20,22 @@ jobs:
           # 5.12.12
           - qt_ver: 5.12.12
             qt_arch: win64_msvc2015_64
-            tools: 'tools_opensslv3_x64'
           - qt_ver: 5.12.12
             qt_arch: win64_msvc2017_64
-            tools: 'tools_opensslv3_x64'
           # 5.15.2
           # - qt_ver: 5.15.2
           #   qt_arch: win32_msvc2019
           - qt_ver: 5.15.2
             qt_arch: win64_msvc2019_64
-            tools: 'tools_opensslv3_x64'
           # 6.2.4
           - qt_ver: 6.2.4
             qt_arch: win64_msvc2019_64
-            tools: 'tools_opensslv3_x64'
           # 6.6.0
           - qt_ver: 6.6.0
             qt_arch: win64_msvc2019_64
-            tools: 'tools_opensslv3_x64'
             modules: 'qthttpserver qtwebsockets'
     env:
-      targetName: Test.exe
+      BUILD_TYPE: Release
     # 步骤
     steps:
       # 安装Qt
@@ -57,28 +52,11 @@ jobs:
           cache: 'true'
           aqtversion: '==2.0.5'
           modules: ${{ matrix.modules }}
-          tools: ${{ matrix.tools }}
+          # tools: ${{ matrix.tools }}
       # 拉取代码
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      # # Conan Install
-      # - name: Conan Install
-      #   id: conanInstall
-      #   shell: pwsh
-      #   run: |
-      #     pip install conan
-      #     conan -v
-      #     conan profile detect --force
-      # # Conan Run
-      # - name: Conan Run
-      #   id: conanRun
-      #   shell: pwsh
-      #   run: |
-      #     conan install .
-      #     ls build/generators/
-      #     build/generators/conanrun.bat
-      # CMake Build
       - name: CMake Build
         id: build
         shell: cmd
@@ -87,7 +65,7 @@ jobs:
           mkdir build
           cd build
           cmake --version
-          cmake -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} ../
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} ../
           ls
       # CMake Install
       - name: CMake Install
@@ -107,15 +85,15 @@ jobs:
         run: |
           cd ${{ github.workspace }}/build
           ls
-          Tree output /F
+          Tree ${{ env.BUILD_TYPE }} /F
 
           # 拷贝依赖
-          windeployqt --qmldir . --no-translations --compiler-runtime output\bin\QCloudMusicApi.dll
-          windeployqt --qmldir . --no-translations --compiler-runtime output\bin\Test.exe
-          windeployqt --qmldir . --no-translations --compiler-runtime output\bin\ApiServer.exe
+          windeployqt --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\QCloudMusicApi.dll
+          windeployqt --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\Test.exe
+          windeployqt --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\ApiServer.exe
           # 打包zip
-          Compress-Archive -Path output\* ${env:archiveName}'.zip'
-          Tree output /F
+          Compress-Archive -Path ${{ env.BUILD_TYPE }}\* ${env:archiveName}'.zip'
+          Tree ${{ env.BUILD_TYPE }} /F
 
           # 记录packageName给后续step
           $name = ${env:archiveName}
@@ -126,7 +104,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.package.outputs.packageName }}
-          path: ${{ github.workspace }}/build/output
+          path: ${{ github.workspace }}/build/${{ env.BUILD_TYPE }}
       # tag 上传Release
       - name: Upload Release
         if: startsWith(github.event.ref, 'refs/tags/')
