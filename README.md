@@ -12,15 +12,6 @@ Qt版 网易云音乐 API
 本项目需要以下库和工具：
 
 - Qt >= 5.12
-- OpenSSL >= 1.1.1
-- conan2
-
-conan 是一个开源的 C/C++ 包管理器，可以自动下载、编译和链接依赖库。可以使用以下命令来安装 conan（以 Ubuntu 为例）：
-
-```bash
-sudo apt install python3-pip
-pip3 install conan
-```
 
 ## 使用说明
 ### 引用动态库文件
@@ -59,7 +50,6 @@ qDebug() << ret;
 ```
 
 ### 在项目中引用CMake项目
-将conanfile.txt移动至项目根目录
 在CMakeLists.txt文件中加上
 ```
 add_subdirectory(QCloudMusicApi)
@@ -78,12 +68,6 @@ C++代码中加上
 ```
 #include "QCloudMusicApi/QCloudMusicApi/module.h"
 ```
-
-若CMake时出现类似错误
-```
-error: Syntax error in cmake code at ... when parsing string ... Invalid character escape '\q'.
-```
-进入出错的CMake文件，将"\\"全部替换为"/"，重新CMake即可
 
 ## License
 
