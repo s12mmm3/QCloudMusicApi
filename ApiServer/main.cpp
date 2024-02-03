@@ -7,6 +7,7 @@
 #include <QtConcurrent>
 
 #include "../QCloudMusicApi/module.h"
+#include "../QCloudMusicApi/util/index.h"
 
 int main(int argc, char *argv[])
 {
@@ -43,45 +44,45 @@ int main(int argc, char *argv[])
     for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
         auto funName = api.metaObject()->method(i).name();
         auto path = "/" + parseRoute(funName);
-        server.route(
-            path,
-            QHttpServerRequest::Method::Get,
-            [=](const QHttpServerRequest &request) {
-                QVariantMap query = getQuery(request);
 
-                QVariantMap headers = getHeaders(request);
-                query["cookie"] = headers["Cookie"];
-                QVariantMap args = {
-                    { "path", path },
-                    { "funName", funName },
-                    { "localAddress", request.localAddress().toString() + ":" + QString::number(request.localPort())  },
-                    { "remoteAddress", request.remoteAddress().toString() + ":" + QString::number(request.remotePort())  },
-                    { "query", query },
-                    { "headers", headers }
-                };
-                qDebug().noquote() << QJsonDocument::fromVariant(args).toJson();
+        auto ViewHandler = [=](const QHttpServerRequest &request) {
+            QVariantMap query = getQuery(request);
 
-                return QtConcurrent::run([=]() {
-                    NeteaseCloudMusicApi api;
-                    QVariantMap ret;
-                    bool ok = QMetaObject::invokeMethod(&api, funName
-                                                        , Qt::DirectConnection
-                                                        , Q_RETURN_ARG(QVariantMap, ret)
-                                                        , Q_ARG(QVariantMap, query));
-                    QByteArray result;
-                    if(ok) {
-                        result = QJsonDocument::fromVariant(ret["body"].toMap()).toJson();
-                    }
-                    else {
-                        //函数调用错误
-                    }
-                    auto response = QHttpServerResponse(result, (QHttpServerResponse::StatusCode)ret["status"].toInt());
-                    const auto cookies = ret["cookie"].toString();
-                    response.setHeader("Set-Cookie", cookies.toUtf8());
-                    return response;
-                });
+            QVariantMap headers = getHeaders(request);
+            auto cookie = Index::stringToMap(headers["Cookie"].toString());
+            query["cookie"] = cookie;
+            QVariantMap args {
+                { "path", path },
+                { "funName", funName },
+                { "localAddress", request.localAddress().toString() + ":" + QString::number(request.localPort())  },
+                { "remoteAddress", request.remoteAddress().toString() + ":" + QString::number(request.remotePort())  },
+                { "query", query },
+                { "headers", headers }
+            };
+            qDebug().noquote() << QJsonDocument::fromVariant(args).toJson();
 
+            return QtConcurrent::run([=]() {
+                NeteaseCloudMusicApi api;
+                QVariantMap ret;
+                bool ok = QMetaObject::invokeMethod(&api, funName
+                                                    , Qt::DirectConnection
+                                                    , Q_RETURN_ARG(QVariantMap, ret)
+                                                    , Q_ARG(QVariantMap, query));
+                QByteArray result;
+                if(ok) {
+                    result = QJsonDocument::fromVariant(ret["body"].toMap()).toJson();
+                }
+                else {
+                    //函数调用错误
+                }
+                auto response = QHttpServerResponse(result, (QHttpServerResponse::StatusCode)ret["status"].toInt());
+                const auto cookies = ret["cookie"].toString();
+                response.setHeader("Set-Cookie", cookies.toUtf8());
+                return response;
             });
+
+        };
+        server.route(path, ViewHandler);
     }
 
     quint16 port = 3000;
