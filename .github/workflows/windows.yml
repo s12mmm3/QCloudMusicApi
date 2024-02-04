@@ -80,7 +80,7 @@ jobs:
         shell: pwsh
         run: |
           cd ${{ github.workspace }}/build
-          cmake --build . --target INSTALL --config release
+          cmake --build . --target INSTALL --config ${{ env.BUILD_TYPE }}
           ls
       # 打包 
       - name: Package
