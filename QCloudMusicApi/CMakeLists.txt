@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Provides dependency openssl
-find_package(OpenSSL QUIET)
+#find_package(OpenSSL QUIET)
 if(NOT OPENSSL_FOUND)
     add_subdirectory(
         ${CMAKE_CURRENT_SOURCE_DIR}/openssl-cmake
