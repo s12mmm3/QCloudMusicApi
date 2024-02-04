@@ -20,25 +20,25 @@ jobs:
           # 5.12.12
           - qt_ver: 5.12.12
             qt_arch: win64_msvc2015_64
-            msvc_arch: x86_x64
+            arch: x64
           - qt_ver: 5.12.12
             qt_arch: win64_msvc2017_64
-            msvc_arch: x86_x64
+            arch: x64
           # 5.15.2
           - qt_ver: 5.15.2
             qt_arch: win32_msvc2019
-            msvc_arch: x86
+            arch: win32
           - qt_ver: 5.15.2
             qt_arch: win64_msvc2019_64
-            msvc_arch: x86_x64
+            arch: x64
           # 6.2.4
           - qt_ver: 6.2.4
             qt_arch: win64_msvc2019_64
-            msvc_arch: x86_x64
+            arch: x64
           # 6.6.0
           - qt_ver: 6.6.0
             qt_arch: win64_msvc2019_64
-            msvc_arch: x86_x64
+            arch: x64
             modules: 'qthttpserver qtwebsockets'
     env:
       BUILD_TYPE: Release
@@ -68,11 +68,10 @@ jobs:
         id: build
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
           mkdir build
           cd build
           cmake --version
-          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} ../
+          cmake -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} ../
           ls
       # CMake Install
       - name: CMake Install
