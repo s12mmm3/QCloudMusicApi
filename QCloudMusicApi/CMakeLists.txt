@@ -27,13 +27,9 @@ endif()
 set (HAVE_OPENSSL 1)
 include_directories (${OPENSSL_INCLUDE_DIR})
 
-#add_subdirectory(openssl-cmake)
-#find_package(openssl REQUIRED)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
-#include_directories(openssl-cmake/include)
 
-#message(${OPENSSL_ROOT_DIR})
 FILE(GLOB HEADERS ./*.h ./util/*.h)
 FILE(GLOB SOURCES ./*.cpp ./util/*.cpp)
 add_library(QCloudMusicApi SHARED
@@ -49,4 +45,3 @@ set(PUBLIC_HEADERS
     module.h
 )
 install(FILES ${PUBLIC_HEADERS} DESTINATION ${CMAKE_HEADER_OUTPUT_DIRECTORY})
-#install(DIRECTORY ${OPENSSL_INCLUDE_DIR}/../bin DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/../)
