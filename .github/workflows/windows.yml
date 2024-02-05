@@ -42,6 +42,7 @@ jobs:
             modules: 'qthttpserver qtwebsockets'
     env:
       BUILD_TYPE: Release
+      assume: --release
     # 步骤
     steps:
       # 安装Qt
@@ -94,9 +95,9 @@ jobs:
           Tree ${{ env.BUILD_TYPE }} /F
 
           # 拷贝依赖
-          windeployqt --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\QCloudMusicApi.dll
-          windeployqt --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\Test.exe
-          windeployqt --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\ApiServer.exe
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\QCloudMusicApi.dll
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\Test.exe
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\ApiServer.exe
           # 打包zip
           Compress-Archive -Path ${{ env.BUILD_TYPE }}\* ${env:archiveName}'.zip'
           Tree ${{ env.BUILD_TYPE }} /F
