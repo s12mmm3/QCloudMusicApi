@@ -42,6 +42,7 @@ jobs:
             modules: 'qthttpserver qtwebsockets'
     env:
       BUILD_TYPE: Release
+      BUILD_PATH: build
       assume: --release
     # 步骤
     steps:
@@ -69,8 +70,8 @@ jobs:
         id: build
         shell: cmd
         run: |
-          mkdir build
-          cd build
+          mkdir ${{ env.BUILD_PATH }}
+          cd ${{ env.BUILD_PATH }}
           cmake --version
           cmake -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} ../
           ls
@@ -80,7 +81,7 @@ jobs:
           prefix: ${{ github.workspace }}
         shell: pwsh
         run: |
-          cd ${{ github.workspace }}/build
+          cd ${{ github.workspace }}/${{ env.BUILD_PATH }}
           cmake --build . --target INSTALL --config ${{ env.BUILD_TYPE }}
           ls
       # 打包 
@@ -90,7 +91,7 @@ jobs:
           archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}'
         shell: pwsh
         run: |
-          cd ${{ github.workspace }}/build
+          cd ${{ github.workspace }}/${{ env.BUILD_PATH }}
           ls
           Tree ${{ env.BUILD_TYPE }} /F
 
@@ -111,14 +112,14 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.package.outputs.packageName }}
-          path: ${{ github.workspace }}/build/${{ env.BUILD_TYPE }}
+          path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
       # tag 上传Release
       - name: Upload Release
         if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ github.workspace }}/build/${{ steps.package.outputs.packageName }}.zip
+          file: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ steps.package.outputs.packageName }}.zip
           asset_name: ${{ steps.package.outputs.packageName }}.zip
           tag: ${{ github.ref }}
           overwrite: true 
