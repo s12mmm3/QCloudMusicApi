@@ -70,10 +70,7 @@ jobs:
         id: build
         shell: cmd
         run: |
-          mkdir ${{ env.BUILD_PATH }}
-          cd ${{ env.BUILD_PATH }}
-          cmake --version
-          cmake -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} ../
+          cmake -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} -B ${{ env.BUILD_PATH }}
           ls
       # CMake Install
       - name: CMake Install
@@ -82,7 +79,7 @@ jobs:
         shell: pwsh
         run: |
           cd ${{ github.workspace }}/${{ env.BUILD_PATH }}
-          cmake --build . --target INSTALL --config ${{ env.BUILD_TYPE }}
+          cmake --build ${{ env.BUILD_PATH }} --target INSTALL --config ${{ env.BUILD_TYPE }}
           ls
       # 打包 
       - name: Package
