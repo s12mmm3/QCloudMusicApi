@@ -3,6 +3,15 @@
 
 #include <QVariantMap>
 
+#if defined(_MSC_VER) || defined(WIN64) || defined(_WIN64) || defined(__WIN64__) || defined(WIN32) \
+|| defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#define Q_DECL_EXPORT __declspec(dllexport)
+#define Q_DECL_IMPORT __declspec(dllimport)
+#else
+#define Q_DECL_EXPORT __attribute__((visibility("default")))
+#define Q_DECL_IMPORT __attribute__((visibility("default")))
+#endif
+
 #if defined(QCLOUDMUSICAPI_LIBRARY)
 #  define QCLOUDMUSICAPI_EXPORT Q_DECL_EXPORT
 #else
@@ -446,14 +455,50 @@ public:
     // 获取用户绑定信息
     Q_INVOKABLE QVariantMap user_binding(QVariantMap);
 
+    // 云盘歌曲删除
+    Q_INVOKABLE QVariantMap user_cloud_del(QVariantMap);
+
+    // 云盘数据详情
+    Q_INVOKABLE QVariantMap user_cloud_detail(QVariantMap);
+
+    // 云盘数据
+    Q_INVOKABLE QVariantMap user_cloud(QVariantMap);
+
     // 获取用户历史评论
     Q_INVOKABLE QVariantMap user_comment_history(QVariantMap);
 
     // 用户详情
     Q_INVOKABLE QVariantMap user_detail(QVariantMap);
 
+    // 用户电台节目
+    Q_INVOKABLE QVariantMap user_dj(QVariantMap);
+
+    // 用户动态
+    Q_INVOKABLE QVariantMap user_event(QVariantMap);
+
+    // 关注TA的人(粉丝)
+    Q_INVOKABLE QVariantMap user_followeds(QVariantMap);
+
+    // TA关注的人(关注)
+    Q_INVOKABLE QVariantMap user_follows(QVariantMap);
+
+    // 获取用户等级信息
+    Q_INVOKABLE QVariantMap user_level(QVariantMap);
+
     // 用户歌单
     Q_INVOKABLE QVariantMap user_playlist(QVariantMap);
+
+    // 听歌排行
+    Q_INVOKABLE QVariantMap user_record(QVariantMap);
+
+    // 用户绑定手机
+    Q_INVOKABLE QVariantMap user_replacephone(QVariantMap);
+
+    // 收藏计数
+    Q_INVOKABLE QVariantMap user_subcount(QVariantMap);
+
+    // 编辑用户信息
+    Q_INVOKABLE QVariantMap user_update(QVariantMap);
 
     // 云贝 todo 任务
     Q_INVOKABLE QVariantMap yunbei_tasks_todo(QVariantMap);

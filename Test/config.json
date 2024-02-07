@@ -261,5 +261,20 @@
     },
     "user_audio": {
         "uid": "79248480"
+    },
+    "user_dj": {
+        "uid": "79248480"
+    },
+    "user_event": {
+        "uid": "79248480"
+    },
+    "user_followeds": {
+        "uid": "79248480"
+    },
+    "user_follows": {
+        "uid": "79248480"
+    },
+    "user_record": {
+        "uid": "79248480"
     }
 }
