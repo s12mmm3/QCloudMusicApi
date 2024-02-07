@@ -78,7 +78,7 @@ jobs:
           prefix: ${{ github.workspace }}
         shell: pwsh
         run: |
-          cd ${{ github.workspace }}/${{ env.BUILD_PATH }}
+          cd ${{ github.workspace }}
           cmake --build ${{ env.BUILD_PATH }} --target INSTALL --config ${{ env.BUILD_TYPE }}
           ls
       # 打包 
