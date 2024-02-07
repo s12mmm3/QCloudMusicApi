@@ -356,6 +356,12 @@ public:
     //抱一抱评论
     Q_INVOKABLE QVariantMap hug_comment(QVariantMap);
 
+    // 红心与取消红心歌曲
+    Q_INVOKABLE QVariantMap like(QVariantMap);
+
+    // 喜欢音乐列表
+    Q_INVOKABLE QVariantMap likelist(QVariantMap);
+
     // 手机登录
     Q_INVOKABLE QVariantMap login_cellphone(QVariantMap);
 
@@ -433,6 +439,12 @@ public:
 
     // 获取账号信息
     Q_INVOKABLE QVariantMap user_account(QVariantMap);
+
+    // 用户创建的电台
+    Q_INVOKABLE QVariantMap user_audio(QVariantMap);
+
+    // 获取用户绑定信息
+    Q_INVOKABLE QVariantMap user_binding(QVariantMap);
 
     // 获取用户历史评论
     Q_INVOKABLE QVariantMap user_comment_history(QVariantMap);

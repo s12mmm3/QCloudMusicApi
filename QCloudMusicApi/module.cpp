@@ -1878,7 +1878,7 @@ QVariantMap Api::hug_comment(QVariantMap query) {
     const QVariantMap data {
         { "targetUserId", query["uid"] },
         { "commentId", query["cid"] },
-        { "threadId", threadId}
+        { "threadId", threadId }
     };
     return request(
         POST,
@@ -1886,6 +1886,46 @@ QVariantMap Api::hug_comment(QVariantMap query) {
         data,
         {
             { "crypto", "api" },
+            _PARAM
+        }
+        );
+}
+
+// 红心与取消红心歌曲
+QVariantMap Api::like(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
+    query["cookie"] = cookie;
+    query["like"] = query["like"].toString() == "false" ? false : true;
+    const QVariantMap data {
+        { "alg", "itembased" },
+        { "trackId", query["id"] },
+        { "like", query["like"] },
+        { "time", "3" }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/radio/like",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 喜欢音乐列表
+QVariantMap Api::likelist(QVariantMap query) {
+    const QVariantMap data {
+        { "uid", query["uid"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/song/like/get",
+        data,
+        {
+            { "crypto", "weapi" },
             _PARAM
         }
         );
@@ -2455,6 +2495,36 @@ QVariantMap Api::user_account(QVariantMap query) {
     return request(
         POST,
         "https://music.163.com/api/nuser/account/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 用户创建的电台
+QVariantMap Api::user_audio(QVariantMap query) {
+    const QVariantMap data {
+        { "userId", query["uid"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/djradio/get/byuser",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 获取用户绑定信息
+QVariantMap Api::user_binding(QVariantMap query) {
+    const QVariantMap data { };
+    return request(
+        POST,
+        "https://music.163.com/api/v1/user/bindings/" + query["uid"].toString(),
         data,
         {
             { "crypto", "weapi" },
