@@ -353,6 +353,9 @@ public:
     //热门话题
     Q_INVOKABLE QVariantMap hot_topic(QVariantMap);
 
+    //抱一抱评论
+    Q_INVOKABLE QVariantMap hug_comment(QVariantMap);
+
     // 手机登录
     Q_INVOKABLE QVariantMap login_cellphone(QVariantMap);
 

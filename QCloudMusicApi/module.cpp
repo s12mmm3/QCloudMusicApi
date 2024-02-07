@@ -1867,6 +1867,30 @@ QVariantMap Api::hot_topic(QVariantMap query) {
         );
 }
 
+// 抱一抱评论
+QVariantMap Api::hug_comment(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.10.90";
+    query["cookie"] = cookie;
+    query["type"] = resourceTypeMap[query.value("type", 0).toString()];
+    const QString threadId = query["type"].toString() + query["sid"].toString();
+    const QVariantMap data {
+        { "targetUserId", query["uid"] },
+        { "commentId", query["cid"] },
+        { "threadId", threadId}
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/v2/resource/comments/hug/listener",
+        data,
+        {
+            { "crypto", "api" },
+            _PARAM
+        }
+        );
+}
+
 // 手机登录
 QVariantMap Api::login_cellphone(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();

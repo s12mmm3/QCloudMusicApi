@@ -247,5 +247,10 @@
     },
     "get_userids": {
         "nicknames": "binaryify"
+    },
+    "hug_comment": {
+        "uid": "285516405",
+        "cid": "1167145843",
+        "sid": "863481066"
     }
 }
