@@ -19,7 +19,7 @@ jobs:
           # 5.12.12
           - qt_version: 5.12.12
             qt_arch: win32_mingw73
-            qt_tools: 'tools_mingw qt.tools.win32_mingw810'
+            qt_tools: 'tools_mingw,qt.tools.win32_mingw810'
           # - qt_version: 5.12.12
           #   qt_arch: win64_mingw73
           #   qt_tools: 'tools_mingw1310'
