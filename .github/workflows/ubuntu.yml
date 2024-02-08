@@ -34,6 +34,7 @@ jobs:
       assume: --release
       qt_target: 'desktop'
       qt_host: 'linux'
+      archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
     # 步骤
     steps:
       # 安装Qt
@@ -73,19 +74,9 @@ jobs:
           cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }}
           ls
 
-      # 打包 （未实现）
-      - name: Package
-        id: package      
-        env:
-          archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
-        run: |
-          # 记录packageName给后续step
-          $name = ${env:archiveName}
-          echo "::set-output name=packageName::$name"
-          ls
       # tag 查询github-Release
       # 上传artifacts          
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.package.outputs.packageName }}
+          name: ${{ env.archiveName }}
           path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
