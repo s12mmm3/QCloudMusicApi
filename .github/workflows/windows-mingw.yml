@@ -1,0 +1,119 @@
+name: Windows-MinGW
+on: 
+  # push代码时触发workflow
+  push:
+    paths:
+      - '**'
+  pull_request:
+    paths:
+      - '**'
+jobs:
+  build:
+    name: Build
+    # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
+    runs-on: windows-latest
+    strategy:
+      # 矩阵配置
+      matrix:
+        include:
+          # 5.12.12
+          - qt_version: 5.12.12
+            qt_arch: win32_mingw73
+            qt_tools: 'tools_mingw qt.tools.win32_mingw810'
+          - qt_version: 5.12.12
+            qt_arch: win64_mingw73
+            qt_tools: 'tools_mingw1310'
+          # 5.15.2
+          - qt_version: 5.15.2
+            qt_arch: win32_mingw81
+            qt_tools: 'tools_mingw qt.tools.win32_mingw810'
+          - qt_version: 5.15.2
+            qt_arch: win64_mingw81
+            qt_tools: 'tools_mingw1310'
+          # 6.2.4
+          - qt_version: 6.2.4
+            qt_arch: win64_mingw
+            qt_tools: 'tools_mingw1310'
+          # 6.6.0
+          - qt_version: 6.6.0
+            qt_arch: win64_mingw
+            qt_tools: 'tools_mingw1310'
+            modules: 'qthttpserver qtwebsockets'
+    env:
+      BUILD_TYPE: Release
+      BUILD_PATH: build
+      assume: --release
+      qt_target: 'desktop'
+      qt_host: 'windows'
+      # 压缩包名称
+      archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}.zip'
+    # 步骤
+    steps:
+      # 安装Qt
+      - name: Install Qt
+        if: 'true'
+        # 使用外部action。这个action专门用来安装Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt_version }}
+          host: ${{ env.qt_host }}
+          target: ${{ env.qt_target }}
+          arch: ${{ matrix.qt_arch }}
+          install-deps: 'true'
+          cache: 'true'
+          aqtversion: '==3.1.*'
+          modules: ${{ matrix.modules }}
+          tools: ${{ matrix.qt_tools }}
+      # 拉取代码
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: CMake Build
+        id: build
+        shell: cmd
+        run: |
+          cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} -B ${{ env.BUILD_PATH }}
+          
+          Tree /F
+      # CMake Install
+      - name: CMake Install
+        env:
+          prefix: ${{ github.workspace }}
+        shell: pwsh
+        run: |
+          cd ${{ github.workspace }}
+          cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }}
+          ls
+      # 打包 
+      - name: Package
+        id: package
+        shell: pwsh
+        run: |
+          cd ${{ github.workspace }}/${{ env.BUILD_PATH }}
+          ls
+          Tree ${{ env.BUILD_TYPE }} /F
+
+          # 拷贝依赖
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\QCloudMusicApi.dll
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\Test.exe
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\ApiServer.exe
+          # 打包zip
+          Compress-Archive -Path ${{ env.BUILD_TYPE }}\* ${{ env.archiveName }}
+          Tree ${{ env.BUILD_TYPE }} /F
+          ls
+      # tag 查询github-Release
+      # 上传artifacts          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.archiveName }}
+          path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
+      # tag 上传Release
+      - name: Upload Release
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.archiveName }}
+          asset_name: ${{ env.archiveName }}
+          tag: ${{ github.ref }}
+          overwrite: true 
