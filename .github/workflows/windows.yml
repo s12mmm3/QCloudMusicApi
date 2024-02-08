@@ -17,25 +17,25 @@ jobs:
       matrix:
         include:
           # 5.12.12
-          - qt_ver: 5.12.12
+          - qt_version: 5.12.12
             qt_arch: win64_msvc2015_64
             arch: x64
-          - qt_ver: 5.12.12
+          - qt_version: 5.12.12
             qt_arch: win64_msvc2017_64
             arch: x64
           # 5.15.2
-          - qt_ver: 5.15.2
+          - qt_version: 5.15.2
             qt_arch: win32_msvc2019
             arch: win32
-          - qt_ver: 5.15.2
+          - qt_version: 5.15.2
             qt_arch: win64_msvc2019_64
             arch: x64
           # 6.2.4
-          - qt_ver: 6.2.4
+          - qt_version: 6.2.4
             qt_arch: win64_msvc2019_64
             arch: x64
           # 6.6.0
-          - qt_ver: 6.6.0
+          - qt_version: 6.6.0
             qt_arch: win64_msvc2019_64
             arch: x64
             modules: 'qthttpserver qtwebsockets'
@@ -43,6 +43,8 @@ jobs:
       BUILD_TYPE: Release
       BUILD_PATH: build
       assume: --release
+      qt_target: 'desktop'
+      qt_host: 'windows'
     # 步骤
     steps:
       # 安装Qt
@@ -51,17 +53,17 @@ jobs:
         # 使用外部action。这个action专门用来安装Qt
         uses: jurplel/install-qt-action@v3
         with:
-          # Version of Qt to install
-          version: ${{ matrix.qt_ver }}
-          # Target platform for build
-          # target: ${{ matrix.qt_target }}
+          version: ${{ matrix.qt_version }}
+          host: ${{ env.qt_host }}
+          target: ${{ env.qt_target }}
           arch: ${{ matrix.qt_arch }}
+          install-deps: 'true'
           cache: 'true'
-          aqtversion: '==2.0.5'
+          aqtversion: '==3.1.*'
           modules: ${{ matrix.modules }}
           # tools: ${{ matrix.tools }}
       # 拉取代码
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 1
           submodules: true
@@ -84,7 +86,7 @@ jobs:
       - name: Package
         id: package      
         env:
-          archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}'
+          archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
         shell: pwsh
         run: |
           cd ${{ github.workspace }}/${{ env.BUILD_PATH }}
@@ -105,7 +107,7 @@ jobs:
           ls
       # tag 查询github-Release
       # 上传artifacts          
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.package.outputs.packageName }}
           path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
