@@ -18,19 +18,15 @@ jobs:
           # 5.12.12
           - qt_version: 5.12.12
             qt_arch: gcc_64
-            arch: x64
           # 5.15.2
           - qt_version: 5.15.2
             qt_arch: gcc_64
-            arch: x64
           # 6.2.4
           - qt_version: 6.2.4
             qt_arch: gcc_64
-            arch: x64
           # 6.6.0
           - qt_version: 6.6.1
             qt_arch: gcc_64
-            arch: x64
             modules: 'qthttpserver qtwebsockets'
     env:
       BUILD_TYPE: Release
@@ -60,22 +56,36 @@ jobs:
         with:
           fetch-depth: 1
           submodules: true
+
       - name: CMake Build
         id: build
         run: |
-          cmake -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} -B ${{ env.BUILD_PATH }}
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} -B ${{ env.BUILD_PATH }}
           ls
+          cat ${{ env.BUILD_PATH }}/Makefile
+
       # CMake Install
       - name: CMake Install
         env:
           prefix: ${{ github.workspace }}
         run: |
           cd ${{ github.workspace }}
-          cmake --build ${{ env.BUILD_PATH }} --target INSTALL --config ${{ env.BUILD_TYPE }}
+          cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }}
+          ls
+
+      # 打包 （未实现）
+      - name: Package
+        id: package      
+        env:
+          archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
+        run: |
+          # 记录packageName给后续step
+          $name = ${env:archiveName}
+          echo "::set-output name=packageName::$name"
           ls
       # tag 查询github-Release
       # 上传artifacts          
       - uses: actions/upload-artifact@v4
         with:
-          name: "Ubuntu Build"
-          path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}/bin/Test
+          name: ${{ steps.package.outputs.packageName }}
+          path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
