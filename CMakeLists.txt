@@ -31,10 +31,10 @@ add_subdirectory(Test)
 
 find_package(QT NAMES Qt6 Qt5)
 find_package(Qt${QT_VERSION_MAJOR})
-if(${QT_VERSION} VERSION_GREATER 6.4.0)
-    if(NOT ANDROID)
+if(NOT ANDROID)
+    add_subdirectory(CApi)
+    if(${QT_VERSION} VERSION_GREATER 6.4.0)
         add_subdirectory(ApiServer)
-        add_subdirectory(CApi)
     endif()
 endif()
 
