@@ -20,25 +20,25 @@ jobs:
           - qt_version: 5.12.12
             qt_arch: win32_mingw73
             qt_tools: 'tools_mingw qt.tools.win32_mingw810'
-          - qt_version: 5.12.12
-            qt_arch: win64_mingw73
-            qt_tools: 'tools_mingw1310'
-          # 5.15.2
-          - qt_version: 5.15.2
-            qt_arch: win32_mingw81
-            qt_tools: 'tools_mingw qt.tools.win32_mingw810'
-          - qt_version: 5.15.2
-            qt_arch: win64_mingw81
-            qt_tools: 'tools_mingw1310'
-          # 6.2.4
-          - qt_version: 6.2.4
-            qt_arch: win64_mingw
-            qt_tools: 'tools_mingw1310'
-          # 6.6.0
-          - qt_version: 6.6.0
-            qt_arch: win64_mingw
-            qt_tools: 'tools_mingw1310'
-            modules: 'qthttpserver qtwebsockets'
+          # - qt_version: 5.12.12
+          #   qt_arch: win64_mingw73
+          #   qt_tools: 'tools_mingw1310'
+          # # 5.15.2
+          # - qt_version: 5.15.2
+          #   qt_arch: win32_mingw81
+          #   qt_tools: 'tools_mingw qt.tools.win32_mingw810'
+          # - qt_version: 5.15.2
+          #   qt_arch: win64_mingw81
+          #   qt_tools: 'tools_mingw1310'
+          # # 6.2.4
+          # - qt_version: 6.2.4
+          #   qt_arch: win64_mingw
+          #   qt_tools: 'tools_mingw1310'
+          # # 6.6.0
+          # - qt_version: 6.6.0
+          #   qt_arch: win64_mingw
+          #   qt_tools: 'tools_mingw1310'
+          #   modules: 'qthttpserver qtwebsockets'
     env:
       BUILD_TYPE: Release
       BUILD_PATH: build
@@ -67,14 +67,14 @@ jobs:
       # 拉取代码
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
+          fetch-depth: 1
+          submodules: true
       - name: CMake Build
         id: build
         shell: cmd
         run: |
           cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} -B ${{ env.BUILD_PATH }}
-          
-          Tree /F
+          ls
       # CMake Install
       - name: CMake Install
         env:
