@@ -45,6 +45,8 @@ jobs:
       assume: --release
       qt_target: 'desktop'
       qt_host: 'windows'
+      # 压缩包名称
+      archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}.zip'
     # 步骤
     steps:
       # 安装Qt
@@ -84,9 +86,7 @@ jobs:
           ls
       # 打包 
       - name: Package
-        id: package      
-        env:
-          archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
+        id: package
         shell: pwsh
         run: |
           cd ${{ github.workspace }}/${{ env.BUILD_PATH }}
@@ -98,18 +98,14 @@ jobs:
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\Test.exe
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\ApiServer.exe
           # 打包zip
-          Compress-Archive -Path ${{ env.BUILD_TYPE }}\* ${env:archiveName}'.zip'
+          Compress-Archive -Path ${{ env.BUILD_TYPE }}\* ${{ env.archiveName }}
           Tree ${{ env.BUILD_TYPE }} /F
-
-          # 记录packageName给后续step
-          $name = ${env:archiveName}
-          echo "::set-output name=packageName::$name"
           ls
       # tag 查询github-Release
       # 上传artifacts          
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.package.outputs.packageName }}
+          name: ${{ env.archiveName }}
           path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
       # tag 上传Release
       - name: Upload Release
@@ -117,7 +113,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ steps.package.outputs.packageName }}.zip
-          asset_name: ${{ steps.package.outputs.packageName }}.zip
+          file: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.archiveName }}
+          asset_name: ${{ env.archiveName }}
           tag: ${{ github.ref }}
           overwrite: true 
