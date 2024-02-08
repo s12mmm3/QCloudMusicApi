@@ -1,0 +1,81 @@
+name: Ubuntu
+on: 
+  # push代码时触发workflow
+  push:
+    paths:
+      - '**'
+  pull_request:
+    paths:
+      - '**'
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      # 矩阵配置
+      matrix:
+        include:
+          # 5.12.12
+          - qt_version: 5.12.12
+            qt_arch: gcc_64
+          # 5.15.2
+          - qt_version: 5.15.2
+            qt_arch: gcc_64
+          # 6.2.4
+          - qt_version: 6.2.4
+            qt_arch: gcc_64
+          # 6.6.0
+          - qt_version: 6.6.1
+            qt_arch: gcc_64
+            modules: 'qthttpserver qtwebsockets'
+    env:
+      BUILD_TYPE: Release
+      BUILD_PATH: build
+      assume: --release
+      qt_target: 'desktop'
+      qt_host: 'linux'
+      archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
+    # 步骤
+    steps:
+      # 安装Qt
+      - name: Install Qt
+        if: 'true'
+        # 使用外部action。这个action专门用来安装Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt_version }}
+          host: ${{ env.qt_host }}
+          target: ${{ env.qt_target }}
+          arch: ${{ matrix.qt_arch }}
+          install-deps: 'true'
+          cache: 'true'
+          aqtversion: '==3.1.*'
+          modules: ${{ matrix.modules }}
+          # tools: ${{ matrix.tools }}
+      # 拉取代码
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: true
+
+      - name: CMake Build
+        id: build
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} -B ${{ env.BUILD_PATH }}
+          ls
+
+      # CMake Install
+      - name: CMake Install
+        env:
+          prefix: ${{ github.workspace }}
+        run: |
+          cd ${{ github.workspace }}
+          cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }}
+          ls
+
+      # tag 查询github-Release
+      # 上传artifacts          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.archiveName }}
+          path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
