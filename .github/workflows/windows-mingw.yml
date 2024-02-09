@@ -96,7 +96,7 @@ jobs:
           Tree ${{ env.BUILD_TYPE }} /F
 
           # 拷贝依赖
-          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\QCloudMusicApi.dll
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\libQCloudMusicApi.dll
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\Test.exe
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\ApiServer.exe
           # 打包zip
