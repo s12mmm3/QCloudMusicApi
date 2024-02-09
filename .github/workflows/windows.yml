@@ -82,7 +82,7 @@ jobs:
         shell: pwsh
         run: |
           cd ${{ github.workspace }}
-          cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }}
+          cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }} -j 8
           ls
       # 打包 
       - name: Package

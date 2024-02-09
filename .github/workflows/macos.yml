@@ -69,7 +69,7 @@ jobs:
           prefix: ${{ github.workspace }}
         run: |
           cd ${{ github.workspace }}
-          cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }}
+          cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }} -j 8
           ls
 
       # tag 查询github-Release
