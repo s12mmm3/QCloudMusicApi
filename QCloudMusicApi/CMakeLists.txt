@@ -8,7 +8,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(BUILD_SHARED_LIBS ON)
 # Provides dependency openssl
 #find_package(OpenSSL QUIET)
 if(NOT OPENSSL_FOUND)
@@ -33,14 +32,17 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
 
 FILE(GLOB HEADERS ./*.h ./util/*.h)
 FILE(GLOB SOURCES ./*.cpp ./util/*.cpp)
-add_library(QCloudMusicApi SHARED
+add_library(${PROJECT_NAME}
     ${HEADERS}
     ${SOURCES}
 )
 
-target_link_libraries(QCloudMusicApi Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
-target_compile_definitions(QCloudMusicApi PRIVATE QCLOUDMUSICAPI_LIBRARY)
+target_compile_definitions(${PROJECT_NAME} PRIVATE QCLOUDMUSICAPI_LIBRARY)
+if(BUILD_SHARED_LIBS)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_SHARED_LIBS)
+endif()
 
 set(PUBLIC_HEADERS
     module.h

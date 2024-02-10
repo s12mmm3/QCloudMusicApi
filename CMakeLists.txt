@@ -7,6 +7,9 @@ project(QCloudMusicApiProject VERSION 1.0)
 # C++标准
 set(CMAKE_CXX_STANDARD 17)
 
+# 生成动态库
+set(BUILD_SHARED_LIBS ON)
+
 # set default output path
 if(NOT ANDROID)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
