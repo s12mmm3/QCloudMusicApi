@@ -69,6 +69,13 @@ C++代码中加上
 #include "QCloudMusicApi/QCloudMusicApi/module.h"
 ```
 
+### 手动编译
+手动安装好Qt库后
+```
+git clone https://github.com/s12mmm3/QCloudMusicApi.git
+cmake -B build
+cmake --build build -j
+```
 ## License
 
 [The MIT License (MIT)](https://github.com/s12mmm3/QCloudMusicApi/blob/master/LICENSE)
