@@ -11,14 +11,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
-add_library(CApi SHARED
+add_library(${PROJECT_NAME} SHARED
   capi.cpp
   capi.h
 )
 
-target_link_libraries(CApi PRIVATE Qt${QT_VERSION_MAJOR}::Core QCloudMusicApi)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core QCloudMusicApi)
 
-target_compile_definitions(CApi PRIVATE CAPI_LIBRARY)
+target_compile_definitions(${PROJECT_NAME} PRIVATE CAPI_LIBRARY)
 
 set(PUBLIC_HEADERS
     capi.h
