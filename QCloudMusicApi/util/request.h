@@ -70,18 +70,21 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
         request.setRawHeader("X-Forwarded-For", ip.toUtf8());
     }
     //    request.setRawHeader("X-Real-IP", "118.88.88.88");
+    auto randomBytes = []() {
+        QByteArray bytes;
+        for(int i = 0; i < 16; ++i) {
+            bytes.append(QRandomGenerator::global()->generate());
+        }
+        return bytes;
+    };
     if(options["cookie"].userType() == QMetaType::QVariantMap) {
         auto cookie = options["cookie"].toMap();
-        auto randomBytes = []() {
-            QByteArray bytes;
-            for(int i = 0; i < 16; ++i) {
-                bytes.append(QRandomGenerator::global()->generate());
-            }
-            return bytes;
-        };
         cookie.insert("__remember_me", true);
         //        cookie.insert("NMTID", randomBytes().toHex());
         cookie.insert("_ntes_nuid", randomBytes().toHex());
+        if (url.indexOf("login") == -1) {
+            cookie["NMTID"] = randomBytes().toHex();
+        }
         if(!cookie.contains("MUSIC_U")) {
             // 游客
             if(!cookie.contains("MUSIC_A")) {
@@ -91,6 +94,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
                 cookie["appver"] = cookie.value("appver", "8.10.90");
             }
         }
+        options["cookie"] = cookie;
         request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(Index::mapToCookie(cookie)));
     }
     else if(options.contains("cookie")) {
@@ -110,8 +114,10 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
         QString csrfToken = "";
         auto cookieList = request.header(QNetworkRequest::CookieHeader).value<QList<QNetworkCookie>>();
         for(auto i: cookieList) {
-            if(i.name() == "__csrf") {
-                csrfToken = i.value();
+            auto name = i.name();
+            auto value = i.value();
+            if(name == "__csrf") {
+                csrfToken = value;
                 break;
             }
         }
@@ -135,26 +141,21 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
                                        : Index::stringToMap(options.value("cookie", "").toString());
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header {
-                           //系统版本
-                           { "osver", cookie["osver"] },
-                           { "deviceId", cookie["deviceId"] },
-                           // app版本
-                           { "appver", cookie["appver"] },
-                           //版本号
-                           { "versioncode", cookie.value("versioncode", "") },
-                           //设备model
-                           { "mobilename", cookie["mobilename"] },
-                           { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
-                           //设备分辨率
-                           { "resolution", cookie.value("resolution", "1920x1080") },
-                           { "__csrf", csrfToken },
-                           { "os", cookie.value("os", "android") },
-                           { "channel", cookie["channel"] },
-                           { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
-                                                + "_"
-                                                + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
-                           },
-                           };
+            { "osver", cookie["osver"] }, //系统版本
+            { "deviceId", cookie["deviceId"] },
+            { "appver", cookie["appver"] }, // app版本
+            { "versioncode", cookie.value("versioncode", "") }, //版本号
+            { "mobilename", cookie["mobilename"] }, //设备model
+            { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
+            { "resolution", cookie.value("resolution", "1920x1080") }, //设备分辨率
+            { "__csrf", csrfToken },
+            { "os", cookie.value("os", "android") },
+            { "channel", cookie["channel"] },
+            { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
+                                 + "_"
+                                 + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
+            },
+        };
         if(cookie.contains("MUSIC_U")) header["MUSIC_U"] = cookie["MUSIC_U"];
         if(cookie.contains("MUSIC_A")) header["MUSIC_A"] = cookie["MUSIC_A"];
 

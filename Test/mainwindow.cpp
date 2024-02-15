@@ -44,10 +44,13 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::updateCookie(const QVariantMap ret) {
-    auto newMap = Index::stringToMap(ret["cookie"].toString());
-    cookie = Index::mergeMap(cookie, newMap);;
-    if (ret["body"].toMap()["token"].isValid()) {
-        cookie["MUSIC_A"] = ret["body"].toMap()["token"];
+    auto newCookie = Index::stringToMap(ret["cookie"].toString());
+    if (!newCookie.isEmpty()) {
+        cookie = Index::mergeMap(cookie, newCookie);
+    }
+    auto token = ret["body"].toMap()["token"].toString();
+    if (!token.isEmpty()) {
+        cookie["MUSIC_A"] = token;
     }
 }
 

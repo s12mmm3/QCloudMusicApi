@@ -276,5 +276,9 @@
     },
     "user_record": {
         "uid": "79248480"
+    },
+    "login_cellphone": {
+        "phone": "xxx",
+        "password": "xxx"
     }
 }
