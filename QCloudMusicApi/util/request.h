@@ -113,7 +113,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
         request.setHeader(QNetworkRequest::UserAgentHeader, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.69");
         QString csrfToken = "";
         auto cookieList = request.header(QNetworkRequest::CookieHeader).value<QList<QNetworkCookie>>();
-        for(auto i: cookieList) {
+        for(auto& i: cookieList) {
             auto name = i.name();
             auto value = i.value();
             if(name == "__csrf") {
@@ -190,7 +190,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
     }
 
     QVariantMap headers;
-    for(auto i : request.rawHeaderList()) {
+    for(auto& i : request.rawHeaderList()) {
         headers[i] = request.rawHeader(i);
     }
     qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
@@ -219,7 +219,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
             {
                 //打印响应头
                 QVariantMap headers;
-                for(auto i : reply->rawHeaderList()) {
+                for(auto& i : reply->rawHeaderList()) {
                     if(!request.rawHeader(i).isNull()) headers[i] = request.rawHeader(i);
                 }
                 qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
