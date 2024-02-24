@@ -20,7 +20,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButton_send_clicked();
 
     void on_comboBox_currentTextChanged(const QString &arg1);
 

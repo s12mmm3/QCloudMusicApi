@@ -531,7 +531,7 @@ QVariantMap Api::batch(QVariantMap query) {
 // 首页轮播图
 QVariantMap Api::banner(QVariantMap query) {
     const auto type0 = query.value("type", 0).toInt();
-    const QMap<int, QString> typeMap = {
+    const QMap<int, QString> typeMap {
         { 0, "pc" },
         { 1, "android" },
         { 2, "iphone" },

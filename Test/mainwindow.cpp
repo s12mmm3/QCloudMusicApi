@@ -63,12 +63,14 @@ QVariantMap MainWindow::invoke(const QString funName, const QVariantMap arg) {
     return ret;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_send_clicked()
 {
-    auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
-    ui->textEdit_2->setText(QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toJson(JsonFormat));
+    ui->textEdit_ret->clear();
 
-    QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_2->toPlainText().toUtf8()).toVariant().toMap();
+    auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
+    ui->textEdit_arg->setText(QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toJson(JsonFormat));
+
+    QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toVariant().toMap();
 
     //Api只能处理map类型的cookie
     if(arg.contains("cookie")) {
@@ -90,10 +92,10 @@ void MainWindow::on_pushButton_clicked()
     this->updateCookie(ret);
 
     if(ui->checkBox->isChecked()) {
-        ui->textEdit->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
+        ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
     }
     else {
-        ui->textEdit->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact));
+        ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact));
     }
 }
 
@@ -101,7 +103,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 {
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
-    ui->textEdit_2->setText(
+    ui->textEdit_arg->setText(
         QJsonDocument(config[arg1].toObject())
             .toJson(JsonFormat)
         );
@@ -111,6 +113,6 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 void MainWindow::on_checkBox_stateChanged(int arg1)
 {
     auto JsonFormat = arg1 ? QJsonDocument::Indented : QJsonDocument::Compact;
-    ui->textEdit->setText(QJsonDocument::fromJson(ui->textEdit->toPlainText().toUtf8()).toJson(JsonFormat));
+    ui->textEdit_ret->setText(QJsonDocument::fromJson(ui->textEdit_ret->toPlainText().toUtf8()).toJson(JsonFormat));
 }
 
