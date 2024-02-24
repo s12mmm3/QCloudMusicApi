@@ -7,11 +7,11 @@
 #include <QJsonDocument>
 #include <QRandomGenerator>
 #include <QCryptographicHash>
+#include <iostream>
 
 extern "C" {
-#include <openssl/rc4.h>
+#include "openssl/err.h"
 #include <openssl/evp.h>
-#include <openssl/rand.h>
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
 }
@@ -37,46 +37,30 @@ const static auto eapiKey = QStringLiteral("e82ckenh8dichen8");
  * @param iv 偏移量
  * @return QString 密文数据，如果加密失败则为空字符串
  */
-static QByteArray aesEncrypt(const QByteArray &plainData, const EVP_CIPHER *mode(), const QString &key, const QString &iv)
-{
-    // 创建加密上下文对象，并使用智能指针接管
-    QScopedPointer<EVP_CIPHER_CTX, QScopedPointerPodDeleter> ctx(EVP_CIPHER_CTX_new());
-    if (NULL == ctx.data())
-    {
-        return "";
+QByteArray aesEncrypt (const QByteArray &plainText, const EVP_CIPHER *mode(), const QByteArray &key, const QByteArray &iv, QString format = "base64") {
+    EVP_CIPHER_CTX *ctx;
+    int len;
+    unsigned char *ciphertext = new unsigned char[plainText.size() * 10];
+    int ciphertext_len;
+    if (! (ctx = EVP_CIPHER_CTX_new ())) ERR_print_errors_fp (stderr);
+    if (1 != EVP_EncryptInit_ex (ctx, mode (), NULL,
+                                (unsigned char *)key.constData(),
+                                (unsigned char *)iv.constData()))
+        ERR_print_errors_fp (stderr);
+    if (1 != EVP_EncryptUpdate (ctx, ciphertext, &len, (unsigned char *)plainText.constData(), plainText.size()))
+        ERR_print_errors_fp (stderr);
+    ciphertext_len = len;
+    if (1 != EVP_EncryptFinal_ex (ctx, ciphertext + len, &len)) ERR_print_errors_fp (stderr);
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free (ctx);
+
+    auto result = QByteArray((char *)ciphertext, ciphertext_len);
+    delete[] ciphertext;
+    if (format == "base64") {
+        return result.toBase64();
     }
-
-    // 将QString类型的输入参数转换为char*类型
-    const char *plainDataChar = plainData.constData();
-    const char *keyChar = key.toUtf8();
-    const char *ivChar = iv.toUtf8();
-
-    // 计算加密后的数据长度，至少要比明文数据长度大一个块大小
-    int outBufLen = plainData.size() + EVP_CIPHER_block_size(mode());
-    // 使用QByteArray代替动态分配的数组
-    QByteArray outBuf(outBufLen, '\0');
-
-    // 初始化加密上下文，设置加密算法、密钥、偏移量等参数
-    EVP_EncryptInit_ex(ctx.data(), mode(), NULL, (const unsigned char *)keyChar, (const unsigned char *)ivChar);
-    // 加密明文数据，将结果存放在outBuf中，更新outBufLen为输出长度
-    if (!EVP_EncryptUpdate(ctx.data(), (unsigned char *)outBuf.data(), &outBufLen, (const unsigned char *)plainDataChar, plainData.size()))
-    {
-        return "";
-    }
-
-    int tempLen = -1;
-    // 结束加密过程，处理剩余的数据，将结果追加到outBuf中，更新tempLen为输出长度
-    if (!EVP_EncryptFinal_ex(ctx.data(), (unsigned char *)outBuf.data() + outBufLen, &tempLen))
-    {
-        return "";
-    }
-
-    outBufLen += tempLen;
-
-    // 将outBuf中的密文数据转换为QByteArray类型
-    QByteArray cipherDataBytes = outBuf.left(outBufLen);
-
-    return cipherDataBytes;
+    return result.toHex().toUpper();
 }
 
 /**
@@ -199,8 +183,8 @@ QVariantMap weapi(QJsonDocument object) {
         secretKey[i] = base62.at(index).toLatin1();
     }
 
-    auto params = aesEncrypt(aesEncrypt(text.toUtf8(), EVP_aes_128_cbc, presetKey, iv).toBase64(),
-                             EVP_aes_128_cbc, secretKey, iv).toBase64();
+    auto params = aesEncrypt(aesEncrypt(text.toUtf8(), EVP_aes_128_cbc, presetKey.toUtf8().data(), iv.toUtf8().data(), "base64"),
+                             EVP_aes_128_cbc, secretKey.data(), iv.toUtf8().data(), "base64");
     std::reverse(secretKey.begin(), secretKey.end());
     auto encSecKey = rsaEncrypt(secretKey, publicKey).toHex();
 
@@ -213,7 +197,7 @@ QVariantMap weapi(QJsonDocument object) {
 QVariantMap linuxapi(QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Indented);
     return {
-        { QStringLiteral("eparams"), aesEncrypt(text.toUtf8(), EVP_aes_128_ecb, linuxapiKey, QStringLiteral("")).toHex().toUpper() }
+        { QStringLiteral("eparams"), aesEncrypt(text.toUtf8(), EVP_aes_128_ecb, linuxapiKey.toUtf8().data(), QStringLiteral("").toUtf8().data(), "hex") }
     };
 }
 
@@ -231,7 +215,7 @@ QVariantMap eapi(QString url, QJsonDocument object) {
                          + QStringLiteral("-36cd479b6b5-")
                          + digest;
     return {
-        { "params", aesEncrypt(data.toUtf8(), EVP_aes_128_ecb, eapiKey, QStringLiteral("")).toHex().toUpper() }
+        { "params", aesEncrypt(data.toUtf8(), EVP_aes_128_ecb, eapiKey.toUtf8().data(), QStringLiteral("").toUtf8().data(), "hex") }
     };
 }
 
