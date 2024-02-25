@@ -237,7 +237,7 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
             }
             if(options["crypto"].toString() == "eapi") {
                 answer["body"] = QJsonDocument::fromJson(
-                                     Crypto::aesDecrypt(body, EVP_aes_128_ecb, Crypto::eapiKey, "")
+                                     Crypto::aesDecrypt(body, EVP_aes_128_ecb, Crypto::eapiKey.toUtf8().data(), "")
                                      ).toVariant().toMap();
                 if(answer["body"].toMap().isEmpty()) {
                     answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
