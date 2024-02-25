@@ -63,7 +63,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_send">
+        <widget class="QPushButton" name="pushButton_tabApiTest_send">
          <property name="text">
           <string>Send</string>
          </property>

@@ -52,7 +52,7 @@ void TabApiTest::test_send(QTextEdit* textEdit_ret, QStringList functions) {
     textEdit_ret->setText(QJsonDocument::fromVariant(rets).toJson(QJsonDocument::Indented));
 }
 
-void TabApiTest::on_pushButton_send_clicked()
+void TabApiTest::on_pushButton_tabApiTest_send_clicked()
 {
     test_send(ui->textEdit_ret,
               ui->textEdit_arg->toPlainText().split("\n"));

@@ -21,7 +21,7 @@ public:
     void setFunctions(QStringList functions);
 
 private slots:
-    void on_pushButton_send_clicked();
+    void on_pushButton_tabApiTest_send_clicked();
 
     void test_send(QTextEdit* textEdit_ret, QStringList functions);
 
