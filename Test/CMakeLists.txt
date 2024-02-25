@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
     ${QRCS}
 )
 
+include_directories (./)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
