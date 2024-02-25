@@ -11,7 +11,7 @@
 
 #include "../QCloudMusicApi/module.h"
 #include "../QCloudMusicApi/util/index.h"
-// #include "../QCloudMusicApi/util/crypto.h"
+#include "../QCloudMusicApi/util/crypto.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -27,16 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     QFile file(":/config.json");
     file.open(QIODevice::ReadOnly);
     config = QJsonDocument::fromJson(file.readAll());
-
-    // []() {//测试aes加解密
-    //     QString body = "This is a text";
-    //     auto bodyEncrypt = Crypto::aesEncrypt(body.toUtf8(), EVP_aes_128_ecb, Crypto::eapiKey, "");
-    //     auto bodyDecrypt = Crypto::aesDecrypt(bodyEncrypt, EVP_aes_128_ecb, Crypto::eapiKey, "");
-    //     qDebug() << body;
-    //     qDebug() << bodyEncrypt;
-    //     qDebug() << bodyDecrypt;
-    //     qDebug() << (body == bodyDecrypt);
-    // }();
 }
 
 MainWindow::~MainWindow()
@@ -171,5 +161,29 @@ void MainWindow::on_pushButton_weapi_test_send_clicked()
                   "artist_detail",
                   "user_detail"
               });
+}
+
+
+void MainWindow::on_pushButton_aes_encrypt_clicked()
+{
+    auto ret = Crypto::aesEncrypt(ui->textEdit_aes_arg->toPlainText().toUtf8(),
+                                  ui->radioButton_ecb->isChecked() ? EVP_aes_128_ecb : EVP_aes_128_cbc,
+                                  ui->lineEdit_aes_key->text().toUtf8(),
+                                  ui->lineEdit_aes_iv->text().toUtf8(),
+                                  ui->radioButton_base64->isChecked() ? "base64" : "hex");
+    ui->textEdit_aes_ret->setText(ret);
+}
+
+
+void MainWindow::on_pushButton_aes_decrypt_clicked()
+{
+    auto arg = ui->radioButton_base64->isChecked()
+                   ? QByteArray::fromBase64(ui->textEdit_aes_arg->toPlainText().toUtf8())
+                   : QByteArray::fromHex(ui->textEdit_aes_arg->toPlainText().toLower().toUtf8());
+    auto ret = Crypto::aesDecrypt(arg,
+                                  ui->radioButton_ecb->isChecked() ? EVP_aes_128_ecb : EVP_aes_128_cbc,
+                                  ui->lineEdit_aes_key->text().toUtf8(),
+                                  ui->lineEdit_aes_iv->text().toUtf8());
+    ui->textEdit_aes_ret->setText(ret);
 }
 
