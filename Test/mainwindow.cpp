@@ -11,7 +11,6 @@
 
 #include "../QCloudMusicApi/module.h"
 #include "../QCloudMusicApi/util/index.h"
-#include "../QCloudMusicApi/util/crypto.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -161,35 +160,5 @@ void MainWindow::on_pushButton_weapi_test_send_clicked()
                   "artist_detail",
                   "user_detail"
               });
-}
-
-
-void MainWindow::on_pushButton_aes_encrypt_clicked()
-{
-    auto arg = ui->textEdit_aes_arg->toPlainText().toUtf8();
-    auto mode = ui->radioButton_ecb->isChecked() ? EVP_aes_128_ecb : EVP_aes_128_cbc;
-    auto key = ui->lineEdit_aes_key->text().toUtf8();
-    auto iv = ui->lineEdit_aes_iv->text().toUtf8();
-    auto ret = Crypto::aesEncrypt(arg,
-                                  mode,
-                                  key,
-                                  iv,
-                                  ui->radioButton_base64->isChecked() ? "base64" : "hex");
-    ui->textEdit_aes_ret->setText(ret);
-}
-
-
-void MainWindow::on_pushButton_aes_decrypt_clicked()
-{
-    auto arg = ui->radioButton_base64->isChecked()
-                   ? QByteArray::fromBase64(ui->textEdit_aes_arg->toPlainText().toUtf8())
-                   : QByteArray::fromHex(ui->textEdit_aes_arg->toPlainText().toLower().toUtf8());
-    auto mode = ui->radioButton_ecb->isChecked() ? EVP_aes_128_ecb : EVP_aes_128_cbc;
-    auto key = ui->lineEdit_aes_key->text().toUtf8();
-    auto iv = ui->lineEdit_aes_iv->text().toUtf8();
-    auto ret = Crypto::aesDecrypt(arg, mode,
-                                  key,
-                                  iv);
-    ui->textEdit_aes_ret->setText(ret);
 }
 

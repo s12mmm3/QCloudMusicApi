@@ -33,10 +33,6 @@ private slots:
 
     void on_pushButton_weapi_test_send_clicked();
 
-    void on_pushButton_aes_encrypt_clicked();
-
-    void on_pushButton_aes_decrypt_clicked();
-
 private:
 
     /**
