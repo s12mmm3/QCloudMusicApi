@@ -27,12 +27,6 @@ private slots:
 
     void on_checkBox_stateChanged(int arg1);
 
-    void on_pushButton_api_test_send_clicked();
-
-    void on_pushButton_eapi_test_send_clicked();
-
-    void on_pushButton_weapi_test_send_clicked();
-
 private:
 
     /**
@@ -49,8 +43,6 @@ private:
      * @return void
      */
     void updateCookie(const QVariantMap ret);
-
-    void test_send(QTextEdit* textEdit_ret, QStringList functions);
 
     Ui::MainWindow *ui;
     NeteaseCloudMusicApi api;

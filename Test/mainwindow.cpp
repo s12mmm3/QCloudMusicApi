@@ -26,6 +26,22 @@ MainWindow::MainWindow(QWidget *parent)
     QFile file(":/config.json");
     file.open(QIODevice::ReadOnly);
     config = QJsonDocument::fromJson(file.readAll());
+
+    ui->tabApiTest->setFunctions({
+        "banner",
+        "lyric",
+        "toplist"
+    });
+    ui->tabEapiTest->setFunctions({
+        "lyric_new",
+        "song_download_url",
+        "song_url_v1"
+    });
+    ui->tabWeapiTest->setFunctions({
+        "album",
+        "artist_detail",
+        "user_detail"
+    });
 }
 
 MainWindow::~MainWindow()
@@ -104,61 +120,5 @@ void MainWindow::on_checkBox_stateChanged(int arg1)
 {
     auto JsonFormat = arg1 ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_ret->setText(QJsonDocument::fromJson(ui->textEdit_ret->toPlainText().toUtf8()).toJson(JsonFormat));
-}
-
-void MainWindow::test_send(QTextEdit* textEdit_ret, QStringList functions) {
-    textEdit_ret->clear();
-    QVariantMap rets;
-    QMutex mutex;
-    auto invoke = [](const QString funName, const QVariantMap arg) {
-        NeteaseCloudMusicApi api;
-        QVariantMap ret;
-        QMetaObject::invokeMethod(&api, funName.toUtf8()
-                                  , Qt::DirectConnection
-                                  , Q_RETURN_ARG(QVariantMap, ret)
-                                  , Q_ARG(QVariantMap, arg));
-        return ret;
-    };
-    QtConcurrent::map(functions, [&](auto function) {
-        QVariantMap arg = config[function].toObject().toVariantMap();
-        QVariantMap ret = invoke(function, arg);
-
-        mutex.lock();
-        rets[function] = QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact);
-        mutex.unlock();
-    }).waitForFinished();
-    textEdit_ret->setText(QJsonDocument::fromVariant(rets).toJson(QJsonDocument::Indented));
-}
-
-void MainWindow::on_pushButton_api_test_send_clicked()
-{
-    test_send(ui->textEdit_api_test_ret,
-              {
-                  "banner",
-                  "lyric",
-                  "toplist"
-              });
-}
-
-
-void MainWindow::on_pushButton_eapi_test_send_clicked()
-{
-    test_send(ui->textEdit_eapi_test_ret,
-              {
-               "lyric_new",
-               "song_download_url",
-               "song_url_v1"
-              });
-}
-
-
-void MainWindow::on_pushButton_weapi_test_send_clicked()
-{
-    test_send(ui->textEdit_weapi_test_ret,
-              {
-                  "album",
-                  "artist_detail",
-                  "user_detail"
-              });
 }
 
