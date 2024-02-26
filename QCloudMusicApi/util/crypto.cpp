@@ -23,13 +23,14 @@ extern "C" {
  * @param format 输出格式
  * @return QString 密文数据，如果加密失败则为空字符串
  */
-QByteArray Crypto::aesEncrypt (const QByteArray &plainText, const EVP_CIPHER *mode(), const QByteArray &key, const QByteArray &iv, QString format) {
+QByteArray Crypto::aesEncrypt (const QByteArray &plainText, const QString mode, const QByteArray &key, const QByteArray &iv, QString format) {
+    auto cipher = (mode == "cbc") ? EVP_aes_128_cbc : /*ecb*/ EVP_aes_128_ecb;
     EVP_CIPHER_CTX *ctx;
     int len;
     unsigned char *ciphertext = new unsigned char[plainText.size() * 10];
     int ciphertext_len;
     if (! (ctx = EVP_CIPHER_CTX_new ())) ERR_print_errors_fp (stderr);
-    if (1 != EVP_EncryptInit_ex (ctx, mode (), NULL,
+    if (1 != EVP_EncryptInit_ex (ctx, cipher (), NULL,
                                 (unsigned char *)key.constData(),
                                 (unsigned char *)iv.constData()))
         ERR_print_errors_fp (stderr);
@@ -57,8 +58,9 @@ QByteArray Crypto::aesEncrypt (const QByteArray &plainText, const EVP_CIPHER *mo
  * @param iv 偏移量
  * @return QString 明文数据，如果解密失败则为空字符串
  */
-QByteArray Crypto::aesDecrypt(const QByteArray &cipherText, const EVP_CIPHER *mode(), const QByteArray &key, const QByteArray &iv)
+QByteArray Crypto::aesDecrypt(const QByteArray &cipherText, const QString mode, const QByteArray &key, const QByteArray &iv)
 {
+    auto cipher = (mode == "cbc") ? EVP_aes_128_cbc : /*ecb*/ EVP_aes_128_ecb;
     EVP_CIPHER_CTX *ctx;
 
     int len;
@@ -67,7 +69,7 @@ QByteArray Crypto::aesDecrypt(const QByteArray &cipherText, const EVP_CIPHER *mo
 
     if (! (ctx = EVP_CIPHER_CTX_new ())) ERR_print_errors_fp (stderr);
 
-    if (1 != EVP_DecryptInit_ex (ctx, mode (), NULL,
+    if (1 != EVP_DecryptInit_ex (ctx, cipher (), NULL,
                                 (unsigned char *)key.constData(),
                                 (unsigned char *)iv.constData()))
         ERR_print_errors_fp (stderr);
@@ -149,18 +151,14 @@ QVariantMap Crypto::weapi(QJsonDocument object) {
     QByteArray secretKey;
     secretKey.resize(16);
 
-    // 生成随机字节并映射到base62字符的ASCII码
     for (int i = 0; i < secretKey.size(); i++) {
-        // 生成一个随机的quint32值取其最低8位作为字节值
         quint8 byte = QRandomGenerator::global()->generate() & 0xFF;
-        // 对62取余得到base62字符的索引
         int index = byte % base62.length();
-        // 获取base62字符并转换为ASCII码存入结果数组
         secretKey[i] = base62.at(index).toLatin1();
     }
 
-    auto params = aesEncrypt(aesEncrypt(text.toUtf8(), EVP_aes_128_cbc, presetKey.toUtf8().data(), iv.toUtf8().data(), "base64"),
-                             EVP_aes_128_cbc, secretKey.data(), iv.toUtf8().data(), "base64");
+    auto params = aesEncrypt(aesEncrypt(text.toUtf8(), "cbc", presetKey.toUtf8().data(), iv.toUtf8().data(), "base64"),
+                             "cbc", secretKey.data(), iv.toUtf8().data(), "base64");
     std::reverse(secretKey.begin(), secretKey.end());
     auto encSecKey = rsaEncrypt(secretKey, publicKey).toHex();
 
@@ -173,7 +171,7 @@ QVariantMap Crypto::weapi(QJsonDocument object) {
 QVariantMap Crypto::linuxapi(QJsonDocument object) {
     const QString text = object.toJson(QJsonDocument::Indented);
     return {
-        { QStringLiteral("eparams"), aesEncrypt(text.toUtf8(), EVP_aes_128_ecb, linuxapiKey.toUtf8().data(), QStringLiteral("").toUtf8().data(), "hex") }
+        { QStringLiteral("eparams"), aesEncrypt(text.toUtf8(), "ecb", linuxapiKey.toUtf8().data(), QStringLiteral("").toUtf8().data(), "hex") }
     };
 }
 
@@ -191,10 +189,10 @@ QVariantMap Crypto::eapi(QString url, QJsonDocument object) {
                          + QStringLiteral("-36cd479b6b5-")
                          + digest;
     return {
-        { "params", aesEncrypt(data.toUtf8(), EVP_aes_128_ecb, eapiKey.toUtf8().data(), QStringLiteral("").toUtf8().data(), "hex") }
+        { "params", aesEncrypt(data.toUtf8(), "ecb", eapiKey.toUtf8().data(), QStringLiteral("").toUtf8().data(), "hex") }
     };
 }
 
 QByteArray Crypto::decrypt(QByteArray cipherBuffer) {
-    return aesDecrypt(cipherBuffer, EVP_aes_128_ecb, eapiKey.toUtf8().data(), "");
+    return aesDecrypt(cipherBuffer, "ecb", eapiKey.toUtf8().data(), "");
 }

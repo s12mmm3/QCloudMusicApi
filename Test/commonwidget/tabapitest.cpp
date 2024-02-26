@@ -1,6 +1,6 @@
 #include "tabapitest.h"
 #include "ui_tabapitest.h"
-#include "../QCloudMusicApi/module.h"
+#include "../../QCloudMusicApi/module.h"
 
 #include <QMutex>
 #include <QJsonDocument>
@@ -28,8 +28,9 @@ void TabApiTest::setFunctions(QStringList functions)
     ui->textEdit_arg->setText(functions.join("\n"));
 }
 
-void TabApiTest::test_send(QTextEdit* textEdit_ret, QStringList functions) {
-    textEdit_ret->clear();
+void TabApiTest::on_pushButton_tabApiTest_send_clicked() {
+    QStringList functions = ui->textEdit_arg->toPlainText().split("\n");
+    ui->textEdit_ret->clear();
     QVariantMap rets;
     QMutex mutex;
     auto invoke = [](const QString funName, const QVariantMap arg) {
@@ -49,12 +50,6 @@ void TabApiTest::test_send(QTextEdit* textEdit_ret, QStringList functions) {
         rets[function] = QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact);
         mutex.unlock();
     }).waitForFinished();
-    textEdit_ret->setText(QJsonDocument::fromVariant(rets).toJson(QJsonDocument::Indented));
-}
-
-void TabApiTest::on_pushButton_tabApiTest_send_clicked()
-{
-    test_send(ui->textEdit_ret,
-              ui->textEdit_arg->toPlainText().split("\n"));
+    ui->textEdit_ret->setText(QJsonDocument::fromVariant(rets).toJson(QJsonDocument::Indented));
 }
 

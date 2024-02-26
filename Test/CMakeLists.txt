@@ -16,14 +16,16 @@ FILE(GLOB HEADERS ./*.h)
 FILE(GLOB SOURCES ./*.cpp)
 FILE(GLOB UIS ./*.ui)
 FILE(GLOB QRCS ./*.qrc)
+FILE(GLOB COMMONWIDGET ./commonwidget/*)
 set(PROJECT_SOURCES
     ${HEADERS}
     ${SOURCES}
     ${UIS}
     ${QRCS}
+    ${COMMONWIDGET}
 )
 
-include_directories (./)
+include_directories (./commonwidget)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}

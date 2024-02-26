@@ -1,6 +1,6 @@
 #include "tabrsa.h"
 #include "ui_tabrsa.h"
-#include "../QCloudMusicApi/util/crypto.h"
+#include "../../QCloudMusicApi/util/crypto.h"
 
 
 TabRsa::TabRsa(QWidget *parent) :

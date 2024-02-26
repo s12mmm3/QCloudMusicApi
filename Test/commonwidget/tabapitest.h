@@ -2,7 +2,6 @@
 #define TABAPITEST_H
 
 #include <QJsonDocument>
-#include <QTextEdit>
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -22,8 +21,6 @@ public:
 
 private slots:
     void on_pushButton_tabApiTest_send_clicked();
-
-    void test_send(QTextEdit* textEdit_ret, QStringList functions);
 
 private:
     Ui::TabApiTest *ui;

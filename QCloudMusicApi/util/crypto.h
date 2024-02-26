@@ -23,12 +23,6 @@
 #include <QByteArray>
 #include <QVariantMap>
 
-extern "C" {
-#include <openssl/evp.h>
-#include <openssl/rsa.h>
-#include <openssl/pem.h>
-}
-
 class QCLOUDMUSICAPI_EXPORT Crypto {
 public:
     inline const QString static iv = QStringLiteral("0102030405060708");
@@ -42,9 +36,9 @@ public:
         );
     inline const QString static eapiKey = QStringLiteral("e82ckenh8dichen8");
 
-    static QByteArray aesEncrypt (const QByteArray &plainText, const EVP_CIPHER *mode(), const QByteArray &key, const QByteArray &iv, QString format = "base64");
+    static QByteArray aesEncrypt (const QByteArray &plainText, const QString mode, const QByteArray &key, const QByteArray &iv, QString format = "base64");
 
-    static QByteArray aesDecrypt(const QByteArray &cipherText, const EVP_CIPHER *mode(), const QByteArray &key, const QByteArray &iv);
+    static QByteArray aesDecrypt(const QByteArray &cipherText, const QString mode, const QByteArray &key, const QByteArray &iv);
 
     static QByteArray rsaEncrypt (QString plainText, const QString& strPubKey);
 
