@@ -16,10 +16,10 @@ TabAes::~TabAes()
 
 void TabAes::on_pushButton_encrypt_clicked()
 {
-    auto arg = ui->textEdit_arg->toPlainText();
-    auto mode = ui->radioButton_ecb->isChecked() ? EVP_aes_128_ecb : EVP_aes_128_cbc;
-    auto key = ui->lineEdit_key->text();
-    auto iv = ui->lineEdit_iv->text();
+    auto arg = ui->textEdit_arg->toPlainText().toUtf8();
+    auto mode = ui->radioButton_ecb->isChecked() ? "ecb" : "cbc";
+    auto key = ui->lineEdit_key->text().toUtf8();
+    auto iv = ui->lineEdit_iv->text().toUtf8();
     auto ret = Crypto::aesEncrypt(arg,
                                   mode,
                                   key,
@@ -31,12 +31,12 @@ void TabAes::on_pushButton_encrypt_clicked()
 
 void TabAes::on_pushButton_decrypt_clicked()
 {
-    QString arg = ui->radioButton_base64->isChecked()
+    auto arg = ui->radioButton_base64->isChecked()
                    ? QByteArray::fromBase64(ui->textEdit_arg->toPlainText().toUtf8())
                    : QByteArray::fromHex(ui->textEdit_arg->toPlainText().toLower().toUtf8());
-    auto mode = ui->radioButton_ecb->isChecked() ? EVP_aes_128_ecb : EVP_aes_128_cbc;
-    auto key = ui->lineEdit_key->text();
-    auto iv = ui->lineEdit_iv->text();
+    auto mode = ui->radioButton_ecb->isChecked() ? "ecb" : "cbc";
+    auto key = ui->lineEdit_key->text().toUtf8();
+    auto iv = ui->lineEdit_iv->text().toUtf8();
     auto ret = Crypto::aesDecrypt(arg, mode,
                                   key,
                                   iv);
