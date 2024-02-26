@@ -531,7 +531,7 @@ QVariantMap Api::batch(QVariantMap query) {
 // 首页轮播图
 QVariantMap Api::banner(QVariantMap query) {
     const auto type0 = query.value("type", 0).toInt();
-    const QMap<int, QString> typeMap = {
+    const QMap<int, QString> typeMap {
         { 0, "pc" },
         { 1, "android" },
         { 2, "iphone" },
@@ -1430,7 +1430,7 @@ QVariantMap Api::dj_sub(QVariantMap query) {
     return request(
         POST,
         "https://music.163.com/weapi/djradio/" + query["t"].toString(),
-        {},
+        data,
         {
             { "crypto", "weapi" },
             _PARAM
@@ -2551,7 +2551,7 @@ QVariantMap Api::user_cloud_del(QVariantMap query) {
 
 // 云盘数据详情
 QVariantMap Api::user_cloud_detail(QVariantMap query) {
-    const auto id = query["id"].toString().replace("\s", "").split(",");
+    const auto id = query["id"].toString().replace("\\s", "").split(",");
     const QVariantMap data {
         { "songIds", id }
     };
