@@ -28,19 +28,19 @@ jobs:
           # - qt_version: 5.15.2
           #   qt_arch: win32_mingw81
           #   qt_tools: 'tools_mingw,qt.tools.win32_mingw810'
-          # - qt_version: 5.15.2
-          #   qt_arch: win64_mingw81
-          #   qt_tools: 'tools_mingw,qt.tools.win64_mingw810'
+          - qt_version: 5.15.2
+            qt_arch: win64_mingw81
+            qt_tools: 'tools_mingw,qt.tools.win64_mingw810'
           # # 6.2.4
           # - qt_version: 6.2.4
           #   qt_arch: win64_mingw
           #   qt_tools: 'tools_mingw1310'
           # 6.6.0
-          - qt_version: 6.6.0
-            qt_arch: win64_mingw
-            arch: "-m64"
-            qt_tools: 'tools_mingw1310'
-            modules: 'qthttpserver qtwebsockets'
+          # - qt_version: 6.6.0
+          #   qt_arch: win64_mingw
+          #   arch: "-m64"
+          #   qt_tools: 'tools_mingw1310'
+          #   modules: 'qthttpserver qtwebsockets'
     env:
       BUILD_TYPE: Release
       BUILD_PATH: build
