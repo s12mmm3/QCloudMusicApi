@@ -50,6 +50,11 @@
         <string>RSA</string>
        </attribute>
       </widget>
+      <widget class="TabLogin_cellphone" name="tabLogin_cellphone">
+       <attribute name="title">
+        <string>login_cellphone</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -87,6 +92,11 @@
    <class>TabCommon</class>
    <extends>QWidget</extends>
    <header>tabcommon.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TabLogin_cellphone</class>
+   <extends>QWidget</extends>
+   <header>tabLogin_cellphone.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
