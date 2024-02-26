@@ -1,3 +1,6 @@
 [submodule "QCloudMusicApi/openssl-cmake"]
 	path = QCloudMusicApi/openssl-cmake
 	url = https://github.com/janbar/openssl-cmake.git
+[submodule "Test/libqrencode"]
+	path = Test/libqrencode
+	url = https://github.com/fukuchi/libqrencode.git

@@ -55,6 +55,11 @@
         <string>login_cellphone</string>
        </attribute>
       </widget>
+      <widget class="TabLogin_qr" name="tabLogin_qr">
+       <attribute name="title">
+        <string>login_qr</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -97,6 +102,11 @@
    <class>TabLogin_cellphone</class>
    <extends>QWidget</extends>
    <header>tabLogin_cellphone.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TabLogin_qr</class>
+   <extends>QWidget</extends>
+   <header>tabLogin_qr.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
