@@ -101,12 +101,12 @@
   <customwidget>
    <class>TabLogin_cellphone</class>
    <extends>QWidget</extends>
-   <header>tabLogin_cellphone.h</header>
+   <header>tablogin_cellphone.h</header>
   </customwidget>
   <customwidget>
    <class>TabLogin_qr</class>
    <extends>QWidget</extends>
-   <header>tabLogin_qr.h</header>
+   <header>tablogin_qr.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
