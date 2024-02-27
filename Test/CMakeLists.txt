@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Concurrent)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Concurrent)
 
-set(WITH_TOOLS OFF)
+set(WITH_TOOLS OFF CACHE BOOL "Build utility tools" FORCE)
 add_subdirectory(
     ${CMAKE_CURRENT_SOURCE_DIR}/libqrencode
 )
