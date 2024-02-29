@@ -34,9 +34,10 @@ private slots:
 
     void on_pushButton_login_qr_check_clicked();
 
+    void on_pushButton_login_qr_key_clicked();
+
 private:
     Ui::TabLogin_qr *ui;
-    QString unikey;
 };
 
 #endif // TABLOGIN_QR_H
