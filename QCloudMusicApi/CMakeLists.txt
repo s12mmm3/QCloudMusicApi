@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Provides dependency openssl
+option( WITH_APPS "Build applications" OFF )
 #find_package(OpenSSL QUIET)
 if(NOT OPENSSL_FOUND)
     add_subdirectory(
@@ -47,4 +48,7 @@ endif()
 set(PUBLIC_HEADERS
     module.h
 )
-install(FILES ${PUBLIC_HEADERS} DESTINATION ${CMAKE_HEADER_OUTPUT_DIRECTORY})
+
+if(MUSICAPI_SETOUTPUTPATH)
+    install(FILES ${PUBLIC_HEADERS} DESTINATION ${CMAKE_HEADER_OUTPUT_DIRECTORY})
+endif()
