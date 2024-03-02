@@ -19,6 +19,9 @@
 #include "config.h"
 #include "index.h"
 
+using namespace QCloudMusicApiProject;
+
+namespace QCloudMusicApiProject {
 namespace Request {
 
 QString chooseUserAgent(QString ua = "") {
@@ -272,5 +275,6 @@ QVariantMap createRequest(QNetworkAccessManager::Operation method,
         reply = manager.get(request);
     }
     return getResult(reply);
+}
 }
 }

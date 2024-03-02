@@ -13,6 +13,7 @@
 #include "../../QCloudMusicApi/module.h"
 #include "../../QCloudMusicApi/util/index.h"
 
+using namespace QCloudMusicApiProject;
 TabCommon::TabCommon(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabCommon)

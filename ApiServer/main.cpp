@@ -9,6 +9,7 @@
 #include "../QCloudMusicApi/module.h"
 #include "../QCloudMusicApi/util/index.h"
 
+using namespace QCloudMusicApiProject;
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);

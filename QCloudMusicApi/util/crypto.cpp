@@ -14,6 +14,7 @@ extern "C" {
 #include <openssl/pem.h>
 }
 
+using namespace QCloudMusicApiProject;
 /**
  * @brief 使用AES算法加密数据的函数
  * @param plainText 明文数据

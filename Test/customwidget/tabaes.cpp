@@ -2,6 +2,7 @@
 #include "ui_tabaes.h"
 #include "../../QCloudMusicApi/util/crypto.h"
 
+using namespace QCloudMusicApiProject;
 TabAes::TabAes(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabAes)
