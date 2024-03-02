@@ -19,10 +19,10 @@
 { "realIP", query["realIP"] } \
 
 using Api = NeteaseCloudMusicApi;
-const static auto &request = Request::createRequest;
+const static auto &request = QCloudMusicApiProject::Request::createRequest;
 const static auto &POST = QNetworkAccessManager::PostOperation;
 const static auto &GET = QNetworkAccessManager::GetOperation;
-const static auto &resourceTypeMap = Config::resourceTypeMap;
+const static auto &resourceTypeMap = QCloudMusicApiProject::Config::resourceTypeMap;
 
 // 初始化名字
 QVariantMap Api::activate_init_profile(QVariantMap query) {
