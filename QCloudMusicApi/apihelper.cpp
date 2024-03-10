@@ -8,7 +8,7 @@ ApiHelper::ApiHelper(QObject *parent)
     : QObject{parent}
 {}
 
-void ApiHelper::beforeInvoke(QVariantMap arg)
+void ApiHelper::beforeInvoke(QVariantMap& arg)
 {
     //Api只能处理map类型的cookie
     if(arg.contains("cookie")) {
@@ -26,7 +26,7 @@ void ApiHelper::beforeInvoke(QVariantMap arg)
     }
 }
 
-void ApiHelper::afterInvoke(QVariantMap ret)
+void ApiHelper::afterInvoke(QVariantMap& ret)
 {
     auto newCookie = Index::stringToMap(ret["cookie"].toString());
     if (!newCookie.isEmpty()) {

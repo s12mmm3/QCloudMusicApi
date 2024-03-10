@@ -67,8 +67,8 @@ public:
     void set_cookie(QString cookie);
 
 private:
-    void beforeInvoke(QVariantMap arg);
-    void afterInvoke(QVariantMap ret);
+    void beforeInvoke(QVariantMap& arg);
+    void afterInvoke(QVariantMap& ret);
 
 private:
     NeteaseCloudMusicApi api;

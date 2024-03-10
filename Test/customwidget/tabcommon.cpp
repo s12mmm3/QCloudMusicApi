@@ -9,11 +9,6 @@
 #include "tabcommon.h"
 #include "ui_tabcommon.h"
 
-
-#include "../../QCloudMusicApi/module.h"
-#include "../../QCloudMusicApi/util/index.h"
-
-using namespace QCloudMusicApiProject;
 TabCommon::TabCommon(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabCommon)
@@ -36,27 +31,6 @@ TabCommon::~TabCommon()
     delete ui;
 }
 
-void TabCommon::updateCookie(const QVariantMap ret) {
-    auto newCookie = Index::stringToMap(ret["cookie"].toString());
-    if (!newCookie.isEmpty()) {
-        cookie = Index::mergeMap(cookie, newCookie);
-    }
-    auto token = ret["body"].toMap()["token"].toString();
-    if (!token.isEmpty()) {
-        cookie["MUSIC_A"] = token;
-    }
-}
-
-QVariantMap TabCommon::invoke(const QString funName, const QVariantMap arg) {
-    NeteaseCloudMusicApi api;
-    QVariantMap ret;
-    QMetaObject::invokeMethod(&api, funName.toUtf8()
-                              , Qt::DirectConnection
-                              , Q_RETURN_ARG(QVariantMap, ret)
-                              , Q_ARG(QVariantMap, arg));
-    return ret;
-}
-
 void TabCommon::on_pushButton_send_clicked()
 {
     ui->textEdit_ret->clear();
@@ -66,24 +40,7 @@ void TabCommon::on_pushButton_send_clicked()
 
     QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toVariant().toMap();
 
-    //Api只能处理map类型的cookie
-    if(arg.contains("cookie")) {
-        //如果传入新的cookie，替换原有的cookie
-        if(arg["cookie"].userType() == QMetaType::QVariantMap) {
-            cookie = arg["cookie"].toMap()/* + " SameSite=None; Secure"*/;
-        }
-        else if(arg["cookie"].userType() == QMetaType::QString) {
-            cookie = Index::stringToMap(arg["cookie"].toString());
-        }
-    }
-    else {
-        //使用存储的cookie
-        arg["cookie"] = arg.value("cookie", cookie);
-    }
-
-    QVariantMap ret = this->invoke(ui->comboBox->currentText(), arg);
-
-    this->updateCookie(ret);
+    QVariantMap ret = helper.invoke(ui->comboBox->currentText(), arg);
 
     if(ui->checkBox->isChecked()) {
         ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
