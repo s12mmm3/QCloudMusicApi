@@ -1,7 +1,7 @@
 ﻿#ifndef INDEX_H
 #define INDEX_H
 
-#include "util_global.h"
+#include "../global.h"
 
 #include <QNetworkCookie>
 #include <QVariantMap>

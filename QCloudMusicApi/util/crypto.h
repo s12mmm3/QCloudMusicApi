@@ -1,7 +1,7 @@
 ﻿#ifndef CRYPTO_H
 #define CRYPTO_H
 
-#include "util_global.h"
+#include "../global.h"
 
 #include <QByteArray>
 #include <QVariantMap>
