@@ -22,7 +22,7 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
     }
     else {
         //使用存储的cookie
-        arg["cookie"] = arg.value("cookie", cookie());
+        arg["cookie"] = cookie();
     }
 }
 
