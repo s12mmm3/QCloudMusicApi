@@ -36,7 +36,6 @@ signals:
 private:
     Ui::TabCommon *ui;
     ApiHelper helper;
-    QJsonDocument config;
 };
 
 #endif // TABCOMMON_H

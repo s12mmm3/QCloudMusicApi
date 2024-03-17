@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QtConcurrent>
 
+#include "../servicelocator.h"
 #include "tabcommon.h"
 #include "ui_tabcommon.h"
 
@@ -19,11 +20,6 @@ TabCommon::TabCommon(QWidget *parent) :
     for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
         ui->comboBox->addItem(api.metaObject()->method(i).name());
     }
-
-    //读取配置
-    QFile file(":/config.json");
-    file.open(QIODevice::ReadOnly);
-    config = QJsonDocument::fromJson(file.readAll());
 
     connect(this, &TabCommon::invoked, this, &TabCommon::update);
 }
@@ -56,7 +52,7 @@ void TabCommon::on_comboBox_currentTextChanged(const QString &arg1)
 {
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_arg->setText(
-        QJsonDocument(config[arg1].toObject())
+        QJsonDocument(ServiceLocator::config()[arg1].toObject())
             .toJson(JsonFormat)
         );
 }

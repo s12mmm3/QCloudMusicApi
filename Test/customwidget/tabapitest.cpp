@@ -1,3 +1,4 @@
+#include "../servicelocator.h"
 #include "tabapitest.h"
 #include "ui_tabapitest.h"
 #include "../../QCloudMusicApi/module.h"
@@ -12,10 +13,6 @@ TabApiTest::TabApiTest(QWidget *parent) :
     ui(new Ui::TabApiTest)
 {
     ui->setupUi(this);
-    //读取配置
-    QFile file(":/config.json");
-    file.open(QIODevice::ReadOnly);
-    config = QJsonDocument::fromJson(file.readAll());
 }
 
 TabApiTest::~TabApiTest()
@@ -43,7 +40,7 @@ void TabApiTest::on_pushButton_tabApiTest_send_clicked() {
         return ret;
     };
     QtConcurrent::map(functions, [&](auto function) {
-        QVariantMap arg = config[function].toObject().toVariantMap();
+        QVariantMap arg = ServiceLocator::config()[function].toObject().toVariantMap();
         QVariantMap ret = invoke(function, arg);
 
         mutex.lock();
