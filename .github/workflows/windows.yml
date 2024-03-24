@@ -90,6 +90,7 @@ jobs:
         shell: pwsh
         env:
           path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
+        continue-on-error: true
         run: |
           # Tree ${{ env.path }} /F
 
