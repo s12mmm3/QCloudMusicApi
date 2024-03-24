@@ -97,10 +97,10 @@ jobs:
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/QCloudMusicApi.dll
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/Test.exe
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/ApiServer.exe
+
           # 打包zip
           Compress-Archive -Path ${{ env.path }}/* ${{ env.archiveName }}
           # Tree ${{ env.path }} /F
-          ls
       # tag 查询github-Release
       # 上传artifacts          
       - uses: actions/upload-artifact@v4
