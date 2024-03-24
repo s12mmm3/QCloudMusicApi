@@ -34,7 +34,7 @@ jobs:
       assume: --release
       qt_target: 'desktop'
       qt_host: 'mac'
-      archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
+      archiveName: 'QCloudMusicApi-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
     # 步骤
     steps:
       # 安装Qt
@@ -61,7 +61,7 @@ jobs:
       - name: CMake Build
         id: build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} -B ${{ env.BUILD_PATH }}
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
           ls
       # CMake Install
       - name: CMake Install
