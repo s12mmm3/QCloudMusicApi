@@ -35,7 +35,7 @@ jobs:
             qt_arch: win64_msvc2019_64
             arch: x64
           # 6.6.0
-          - qt_version: 6.6.0
+          - qt_version: 6.6.2
             qt_arch: win64_msvc2019_64
             arch: x64
             modules: 'qthttpserver qtwebsockets'
@@ -99,7 +99,7 @@ jobs:
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime bin/ApiServer.exe
           # 打包zip
           Compress-Archive -Path * ${{ env.archiveName }}
-          Tree ${{ env.BUILD_TYPE }} /F
+          Tree /F
           ls
       # tag 查询github-Release
       # 上传artifacts          
