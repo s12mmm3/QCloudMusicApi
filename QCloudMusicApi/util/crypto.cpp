@@ -15,6 +15,18 @@ extern "C" {
 }
 
 using namespace QCloudMusicApiProject;
+
+const QString Crypto::iv = QStringLiteral("0102030405060708");
+const QString Crypto::presetKey = QStringLiteral("0CoJUm6Qyw8W8jud");
+const QString Crypto::linuxapiKey = QStringLiteral("rFgB&h#%2?^eDg:Q");
+const QString Crypto::base62 = QStringLiteral("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+const QString Crypto::publicKey = QStringLiteral(
+    "-----BEGIN PUBLIC KEY-----\n"
+    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB"
+    "\n-----END PUBLIC KEY-----"
+    );
+
+const QString Crypto::eapiKey = QStringLiteral("e82ckenh8dichen8");
 /**
  * @brief 使用AES算法加密数据的函数
  * @param plainText 明文数据

@@ -35,7 +35,7 @@ jobs:
             qt_arch: win64_msvc2019_64
             arch: x64
           # 6.6.0
-          - qt_version: 6.6.0
+          - qt_version: 6.6.2
             qt_arch: win64_msvc2019_64
             arch: x64
             modules: 'qthttpserver qtwebsockets'
@@ -46,7 +46,7 @@ jobs:
       qt_target: 'desktop'
       qt_host: 'windows'
       # 压缩包名称
-      archiveName: 'QCloudMusicApi-${{ github.ref_name }}-${{ matrix.qt_version }}-${{ matrix.qt_arch }}.zip'
+      archiveName: 'QCloudMusicApi-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
     # 步骤
     steps:
       # 安装Qt
@@ -73,7 +73,7 @@ jobs:
         id: build
         shell: cmd
         run: |
-          cmake -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ github.workspace }} -B ${{ env.BUILD_PATH }}
+          cmake -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
           ls
       # CMake Install
       - name: CMake Install
@@ -88,19 +88,20 @@ jobs:
       - name: Package
         id: package
         shell: pwsh
+        env:
+          path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
+        continue-on-error: true
         run: |
-          cd ${{ github.workspace }}/${{ env.BUILD_PATH }}
-          ls
-          Tree ${{ env.BUILD_TYPE }} /F
+          # Tree ${{ env.path }} /F
 
           # 拷贝依赖
-          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\QCloudMusicApi.dll
-          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\Test.exe
-          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.BUILD_TYPE }}\bin\ApiServer.exe
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/QCloudMusicApi.dll
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/Test.exe
+          windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/ApiServer.exe
+
           # 打包zip
-          Compress-Archive -Path ${{ env.BUILD_TYPE }}\* ${{ env.archiveName }}
-          Tree ${{ env.BUILD_TYPE }} /F
-          ls
+          Compress-Archive -Path ${{ env.path }}/* ${{ env.archiveName }}
+          # Tree ${{ env.path }} /F
       # tag 查询github-Release
       # 上传artifacts          
       - uses: actions/upload-artifact@v4

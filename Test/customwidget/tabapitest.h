@@ -24,7 +24,6 @@ private slots:
 
 private:
     Ui::TabApiTest *ui;
-    QJsonDocument config;
 };
 
 #endif // TABAPITEST_H
