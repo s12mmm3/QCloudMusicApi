@@ -1,4 +1,3 @@
-#include <QMetaMethod>
 #include <QTextEdit>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -16,10 +15,7 @@ TabCommon::TabCommon(QWidget *parent) :
 {
     ui->setupUi(this);
     //将Api中的方法名称取出
-    NeteaseCloudMusicApi api;
-    for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
-        ui->comboBox->addItem(api.metaObject()->method(i).name());
-    }
+    ui->comboBox->addItems(ApiHelper::memberList());
 
     connect(this, &TabCommon::invoked, this, &TabCommon::update);
 }

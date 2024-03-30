@@ -25,6 +25,9 @@ private:
     NeteaseCloudMusicApi api;
 
     DEFINE_VALUE(QVariantMap, cookie, {})
+
+public:
+    static QStringList memberList();
 };
 
 #endif // APIHELPER_H

@@ -2,6 +2,7 @@
 #include "util/index.h"
 
 #include <functional>
+#include <QMetaMethod>
 
 using namespace QCloudMusicApiProject;
 ApiHelper::ApiHelper(QObject *parent)
@@ -63,6 +64,16 @@ QVariantMap ApiHelper::invoke(QVariantMap (NeteaseCloudMusicApi::*member)(QVaria
     afterInvoke(ret);
 
     return ret;
+}
+
+QStringList ApiHelper::memberList()
+{
+    QStringList memberList;
+    NeteaseCloudMusicApi api;
+    for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
+        memberList.push_back(api.metaObject()->method(i).name());
+    }
+    return memberList;
 }
 
 void ApiHelper::set_cookie(QString cookie)
