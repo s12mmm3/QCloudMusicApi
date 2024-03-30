@@ -1,7 +1,7 @@
 ﻿#include <QNetworkAccessManager>
 #include <QVariantMap>
 
-#include "util_global.h"
+#include "../global.h"
 
 namespace QCloudMusicApiProject {
 class QCLOUDMUSICAPI_EXPORT Request {
