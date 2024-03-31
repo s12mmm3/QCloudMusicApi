@@ -34,8 +34,8 @@ jobs:
           - qt_version: 6.2.4
             qt_arch: win64_msvc2019_64
             arch: x64
-          # 6.6.0
-          - qt_version: 6.6.2
+          # 6.7.0
+          - qt_version: 6.7.0
             qt_arch: win64_msvc2019_64
             arch: x64
             modules: 'qthttpserver qtwebsockets'
@@ -46,7 +46,7 @@ jobs:
       qt_target: 'desktop'
       qt_host: 'windows'
       # 压缩包名称
-      archiveName: 'QCloudMusicApi-${{ matrix.qt_version }}-${{ matrix.qt_arch }}'
+      archiveName: 'QCloudMusicApi-${{ matrix.qt_version }}-${{ matrix.qt_arch }}.zip'
     # 步骤
     steps:
       # 安装Qt
@@ -84,37 +84,43 @@ jobs:
           cd ${{ github.workspace }}
           cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }} -j
           ls
-      # 打包 
-      - name: Package
-        id: package
+      # 拷贝依赖 
+      - name: Copy Dependency
+        id: copyDependency
         shell: pwsh
         env:
           path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
         continue-on-error: true
         run: |
-          # Tree ${{ env.path }} /F
+          # tree /F
 
           # 拷贝依赖
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/QCloudMusicApi.dll
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/Test.exe
           windeployqt ${{ env.assume }} --qmldir . --no-translations --compiler-runtime ${{ env.path }}/bin/ApiServer.exe
-
-          # 打包zip
-          Compress-Archive -Path ${{ env.path }}/* ${{ env.archiveName }}
-          # Tree ${{ env.path }} /F
       # tag 查询github-Release
       # 上传artifacts          
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.archiveName }}
           path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
+      # 打包 
+      - name: Package
+        # if: startsWith(github.event.ref, 'refs/tags/')
+        id: package
+        shell: pwsh
+        env:
+          path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
+        run: |
+          # 打包zip
+          Compress-Archive -Path ${{ env.path }}/* ${{ env.archiveName }}
+          # tree /F
       # tag 上传Release
       - name: Upload Release
-        if: startsWith(github.event.ref, 'refs/tags/')
+        # if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}/${{ env.archiveName }}
-          asset_name: ${{ env.archiveName }}
+          file: ${{ github.workspace }}/${{ env.archiveName }}
           tag: ${{ github.ref }}
           overwrite: true 
