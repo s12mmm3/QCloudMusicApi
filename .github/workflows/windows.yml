@@ -106,7 +106,7 @@ jobs:
           path: ${{ github.workspace }}/${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}
       # 打包 
       - name: Package
-        # if: startsWith(github.event.ref, 'refs/tags/')
+        if: startsWith(github.event.ref, 'refs/tags/')
         id: package
         shell: pwsh
         env:
@@ -117,7 +117,7 @@ jobs:
           # tree /F
       # tag 上传Release
       - name: Upload Release
-        # if: startsWith(github.event.ref, 'refs/tags/')
+        if: startsWith(github.event.ref, 'refs/tags/')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
