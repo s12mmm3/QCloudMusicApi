@@ -402,7 +402,7 @@ public:
 
     // 歌曲链接 - v1
     // 此版本不再采用 br 作为音质区分的标准
-    // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声(QVariantMap);, sky(沉浸环绕声(QVariantMap);, jymaster(超清母带(QVariantMap); 进行音质判断
+    // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
     Q_INVOKABLE QVariantMap song_url_v1(QVariantMap);
 
     // 音乐百科基础信息

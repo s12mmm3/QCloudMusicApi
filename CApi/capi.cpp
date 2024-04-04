@@ -5,36 +5,27 @@
 #include <QMetaObject>
 
 #include "capi.h"
-#include "../QCloudMusicApi/module.h"
+#include "../QCloudMusicApi/apihelper.h"
 
 CAPI_EXPORT char* invoke(char* funName, char* value) {
-    QString result;
     int argc = 1;
     char *argv[1];
     QCoreApplication a(argc, argv);
-    qDebug() << "QSslSocket" << QSslSocket::sslLibraryBuildVersionString()
-             << "OpenSSL支持情况" << QSslSocket::supportsSsl();
 
-                        NeteaseCloudMusicApi api;
-    QVariantMap ret;
-    bool ok = QMetaObject::invokeMethod(&api, funName
-                                        , Qt::DirectConnection
-                                        , Q_RETURN_ARG(QVariantMap, ret)
-                                        , Q_ARG(QVariantMap, QJsonDocument::fromJson(value).toVariant().toMap()));
-    if(ok) {
-        result = QJsonDocument::fromVariant(ret["body"].toMap()).toJson();
-    }
-    else {
-        //函数调用错误
-    }
-    return result.toUtf8().data();
+    ApiHelper helper;
+    QVariantMap ret = helper.invoke(funName, QJsonDocument::fromJson(value).toVariant().toMap());
+    QString result = QJsonDocument::fromVariant(ret["body"].toMap()).toJson();
+    auto data = result.toUtf8().data();
+    return data;
 }
 
 CAPI_EXPORT char* getFunName(int i) {
     NeteaseCloudMusicApi api;
-    return api.metaObject()->method(QObject().metaObject()->methodCount() + i).name().data();
+    auto data = api.metaObject()->method(QObject().metaObject()->methodCount() + i).name().data();
+    return data;
 }
 
 CAPI_EXPORT int getFunCount() {
-    return NeteaseCloudMusicApi().metaObject()->methodCount() - QObject().metaObject()->methodCount();
+    NeteaseCloudMusicApi api;
+    return api.metaObject()->methodCount() - QObject().metaObject()->methodCount();
 }
