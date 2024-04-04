@@ -21,16 +21,6 @@ private slots:
     void on_pushButton_send_clicked();
 
 private:
-
-    /**
-     * @brief 反射调用API中的方法
-     * @param funName 函数名称
-     * @param arg 参数
-     * @return QVariantMap 返回的数据
-     */
-    QVariantMap invoke(const QString funName, const QVariantMap arg);
-
-private:
     Ui::TabLogin_cellphone *ui;
 };
 

@@ -21,11 +21,11 @@ private:
 
     /**
      * @brief 反射调用API中的方法
-     * @param funName 函数名称
+     * @param member 函数名称
      * @param arg 参数
      * @return QVariantMap 返回的数据
      */
-    QVariantMap invoke(const QString funName, const QVariantMap arg);
+    QVariantMap invoke(const QString member, const QVariantMap arg);
 
     QPixmap generateQRCode(QString strUrl, qint32 temp_width, qint32 temp_height, int offset);
 

@@ -1,7 +1,7 @@
 #include "tablogin_qr.h"
 #include "ui_tablogin_qr.h"
 
-#include "../../QCloudMusicApi/module.h"
+#include "../../QCloudMusicApi/apihelper.h"
 
 #include "../libqrencode/qrencode.h"
 
@@ -56,13 +56,9 @@ QPixmap TabLogin_qr::generateQRCode(QString strUrl, qint32 temp_width, qint32 te
     return mainmap;
 }
 
-QVariantMap TabLogin_qr::invoke(const QString funName, const QVariantMap arg) {
-    NeteaseCloudMusicApi api;
-    QVariantMap ret;
-    QMetaObject::invokeMethod(&api, funName.toUtf8()
-                              , Qt::DirectConnection
-                              , Q_RETURN_ARG(QVariantMap, ret)
-                              , Q_ARG(QVariantMap, arg));
+QVariantMap TabLogin_qr::invoke(const QString member, const QVariantMap arg) {
+    ApiHelper helper;
+    QVariantMap ret = helper.invoke(member, arg);
     return ret;
 }
 
