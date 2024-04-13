@@ -28,11 +28,6 @@ private slots:
 
     void on_checkBox_stateChanged(int arg1);
 
-    void update(QVariantMap ret);
-
-signals:
-    void invoked(QVariantMap ret);
-
 private:
     Ui::TabCommon *ui;
     ApiHelper helper;

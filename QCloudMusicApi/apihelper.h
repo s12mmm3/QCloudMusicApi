@@ -11,9 +11,9 @@ class QCLOUDMUSICAPI_EXPORT ApiHelper : public NeteaseCloudMusicApi
 public:
     explicit ApiHelper(QObject *parent = nullptr);
 
-    QVariantMap invoke(QString member, QVariantMap arg);
+    QVariantMap invoke(QString member, QVariantMap arg, callbackType = Q_NULLPTR);
 
-    QVariantMap invoke(QVariantMap (NeteaseCloudMusicApi::* member)(QVariantMap), QVariantMap arg);
+    QVariantMap invoke(QVariantMap (NeteaseCloudMusicApi::* member)(QVariantMap, callbackType), QVariantMap arg, callbackType = Q_NULLPTR);
 
     void set_cookie(QString cookie);
 

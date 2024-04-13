@@ -38,7 +38,7 @@ void ApiHelper::afterInvoke(QVariantMap& ret)
     }
 }
 
-QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
+QVariantMap ApiHelper::invoke(QString member, QVariantMap arg, callbackType callback)
 {
     beforeInvoke(arg);
 
@@ -46,20 +46,21 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
     QMetaObject::invokeMethod(this, member.toUtf8()
                               , Qt::DirectConnection
                               , Q_RETURN_ARG(QVariantMap, ret)
-                              , Q_ARG(QVariantMap, arg));
+                              , Q_ARG(QVariantMap, arg)
+                              , Q_ARG(callbackType, callback));
 
     afterInvoke(ret);
 
     return ret;
 }
 
-QVariantMap ApiHelper::invoke(QVariantMap (NeteaseCloudMusicApi::*member)(QVariantMap), QVariantMap arg)
+QVariantMap ApiHelper::invoke(QVariantMap (NeteaseCloudMusicApi::*member)(QVariantMap, callbackType), QVariantMap arg, callbackType callback)
 {
     beforeInvoke(arg);
 
     // auto bind = std::bind(member, &api, arg);
     // QVariantMap ret = bind();
-    QVariantMap ret = (this->*member)(arg);
+    QVariantMap ret = (this->*member)(arg, callback);
 
     afterInvoke(ret);
 

@@ -19,7 +19,7 @@
 { "realIP", query["realIP"] } \
 
 using Api = NeteaseCloudMusicApi;
-const static auto &request = QCloudMusicApiNS::Request::createRequest;
+#define request QCloudMusicApiNS::Request::createRequest
 const static auto &POST = QNetworkAccessManager::PostOperation;
 const static auto &GET = QNetworkAccessManager::GetOperation;
 const static auto &resourceTypeMap = QCloudMusicApiNS::Config::resourceTypeMap;
@@ -29,7 +29,7 @@ NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject *parent)
     : QObject{parent}
 {}
 
-QVariantMap Api::activate_init_profile(QVariantMap query) {
+QVariantMap Api::activate_init_profile(QVariantMap query, callbackType callback) {
     QVariantMap data {
         { "nickname", query["nickname"] }
     };
@@ -41,12 +41,13 @@ QVariantMap Api::activate_init_profile(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/activate/initProfile" }
-        }
+        },
+        callback
         );
 }
 
 // 专辑动态信息
-QVariantMap Api::album_detail_dynamic(QVariantMap query) {
+QVariantMap Api::album_detail_dynamic(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -57,12 +58,13 @@ QVariantMap Api::album_detail_dynamic(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 数字专辑详情
-QVariantMap Api::album_detail(QVariantMap query) {
+QVariantMap Api::album_detail(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -73,12 +75,13 @@ QVariantMap Api::album_detail(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 数字专辑-语种风格馆
-QVariantMap Api::album_list_style(QVariantMap query) {
+QVariantMap Api::album_list_style(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 10) },
         { "offset", query.value("offset", 0) },
@@ -92,12 +95,13 @@ QVariantMap Api::album_list_style(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 数字专辑-新碟上架
-QVariantMap Api::album_list(QVariantMap query) {
+QVariantMap Api::album_list(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) },
@@ -112,12 +116,13 @@ QVariantMap Api::album_list(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 全部新碟
-QVariantMap Api::album_new(QVariantMap query) {
+QVariantMap Api::album_new(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) },
@@ -131,12 +136,13 @@ QVariantMap Api::album_new(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 最新专辑
-QVariantMap Api::album_newest(QVariantMap query) {
+QVariantMap Api::album_newest(QVariantMap query, callbackType callback) {
     return request(
         POST,
         "https://music.163.com/api/discovery/newAlbum",
@@ -144,12 +150,13 @@ QVariantMap Api::album_newest(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 数字专辑&数字单曲-榜单
-QVariantMap Api::album_songsaleboard(QVariantMap query) {
+QVariantMap Api::album_songsaleboard(QVariantMap query, callbackType callback) {
     QVariantMap data {
         { "albumType", query.value("albumType", 0) } //0为数字专辑,1为数字单曲
     };
@@ -162,12 +169,13 @@ QVariantMap Api::album_songsaleboard(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 收藏/取消收藏专辑
-QVariantMap Api::album_sub(QVariantMap query) {
+QVariantMap Api::album_sub(QVariantMap query, callbackType callback) {
     query["t"] = query.value("t", 1) == 1 ? "sub" : "unsub";
     const QVariantMap data {
         { "id", query["id"] }
@@ -179,12 +187,13 @@ QVariantMap Api::album_sub(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 已收藏专辑列表
-QVariantMap Api::album_sublist(QVariantMap query) {
+QVariantMap Api::album_sublist(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 25) },
         { "offset", query.value("offset", 0) },
@@ -197,12 +206,13 @@ QVariantMap Api::album_sublist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 专辑内容
-QVariantMap Api::album(QVariantMap query) {
+QVariantMap Api::album(QVariantMap query, callbackType callback) {
     return request(
         POST,
         "https://music.163.com/weapi/v1/album/" + query["id"].toString(),
@@ -210,12 +220,13 @@ QVariantMap Api::album(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手专辑列表
-QVariantMap Api::artist_album(QVariantMap query) {
+QVariantMap Api::artist_album(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) },
@@ -228,12 +239,13 @@ QVariantMap Api::artist_album(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手介绍
-QVariantMap Api::artist_desc(QVariantMap query) {
+QVariantMap Api::artist_desc(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -244,12 +256,13 @@ QVariantMap Api::artist_desc(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手详情
-QVariantMap Api::artist_detail(QVariantMap query) {
+QVariantMap Api::artist_detail(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -260,12 +273,13 @@ QVariantMap Api::artist_detail(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手粉丝
-QVariantMap Api::artist_fans(QVariantMap query) {
+QVariantMap Api::artist_fans(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] },
         { "limit", query.value("limit", 20) },
@@ -278,12 +292,13 @@ QVariantMap Api::artist_fans(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手粉丝数量
-QVariantMap Api::artist_follow_count(QVariantMap query) {
+QVariantMap Api::artist_follow_count(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -294,7 +309,8 @@ QVariantMap Api::artist_follow_count(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
@@ -316,7 +332,7 @@ QVariantMap Api::artist_follow_count(QVariantMap query) {
 
     initial 取值 a-z/A-Z
 */
-QVariantMap Api::artist_list(QVariantMap query) {
+QVariantMap Api::artist_list(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "initial", (quint16)((query.value("initial", "\0").toString()[0]).toUpper()).unicode() },
         { "offset", query.value("offset", 0) },
@@ -332,12 +348,13 @@ QVariantMap Api::artist_list(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手相关MV
-QVariantMap Api::artist_mv(QVariantMap query) {
+QVariantMap Api::artist_mv(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "artistId", query["id"] },
         { "limit", query["limit"] },
@@ -351,12 +368,13 @@ QVariantMap Api::artist_mv(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 关注歌手新 MV
-QVariantMap Api::artist_new_mv(QVariantMap query) {
+QVariantMap Api::artist_new_mv(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -372,12 +390,13 @@ QVariantMap Api::artist_new_mv(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 关注歌手新歌
-QVariantMap Api::artist_new_song(QVariantMap query) {
+QVariantMap Api::artist_new_song(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -393,12 +412,13 @@ QVariantMap Api::artist_new_song(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手全部歌曲
-QVariantMap Api::artist_songs(QVariantMap query) {
+QVariantMap Api::artist_songs(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -417,12 +437,13 @@ QVariantMap Api::artist_songs(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 收藏与取消收藏歌手
-QVariantMap Api::artist_sub(QVariantMap query) {
+QVariantMap Api::artist_sub(QVariantMap query, callbackType callback) {
     query["t"] = query.value("t", 1) == 1 ? "sub" : "unsub";
     QStringList artistIds;
     artistIds.append(query["id"].toString());
@@ -437,12 +458,13 @@ QVariantMap Api::artist_sub(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 关注歌手列表
-QVariantMap Api::artist_sublist(QVariantMap query) {
+QVariantMap Api::artist_sublist(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 25) },
         { "offset", query.value("offset", 0) },
@@ -455,12 +477,13 @@ QVariantMap Api::artist_sublist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手热门 50 首歌曲
-QVariantMap Api::artist_top_song(QVariantMap query) {
+QVariantMap Api::artist_top_song(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -471,12 +494,13 @@ QVariantMap Api::artist_top_song(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手相关视频
-QVariantMap Api::artist_video(QVariantMap query) {
+QVariantMap Api::artist_video(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "artistId", query["id"] },
         { "page", QJsonDocument(QJsonObject::fromVariantMap({
@@ -493,12 +517,13 @@ QVariantMap Api::artist_video(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌手单曲
-QVariantMap Api::artists(QVariantMap query) {
+QVariantMap Api::artists(QVariantMap query, callbackType callback) {
     return request(
         POST,
         "https://music.163.com/weapi/v1/artist/" + query["id"].toString(),
@@ -506,12 +531,13 @@ QVariantMap Api::artists(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 批量请求接口
-QVariantMap Api::batch(QVariantMap query) {
+QVariantMap Api::batch(QVariantMap query, callbackType callback) {
     QVariantMap data {
         { "e_r", true }
     };
@@ -528,12 +554,13 @@ QVariantMap Api::batch(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/batch" }
-        }
+        },
+        callback
         );
 }
 
 // 首页轮播图
-QVariantMap Api::banner(QVariantMap query) {
+QVariantMap Api::banner(QVariantMap query, callbackType callback) {
     const auto type0 = query.value("type", 0).toInt();
     const QMap<int, QString> typeMap {
         { 0, "pc" },
@@ -552,12 +579,13 @@ QVariantMap Api::banner(QVariantMap query) {
             { "crypto", "api" },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] }
-        }
+        },
+        callback
         );
 }
 
 // 音乐日历
-QVariantMap Api::calendar(QVariantMap query) {
+QVariantMap Api::calendar(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "startTime", query.value("startTime", QDateTime::currentDateTime().toMSecsSinceEpoch()) },
         { "endTime", query.value("endTime", QDateTime::currentDateTime().toMSecsSinceEpoch()) }
@@ -569,12 +597,13 @@ QVariantMap Api::calendar(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 发送验证码
-QVariantMap Api::captcha_sent(QVariantMap query) {
+QVariantMap Api::captcha_sent(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "ctcode", query.value("ctcode", "86") },
         { "cellphone", query["cellphone"] }
@@ -586,12 +615,13 @@ QVariantMap Api::captcha_sent(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 校验验证码
-QVariantMap Api::captcha_verify(QVariantMap query) {
+QVariantMap Api::captcha_verify(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "ctcode", query.value("ctcode", "86") },
         { "cellphone", query["phone"] },
@@ -604,12 +634,13 @@ QVariantMap Api::captcha_verify(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 检测手机号码是否已注册
-QVariantMap Api::cellphone_existence_check(QVariantMap query) {
+QVariantMap Api::cellphone_existence_check(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "cellphone", query["phone"] },
         { "countrycode", query["countrycode"] }
@@ -622,15 +653,40 @@ QVariantMap Api::cellphone_existence_check(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/cellphone/existence/check" }
-        }
+        },
+        callback
         );
 }
 
 // 歌曲可用性
-QVariantMap Api::check_music(QVariantMap query) {
+QVariantMap Api::check_music(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "ids", QStringList { query["id"].toString() } },
         { "br", query.value("br", 999000) }
+    };
+    auto doCallback = [=](QVariantMap result) {
+        auto playable = false;
+        if(result["body"].toMap()["code"].toInt() == 200) {
+            if(result["body"].toMap()["data"].toList()[0].toMap()["code"].toInt() == 200) {
+                playable = true;
+            }
+        }
+        if(playable) {
+            result["body"] = QVariantMap {
+                { "code", 200 },
+                { "success", true },
+                { "message", "ok" }
+            };
+        }
+        else {
+            result["body"] = QVariantMap {
+                { "code", 200 },
+                { "success", false },
+                { "message", "亲爱的,暂无版权" }
+            };
+        }
+        if (callback) callback(result);
+        return result;
     };
     QVariantMap result = request(
         POST,
@@ -639,34 +695,14 @@ QVariantMap Api::check_music(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback ? doCallback : callback
         );
-    auto playable = false;
-    if(result["body"].toMap()["code"].toInt() == 200) {
-        if(result["body"].toMap()["data"].toList()[0].toMap()["code"].toInt() == 200) {
-            playable = true;
-        }
-    }
-    if(playable) {
-        result["body"] = QVariantMap {
-            { "code", 200 },
-            { "success", true },
-            { "message", "ok" }
-        };
-        return result;
-    }
-    else {
-        result["body"] = QVariantMap {
-            { "code", 200 },
-            { "success", false },
-            { "message", "亲爱的,暂无版权" }
-        };
-        return result;
-    }
+    return callback ? QVariantMap() : doCallback(result);
 }
 
 // 云盘歌曲信息匹配纠正
-QVariantMap Api::cloud_match(QVariantMap query) {
+QVariantMap Api::cloud_match(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -683,12 +719,13 @@ QVariantMap Api::cloud_match(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 搜索
-QVariantMap Api::cloudsearch(QVariantMap query) {
+QVariantMap Api::cloudsearch(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "s", query["keywords"] },
         { "type", query.value("type", 1) },// 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
@@ -704,12 +741,13 @@ QVariantMap Api::cloudsearch(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/cloudsearch/pc" }
-        }
+        },
+        callback
         );
 }
 
 // 专辑评论
-QVariantMap Api::comment_album(QVariantMap query) {
+QVariantMap Api::comment_album(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -726,12 +764,13 @@ QVariantMap Api::comment_album(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台评论
-QVariantMap Api::comment_dj(QVariantMap query) {
+QVariantMap Api::comment_dj(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -748,12 +787,13 @@ QVariantMap Api::comment_dj(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 获取动态评论
-QVariantMap Api::comment_event(QVariantMap query) {
+QVariantMap Api::comment_event(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 20) },
         { "offset", query.value("offset", 0) },
@@ -766,12 +806,13 @@ QVariantMap Api::comment_event(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 楼层评论
-QVariantMap Api::comment_floor(QVariantMap query) {
+QVariantMap Api::comment_floor(QVariantMap query, callbackType callback) {
     query["type"] = resourceTypeMap[query["type"].toString()];
     const QVariantMap data {
         { "parentCommentId", query["parentCommentId"] },
@@ -786,12 +827,13 @@ QVariantMap Api::comment_floor(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 热门评论
-QVariantMap Api::comment_hot(QVariantMap query) {
+QVariantMap Api::comment_hot(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -809,12 +851,13 @@ QVariantMap Api::comment_hot(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 评论抱一抱列表
-QVariantMap Api::comment_hug_list(QVariantMap query) {
+QVariantMap Api::comment_hug_list(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -837,12 +880,13 @@ QVariantMap Api::comment_hug_list(QVariantMap query) {
         {
             { "crypto", "api" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 点赞与取消点赞评论
-QVariantMap Api::comment_like(QVariantMap query) {
+QVariantMap Api::comment_like(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -862,12 +906,13 @@ QVariantMap Api::comment_like(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 歌曲评论
-QVariantMap Api::comment_music(QVariantMap query) {
+QVariantMap Api::comment_music(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -884,12 +929,13 @@ QVariantMap Api::comment_music(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // MV评论
-QVariantMap Api::comment_mv(QVariantMap query) {
+QVariantMap Api::comment_mv(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -906,12 +952,13 @@ QVariantMap Api::comment_mv(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 新版评论接口
-QVariantMap Api::comment_new(QVariantMap query) {
+QVariantMap Api::comment_new(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -953,12 +1000,13 @@ QVariantMap Api::comment_new(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/v2/resource/comments" }
-        }
+        },
+        callback
         );
 }
 
 // 歌单评论
-QVariantMap Api::comment_playlist(QVariantMap query) {
+QVariantMap Api::comment_playlist(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -975,12 +1023,13 @@ QVariantMap Api::comment_playlist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 视频评论
-QVariantMap Api::comment_video(QVariantMap query) {
+QVariantMap Api::comment_video(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -997,12 +1046,13 @@ QVariantMap Api::comment_video(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 发送与删除评论
-QVariantMap Api::comment(QVariantMap query) {
+QVariantMap Api::comment(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "android";
     query["cookie"] = cookie;
@@ -1031,12 +1081,13 @@ QVariantMap Api::comment(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 国家编码列表
-QVariantMap Api::countries_code_list(QVariantMap query) {
+QVariantMap Api::countries_code_list(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1046,12 +1097,13 @@ QVariantMap Api::countries_code_list(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/lbs/countries/v1" }
-        }
+        },
+        callback
         );
 }
 
 // 获取达人用户信息
-QVariantMap Api::creator_authinfo_get(QVariantMap query) {
+QVariantMap Api::creator_authinfo_get(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1061,7 +1113,8 @@ QVariantMap Api::creator_authinfo_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/user/creator/authinfo/get" }
-        }
+        },
+        callback
         );
 }
 
@@ -1073,7 +1126,7 @@ QVariantMap Api::creator_authinfo_get(QVariantMap query) {
     重复签到 {'android': {'code': -2, 'msg': '重复签到'}, 'web': {'code': -2, 'msg': '重复签到'}}
     未登录 {'android': {'code': 301}, 'web': {'code': 301}}
     */
-QVariantMap Api::daily_signin(QVariantMap query) {
+QVariantMap Api::daily_signin(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "type", query.value("type", 0) }
     };
@@ -1084,12 +1137,13 @@ QVariantMap Api::daily_signin(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 数字专辑详情
-QVariantMap Api::digitalAlbum_detail(QVariantMap query) {
+QVariantMap Api::digitalAlbum_detail(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -1100,12 +1154,13 @@ QVariantMap Api::digitalAlbum_detail(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 购买数字专辑
-QVariantMap Api::digitalAlbum_ordering(QVariantMap query) {
+QVariantMap Api::digitalAlbum_ordering(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "business", "Album" },
         { "paymentMethod", query["payment"] },
@@ -1123,12 +1178,13 @@ QVariantMap Api::digitalAlbum_ordering(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 我的数字专辑
-QVariantMap Api::digitalAlbum_purchased(QVariantMap query) {
+QVariantMap Api::digitalAlbum_purchased(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) },
@@ -1141,12 +1197,13 @@ QVariantMap Api::digitalAlbum_purchased(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 数字专辑销量
-QVariantMap Api::digitalAlbum_sales(QVariantMap query) {
+QVariantMap Api::digitalAlbum_sales(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "albumIds", query["ids"] }
     };
@@ -1157,12 +1214,13 @@ QVariantMap Api::digitalAlbum_sales(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台banner
-QVariantMap Api::dj_banner(QVariantMap query) {
+QVariantMap Api::dj_banner(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
@@ -1174,12 +1232,13 @@ QVariantMap Api::dj_banner(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台非热门类型
-QVariantMap Api::dj_category_excludehot(QVariantMap query) {
+QVariantMap Api::dj_category_excludehot(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1188,12 +1247,13 @@ QVariantMap Api::dj_category_excludehot(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台推荐类型
-QVariantMap Api::dj_category_recommend(QVariantMap query) {
+QVariantMap Api::dj_category_recommend(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1202,12 +1262,13 @@ QVariantMap Api::dj_category_recommend(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台分类列表
-QVariantMap Api::dj_catelist(QVariantMap query) {
+QVariantMap Api::dj_catelist(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1216,12 +1277,13 @@ QVariantMap Api::dj_catelist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台详情
-QVariantMap Api::dj_detail(QVariantMap query) {
+QVariantMap Api::dj_detail(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["rid"] }
     };
@@ -1232,12 +1294,13 @@ QVariantMap Api::dj_detail(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 热门电台
-QVariantMap Api::dj_hot(QVariantMap query) {
+QVariantMap Api::dj_hot(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) }
@@ -1249,12 +1312,13 @@ QVariantMap Api::dj_hot(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 付费电台
-QVariantMap Api::dj_paygift(QVariantMap query) {
+QVariantMap Api::dj_paygift(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) }
@@ -1266,12 +1330,13 @@ QVariantMap Api::dj_paygift(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台个性推荐
-QVariantMap Api::dj_personalize_recommend(QVariantMap query) {
+QVariantMap Api::dj_personalize_recommend(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 6) }
     };
@@ -1282,12 +1347,13 @@ QVariantMap Api::dj_personalize_recommend(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台节目详情
-QVariantMap Api::dj_program_detail(QVariantMap query) {
+QVariantMap Api::dj_program_detail(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -1298,12 +1364,13 @@ QVariantMap Api::dj_program_detail(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台24小时节目榜
-QVariantMap Api::dj_program_toplist_hours(QVariantMap query) {
+QVariantMap Api::dj_program_toplist_hours(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 100) }
         // 不支持 offset
@@ -1315,12 +1382,13 @@ QVariantMap Api::dj_program_toplist_hours(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台节目榜
-QVariantMap Api::dj_program_toplist(QVariantMap query) {
+QVariantMap Api::dj_program_toplist(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 100) },
         { "offset", query.value("offset", 0) }
@@ -1332,12 +1400,13 @@ QVariantMap Api::dj_program_toplist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台节目列表
-QVariantMap Api::dj_program(QVariantMap query) {
+QVariantMap Api::dj_program(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "radioId", query["rid"] },
         { "limit", query.value("limit", 30) },
@@ -1351,12 +1420,13 @@ QVariantMap Api::dj_program(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 类别热门电台
-QVariantMap Api::dj_radio_hot(QVariantMap query) {
+QVariantMap Api::dj_radio_hot(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "cateId", query["cateId"] },
         { "limit", query.value("limit", 30) },
@@ -1369,7 +1439,8 @@ QVariantMap Api::dj_radio_hot(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
@@ -1397,7 +1468,7 @@ QVariantMap Api::dj_radio_hot(QVariantMap query) {
     校园|教育 4001
     旅途|城市 12
 */
-QVariantMap Api::dj_recommend_type(QVariantMap query) {
+QVariantMap Api::dj_recommend_type(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "cateId", query["type"] }
     };
@@ -1408,12 +1479,13 @@ QVariantMap Api::dj_recommend_type(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 精选电台
-QVariantMap Api::dj_recommend(QVariantMap query) {
+QVariantMap Api::dj_recommend(QVariantMap query, callbackType callback) {
     return request(
         POST,
         "https://music.163.com/weapi/djradio/recommend/v1",
@@ -1421,12 +1493,13 @@ QVariantMap Api::dj_recommend(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 订阅与取消电台
-QVariantMap Api::dj_sub(QVariantMap query) {
+QVariantMap Api::dj_sub(QVariantMap query, callbackType callback) {
     query["t"] = query["t"].toInt() == 1 ? "sub" : "unsub";
     const QVariantMap data {
         { "id", query["rid"] }
@@ -1438,12 +1511,13 @@ QVariantMap Api::dj_sub(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 订阅电台列表
-QVariantMap Api::dj_sublist(QVariantMap query) {
+QVariantMap Api::dj_sublist(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) },
@@ -1456,12 +1530,13 @@ QVariantMap Api::dj_sublist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台详情
-QVariantMap Api::dj_subscriber(QVariantMap query) {
+QVariantMap Api::dj_subscriber(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "time", query.value("time", "-1") },
         { "id", query["id"] },
@@ -1475,12 +1550,13 @@ QVariantMap Api::dj_subscriber(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台今日优选
-QVariantMap Api::dj_today_perfered(QVariantMap query) {
+QVariantMap Api::dj_today_perfered(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "page", query.value("page", 0) }
     };
@@ -1491,12 +1567,13 @@ QVariantMap Api::dj_today_perfered(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台24小时主播榜
-QVariantMap Api::dj_toplist_hours(QVariantMap query) {
+QVariantMap Api::dj_toplist_hours(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 100) }
         // 不支持 offset
@@ -1508,12 +1585,13 @@ QVariantMap Api::dj_toplist_hours(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台新人榜
-QVariantMap Api::dj_toplist_newcomer(QVariantMap query) {
+QVariantMap Api::dj_toplist_newcomer(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 100) },
         { "offset", query.value("offset", 0) }
@@ -1525,12 +1603,13 @@ QVariantMap Api::dj_toplist_newcomer(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 付费精品
-QVariantMap Api::dj_toplist_pay(QVariantMap query) {
+QVariantMap Api::dj_toplist_pay(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 100) }
         // 不支持 offset
@@ -1542,12 +1621,13 @@ QVariantMap Api::dj_toplist_pay(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 电台最热主播榜
-QVariantMap Api::dj_toplist_popular(QVariantMap query) {
+QVariantMap Api::dj_toplist_popular(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 100) }
         // 不支持 offset
@@ -1559,12 +1639,13 @@ QVariantMap Api::dj_toplist_popular(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 新晋电台榜/热门电台榜
-QVariantMap Api::dj_toplist(QVariantMap query) {
+QVariantMap Api::dj_toplist(QVariantMap query, callbackType callback) {
     const QVariantMap typeMap {
         { "new", 0 },
         { "hot", 1 }
@@ -1581,12 +1662,13 @@ QVariantMap Api::dj_toplist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 删除动态
-QVariantMap Api::event_del(QVariantMap query) {
+QVariantMap Api::event_del(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["evId"] }
     };
@@ -1597,12 +1679,13 @@ QVariantMap Api::event_del(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 转发动态
-QVariantMap Api::event_forward(QVariantMap query) {
+QVariantMap Api::event_forward(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -1618,12 +1701,13 @@ QVariantMap Api::event_forward(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 动态
-QVariantMap Api::event(QVariantMap query) {
+QVariantMap Api::event(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "pagesize", query.value("pagesize", 20) },
         { "lasttime", query.value("lasttime", -1) }
@@ -1635,12 +1719,13 @@ QVariantMap Api::event(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 粉丝年龄比例
-QVariantMap Api::fanscenter_basicinfo_age_get(QVariantMap query) {
+QVariantMap Api::fanscenter_basicinfo_age_get(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1650,12 +1735,13 @@ QVariantMap Api::fanscenter_basicinfo_age_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/fanscenter/basicinfo/age/get" }
-        }
+        },
+        callback
         );
 }
 
 // 粉丝性别比例
-QVariantMap Api::fanscenter_basicinfo_gender_get(QVariantMap query) {
+QVariantMap Api::fanscenter_basicinfo_gender_get(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1665,12 +1751,13 @@ QVariantMap Api::fanscenter_basicinfo_gender_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/fanscenter/basicinfo/gender/get" }
-        }
+        },
+        callback
         );
 }
 
 // 粉丝省份比例
-QVariantMap Api::fanscenter_basicinfo_province_get(QVariantMap query) {
+QVariantMap Api::fanscenter_basicinfo_province_get(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1680,12 +1767,13 @@ QVariantMap Api::fanscenter_basicinfo_province_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/fanscenter/basicinfo/province/get" }
-        }
+        },
+        callback
         );
 }
 
 // 粉丝数量
-QVariantMap Api::fanscenter_overview_get(QVariantMap query) {
+QVariantMap Api::fanscenter_overview_get(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -1695,12 +1783,13 @@ QVariantMap Api::fanscenter_overview_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/fanscenter/overview/get" }
-        }
+        },
+        callback
         );
 }
 
 // 粉丝来源
-QVariantMap Api::fanscenter_trend_list(QVariantMap query) {
+QVariantMap Api::fanscenter_trend_list(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "startTime", query.value("startTime", QDateTime::currentDateTime().toMSecsSinceEpoch() - 7 * 24 * 3600 * 1000) },
         { "endTime", query.value("endTime", QDateTime::currentDateTime().toMSecsSinceEpoch()) },
@@ -1714,12 +1803,13 @@ QVariantMap Api::fanscenter_trend_list(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/fanscenter/trend/list" }
-        }
+        },
+        callback
         );
 }
 
 // 垃圾桶
-QVariantMap Api::fm_trash(QVariantMap query) {
+QVariantMap Api::fm_trash(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "songId", query["id"] }
     };
@@ -1733,12 +1823,13 @@ QVariantMap Api::fm_trash(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 关注与取消关注用户
-QVariantMap Api::follow(QVariantMap query) {
+QVariantMap Api::follow(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     query["cookie"] = cookie;
@@ -1753,12 +1844,13 @@ QVariantMap Api::follow(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 根据nickname获取userid
-QVariantMap Api::get_userids(QVariantMap query) {
+QVariantMap Api::get_userids(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "nicknames", query["nicknames"] }
     };
@@ -1769,12 +1861,13 @@ QVariantMap Api::get_userids(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 历史每日推荐歌曲详情
-QVariantMap Api::history_recommend_songs_detail(QVariantMap query) {
+QVariantMap Api::history_recommend_songs_detail(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     query["cookie"] = cookie;
@@ -1788,12 +1881,13 @@ QVariantMap Api::history_recommend_songs_detail(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 历史每日推荐歌曲
-QVariantMap Api::history_recommend_songs(QVariantMap query) {
+QVariantMap Api::history_recommend_songs(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     query["cookie"] = cookie;
@@ -1805,14 +1899,15 @@ QVariantMap Api::history_recommend_songs(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 首页-发现 block page
 // 这个接口为移动端接口，首页-发现页，数据结构可以参考 https://github.com/hcanyz/flutter-netease-music-api/blob/master/lib/src/api/uncategorized/bean.dart#L259 HomeBlockPageWrap
 // query.refresh 是否刷新数据
-QVariantMap Api::homepage_block_page(QVariantMap query) {
+QVariantMap Api::homepage_block_page(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -1828,7 +1923,8 @@ QVariantMap Api::homepage_block_page(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
@@ -1836,7 +1932,7 @@ QVariantMap Api::homepage_block_page(QVariantMap query) {
 // 这个接口为移动端接口，首页-发现页（每日推荐、歌单、排行榜 那些入口）
 // 数据结构可以参考 https://github.com/hcanyz/flutter-netease-music-api/blob/master/lib/src/api/uncategorized/bean.dart#L290 HomeDragonBallWrap
 // !需要登录或者游客登录，非登录返回 []
-QVariantMap Api::homepage_dragon_ball(QVariantMap query) {
+QVariantMap Api::homepage_dragon_ball(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -1850,12 +1946,13 @@ QVariantMap Api::homepage_dragon_ball(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/homepage/dragon/ball/static"}
-        }
+        },
+        callback
         );
 }
 
 //热门话题
-QVariantMap Api::hot_topic(QVariantMap query) {
+QVariantMap Api::hot_topic(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 20) },
         { "offset", query.value("offset", 0) }
@@ -1867,12 +1964,13 @@ QVariantMap Api::hot_topic(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 抱一抱评论
-QVariantMap Api::hug_comment(QVariantMap query) {
+QVariantMap Api::hug_comment(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -1891,12 +1989,13 @@ QVariantMap Api::hug_comment(QVariantMap query) {
         {
             { "crypto", "api" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 红心与取消红心歌曲
-QVariantMap Api::like(QVariantMap query) {
+QVariantMap Api::like(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     cookie["appver"] = "2.9.7";
@@ -1915,12 +2014,13 @@ QVariantMap Api::like(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 喜欢音乐列表
-QVariantMap Api::likelist(QVariantMap query) {
+QVariantMap Api::likelist(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "uid", query["uid"] }
     };
@@ -1931,12 +2031,13 @@ QVariantMap Api::likelist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 手机登录
-QVariantMap Api::login_cellphone(QVariantMap query) {
+QVariantMap Api::login_cellphone(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -1951,6 +2052,19 @@ QVariantMap Api::login_cellphone(QVariantMap query) {
                                  QCryptographicHash::hash(query["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex())) },
         { "rememberLogin", "true" }
     };
+    auto doCallback = [=](QVariantMap result) {
+        if(result["body"].toMap()["code"].toInt() == 200) {
+            auto body = result["body"].toMap();
+            body["cookie"] = result["cookie"];
+            result = QVariantMap {
+                { "status", 200 },
+                { "body", body },
+                { "cookie", result["cookie"] }
+            };
+        }
+        if (callback) callback(result);
+        return result;
+    };
     QVariantMap result = request(
         POST,
         "https://music.163.com/weapi/login/cellphone",
@@ -1959,9 +2073,19 @@ QVariantMap Api::login_cellphone(QVariantMap query) {
             { "crypto", "weapi" },
             { "ua", "pc" },
             _PARAM
-        }
+        },
+        callback ? doCallback : callback
         );
-    if(result["body"].toMap()["code"].toInt() == 200) {
+    return callback ? QVariantMap() : doCallback(result);
+}
+
+// 二维码检测扫码状态接口
+QVariantMap Api::login_qr_check(QVariantMap query, callbackType callback) {
+    const QVariantMap data {
+        { "key", query["key"] },
+        { "type", 1 }
+    };
+    auto doCallback = [=](QVariantMap result) {
         auto body = result["body"].toMap();
         body["cookie"] = result["cookie"];
         result = QVariantMap {
@@ -1969,15 +2093,8 @@ QVariantMap Api::login_cellphone(QVariantMap query) {
             { "body", body },
             { "cookie", result["cookie"] }
         };
-    }
-    return result;
-}
-
-// 二维码检测扫码状态接口
-QVariantMap Api::login_qr_check(QVariantMap query) {
-    const QVariantMap data {
-        { "key", query["key"] },
-        { "type", 1 }
+        if (callback) callback(result);
+        return result;
     };
     QVariantMap result = request(
         POST,
@@ -1986,22 +2103,28 @@ QVariantMap Api::login_qr_check(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback ? doCallback : callback
         );
-    auto body = result["body"].toMap();
-    body["cookie"] = result["cookie"];
-    result = QVariantMap {
-        { "status", 200 },
-        { "body", body },
-        { "cookie", result["cookie"] }
-    };
-    return result;
+    return callback ? QVariantMap() : doCallback(result);
 }
 
 // 二维码 key 生成接口
-QVariantMap Api::login_qr_key(QVariantMap query) {
+QVariantMap Api::login_qr_key(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "type", 1 }
+    };
+    auto doCallback = [=](QVariantMap result) {
+        result = QVariantMap {
+            { "status", 200 },
+            { "body", QVariantMap {
+                         { "data", result["body"] },
+                         { "code", 200}
+                     } },
+            { "cookie", result["cookie"] }
+        };
+        if (callback) callback(result);
+        return result;
     };
     QVariantMap result = request(
         POST,
@@ -2010,21 +2133,14 @@ QVariantMap Api::login_qr_key(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback ? doCallback : callback
         );
-    result = QVariantMap {
-        { "status", 200 },
-        { "body", QVariantMap {
-                     { "data", result["body"] },
-                     { "code", 200}
-                 } },
-        { "cookie", result["cookie"] }
-    };
-    return result;
+    return callback ? QVariantMap() : doCallback(result);
 }
 
 // 二维码生成接口
-QVariantMap Api::login_qr_create(QVariantMap query) {
+QVariantMap Api::login_qr_create(QVariantMap query, callbackType callback) {
     const QString url = "https://music.163.com/login?codekey=" + query["key"].toString();
     auto result = QVariantMap {
         { "code", 200 },
@@ -2036,11 +2152,25 @@ QVariantMap Api::login_qr_create(QVariantMap query) {
                               } }
                  } }
     };
+    if (callback) callback(result);
     return result;
 }
 
 // 登录刷新
-QVariantMap Api::login_refresh(QVariantMap query) {
+QVariantMap Api::login_refresh(QVariantMap query, callbackType callback) {
+    auto doCallback = [=](QVariantMap result) {
+        if(result["body"].toMap()["code"].toInt() == 200) {
+            auto body = result["body"].toMap();
+            body["cookie"] = result["cookie"];
+            result = QVariantMap {
+                { "status", 200 },
+                { "body", body },
+                { "cookie", result["cookie"] }
+            };
+        }
+        if (callback) callback(result);
+        return result;
+    };
     QVariantMap result = request(
         POST,
         "https://music.163.com/weapi/login/token/refresh",
@@ -2049,22 +2179,29 @@ QVariantMap Api::login_refresh(QVariantMap query) {
             { "crypto", "weapi" },
             { "ua", "pc" },
             _PARAM
-        }
+        },
+        callback ? doCallback : callback
         );
-    if(result["body"].toMap()["code"].toInt() == 200) {
-        auto body = result["body"].toMap();
-        body["cookie"] = result["cookie"];
-        result = QVariantMap {
-            { "status", 200 },
-            { "body", body },
-            { "cookie", result["cookie"] }
-        };
-    }
-    return result;
+    return callback ? QVariantMap() : doCallback(result);
 }
 
 // 登录状态
-QVariantMap Api::login_status(QVariantMap query) {
+QVariantMap Api::login_status(QVariantMap query, callbackType callback) {
+    auto doCallback = [=](QVariantMap result) {
+        if(result["body"].toMap()["code"].toInt() == 200) {
+            auto body = result["body"].toMap();
+            body["cookie"] = result["cookie"];
+            result = QVariantMap {
+                { "status", 200 },
+                { "body", {
+                             { "data", result["body"] }
+                         } },
+                { "cookie", result["cookie"] }
+            };
+        }
+        if (callback) callback(result);
+        return result;
+    };
     QVariantMap result = request(
         POST,
         "https://music.163.com/weapi/w/nuser/account/get",
@@ -2072,24 +2209,14 @@ QVariantMap Api::login_status(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback ? doCallback : callback
         );
-    if(result["body"].toMap()["code"].toInt() == 200) {
-        auto body = result["body"].toMap();
-        body["cookie"] = result["cookie"];
-        result = QVariantMap {
-            { "status", 200 },
-            { "body", {
-                         { "data", result["body"] }
-                     } },
-            { "cookie", result["cookie"] }
-        };
-    }
-    return result;
+    return callback ? QVariantMap() : doCallback(result);
 }
 
 // 退出登录
-QVariantMap Api::logout(QVariantMap query) {
+QVariantMap Api::logout(QVariantMap query, callbackType callback) {
     return request(
         POST,
         "https://music.163.com/weapi/logout",
@@ -2098,12 +2225,13 @@ QVariantMap Api::logout(QVariantMap query) {
             { "crypto", "eapi" },
             { "ua", "pc" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 新版歌词 - 包含逐字歌词
-QVariantMap Api::lyric_new(QVariantMap query) {
+QVariantMap Api::lyric_new(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "id", query["id"] },
         { "cp", false},
@@ -2123,12 +2251,13 @@ QVariantMap Api::lyric_new(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/song/lyric/v1" }
-        }
+        },
+        callback
         );
 }
 
 // 歌词
-QVariantMap Api::lyric(QVariantMap query) {
+QVariantMap Api::lyric(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     query["cookie"] = cookie;
@@ -2147,12 +2276,13 @@ QVariantMap Api::lyric(QVariantMap query) {
         {
             { "crypto", "api" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 重复昵称检测
-QVariantMap Api::nickname_check(QVariantMap query) {
+QVariantMap Api::nickname_check(QVariantMap query, callbackType callback) {
     QVariantMap data {
         { "nickname", query["nickname"] }
     };
@@ -2163,12 +2293,13 @@ QVariantMap Api::nickname_check(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 游客登录
-QVariantMap Api::register_anonimous(QVariantMap query) {
+QVariantMap Api::register_anonimous(QVariantMap query, callbackType callback) {
     auto cookie = query["cookie"].toMap();
     cookie["os"] = "iOS";
     query["cookie"] = cookie;
@@ -2200,6 +2331,19 @@ QVariantMap Api::register_anonimous(QVariantMap query) {
                               { "username", username },
                               };
 
+    auto doCallback = [=](QVariantMap result) {
+        if(result["body"].toMap()["code"].toInt() == 200) {
+            auto body = result["body"].toMap();
+            body["cookie"] = result["cookie"].toStringList().join(';');
+            result = QVariantMap {
+                { "status", 200 },
+                { "body", body },
+                { "cookie", result["cookie"] }
+            };
+        }
+        if (callback) callback(result);
+        return result;
+    };
     QVariantMap result = request(
         POST,
         "https://music.163.com/api/register/anonimous",
@@ -2207,22 +2351,51 @@ QVariantMap Api::register_anonimous(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback ? doCallback : callback
         );
-    if(result["body"].toMap()["code"].toInt() == 200) {
-        auto body = result["body"].toMap();
-        body["cookie"] = result["cookie"].toStringList().join(';');
-        result = QVariantMap {
-            { "status", 200 },
-            { "body", body },
-            { "cookie", result["cookie"] }
-        };
-    }
-    return result;
+    return callback ? QVariantMap() : doCallback(result);
 }
 
 // 相关歌单
-QVariantMap Api::related_playlist(QVariantMap query) {
+QVariantMap Api::related_playlist(QVariantMap query, callbackType callback) {
+    auto doCallback = [=](QVariantMap result) {
+        QRegularExpression pattern("<div class=\"cver u-cover u-cover-3\">[\\s\\S]*?<img src=\"([^\"]+)\">[\\s\\S]*?<a class=\"sname f-fs1 s-fc0\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>[\\s\\S]*?<a class=\"nm nm f-thide s-fc3\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>");
+        QRegularExpressionMatchIterator it = pattern.globalMatch(result["body"].toString());
+        QJsonArray playlists;
+        while (it.hasNext()) {
+            auto result = it.next().capturedTexts();
+            playlists.push_back(
+                QJsonValue::fromVariant(
+                    QVariantMap {
+                        {
+                            "creator", {
+                                QVariantMap {
+                                    { "userId", result[4].split("/user/home?id=")[1] },
+                                    { "nickname", result[5] }
+                                }
+                            }
+                        },
+                        {
+                            "coverImgUrl", result[1].split("?param=50y50")[0]
+                        },
+                        {
+                            "name", result[3]
+                        },
+                        {
+                            "id", result[2].split("/playlist?id=")[1]
+                        }
+                    }
+                    )
+                );
+        }
+        result["body"] = QVariantMap {
+            { "code", 200 },
+            { "playlists", QVariant(playlists) }
+        };
+        if (callback) callback(result);
+        return result;
+    };
     QVariantMap result = request(
         GET,
         "https://music.163.com/playlist?id=" + query["id"].toString(),
@@ -2230,46 +2403,14 @@ QVariantMap Api::related_playlist(QVariantMap query) {
         {
             { "ua", "pc" },
             _PARAM
-        }
+        },
+        callback ? doCallback : callback
         );
-    QRegularExpression pattern("<div class=\"cver u-cover u-cover-3\">[\\s\\S]*?<img src=\"([^\"]+)\">[\\s\\S]*?<a class=\"sname f-fs1 s-fc0\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>[\\s\\S]*?<a class=\"nm nm f-thide s-fc3\" href=\"([^\"]+)\"[^>]*>([^<]+?)<\\/a>");
-    QRegularExpressionMatchIterator it = pattern.globalMatch(result["body"].toString());
-    QJsonArray playlists;
-    while (it.hasNext()) {
-        auto result = it.next().capturedTexts();
-        playlists.push_back(
-            QJsonValue::fromVariant(
-                QVariantMap {
-                    {
-                        "creator", {
-                            QVariantMap {
-                                { "userId", result[4].split("/user/home?id=")[1] },
-                                { "nickname", result[5] }
-                            }
-                        }
-                    },
-                    {
-                        "coverImgUrl", result[1].split("?param=50y50")[0]
-                    },
-                    {
-                        "name", result[3]
-                    },
-                    {
-                        "id", result[2].split("/playlist?id=")[1]
-                    }
-                }
-                )
-            );
-    }
-    result["body"] = QVariantMap {
-        { "code", 200 },
-        { "playlists", QVariant(playlists) }
-    };
-    return result;
+    return callback ? QVariantMap() : doCallback(result);
 }
 
 // 搜索
-QVariantMap Api::search(QVariantMap query) {
+QVariantMap Api::search(QVariantMap query, callbackType callback) {
     if (query.contains("type") && query["type"].toString() == "2000") {
         const QVariantMap data {
             { "keyword", query["keywords"] },
@@ -2300,12 +2441,13 @@ QVariantMap Api::search(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 获取客户端歌曲下载链接
-QVariantMap Api::song_download_url(QVariantMap query) {
+QVariantMap Api::song_download_url(QVariantMap query, callbackType callback) {
     QVariantMap data {
         { "id", query["id"] },
         { "br", query.value("br", 999000) }
@@ -2318,14 +2460,15 @@ QVariantMap Api::song_download_url(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/song/enhance/download/url" }
-        }
+        },
+        callback
         );
 }
 
 // 歌曲链接 - v1
 // 此版本不再采用 br 作为音质区分的标准
 // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
-QVariantMap Api::song_url_v1(QVariantMap query) {
+QVariantMap Api::song_url_v1(QVariantMap query, callbackType callback) {
     QVariantMap data {
         { "ids", query["id"].toList() },
         { "level", query["level"].toString() },
@@ -2342,12 +2485,13 @@ QVariantMap Api::song_url_v1(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/song/enhance/player/url/v1" }
-        }
+        },
+        callback
         );
 }
 
 // 音乐百科基础信息
-QVariantMap Api::song_wiki_summary(QVariantMap query) {
+QVariantMap Api::song_wiki_summary(QVariantMap query, callbackType callback) {
     QVariantMap data {
         { "songId", query["id"].toInt() }
     };
@@ -2359,12 +2503,13 @@ QVariantMap Api::song_wiki_summary(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/song/play/about/block/page" }
-        }
+        },
+        callback
         );
 }
 
 // 年度听歌报告2017-2022
-QVariantMap Api::summary_annual(QVariantMap query) {
+QVariantMap Api::summary_annual(QVariantMap query, callbackType callback) {
     QVariantMap data { };
     const QString key = QStringList { "2017", "2018", "2019 "}.indexOf(query["year"].toString()) > -1 ? "userdata" : "data";
     return request(
@@ -2375,12 +2520,13 @@ QVariantMap Api::summary_annual(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/activity/summary/annual/" + query["year"].toString() + "/" + key }
-        }
+        },
+        callback
         );
 }
 
 // 获取达人达标信息
-QVariantMap Api::threshold_detail_get(QVariantMap query) {
+QVariantMap Api::threshold_detail_get(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -2390,12 +2536,13 @@ QVariantMap Api::threshold_detail_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/influencer/web/apply/threshold/detail/get" }
-        }
+        },
+        callback
         );
 }
 
 // 所有榜单介绍
-QVariantMap Api::toplist(QVariantMap query) {
+QVariantMap Api::toplist(QVariantMap query, callbackType callback) {
     return request(
         POST,
         "https://music.163.com/api/toplist",
@@ -2403,12 +2550,13 @@ QVariantMap Api::toplist(QVariantMap query) {
         {
             { "crypto", "api" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 专辑简要百科信息
-QVariantMap Api::ugc_album_get(QVariantMap query) {
+QVariantMap Api::ugc_album_get(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "albumId", query["id"] }
     };
@@ -2420,12 +2568,13 @@ QVariantMap Api::ugc_album_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/rep/ugc/album/get" }
-        }
+        },
+        callback
         );
 }
 
 // 歌手简要百科信息
-QVariantMap Api::ugc_artist_get(QVariantMap query) {
+QVariantMap Api::ugc_artist_get(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "artistId", query["id"] }
     };
@@ -2437,13 +2586,14 @@ QVariantMap Api::ugc_artist_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/rep/ugc/artist/get" }
-        }
+        },
+        callback
         );
 }
 
 // 搜索歌手
 // 可传关键字或者歌手id
-QVariantMap Api::ugc_artist_search(QVariantMap query) {
+QVariantMap Api::ugc_artist_search(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "keyword", query["keyword"] },
         { "limit", query.value("limit", 40) }
@@ -2455,12 +2605,13 @@ QVariantMap Api::ugc_artist_search(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // mv简要百科信息
-QVariantMap Api::ugc_mv_get(QVariantMap query) {
+QVariantMap Api::ugc_mv_get(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "mvId", query["id"] }
     };
@@ -2472,12 +2623,13 @@ QVariantMap Api::ugc_mv_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/rep/ugc/mv/get" }
-        }
+        },
+        callback
         );
 }
 
 // 歌曲简要百科信息
-QVariantMap Api::ugc_song_get(QVariantMap query) {
+QVariantMap Api::ugc_song_get(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "songId", query["id"] }
     };
@@ -2489,12 +2641,13 @@ QVariantMap Api::ugc_song_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/rep/ugc/song/get" }
-        }
+        },
+        callback
         );
 }
 
 // 获取账号信息
-QVariantMap Api::user_account(QVariantMap query) {
+QVariantMap Api::user_account(QVariantMap query, callbackType callback) {
     const QVariantMap data {};
     return request(
         POST,
@@ -2503,12 +2656,13 @@ QVariantMap Api::user_account(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 用户创建的电台
-QVariantMap Api::user_audio(QVariantMap query) {
+QVariantMap Api::user_audio(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "userId", query["uid"] }
     };
@@ -2519,12 +2673,13 @@ QVariantMap Api::user_audio(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 获取用户绑定信息
-QVariantMap Api::user_binding(QVariantMap query) {
+QVariantMap Api::user_binding(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -2533,12 +2688,13 @@ QVariantMap Api::user_binding(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 云盘歌曲删除
-QVariantMap Api::user_cloud_del(QVariantMap query) {
+QVariantMap Api::user_cloud_del(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "songIds", QVariantList{ query["id"] } }
     };
@@ -2549,12 +2705,13 @@ QVariantMap Api::user_cloud_del(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 云盘数据详情
-QVariantMap Api::user_cloud_detail(QVariantMap query) {
+QVariantMap Api::user_cloud_detail(QVariantMap query, callbackType callback) {
     const auto id = query["id"].toString().replace("\\s", "").split(",");
     const QVariantMap data {
         { "songIds", id }
@@ -2566,12 +2723,13 @@ QVariantMap Api::user_cloud_detail(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 云盘数据
-QVariantMap Api::user_cloud(QVariantMap query) {
+QVariantMap Api::user_cloud(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) }
@@ -2583,12 +2741,13 @@ QVariantMap Api::user_cloud(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 获取用户历史评论
-QVariantMap Api::user_comment_history(QVariantMap query) {
+QVariantMap Api::user_comment_history(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -2607,12 +2766,13 @@ QVariantMap Api::user_comment_history(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 用户详情
-QVariantMap Api::user_detail(QVariantMap query) {
+QVariantMap Api::user_detail(QVariantMap query, callbackType callback) {
     return request(
         POST,
         "https://music.163.com/weapi/v1/user/detail/" + query["uid"].toString(),
@@ -2620,12 +2780,13 @@ QVariantMap Api::user_detail(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 用户电台节目
-QVariantMap Api::user_dj(QVariantMap query) {
+QVariantMap Api::user_dj(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) }
@@ -2637,12 +2798,13 @@ QVariantMap Api::user_dj(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 用户动态
-QVariantMap Api::user_event(QVariantMap query) {
+QVariantMap Api::user_event(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -2660,12 +2822,13 @@ QVariantMap Api::user_event(QVariantMap query) {
         {
             { "crypto", "api" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 关注TA的人(粉丝)
-QVariantMap Api::user_followeds(QVariantMap query) {
+QVariantMap Api::user_followeds(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "userId", query["uid"] },
         { "time", "0" },
@@ -2681,12 +2844,13 @@ QVariantMap Api::user_followeds(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/user/getfolloweds" }
-        }
+        },
+        callback
         );
 }
 
 // TA关注的人(关注)
-QVariantMap Api::user_follows(QVariantMap query) {
+QVariantMap Api::user_follows(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "offset", query.value("offset", 0) },
         { "limit", query.value("limit", 30) },
@@ -2699,12 +2863,13 @@ QVariantMap Api::user_follows(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 获取用户等级信息
-QVariantMap Api::user_level(QVariantMap query) {
+QVariantMap Api::user_level(QVariantMap query, callbackType callback) {
     const QVariantMap data { };
     return request(
         POST,
@@ -2713,12 +2878,13 @@ QVariantMap Api::user_level(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 用户歌单
-QVariantMap Api::user_playlist(QVariantMap query) {
+QVariantMap Api::user_playlist(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "uid", query["uid"] },
         { "limit", query.value("limit", 30) },
@@ -2732,12 +2898,13 @@ QVariantMap Api::user_playlist(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 听歌排行
-QVariantMap Api::user_record(QVariantMap query) {
+QVariantMap Api::user_record(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "uid", query["uid"] },
         { "type", query.value("type", 0) } // 1: 最近一周, 0: 所有时间
@@ -2749,12 +2916,13 @@ QVariantMap Api::user_record(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 用户绑定手机
-QVariantMap Api::user_replacephone(QVariantMap query) {
+QVariantMap Api::user_replacephone(QVariantMap query, callbackType callback) {
     const QVariantMap data {
         { "phone", query["phone"] },
         { "captcha", query["captcha"] },
@@ -2768,12 +2936,13 @@ QVariantMap Api::user_replacephone(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 收藏计数
-QVariantMap Api::user_subcount(QVariantMap query) {
+QVariantMap Api::user_subcount(QVariantMap query, callbackType callback) {
     return request(
         POST,
         "https://music.163.com/weapi/subcount",
@@ -2781,12 +2950,13 @@ QVariantMap Api::user_subcount(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 编辑用户信息
-QVariantMap Api::user_update(QVariantMap query) {
+QVariantMap Api::user_update(QVariantMap query, callbackType callback) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "ios";
     cookie["appver"] = "8.10.90";
@@ -2806,12 +2976,13 @@ QVariantMap Api::user_update(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 云贝 todo 任务
-QVariantMap Api::yunbei_tasks_todo(QVariantMap query) {
+QVariantMap Api::yunbei_tasks_todo(QVariantMap query, callbackType callback) {
     const QVariantMap data {};
     // /api/point/today/get
     return request(
@@ -2821,12 +2992,13 @@ QVariantMap Api::yunbei_tasks_todo(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 云贝所有任务
-QVariantMap Api::yunbei_tasks(QVariantMap query) {
+QVariantMap Api::yunbei_tasks(QVariantMap query, callbackType callback) {
     const QVariantMap data {};
     // /api/point/today/get
     return request(
@@ -2836,12 +3008,13 @@ QVariantMap Api::yunbei_tasks(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 云贝今日签到信息
-QVariantMap Api::yunbei_today(QVariantMap query) {
+QVariantMap Api::yunbei_today(QVariantMap query, callbackType callback) {
     const QVariantMap data {};
     // /api/point/today/get
     return request(
@@ -2851,12 +3024,13 @@ QVariantMap Api::yunbei_today(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 
 // 云贝
-QVariantMap Api::yunbei(QVariantMap query) {
+QVariantMap Api::yunbei(QVariantMap query, callbackType callback) {
     const QVariantMap data {};
     // /api/point/today/get
     return request(
@@ -2866,7 +3040,8 @@ QVariantMap Api::yunbei(QVariantMap query) {
         {
             { "crypto", "weapi" },
             _PARAM
-        }
+        },
+        callback
         );
 }
 

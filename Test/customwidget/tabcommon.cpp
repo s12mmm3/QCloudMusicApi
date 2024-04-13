@@ -16,8 +16,6 @@ TabCommon::TabCommon(QWidget *parent) :
     ui->setupUi(this);
     //将Api中的方法名称取出
     ui->comboBox->addItems(ApiHelper::memberList());
-
-    connect(this, &TabCommon::invoked, this, &TabCommon::update);
 }
 
 TabCommon::~TabCommon()
@@ -35,12 +33,14 @@ void TabCommon::on_pushButton_send_clicked()
     QString member = ui->comboBox->currentText();
     QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toVariant().toMap();
 
-    QtConcurrent::run([this](QString member, QVariantMap arg) {
-
-        QVariantMap ret = helper.invoke(member, arg);
-
-        emit invoked(ret);
-    }, member, arg);
+    helper.invoke(member, arg, [this](QVariantMap ret) {
+        if(ui->checkBox->isChecked()) {
+            ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
+        }
+        else {
+            ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact));
+        }
+    });
 }
 
 
@@ -58,14 +58,4 @@ void TabCommon::on_checkBox_stateChanged(int arg1)
 {
     auto JsonFormat = arg1 ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_ret->setText(QJsonDocument::fromJson(ui->textEdit_ret->toPlainText().toUtf8()).toJson(JsonFormat));
-}
-
-void TabCommon::update(QVariantMap ret)
-{
-    if(ui->checkBox->isChecked()) {
-        ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
-    }
-    else {
-        ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact));
-    }
 }

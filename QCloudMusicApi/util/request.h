@@ -10,6 +10,7 @@ public:
     static QVariantMap createRequest(QNetworkAccessManager::Operation method,
                                      QString url,
                                      QVariantMap data,
-                                     QVariantMap options);
+                                     QVariantMap options,
+                                     std::function<void(QVariantMap)> callback = Q_NULLPTR);
 };
 }
