@@ -5,7 +5,7 @@
 
 #include <QObject>
 
-class QCLOUDMUSICAPI_EXPORT ApiHelper : public QObject
+class QCLOUDMUSICAPI_EXPORT ApiHelper : public NeteaseCloudMusicApi
 {
     Q_OBJECT
 public:
@@ -22,8 +22,6 @@ private:
     void afterInvoke(QVariantMap& ret);
 
 private:
-    NeteaseCloudMusicApi api;
-
     DEFINE_VALUE(QVariantMap, cookie, {})
 
 public:

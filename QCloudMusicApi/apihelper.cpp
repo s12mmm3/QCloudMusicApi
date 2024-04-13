@@ -1,12 +1,11 @@
 #include "apihelper.h"
 #include "util/index.h"
 
-#include <functional>
 #include <QMetaMethod>
 
-using namespace QCloudMusicApiProject;
+using namespace QCloudMusicApiNS;
 ApiHelper::ApiHelper(QObject *parent)
-    : QObject{parent}
+    : NeteaseCloudMusicApi{parent}
 {}
 
 void ApiHelper::beforeInvoke(QVariantMap& arg)
@@ -44,7 +43,7 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
     beforeInvoke(arg);
 
     QVariantMap ret;
-    QMetaObject::invokeMethod(&api, member.toUtf8()
+    QMetaObject::invokeMethod(this, member.toUtf8()
                               , Qt::DirectConnection
                               , Q_RETURN_ARG(QVariantMap, ret)
                               , Q_ARG(QVariantMap, arg));
@@ -58,8 +57,9 @@ QVariantMap ApiHelper::invoke(QVariantMap (NeteaseCloudMusicApi::*member)(QVaria
 {
     beforeInvoke(arg);
 
-    auto bind = std::bind(member, &api, arg);
-    QVariantMap ret = bind();
+    // auto bind = std::bind(member, &api, arg);
+    // QVariantMap ret = bind();
+    QVariantMap ret = (this->*member)(arg);
 
     afterInvoke(ret);
 

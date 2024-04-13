@@ -6,7 +6,7 @@
 #include <QNetworkCookie>
 #include <QVariantMap>
 
-namespace QCloudMusicApiProject {
+namespace QCloudMusicApiNS {
 class QCLOUDMUSICAPI_EXPORT Index {
 public:
     static QVariantMap stringToMap(const QString &cookie);

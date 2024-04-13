@@ -20,7 +20,7 @@
 #include "index.h"
 #include "request.h"
 
-using namespace QCloudMusicApiProject;
+using namespace QCloudMusicApiNS;
 QString Request::chooseUserAgent(QString ua) {
     const QMap<QString, QString> userAgentList {
         {
@@ -257,7 +257,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                                    : 400;
         }
 
-        reply->deleteLater();
+        // reply->deleteLater();
         return answer;
     };
     request.setUrl(url);

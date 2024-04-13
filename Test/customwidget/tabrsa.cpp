@@ -2,7 +2,7 @@
 #include "ui_tabrsa.h"
 #include "../../QCloudMusicApi/util/crypto.h"
 
-using namespace QCloudMusicApiProject;
+using namespace QCloudMusicApiNS;
 TabRsa::TabRsa(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabRsa)

@@ -1,6 +1,6 @@
 #include "index.h"
 
-using namespace QCloudMusicApiProject;
+using namespace QCloudMusicApiNS;
 QVariantMap Index::stringToMap(const QString &cookie) {
     if (cookie.isEmpty()) return QVariantMap();
     QVariantMap map;
@@ -48,8 +48,12 @@ QList<QNetworkCookie> Index::mapToCookie(QVariantMap &cookie) {
 QVariantMap Index::mergeMap(const QVariantMap &map0, const QVariantMap &map1)
 {
     QVariantMap result = map0; //复制第一个map
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     for (auto i = map1.constBegin(); i != map1.constEnd(); ++i) {
         result.insert(i.key(), i.value()); //插入或覆盖第二个map的键值对
     }
+#else
+    result.insert(map1);
+#endif
     return result;
 }

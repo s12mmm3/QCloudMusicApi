@@ -3,7 +3,7 @@
 
 #include "../global.h"
 
-namespace QCloudMusicApiProject {
+namespace QCloudMusicApiNS {
 class QCLOUDMUSICAPI_EXPORT Request {
 public:
     static QString chooseUserAgent(QString ua = "");
