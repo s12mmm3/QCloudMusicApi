@@ -196,70 +196,6 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
     // 发送HTTP请求
-    auto getResult = [&](QNetworkReply* reply) -> QVariantMap {
-        QVariantMap answer {
-            { "status", 500 },
-            { "body", {} },
-            { "cookie", {} }
-        };
-
-        // 开启一个局部的事件循环，等待响应结束，退出
-        QEventLoop eventLoop;
-        QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
-        eventLoop.exec(); // 启动事件循环
-
-        if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
-            answer["body"] = QVariantMap {
-                { "code", 502 },
-                { "msg", reply->errorString() }
-            };
-            answer["status"] = 502;
-        }
-        else {
-            {
-                //打印响应头
-                QVariantMap headers;
-                for(auto& i : reply->rawHeaderList()) {
-                    if(!request.rawHeader(i).isNull()) headers[i] = request.rawHeader(i);
-                }
-                qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
-            }
-
-            // 读取响应内容
-            auto body = reply->readAll();
-            qDebug().noquote() << "body" << body;
-
-            if(reply->header(QNetworkRequest::SetCookieHeader).isValid()) {
-                // 去掉cookie中的domain属性
-                auto cookie = reply->header(QNetworkRequest::SetCookieHeader).value<QList<QNetworkCookie>>()[0];
-                cookie.setDomain("");
-                answer["cookie"] = cookie.toRawForm();
-            }
-            if(options["crypto"].toString() == "eapi") {
-                answer["body"] = QJsonDocument::fromJson(
-                                     Crypto::aesDecrypt(body, "ecb", Crypto::eapiKey.toUtf8().data(), "")
-                                     ).toVariant().toMap();
-                if(answer["body"].toMap().isEmpty()) {
-                    answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
-                }
-            }
-            else {
-                if(!QJsonDocument::fromJson(body).isNull()) answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
-                else answer["body"] = QString::fromUtf8(body);
-            }
-            answer["status"] = answer["body"].toMap().value("code", reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
-            if(QList<int> { 201, 302, 400, 502, 800, 801, 802, 803 }.indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
-                answer["status"] = 200;
-            }
-
-            answer["status"] = 100 < answer["status"].toInt() && answer["status"].toInt() < 600
-                                   ? answer["status"]
-                                   : 400;
-        }
-
-        // reply->deleteLater();
-        return answer;
-    };
     request.setUrl(url);
     QNetworkReply* reply;
     if (method == QNetworkAccessManager::PostOperation) {
@@ -271,5 +207,61 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     } else {
         reply = manager.get(request);
     }
-    return getResult(reply);
+
+    QVariantMap answer {
+        { "status", 500 },
+        { "body", {} },
+        { "cookie", {} }
+    };
+
+    // 开启一个局部的事件循环，等待响应结束，退出
+    QEventLoop eventLoop;
+    QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
+    eventLoop.exec(); // 启动事件循环
+
+    if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
+        answer["body"] = QVariantMap {
+            { "code", 502 },
+            { "msg", reply->errorString() }
+        };
+        answer["status"] = 502;
+    }
+    else {
+        // 打印响应头
+        qDebug().noquote() << reply->rawHeaderPairs();
+
+        // 读取响应内容
+        auto body = reply->readAll();
+        qDebug().noquote() << "body" << body;
+
+        if(reply->header(QNetworkRequest::SetCookieHeader).isValid()) {
+            // 去掉cookie中的domain属性
+            auto cookie = reply->header(QNetworkRequest::SetCookieHeader).value<QList<QNetworkCookie>>()[0];
+            cookie.setDomain("");
+            answer["cookie"] = cookie.toRawForm();
+        }
+        if(options["crypto"].toString() == "eapi") {
+            answer["body"] = QJsonDocument::fromJson(
+                                 Crypto::aesDecrypt(body, "ecb", Crypto::eapiKey.toUtf8().data(), "")
+                                 ).toVariant().toMap();
+            if(answer["body"].toMap().isEmpty()) {
+                answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+            }
+        }
+        else {
+            if(!QJsonDocument::fromJson(body).isNull()) answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+            else answer["body"] = QString::fromUtf8(body);
+        }
+        answer["status"] = answer["body"].toMap().value("code", reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
+        if(QList<int> { 201, 302, 400, 502, 800, 801, 802, 803 }.indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
+            answer["status"] = 200;
+        }
+
+        answer["status"] = 100 < answer["status"].toInt() && answer["status"].toInt() < 600
+                               ? answer["status"]
+                               : 400;
+    }
+
+    // reply->deleteLater();
+    return answer;
 }
