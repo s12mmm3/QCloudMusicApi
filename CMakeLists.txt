@@ -40,7 +40,7 @@ endif()
 
 find_package(QT NAMES Qt6 Qt5)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS HttpServer)
-if(TARGET Qt${QT_VERSION_MAJOR}::HttpServer)
+if(Qt${QT_VERSION_MAJOR}HttpServer_FOUND)
     # Qt6.4后才支持QHttpServer库
     if(MUSICAPI_SERVER)
         add_subdirectory(ApiServer)
