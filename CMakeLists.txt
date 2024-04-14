@@ -38,14 +38,12 @@ if(MUSICAPI_TEST)
     add_subdirectory(Test)
 endif()
 
-if(NOT ANDROID AND NOT IOS)
-    find_package(QT NAMES Qt6 Qt5)
-    find_package(Qt${QT_VERSION_MAJOR})
-    if(${QT_VERSION} VERSION_GREATER 6.4.0)
-        # Qt6.4后才支持QHttpServer库
-        if(MUSICAPI_SERVER)
-            add_subdirectory(ApiServer)
-        endif()
+find_package(QT NAMES Qt6 Qt5)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS HttpServer)
+if(Qt${QT_VERSION_MAJOR}_FOUND AND TARGET Qt${QT_VERSION_MAJOR}::HttpServer)
+    # Qt6.4后才支持QHttpServer库
+    if(MUSICAPI_SERVER)
+        add_subdirectory(ApiServer)
     endif()
 endif()
 
