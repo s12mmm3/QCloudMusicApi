@@ -39,7 +39,7 @@ if(MUSICAPI_TEST)
 endif()
 
 find_package(QT NAMES Qt6 Qt5)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS HttpServer REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS HttpServer)
 if(Qt${QT_VERSION_MAJOR}HttpServer_FOUND)
     # Qt6.4后才支持QHttpServer库
     if(MUSICAPI_SERVER)
