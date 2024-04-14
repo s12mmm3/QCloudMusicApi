@@ -5,7 +5,6 @@ project(QCloudMusicApiProject VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 
 option(MUSICAPI_TEST "Build Test" ON)
-option(MUSICAPI_CAPI "Build CApi" ON)
 option(MUSICAPI_SERVER "Build ApiServer" ON)
 option(MUSICAPI_SETOUTPUTPATH "Set default output path" ON)
 
@@ -40,9 +39,6 @@ if(MUSICAPI_TEST)
 endif()
 
 if(NOT ANDROID AND NOT IOS)
-    if(MUSICAPI_CAPI)
-        add_subdirectory(CApi)
-    endif()
     find_package(QT NAMES Qt6 Qt5)
     find_package(Qt${QT_VERSION_MAJOR})
     if(${QT_VERSION} VERSION_GREATER 6.4.0)
