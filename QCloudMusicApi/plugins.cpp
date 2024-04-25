@@ -11,11 +11,11 @@ const static auto &POST = QNetworkAccessManager::PostOperation;
 const static auto &GET = QNetworkAccessManager::GetOperation;
 
 using namespace QCloudMusicApiNS;
-plugins::plugins(QObject *parent)
+Plugins::Plugins(QObject *parent)
     : QObject{parent}
 {}
 
-QVariantMap plugins::songUpload(QVariantMap query)
+QVariantMap Plugins::upload(QVariantMap query)
 {
     const QVariantMap data {
         { "bucket", "yyimgs" },

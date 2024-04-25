@@ -6,13 +6,13 @@
 #include <QVariantMap>
 
 namespace QCloudMusicApiNS {
-class QCLOUDMUSICAPI_EXPORT plugins : public QObject
+class QCLOUDMUSICAPI_EXPORT Plugins : public QObject
 {
     Q_OBJECT
 public:
-    explicit plugins(QObject *parent = nullptr);
+    explicit Plugins(QObject *parent = nullptr);
 
-    Q_INVOKABLE QVariantMap songUpload(QVariantMap);
+    Q_INVOKABLE QVariantMap upload(QVariantMap);
 signals:
 };
 }
