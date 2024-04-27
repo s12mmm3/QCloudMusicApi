@@ -14,6 +14,10 @@ public:
                                      QVariantMap options);
 
     // 仿axios的网络请求，需要手动析构QNetworkReply和QNetworkAccessManager
-    static QNetworkReply* axios(QNetworkAccessManager::Operation method, QString url, QVariantMap headers, QVariantMap data, QNetworkProxy proxy = QNetworkProxy::NoProxy);
+    static QNetworkReply* axios(QNetworkAccessManager::Operation method,
+                                QString url,
+                                const QVariantMap &headers,
+                                const QByteArray &data,
+                                QNetworkProxy proxy = QNetworkProxy::NoProxy);
 };
 }

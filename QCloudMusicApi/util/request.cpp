@@ -168,7 +168,15 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
     qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
-    QNetworkReply* reply = axios(method, url, headers, data, proxy);
+    QUrlQuery urlQuery;
+    if (method == QNetworkAccessManager::PostOperation) {
+        for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
+            urlQuery.addQueryItem(i.key(), i.value().toString());
+        }
+    }
+    QNetworkReply* reply = axios(method, url, headers, urlQuery.toString().toUtf8(), proxy);
+    reply->deleteLater();
+    reply->manager()->deleteLater();
 
     QVariantMap answer {
         { "status", 500 },
@@ -219,12 +227,10 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                                : 400;
     }
 
-    reply->deleteLater();
-    reply->manager()->deleteLater();
     return answer;
 }
 
-QNetworkReply *Request::axios(QNetworkAccessManager::Operation method, QString url, QVariantMap headers, QVariantMap data, QNetworkProxy proxy)
+QNetworkReply *Request::axios(QNetworkAccessManager::Operation method, QString url, const QVariantMap &headers, const QByteArray &data, QNetworkProxy proxy)
 {
     // 发送HTTP请求
     QNetworkRequest request;
@@ -237,11 +243,7 @@ QNetworkReply *Request::axios(QNetworkAccessManager::Operation method, QString u
     QNetworkAccessManager* manager = new QNetworkAccessManager();
     manager->setProxy(proxy);
     if (method == QNetworkAccessManager::PostOperation) {
-        QUrlQuery urlQuery;
-        for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
-            urlQuery.addQueryItem(i.key(), i.value().toString());
-        }
-        reply = manager->post(request, urlQuery.toString().toUtf8());
+        reply = manager->post(request, data);
     } else {
         reply = manager->get(request);
     }

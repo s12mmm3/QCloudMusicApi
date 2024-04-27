@@ -38,21 +38,17 @@ QVariantMap Plugins::upload(QVariantMap query)
          { "ua", query.value("ua", "") },
          }
         );
-    QNetworkRequest networkRequest;
-    networkRequest.setRawHeader("x-nos-token", res["body"].toMap()["result"].toMap()["token"].toByteArray());
-    networkRequest.setRawHeader("Content-Type", "image/jpeg");
-    networkRequest.setUrl("https://nosup-hz1.127.net/yyimgs/"
-                   + res["body"].toMap()["result"].toMap()["objectKey"].toString()
-                   + "?offset=0&complete=true&version=1.0");
-
-    // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
-    QNetworkAccessManager manager;
-    QNetworkReply* reply = manager.post(networkRequest, query["imgFile"].toMap()["data"].toByteArray());
-
-    // 开启一个局部的事件循环，等待响应结束，退出
-    QEventLoop eventLoop;
-    QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
-    eventLoop.exec(); // 启动事件循环
+    auto reply = Request::axios(QNetworkAccessManager::PostOperation,
+                                "https://nosup-hz1.127.net/yyimgs/"
+                                    + res["body"].toMap()["result"].toMap()["objectKey"].toString()
+                                    + "?offset=0&complete=true&version=1.0",
+                                {
+                                    { "x-nos-token", res["body"].toMap()["result"].toMap()["token"].toByteArray() },
+                                    { "Content-Type", "image/jpeg" }
+                                },
+                                query["imgFile"].toMap()["data"].toByteArray());
+    reply->deleteLater();
+    reply->manager()->deleteLater();
 
     // 读取响应内容
     auto body = reply->readAll();
