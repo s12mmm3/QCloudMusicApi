@@ -152,52 +152,29 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         url = url.replace(QRegularExpression("\\w*api"), "eapi");
     }
 
-    // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
-    QNetworkAccessManager manager;
-
+    QNetworkProxy proxy = QNetworkProxy::NoProxy;
     if (options.contains("proxy") && !options["proxy"].isNull()) {
         QUrl purl(options["proxy"].toString());
         if (!purl.host().isEmpty()) {
-            QNetworkProxy proxy;
             proxy.setType(QNetworkProxy::HttpProxy);
             proxy.setHostName(purl.host());
             proxy.setPort(purl.port(80));
-            manager.setProxy(proxy);
+
         } else {
-            manager.setProxy (QNetworkProxy::NoProxy);
+            proxy = QNetworkProxy::NoProxy;
             qDebug() << "代理配置无效，不使用代理";
         }
     }
 
     qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
-    // 发送HTTP请求
-    QNetworkRequest request;
-    request.setUrl(url);
-    for (auto i = headers.constBegin(); i != headers.constEnd(); i++) {
-        request.setRawHeader(i.key().toUtf8(), i.value().toByteArray());
-    }
-    QNetworkReply* reply;
-    if (method == QNetworkAccessManager::PostOperation) {
-        QUrlQuery urlQuery;
-        for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
-            urlQuery.addQueryItem(i.key(), i.value().toString());
-        }
-        reply = manager.post(request, urlQuery.toString().toUtf8());
-    } else {
-        reply = manager.get(request);
-    }
+    QNetworkReply* reply = axios(method, url, headers, data, proxy);
 
     QVariantMap answer {
         { "status", 500 },
         { "body", {} },
         { "cookie", {} }
     };
-
-    // 开启一个局部的事件循环，等待响应结束，退出
-    QEventLoop eventLoop;
-    QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
-    eventLoop.exec(); // 启动事件循环
 
     if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
         answer["body"] = QVariantMap {
@@ -242,6 +219,37 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                                : 400;
     }
 
-    // reply->deleteLater();
+    reply->deleteLater();
+    reply->manager()->deleteLater();
     return answer;
+}
+
+QNetworkReply *Request::axios(QNetworkAccessManager::Operation method, QString url, QVariantMap headers, QVariantMap data, QNetworkProxy proxy)
+{
+    // 发送HTTP请求
+    QNetworkRequest request;
+    request.setUrl(url);
+    for (auto i = headers.constBegin(); i != headers.constEnd(); i++) {
+        request.setRawHeader(i.key().toUtf8(), i.value().toByteArray());
+    }
+    QNetworkReply* reply;
+    // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    manager->setProxy(proxy);
+    if (method == QNetworkAccessManager::PostOperation) {
+        QUrlQuery urlQuery;
+        for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
+            urlQuery.addQueryItem(i.key(), i.value().toString());
+        }
+        reply = manager->post(request, urlQuery.toString().toUtf8());
+    } else {
+        reply = manager->get(request);
+    }
+
+    // 开启一个局部的事件循环，等待响应结束，退出
+    QEventLoop eventLoop;
+    QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
+    eventLoop.exec(); // 启动事件循环
+
+    return reply;
 }

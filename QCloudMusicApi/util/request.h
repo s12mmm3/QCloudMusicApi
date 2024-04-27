@@ -1,4 +1,5 @@
 ﻿#include <QNetworkAccessManager>
+#include <QNetworkProxy>
 #include <QVariantMap>
 
 #include "../global.h"
@@ -11,5 +12,8 @@ public:
                                      QString url,
                                      QVariantMap data,
                                      QVariantMap options);
+
+    // 仿axios的网络请求，需要手动析构QNetworkReply和QNetworkAccessManager
+    static QNetworkReply* axios(QNetworkAccessManager::Operation method, QString url, QVariantMap headers, QVariantMap data, QNetworkProxy proxy = QNetworkProxy::NoProxy);
 };
 }
