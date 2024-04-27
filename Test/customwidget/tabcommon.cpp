@@ -17,6 +17,15 @@ TabCommon::TabCommon(QWidget *parent) :
     //将Api中的方法名称取出
     ui->comboBox->addItems(ApiHelper::memberList());
 
+    // for (int i = 0; i < 15; i++) {
+    //     QVariantMap ret = ServiceLocator::helper().invoke("register_anonimous", {});
+    //     auto cookie = ret.value("cookie", "").toString();
+    //     if (!cookie.isEmpty()) {
+    //         ServiceLocator::helper().set_cookie(cookie);
+    //         break;
+    //     }
+    // }
+
     connect(this, &TabCommon::invoked, this, &TabCommon::update);
 }
 
@@ -37,7 +46,7 @@ void TabCommon::on_pushButton_send_clicked()
 
     QtConcurrent::run([this](QString member, QVariantMap arg) {
 
-        QVariantMap ret = helper.invoke(member, arg);
+        QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
 
         emit invoked(ret);
     }, member, arg);

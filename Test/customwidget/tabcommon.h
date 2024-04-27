@@ -1,8 +1,6 @@
 #ifndef TABCOMMON_H
 #define TABCOMMON_H
 
-#include "../../QCloudMusicApi/apihelper.h"
-
 #include <QWidget>
 #include <QJsonDocument>
 #include <QVariantMap>
@@ -35,7 +33,6 @@ signals:
 
 private:
     Ui::TabCommon *ui;
-    ApiHelper helper;
 };
 
 #endif // TABCOMMON_H
