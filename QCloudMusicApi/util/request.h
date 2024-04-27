@@ -1,4 +1,7 @@
-﻿#include <QNetworkAccessManager>
+﻿#ifndef REQUEST_H
+#define REQUEST_H
+
+#include <QNetworkAccessManager>
 #include <QNetworkProxy>
 #include <QVariantMap>
 
@@ -21,3 +24,5 @@ public:
                                 QNetworkProxy proxy = QNetworkProxy::NoProxy);
 };
 }
+
+#endif // REQUEST_H
