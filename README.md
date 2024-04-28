@@ -94,7 +94,7 @@ C++代码中加上
 ### 手动编译
 手动安装好Qt库后
 ```Shell
-git clone https://github.com/s12mmm3/QCloudMusicApi.git
+git clone --recursive https://github.com/s12mmm3/QCloudMusicApi.git
 cmake -B build
 cmake --build build -j
 ```
