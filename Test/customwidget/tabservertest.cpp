@@ -39,7 +39,7 @@ void TabServerTest::on_pushButton_send_clicked()
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_arg->setText(QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toJson(JsonFormat));
 
-    QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toVariant().toMap();
+    auto method = ui->checkBox_post->isChecked() ? QNetworkAccessManager::PostOperation : QNetworkAccessManager::GetOperation;
     QString url = ui->label_url->text();
     if (ui->checkBox_timestamp->isChecked()) {
         QUrl u(url);
@@ -48,12 +48,13 @@ void TabServerTest::on_pushButton_send_clicked()
         u.setQuery(urlQuery);
         url = u.toString();
     }
+    QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toVariant().toMap();
 
     QtConcurrent::run([=](QVariantMap arg) {
         QVariantMap headers;
         // headers["Content-Type"] = "application/x-www-form-urlencoded";
         auto reply = QCloudMusicApiNS::Request
-            ::axios(QNetworkAccessManager::PostOperation,
+            ::axios(method,
                     url,
                     headers,
                     arg);

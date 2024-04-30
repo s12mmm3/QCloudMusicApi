@@ -46,16 +46,30 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
          <widget class="QComboBox" name="comboBox"/>
         </item>
         <item>
-         <widget class="QCheckBox" name="checkBox_timestamp">
-          <property name="text">
-           <string>timestamp</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QCheckBox" name="checkBox_timestamp">
+            <property name="text">
+             <string>timestamp</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_post">
+            <property name="text">
+             <string>post</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>

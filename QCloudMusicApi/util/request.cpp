@@ -240,6 +240,7 @@ QNetworkReply *Request::axios(QNetworkAccessManager::Operation method,
     manager->setProxy(proxy);
 
     QUrlQuery urlQuery;
+    urlQuery.setQuery(QUrl(url).query());
     for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
         urlQuery.addQueryItem(i.key(), i.value().toString());
     }
