@@ -23,11 +23,20 @@ int main(int argc, char *argv[])
         responder.sendResponse(response);
     });
     for(auto& member: ApiHelper().memberList()) {
-        auto path = "/" + member.replace("_", "/").trimmed();
+        auto path = member;
+        path = "/" + path.replace("_", "/").trimmed();
 
         auto ViewHandler = [=](const QHttpServerRequest &request) {
             QVariantMap arg;
-            for(auto& i: request.query().queryItems()) {
+            QUrlQuery urlQuery;
+            if (request.method() == QHttpServerRequest::Method::Post) {
+                auto body = request.body();
+                urlQuery.setQuery(body);
+            }
+            else {
+                urlQuery = request.query();
+            }
+            for (auto& i : urlQuery.queryItems()) {
                 arg[i.first] = i.second;
             }
 
@@ -36,7 +45,9 @@ int main(int argc, char *argv[])
                 headers[i.first] = i.second;
             }
             auto cookie = Index::stringToMap(headers["Cookie"].toString());
-            arg["cookie"] = cookie;
+            if (!cookie.isEmpty()) {
+                arg["cookie"] = cookie;
+            }
 
             // QVariantMap args {
             //     { "path", path },
