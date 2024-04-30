@@ -4,6 +4,7 @@
 
 ServiceLocator::ServiceLocator() {}
 QJsonDocument ServiceLocator::m_config;
+ApiHelper ServiceLocator::m_helper;
 
 void ServiceLocator::init()
 {

@@ -60,6 +60,11 @@
         <string>login_qr</string>
        </attribute>
       </widget>
+      <widget class="TabServerTest" name="tabServerTest">
+       <attribute name="title">
+        <string>serverTest</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -107,6 +112,11 @@
    <class>TabLogin_qr</class>
    <extends>QWidget</extends>
    <header>tablogin_qr.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TabServerTest</class>
+   <extends>QWidget</extends>
+   <header>tabservertest.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

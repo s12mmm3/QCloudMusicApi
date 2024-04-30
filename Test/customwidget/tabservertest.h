@@ -1,5 +1,7 @@
-#ifndef TABCOMMON_H
-#define TABCOMMON_H
+#ifndef TABSERVERTEST_H
+#define TABSERVERTEST_H
+
+#include "../../QCloudMusicApi/apihelper.h"
 
 #include <QWidget>
 #include <QJsonDocument>
@@ -7,17 +9,17 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class TabCommon;
+class TabServerTest;
 }
 QT_END_NAMESPACE
 
-class TabCommon : public QWidget
+class TabServerTest : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TabCommon(QWidget *parent = nullptr);
-    ~TabCommon();
+    explicit TabServerTest(QWidget *parent = nullptr);
+    ~TabServerTest();
 
 private slots:
     void on_pushButton_send_clicked();
@@ -28,11 +30,14 @@ private slots:
 
     void update(QVariantMap ret);
 
+    void setUrl();
+
 signals:
     void invoked(QVariantMap ret);
 
 private:
-    Ui::TabCommon *ui;
+    Ui::TabServerTest *ui;
+    ApiHelper helper;
 };
 
-#endif // TABCOMMON_H
+#endif // TABSERVERTEST_H

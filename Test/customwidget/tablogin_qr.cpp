@@ -1,7 +1,7 @@
 #include "tablogin_qr.h"
 #include "ui_tablogin_qr.h"
 
-#include "../../QCloudMusicApi/apihelper.h"
+#include "../servicelocator.h"
 
 #include "../libqrencode/qrencode.h"
 
@@ -57,8 +57,7 @@ QPixmap TabLogin_qr::generateQRCode(QString strUrl, qint32 temp_width, qint32 te
 }
 
 QVariantMap TabLogin_qr::invoke(const QString member, const QVariantMap arg) {
-    ApiHelper helper;
-    QVariantMap ret = helper.invoke(member, arg);
+    QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
     return ret;
 }
 
@@ -83,6 +82,10 @@ void TabLogin_qr::on_pushButton_login_qr_check_clicked()
                                  { "key", unikey }
                              });
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
+    auto cookie = ret["cookie"].toString();
+    if (!cookie.isEmpty()) {
+        ServiceLocator::helper().set_cookie(cookie);
+    }
 }
 
 
