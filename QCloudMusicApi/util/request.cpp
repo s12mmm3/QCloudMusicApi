@@ -168,13 +168,8 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
     qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
 
-    QUrlQuery urlQuery;
-    if (method == QNetworkAccessManager::PostOperation) {
-        for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
-            urlQuery.addQueryItem(i.key(), i.value().toString());
-        }
-    }
-    QNetworkReply* reply = axios(method, url, headers, urlQuery.toString().toUtf8(), proxy);
+
+    QNetworkReply* reply = axios(method, url, headers, data, proxy);
     reply->deleteLater();
     reply->manager()->deleteLater();
 
@@ -230,21 +225,34 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     return answer;
 }
 
-QNetworkReply *Request::axios(QNetworkAccessManager::Operation method, QString url, const QVariantMap &headers, const QByteArray &data, QNetworkProxy proxy)
+QNetworkReply *Request::axios(QNetworkAccessManager::Operation method,
+                              QString url,
+                              const QVariantMap &headers,
+                              const QVariantMap &data,
+                              QNetworkProxy proxy)
 {
-    // 发送HTTP请求
     QNetworkRequest request;
-    request.setUrl(url);
     for (auto i = headers.constBegin(); i != headers.constEnd(); i++) {
         request.setRawHeader(i.key().toUtf8(), i.value().toByteArray());
     }
-    QNetworkReply* reply;
     // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
     QNetworkAccessManager* manager = new QNetworkAccessManager();
     manager->setProxy(proxy);
+
+    QUrlQuery urlQuery;
+    for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
+        urlQuery.addQueryItem(i.key(), i.value().toString());
+    }
+
+    // 发送HTTP请求
+    QNetworkReply* reply;
     if (method == QNetworkAccessManager::PostOperation) {
-        reply = manager->post(request, data);
+        request.setUrl(url);
+        reply = manager->post(request, urlQuery.toString().toUtf8());
     } else {
+        QUrl qurl(url);
+        qurl.setQuery(urlQuery);
+        request.setUrl(qurl);
         reply = manager->get(request);
     }
 

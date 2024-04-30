@@ -46,7 +46,7 @@ QVariantMap Plugins::upload(QVariantMap query)
                                     { "x-nos-token", res["body"].toMap()["result"].toMap()["token"].toByteArray() },
                                     { "Content-Type", "image/jpeg" }
                                 },
-                                query["imgFile"].toMap()["data"].toByteArray());
+                                query["imgFile"].toMap());
     reply->deleteLater();
     reply->manager()->deleteLater();
 

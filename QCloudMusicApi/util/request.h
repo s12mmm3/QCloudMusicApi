@@ -1,6 +1,7 @@
 ﻿#ifndef REQUEST_H
 #define REQUEST_H
 
+#include <QFile>
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
 #include <QVariantMap>
@@ -20,7 +21,7 @@ public:
     static QNetworkReply* axios(QNetworkAccessManager::Operation method,
                                 QString url,
                                 const QVariantMap &headers,
-                                const QByteArray &data,
+                                const QVariantMap &data,
                                 QNetworkProxy proxy = QNetworkProxy::NoProxy);
 };
 }
