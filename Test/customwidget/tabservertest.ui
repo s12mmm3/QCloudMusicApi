@@ -19,7 +19,7 @@
      <property name="title">
       <string>Path</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_5">
+     <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
        <widget class="QLabel" name="label_url">
         <property name="text">
@@ -46,7 +46,18 @@
        </layout>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QComboBox" name="comboBox"/>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_timestamp">
+          <property name="text">
+           <string>timestamp</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
