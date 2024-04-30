@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: macos-latest
+    runs-on: macos-14-large
     strategy:
       # 矩阵配置
       matrix:
