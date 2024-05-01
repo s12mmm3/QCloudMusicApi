@@ -19,6 +19,7 @@
 #include "config.h"
 #include "index.h"
 #include "request.h"
+#include "logger.h"
 
 using namespace QCloudMusicApiNS;
 QString Request::chooseUserAgent(QString ua) {
@@ -42,7 +43,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                           QString url,
                           QVariantMap data,
                           QVariantMap options) {
-    qDebug().noquote() <<
+    qCDebug(Logger).noquote() <<
         QJsonDocument::fromVariant(
             QVariantMap {
                 { "method", method },
@@ -162,11 +163,11 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
         } else {
             proxy = QNetworkProxy::NoProxy;
-            qDebug() << "代理配置无效，不使用代理";
+            qCDebug(Logger) << "代理配置无效，不使用代理";
         }
     }
 
-    qDebug().noquote() << QJsonDocument::fromVariant(headers).toJson();
+    qCDebug(Logger).noquote() << QJsonDocument::fromVariant(headers).toJson();
 
 
     QNetworkReply* reply = axios(method, url, headers, data, proxy);
@@ -188,11 +189,11 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
     else {
         // 打印响应头
-        qDebug().noquote() << reply->rawHeaderPairs();
+        qCDebug(Logger).noquote() << reply->rawHeaderPairs();
 
         // 读取响应内容
         auto body = reply->readAll();
-        qDebug().noquote() << "body" << body;
+        qCDebug(Logger).noquote() << "body" << body;
 
         if(reply->header(QNetworkRequest::SetCookieHeader).isValid()) {
             // 去掉cookie中的domain属性

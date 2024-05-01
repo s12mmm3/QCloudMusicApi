@@ -9,20 +9,32 @@
 #include "../QCloudMusicApi/apihelper.h"
 #include "../QCloudMusicApi/util/index.h"
 
+Q_LOGGING_CATEGORY(Logger, "ApiServer")
+
 using namespace QCloudMusicApiNS;
 int main(int argc, char *argv[])
 {
+    qSetMessagePattern("%{time yyyy-MM-dd hh:mm:ss.zzz} : %{pid} : %{category} : %{type} : %{line} : %{function} : %{message}");
     QCoreApplication a(argc, argv);
+    QCommandLineParser parser;
+    QCommandLineOption portOption(QStringList() << "PORT",
+                                  QCoreApplication::translate("main", "Set PORT."),
+                                  QCoreApplication::translate("main", "PORT"), "3000");
+    parser.addOption(portOption);
+    parser.process(a);
+
+    // 端口号
+    quint16 port = parser.value(portOption).toUInt();
 
     QHttpServer server;
-    //设置请求的路径和方法未知时的错误提示
+    // 设置请求的路径和方法未知时的错误提示
     server.setMissingHandler([] (const QHttpServerRequest &request, QHttpServerResponder &&responder) {
         QHttpServerResponse response(("Cannot GET "
                                       + request.url().path()).toUtf8()
                                      , QHttpServerResponse::StatusCode::NotFound);
         responder.sendResponse(response);
     });
-    for(auto& member: ApiHelper().memberList()) {
+    for (auto& member: ApiHelper().memberList()) {
         auto path = member;
         path = "/" + path.replace("_", "/").trimmed();
 
@@ -74,12 +86,11 @@ int main(int argc, char *argv[])
         server.route(path, ViewHandler);
     }
 
-    quint16 port = 3000;
     if(port == server.listen(QHostAddress::Any, port)) {
-        qDebug() << "ApiServer running at port" << port;
+        qCDebug(Logger) << "ApiServer running at port" << port;
     }
     else {
-        qDebug() << "该端口号已被占用:" << port;
+        qCDebug(Logger) << "该端口号已被占用:" << port;
     }
     return a.exec();
 }

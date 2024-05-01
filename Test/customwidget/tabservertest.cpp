@@ -40,7 +40,7 @@ void TabServerTest::on_pushButton_send_clicked()
     ui->textEdit_arg->setText(QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toJson(JsonFormat));
 
     auto method = ui->checkBox_post->isChecked() ? QNetworkAccessManager::PostOperation : QNetworkAccessManager::GetOperation;
-    QString url = ui->label_url->text();
+    QString url = ui->lineEdit_url->text();
     if (ui->checkBox_timestamp->isChecked()) {
         QUrl u(url);
         QUrlQuery urlQuery;
@@ -97,6 +97,6 @@ void TabServerTest::setUrl()
     url.setUrl(ui->lineEdit_address->text());
     url.setPath("/" + ui->comboBox->currentText().replace("_", "/"));
     url.setPort(ui->lineEdit_port->text().toInt());
-    ui->label_url->setText(url.toString());
+    ui->lineEdit_url->setText(url.toString());
 }
 
