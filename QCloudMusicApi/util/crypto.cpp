@@ -14,7 +14,7 @@ extern "C" {
 #include <openssl/pem.h>
 }
 
-using namespace QCloudMusicApiNS;
+using namespace QCloudMusicApi;
 
 const QString Crypto::iv = QStringLiteral("0102030405060708");
 const QString Crypto::presetKey = QStringLiteral("0CoJUm6Qyw8W8jud");

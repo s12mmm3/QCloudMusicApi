@@ -11,7 +11,7 @@
 
 Q_LOGGING_CATEGORY(Logger, "ApiServer")
 
-using namespace QCloudMusicApiNS;
+using namespace QCloudMusicApi;
 int main(int argc, char *argv[])
 {
     qSetMessagePattern("%{time yyyy-MM-dd hh:mm:ss.zzz} : %{pid} : %{category} : %{type} : %{line} : %{function} : %{message}");

@@ -19,10 +19,10 @@
 { "realIP", query["realIP"] } \
 
 using Api = NeteaseCloudMusicApi;
-const static auto &request = QCloudMusicApiNS::Request::createRequest;
+const static auto &request = QCloudMusicApi::Request::createRequest;
 const static auto &POST = QNetworkAccessManager::PostOperation;
 const static auto &GET = QNetworkAccessManager::GetOperation;
-const static auto &resourceTypeMap = QCloudMusicApiNS::Config::resourceTypeMap;
+const static auto &resourceTypeMap = QCloudMusicApi::Config::resourceTypeMap;
 
 // 初始化名字
 NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject *parent)

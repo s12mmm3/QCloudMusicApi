@@ -6,11 +6,11 @@
 #include <QJsonDocument>
 #include <QNetworkReply>
 
-const static auto &request = QCloudMusicApiNS::Request::createRequest;
+const static auto &request = QCloudMusicApi::Request::createRequest;
 const static auto &POST = QNetworkAccessManager::PostOperation;
 const static auto &GET = QNetworkAccessManager::GetOperation;
 
-using namespace QCloudMusicApiNS;
+using namespace QCloudMusicApi;
 Plugins::Plugins(QObject *parent)
     : QObject{parent}
 {}

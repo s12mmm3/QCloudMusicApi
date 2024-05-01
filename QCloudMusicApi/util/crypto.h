@@ -6,7 +6,7 @@
 #include <QByteArray>
 #include <QVariantMap>
 
-namespace QCloudMusicApiNS {
+namespace QCloudMusicApi {
 class QCLOUDMUSICAPI_EXPORT Crypto {
 public:
     static const QString iv;

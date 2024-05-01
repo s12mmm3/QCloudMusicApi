@@ -1,6 +1,6 @@
 #include "index.h"
 
-using namespace QCloudMusicApiNS;
+using namespace QCloudMusicApi;
 
 QVariantMap Index::stringToMap(const QString &cookie) {
     if (cookie.isEmpty()) return QVariantMap();

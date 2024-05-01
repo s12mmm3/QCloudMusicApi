@@ -21,7 +21,7 @@
 #include "request.h"
 #include "logger.h"
 
-using namespace QCloudMusicApiNS;
+using namespace QCloudMusicApi;
 QString Request::chooseUserAgent(QString ua) {
     const QMap<QString, QString> userAgentList {
         {

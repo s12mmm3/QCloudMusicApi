@@ -3,7 +3,7 @@
 
 #include <QMetaMethod>
 
-using namespace QCloudMusicApiNS;
+using namespace QCloudMusicApi;
 ApiHelper::ApiHelper(QObject *parent)
     : NeteaseCloudMusicApi{parent}
 {}

@@ -5,7 +5,7 @@
 
 #include <QVariantMap>
 
-namespace QCloudMusicApiNS {
+namespace QCloudMusicApi {
 class QCLOUDMUSICAPI_EXPORT Plugins : public QObject
 {
     Q_OBJECT

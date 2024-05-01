@@ -3,7 +3,7 @@
 
 #include <QLoggingCategory>
 
-namespace QCloudMusicApiNS {
+namespace QCloudMusicApi {
 Q_DECLARE_LOGGING_CATEGORY(Logger)
 }
 

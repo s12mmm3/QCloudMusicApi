@@ -53,7 +53,7 @@ void TabServerTest::on_pushButton_send_clicked()
     QtConcurrent::run([=](QVariantMap arg) {
         QVariantMap headers;
         // headers["Content-Type"] = "application/x-www-form-urlencoded";
-        auto reply = QCloudMusicApiNS::Request
+        auto reply = QCloudMusicApi::Request
             ::axios(method,
                     url,
                     headers,

@@ -1,5 +1,5 @@
 #include "logger.h"
 
-namespace QCloudMusicApiNS {
+namespace QCloudMusicApi {
 Q_LOGGING_CATEGORY(Logger, "QCloudMusicApi")
 }
