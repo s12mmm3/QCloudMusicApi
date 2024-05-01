@@ -1935,6 +1935,170 @@ QVariantMap Api::likelist(QVariantMap query) {
         );
 }
 
+// 一起听 结束房间
+QVariantMap Api::listentogether_end(QVariantMap query) {
+    const QVariantMap data {
+        { "roomId", query["roomId"] }
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/eapi/listen/together/end/v2",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/listen/together/end/v2" }
+        }
+        );
+}
+
+// 一起听 发送心跳
+QVariantMap Api::listentogether_heatbeat(QVariantMap query) {
+    const QVariantMap data {
+        { "roomId", query["roomId"] },
+        { "songId", query["songId"] },
+        { "playStatus", query["playStatus"] },
+        { "progress", query["progress"] }
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/eapi/listen/together/heartbeat",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/listen/together/heartbeat" }
+        }
+        );
+}
+
+// 一起听 发送播放状态
+QVariantMap Api::listentogether_play_command(QVariantMap query) {
+    const QVariantMap data {
+        { "roomId", query["roomId"] },
+        { "commandInfo", QJsonDocument::fromVariant(QVariantMap
+                            {
+                                { "commandType", query["commandType"] },
+                                { "progress", query.value("progress", 0) },
+                                { "playStatus", query["playStatus"] },
+                                { "formerSongId", query["formerSongId"] },
+                                { "targetSongId", query["targetSongId"] },
+                                { "clientSeq", query["clientSeq"] }
+                            }
+                            ).toJson(QJsonDocument::Compact) }
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/eapi/listen/together/play/command/report",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/listen/together/play/command/report" }
+        }
+        );
+}
+
+// 一起听 房间情况
+QVariantMap Api::listentogether_room_check(QVariantMap query) {
+    const QVariantMap data {
+        { "roomId", query["roomId"] }
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/eapi/listen/together/room/check",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/listen/together/room/check" }
+        }
+        );
+}
+
+// 一起听创建房间
+QVariantMap Api::listentogether_room_create(QVariantMap query) {
+    const QVariantMap data {
+        { "refer", "songplay_more" }
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/eapi/listen/together/room/create",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/listen/together/room/create" }
+        }
+        );
+}
+
+// 一起听状态
+QVariantMap Api::listentogether_status(QVariantMap query) {
+    return request(
+        POST,
+        "https://music.163.com/api/listen/together/status/get",
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 一起听 更新播放列表
+QVariantMap Api::listentogether_sync_list_command(QVariantMap query) {
+    const QVariantMap data {
+        { "roomId", query["roomId"] },
+        { "commandInfo", QJsonDocument::fromVariant(
+                            QVariantMap
+                            {
+                                { "commandType", query["commandType"] },
+                                { "version", QVariantList
+                                    {
+                                        QVariantMap
+                                        {
+                                            { "userId", query["userId"] },
+                                            { "version", query["version"] }
+                                        }
+                                    }
+                                },
+                                { "anchorSongId", "" },
+                                { "anchorPosition", -1 },
+                                { "randomList", query["randomList"].toString().split(",") },
+                                { "displayList", query["displayList"].toString().split(",") }
+                            }
+                            ).toJson(QJsonDocument::Compact) }
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/eapi/listen/together/sync/list/command/report",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/listen/together/sync/list/command/report" }
+        }
+        );
+}
+
+// 一起听 当前列表获取
+QVariantMap Api::listentogether_sync_playlist_get(QVariantMap query) {
+    const QVariantMap data {
+        { "roomId", query["roomId"] }
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/eapi/listen/together/sync/playlist/get",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/listen/together/sync/playlist/get" }
+        }
+        );
+}
+
 // 手机登录
 QVariantMap Api::login_cellphone(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();

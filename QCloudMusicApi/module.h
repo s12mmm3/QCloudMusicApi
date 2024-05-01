@@ -359,6 +359,30 @@ public:
     // 喜欢音乐列表
     Q_INVOKABLE QVariantMap likelist(QVariantMap);
 
+    // 一起听 结束房间
+    Q_INVOKABLE QVariantMap listentogether_end(QVariantMap);
+
+    // 一起听 发送心跳
+    Q_INVOKABLE QVariantMap listentogether_heatbeat(QVariantMap);
+
+    // 一起听 发送播放状态
+    Q_INVOKABLE QVariantMap listentogether_play_command(QVariantMap);
+
+    // 一起听 房间情况
+    Q_INVOKABLE QVariantMap listentogether_room_check(QVariantMap);
+
+    // 一起听创建房间
+    Q_INVOKABLE QVariantMap listentogether_room_create(QVariantMap);
+
+    // 一起听状态
+    Q_INVOKABLE QVariantMap listentogether_status(QVariantMap);
+
+    // 一起听 更新播放列表
+    Q_INVOKABLE QVariantMap listentogether_sync_list_command(QVariantMap);
+
+    // 一起听 当前列表获取
+    Q_INVOKABLE QVariantMap listentogether_sync_playlist_get(QVariantMap);
+
     // 手机登录
     Q_INVOKABLE QVariantMap login_cellphone(QVariantMap);
 
