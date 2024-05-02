@@ -23,7 +23,7 @@ QVariantMap Plugins::upload(QVariantMap query)
         { "filename", query["imgFile"].toMap()["name"] },
         { "local", false },
         { "nos_product", 0 },
-        { "return_body", "{\"code\",200,\"size\",\"$(ObjectSize)\"}" },
+        { "return_body", "{\"code\":200,\"size\":\"$(ObjectSize)\"}" },
         { "type", "other" }
     };
     //   获取key和token
@@ -35,33 +35,27 @@ QVariantMap Plugins::upload(QVariantMap query)
          { "crypto", "weapi" },
          { "cookie", query["cookie"] },
          { "proxy", query["proxy"] },
-         { "ua", query.value("ua", "") },
          }
         );
+    if (res["body"].toMap().isEmpty()) return {};
     auto reply = Request::axios(QNetworkAccessManager::PostOperation,
                                 "https://nosup-hz1.127.net/yyimgs/"
                                     + res["body"].toMap()["result"].toMap()["objectKey"].toString()
                                     + "?offset=0&complete=true&version=1.0",
+                                {},
                                 {
-                                    { "x-nos-token", res["body"].toMap()["result"].toMap()["token"].toByteArray() },
+                                    { "x-nos-token", res["body"].toMap()["result"].toMap()["token"] },
                                     { "Content-Type", "image/jpeg" }
                                 },
-                                query["imgFile"].toMap());
+                                query["imgFile"].toMap()["data"].toByteArray());
     reply->deleteLater();
     reply->manager()->deleteLater();
 
     // 读取响应内容
     auto body = reply->readAll();
-    qDebug().noquote() << "body" << body;
+    qDebug().noquote() << body.isEmpty() << "body" << body;
 
-    QVariantMap res2 {
-        { "status", 500 },
-        { "body", {} },
-        { "cookie", {} }
-    };
-
-    if(!QJsonDocument::fromJson(body).isNull()) res2["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
-    else res2["body"] = QString::fromUtf8(body);
+    QVariantMap res2 = QJsonDocument::fromJson(body).toVariant().toMap();
 
     //   获取裁剪后图片的id
     const int imgSize = query.value("imgSize", 300).toInt();
