@@ -4,6 +4,9 @@
 #include <QMetaMethod>
 #include <QMetaObject>
 
+#include <cstring>
+#include <iostream>
+
 #include "api_c.h"
 #include "../QCloudMusicApi/apihelper.h"
 
