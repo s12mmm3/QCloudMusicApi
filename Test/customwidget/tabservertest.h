@@ -32,9 +32,6 @@ private slots:
 
     void setUrl();
 
-signals:
-    void invoked(QVariantMap ret);
-
 private:
     Ui::TabServerTest *ui;
     ApiHelper helper;

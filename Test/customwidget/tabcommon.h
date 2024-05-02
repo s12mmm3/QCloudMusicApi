@@ -28,9 +28,6 @@ private slots:
 
     void update(QVariantMap ret);
 
-signals:
-    void invoked(QVariantMap ret);
-
 private:
     Ui::TabCommon *ui;
 };

@@ -3,7 +3,6 @@
 #include <QJsonObject>
 #include <QFile>
 #include <QDebug>
-#include <QtConcurrent>
 
 #include "../servicelocator.h"
 #include "tabcommon.h"
@@ -25,8 +24,6 @@ TabCommon::TabCommon(QWidget *parent) :
     //         break;
     //     }
     // }
-
-    connect(this, &TabCommon::invoked, this, &TabCommon::update);
 }
 
 TabCommon::~TabCommon()
@@ -44,12 +41,9 @@ void TabCommon::on_pushButton_send_clicked()
     QString member = ui->comboBox->currentText();
     QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toVariant().toMap();
 
-    QtConcurrent::run([this](QString member, QVariantMap arg) {
+    QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
 
-        QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
-
-        emit invoked(ret);
-    }, member, arg);
+    update(ret);
 }
 
 

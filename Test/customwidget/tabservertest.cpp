@@ -19,8 +19,6 @@ TabServerTest::TabServerTest(QWidget *parent) :
     //将Api中的方法名称取出
     ui->comboBox->addItems(ApiHelper::memberList());
 
-    connect(this, &TabServerTest::invoked, this, &TabServerTest::update);
-
     setUrl();
     connect(ui->lineEdit_address, &QLineEdit::textChanged, this, &TabServerTest::setUrl);
     connect(ui->lineEdit_port, &QLineEdit::textChanged, this, &TabServerTest::setUrl);
@@ -50,25 +48,26 @@ void TabServerTest::on_pushButton_send_clicked()
     }
     QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toVariant().toMap();
 
-    QtConcurrent::run([=](QVariantMap arg) {
-        QVariantMap headers;
-        // headers["Content-Type"] = "application/x-www-form-urlencoded";
-        QUrlQuery query;
-        query.setQuery(QUrl(url).query());
-        for(auto i = arg.constBegin(); i != arg.constEnd(); ++i) {
-            query.addQueryItem(i.key(), i.value().toString());
-        }
-        auto reply = QCloudMusicApi::Request
-            ::axios(method,
-                    url,
-                    arg,
-                    headers,
-                    query.toString().toUtf8());
-        auto ret = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
-        qDebug().noquote() << reply->rawHeaderPairs();
+    // QtConcurrent::run
+    QVariantMap headers;
+    // headers["Content-Type"] = "application/x-www-form-urlencoded";
+    QUrlQuery query;
+    query.setQuery(QUrl(url).query());
+    for(auto i = arg.constBegin(); i != arg.constEnd(); ++i) {
+        query.addQueryItem(i.key(), i.value().toString());
+    }
+    auto reply = QCloudMusicApi::Request
+        ::axios(method,
+                url,
+                arg,
+                headers,
+                query.toString().toUtf8());
+    reply->deleteLater();
+    reply->manager()->deleteLater();
+    auto ret = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
+    qDebug().noquote() << reply->rawHeaderPairs();
 
-        emit invoked(ret);
-    }, arg);
+    update(ret);
 }
 
 
