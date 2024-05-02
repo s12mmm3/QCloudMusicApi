@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-QCLOUDMUSICAPI_EXPORT char* invoke(char* memberName, char* value);
+QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value);
 QCLOUDMUSICAPI_EXPORT char* memberName(int i);
 QCLOUDMUSICAPI_EXPORT int memberCount();
 #ifdef __cplusplus

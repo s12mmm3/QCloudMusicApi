@@ -7,20 +7,20 @@
 #include "api_c.h"
 #include "../QCloudMusicApi/apihelper.h"
 
-QCLOUDMUSICAPI_EXPORT char* invoke(char* memberName, char* value) {
+QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
     QCoreApplication *a = Q_NULLPTR;
     if (!QCoreApplication::instance()) {
         int argc = 1;
         char* argv[1];
         a = new QCoreApplication(argc, argv);
-        a->deleteLater();
+        // a->deleteLater();
     }
-
     ApiHelper helper;
     QVariantMap ret = helper.invoke(memberName, QJsonDocument::fromJson(value).toVariant().toMap());
-    QString result = QJsonDocument::fromVariant(ret["body"].toMap()).toJson();
-    auto data = result.toUtf8().data();
+    std::string result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
 
+    char* data = new char[result.size() + 1];
+    std::strcpy(data, result.c_str());
     return data;
 }
 
