@@ -169,8 +169,12 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
     qCDebug(Logger).noquote() << QJsonDocument::fromVariant(headers).toJson();
 
-
-    QNetworkReply* reply = axios(method, url, headers, data, proxy);
+    QUrlQuery query;
+    query.setQuery(QUrl(url).query());
+    for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
+        query.addQueryItem(i.key(), i.value().toString());
+    }
+    QNetworkReply* reply = axios(method, url, data, headers, query.toString().toUtf8(), proxy);
     reply->deleteLater();
     reply->manager()->deleteLater();
 
@@ -228,8 +232,9 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
 QNetworkReply *Request::axios(QNetworkAccessManager::Operation method,
                               QString url,
+                              const QVariantMap &urlQuery,
                               const QVariantMap &headers,
-                              const QVariantMap &data,
+                              const QByteArray &data,
                               QNetworkProxy proxy)
 {
     QNetworkRequest request;
@@ -240,21 +245,20 @@ QNetworkReply *Request::axios(QNetworkAccessManager::Operation method,
     QNetworkAccessManager* manager = new QNetworkAccessManager();
     manager->setProxy(proxy);
 
-    QUrlQuery urlQuery;
-    urlQuery.setQuery(QUrl(url).query());
-    for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
-        urlQuery.addQueryItem(i.key(), i.value().toString());
+    QUrlQuery query;
+    QUrl qurl(url);
+    query.setQuery(qurl.query());
+    for(auto i = urlQuery.constBegin(); i != urlQuery.constEnd(); ++i) {
+        query.addQueryItem(i.key(), i.value().toString());
     }
+    qurl.setQuery(query);
+    request.setUrl(qurl);
 
     // 发送HTTP请求
     QNetworkReply* reply;
     if (method == QNetworkAccessManager::PostOperation) {
-        request.setUrl(url);
-        reply = manager->post(request, urlQuery.toString().toUtf8());
+        reply = manager->post(request, data);
     } else {
-        QUrl qurl(url);
-        qurl.setQuery(urlQuery);
-        request.setUrl(qurl);
         reply = manager->get(request);
     }
 

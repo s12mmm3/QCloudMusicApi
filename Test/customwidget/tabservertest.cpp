@@ -53,12 +53,19 @@ void TabServerTest::on_pushButton_send_clicked()
     QtConcurrent::run([=](QVariantMap arg) {
         QVariantMap headers;
         // headers["Content-Type"] = "application/x-www-form-urlencoded";
+        QUrlQuery query;
+        query.setQuery(QUrl(url).query());
+        for(auto i = arg.constBegin(); i != arg.constEnd(); ++i) {
+            query.addQueryItem(i.key(), i.value().toString());
+        }
         auto reply = QCloudMusicApi::Request
             ::axios(method,
                     url,
+                    arg,
                     headers,
-                    arg);
+                    query.toString().toUtf8());
         auto ret = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
+        qDebug().noquote() << reply->rawHeaderPairs();
 
         emit invoked(ret);
     }, arg);
