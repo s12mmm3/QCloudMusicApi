@@ -12,8 +12,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core HttpServer Network Concurrent)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core HttpServer Network Concurrent)
 
+FILE(GLOB HEADERS ./*.h)
+FILE(GLOB SOURCES ./*.cpp)
+set(PROJECT_SOURCES
+    ${HEADERS}
+    ${SOURCES}
+)
 add_executable(${PROJECT_NAME}
-  main.cpp
+    ${PROJECT_SOURCES}
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::HttpServer Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent QCloudMusicApi)
 
