@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <cstring>
 
 #include "../servicelocator.h"
 #include "tabapi_c.h"
