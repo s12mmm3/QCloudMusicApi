@@ -25,30 +25,46 @@
         <string>Common</string>
        </attribute>
       </widget>
-      <widget class="TabApiTest" name="tabApiTest">
+      <widget class="QTabWidget" name="tabApiTestParent">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
        <attribute name="title">
         <string>api_test</string>
        </attribute>
+       <widget class="TabApiTest" name="tabApiTest">
+        <attribute name="title">
+         <string>api_test</string>
+        </attribute>
+       </widget>
+       <widget class="TabApiTest" name="tabEapiTest">
+        <attribute name="title">
+         <string>eapi_test</string>
+        </attribute>
+       </widget>
+       <widget class="TabApiTest" name="tabWeapiTest">
+        <attribute name="title">
+         <string>weapi_test</string>
+        </attribute>
+       </widget>
       </widget>
-      <widget class="TabApiTest" name="tabEapiTest">
+      <widget class="QTabWidget" name="tabCrypto">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
        <attribute name="title">
-        <string>eapi_test</string>
+        <string>crypto</string>
        </attribute>
-      </widget>
-      <widget class="TabApiTest" name="tabWeapiTest">
-       <attribute name="title">
-        <string>weapi_test</string>
-       </attribute>
-      </widget>
-      <widget class="TabAes" name="tabAes">
-       <attribute name="title">
-        <string>AES</string>
-       </attribute>
-      </widget>
-      <widget class="TabRsa" name="tabRsa">
-       <attribute name="title">
-        <string>RSA</string>
-       </attribute>
+       <widget class="TabAes" name="tabAes">
+        <attribute name="title">
+         <string>AES</string>
+        </attribute>
+       </widget>
+       <widget class="TabRsa" name="tabRsa">
+        <attribute name="title">
+         <string>RSA</string>
+        </attribute>
+       </widget>
       </widget>
       <widget class="TabLogin_cellphone" name="tabLogin_cellphone">
        <attribute name="title">
@@ -75,7 +91,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>

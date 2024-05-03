@@ -11,6 +11,9 @@
 #include "api_c.h"
 #include "../QCloudMusicApi/apihelper.h"
 
+QCoreApplication *a = Q_NULLPTR;
+char* data = Q_NULLPTR;
+
 void init() {
     /*
      * Python调用时，QCoreApplication::libraryPaths只返回python可执行程序的路径，因此需要手动添加API动态库的路径；
@@ -21,7 +24,6 @@ void init() {
         QCoreApplication::addLibraryPath(currentPath);
     }
 
-    QCoreApplication *a = Q_NULLPTR;
     if (!QCoreApplication::instance()) {
         int argc = 1;
         char* argv[1];
@@ -37,9 +39,21 @@ QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
     QVariantMap ret = helper.invoke(memberName, QJsonDocument::fromJson(value).toVariant().toMap());
     std::string result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
 
-    char* data = new char[result.size() + 1];
+    if (data) delete data;
+    data = new char[result.size() + 1];
     std::strcpy(data, result.c_str());
     return data;
+}
+
+QCLOUDMUSICAPI_EXPORT void freeApi() {
+    if (a) {
+        delete a;
+        a = Q_NULLPTR;
+    }
+    if (data) {
+        delete data;
+        data = Q_NULLPTR;
+    }
 }
 
 QCLOUDMUSICAPI_EXPORT char* memberName(int i) {

@@ -17,6 +17,11 @@ extern "C" {
 QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value);
 
 /**
+ * @brief 释放资源，结束时调用
+ */
+QCLOUDMUSICAPI_EXPORT void freeApi();
+
+/**
  * @brief 通过索引检索成员的名称。
  *
  * @param i 成员的索引。
