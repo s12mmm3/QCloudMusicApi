@@ -51,7 +51,7 @@ void TabApi_c::on_pushButton_send_clicked()
 
         update(QJsonDocument::fromJson(ret).toVariant().toMap());
     } else {
-        QMessageBox::warning(this, "", "动态库加载失败！");
+        libraryLoadFailed();
     }
 }
 
@@ -91,11 +91,42 @@ void TabApi_c::on_pushButton_select_clicked()
         library.setFileName(filePath);
         if (library.load()) {
             ui->lineEdit_library_fileName->setText(filePath);
-            QMessageBox::information(this, "", "动态库加载成功！");
+            libarayLoadSucceed();
         }
         else {
-            QMessageBox::warning(this, "", "动态库加载失败！");
+            libraryLoadFailed();
         }
+    }
+}
+
+void TabApi_c::libarayLoadSucceed()
+{
+    QMessageBox::information(this, "", "动态库加载成功！");
+}
+
+void TabApi_c::libraryLoadFailed()
+{
+    QMessageBox::warning(this, "动态库加载失败！", library.errorString());
+}
+
+void TabApi_c::libarayUnloadSucceed()
+{
+    QMessageBox::information(this, "", "动态库卸载成功！");
+}
+
+void TabApi_c::libraryUnloadFailed()
+{
+    QMessageBox::warning(this, "动态库卸载失败！", library.errorString());
+}
+
+
+void TabApi_c::on_pushButton_unload_clicked()
+{
+    if (library.unload()) {
+        libarayUnloadSucceed();
+    }
+    else {
+        libraryUnloadFailed();
     }
 }
 

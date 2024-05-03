@@ -32,6 +32,15 @@ private slots:
 
     void on_pushButton_select_clicked();
 
+    void on_pushButton_unload_clicked();
+
+private:
+    void libarayLoadSucceed();
+    void libraryLoadFailed();
+
+    void libarayUnloadSucceed();
+    void libraryUnloadFailed();
+
 private:
     Ui::TabApi_c *ui;
     QLibrary library;
