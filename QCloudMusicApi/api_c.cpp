@@ -45,6 +45,7 @@ void init() {
         QCoreApplication::addLibraryPath(currentPath);
     }
 
+    // 创建一个QCoreApplication单例，用于支持事件循环QEventLoop
     if (!QCoreApplication::instance()) {
         int argc = 1;
         char* argv[1] = { (char*)currentPath_c.c_str() };

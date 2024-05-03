@@ -7,6 +7,7 @@
 #include <QNetworkReply>
 
 #include "../servicelocator.h"
+#include "../logger.h"
 #include "../../QCloudMusicApi/util/request.h"
 #include "tabservertest.h"
 #include "ui_tabservertest.h"
@@ -65,7 +66,7 @@ void TabServerTest::on_pushButton_send_clicked()
     reply->deleteLater();
     reply->manager()->deleteLater();
     auto ret = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
-    qDebug().noquote() << reply->rawHeaderPairs();
+    DEBUG.noquote() << reply->rawHeaderPairs();
 
     update(ret);
 }

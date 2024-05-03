@@ -41,10 +41,10 @@ void Server::serveNcmApi(QVariantMap options)
     consturctServer({});
 
     if(port == server.listen(host, port)) {
-        qCDebug(Logger) << "server running @ http://" + (host != QHostAddress::Any ? host.toString() : "localhost") + ":" + QString::number(port);
+        DEBUG << "server running @ http://" + (host != QHostAddress::Any ? host.toString() : "localhost") + ":" + QString::number(port);
     }
     else {
-        qCDebug(Logger) << "address already in use :::" + QString::number(port);
+        DEBUG << "address already in use :::" + QString::number(port);
     }
 }
 
@@ -92,7 +92,7 @@ void Server::consturctServer(QVariantMap options)
             }
             arg.insert("realIP", ip);
 
-            qCDebug(Logger) << "[OK]" << request.url().path();
+            INFO << "[OK]" << request.url().path();
 
             QUrlQuery urlQuery;
             if (request.method() == QHttpServerRequest::Method::Post) {

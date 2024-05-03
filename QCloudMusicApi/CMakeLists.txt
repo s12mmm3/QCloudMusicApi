@@ -40,7 +40,10 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE QCLOUDMUSICAPI_LIBRARY)
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    QCLOUDMUSICAPI_LIBRARY
+    PROJECT_NAME="${PROJECT_NAME}"
+)
 if(BUILD_SHARED_LIBS)
     target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_SHARED_LIBS)
 endif()

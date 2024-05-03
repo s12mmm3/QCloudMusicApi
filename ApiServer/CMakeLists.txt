@@ -42,6 +42,10 @@ else()
 endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::HttpServer Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent QCloudMusicApi)
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    PROJECT_NAME="${PROJECT_NAME}"
+)
+
 include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .

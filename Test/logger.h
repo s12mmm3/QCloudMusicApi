@@ -3,11 +3,9 @@
 
 #include <QLoggingCategory>
 
-#define LOGGER_NAME ApiLogger
+#define LOGGER_NAME ApiTestLogger
 
-namespace QCloudMusicApi {
 Q_DECLARE_LOGGING_CATEGORY(LOGGER_NAME)
-}
 
 #define DEBUG qCDebug(LOGGER_NAME)
 #define INFO qCInfo(LOGGER_NAME)

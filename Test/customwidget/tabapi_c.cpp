@@ -84,8 +84,7 @@ void TabApi_c::update(QVariantMap ret)
 
 void TabApi_c::on_pushButton_select_clicked()
 {
-    QFileInfo fileInfo = QFileInfo(QFileDialog::getOpenFileName(this));
-    auto filePath = fileInfo.filePath();
+    auto filePath = QFileDialog::getOpenFileName(this);
     if (!filePath.isEmpty()) {
         library.unload();
         library.setFileName(filePath);

@@ -43,7 +43,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                           QString url,
                           QVariantMap data,
                           QVariantMap options) {
-    qCDebug(Logger).noquote() <<
+    DEBUG.noquote() <<
         QJsonDocument::fromVariant(
             QVariantMap {
                 { "method", method },
@@ -163,11 +163,11 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
         } else {
             proxy = QNetworkProxy::NoProxy;
-            qCDebug(Logger) << "代理配置无效，不使用代理";
+            DEBUG << "代理配置无效，不使用代理";
         }
     }
 
-    qCDebug(Logger).noquote() << QJsonDocument::fromVariant(headers).toJson();
+    DEBUG.noquote() << QJsonDocument::fromVariant(headers).toJson();
 
     QUrlQuery query;
     query.setQuery(QUrl(url).query());
@@ -193,11 +193,11 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
     else {
         // 打印响应头
-        qCDebug(Logger).noquote() << reply->rawHeaderPairs();
+        DEBUG.noquote() << reply->rawHeaderPairs();
 
         // 读取响应内容
         auto body = reply->readAll();
-        qCDebug(Logger).noquote() << "body" << body;
+        DEBUG.noquote() << "body" << body;
 
         if(reply->header(QNetworkRequest::SetCookieHeader).isValid()) {
             // 去掉cookie中的domain属性

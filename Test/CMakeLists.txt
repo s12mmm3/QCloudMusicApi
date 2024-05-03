@@ -57,6 +57,10 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent QCloudMusicApi qrencode)
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    PROJECT_NAME="${PROJECT_NAME}"
+)
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.

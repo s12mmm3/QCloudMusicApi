@@ -3,7 +3,12 @@
 
 #include <QLoggingCategory>
 
-Q_DECLARE_LOGGING_CATEGORY(Logger)
+#define LOGGER_NAME ApiServerLogger
 
+Q_DECLARE_LOGGING_CATEGORY(LOGGER_NAME)
+
+#define DEBUG qCDebug(LOGGER_NAME)
+#define INFO qCInfo(LOGGER_NAME)
+#define WARNING qCWarning(LOGGER_NAME)
 
 #endif // LOGGER_H
