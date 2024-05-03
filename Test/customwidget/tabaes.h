@@ -10,6 +10,7 @@ class TabAes;
 }
 QT_END_NAMESPACE
 
+// 测试AES加解密
 class TabAes : public QWidget
 {
     Q_OBJECT

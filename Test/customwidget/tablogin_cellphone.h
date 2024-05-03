@@ -9,6 +9,7 @@ class TabLogin_cellphone;
 }
 QT_END_NAMESPACE
 
+// 手机号登录测试
 class TabLogin_cellphone : public QWidget
 {
     Q_OBJECT

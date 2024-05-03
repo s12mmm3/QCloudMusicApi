@@ -13,6 +13,7 @@ class TabServerTest;
 }
 QT_END_NAMESPACE
 
+// 测试服务器Api
 class TabServerTest : public QWidget
 {
     Q_OBJECT

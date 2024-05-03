@@ -17,7 +17,7 @@ QVariantMap Index::stringToMap(const QString &cookie) {
 QString Index::mapToString(const QVariantMap &cookie) {
     QString string;
     for(auto i = cookie.begin(); i != cookie.end(); ++i) {
-        string.append(i.key() + "=" + i.value().toString() + ";");
+        string.append(i.key() + "=" + i.value().toString() + "; ");
     }
     return string;
 }

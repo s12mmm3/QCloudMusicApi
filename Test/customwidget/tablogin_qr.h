@@ -9,6 +9,7 @@ class TabLogin_qr;
 }
 QT_END_NAMESPACE
 
+// 二维码登录测试
 class TabLogin_qr : public QWidget
 {
     Q_OBJECT

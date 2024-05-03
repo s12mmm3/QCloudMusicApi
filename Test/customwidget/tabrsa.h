@@ -9,6 +9,7 @@ class TabRsa;
 }
 QT_END_NAMESPACE
 
+// 测试RSA加密
 class TabRsa : public QWidget
 {
     Q_OBJECT
