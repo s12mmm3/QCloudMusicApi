@@ -86,6 +86,11 @@
         <string>playlist_cover_update</string>
        </attribute>
       </widget>
+      <widget class="TabApi_c" name="tabApi_c">
+       <attribute name="title">
+        <string>api_c</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -143,6 +148,11 @@
    <class>TabPlaylist_cover_update</class>
    <extends>QWidget</extends>
    <header>tabplaylist_cover_update.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TabApi_c</class>
+   <extends>QWidget</extends>
+   <header>tabapi_c.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
