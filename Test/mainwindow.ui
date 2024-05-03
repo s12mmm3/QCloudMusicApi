@@ -81,6 +81,11 @@
         <string>serverTest</string>
        </attribute>
       </widget>
+      <widget class="TabPlaylist_cover_update" name="tabPlaylist_cover_update">
+       <attribute name="title">
+        <string>playlist_cover_update</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -133,6 +138,11 @@
    <class>TabServerTest</class>
    <extends>QWidget</extends>
    <header>tabservertest.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TabPlaylist_cover_update</class>
+   <extends>QWidget</extends>
+   <header>tabplaylist_cover_update.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

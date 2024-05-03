@@ -10,7 +10,9 @@
 
 #include "util/config.h"
 #include "util/request.h"
+#include "util/index.h"
 #include "module.h"
+#include "plugins.h"
 
 //定义一些重复参数
 #define _PARAM \
@@ -23,6 +25,8 @@ const static auto &request = QCloudMusicApi::Request::createRequest;
 const static auto &POST = QNetworkAccessManager::PostOperation;
 const static auto &GET = QNetworkAccessManager::GetOperation;
 const static auto &resourceTypeMap = QCloudMusicApi::Config::resourceTypeMap;
+
+const static auto &uploadPlugin = QCloudMusicApi::Plugins::upload;
 
 // 初始化名字
 NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject *parent)
@@ -685,6 +689,119 @@ QVariantMap Api::cloud_match(QVariantMap query) {
             _PARAM
         }
         );
+}
+
+// 云盘上传
+QVariantMap Api::cloud(QVariantMap query) {
+    QString ext = "mp3";
+    if (query["songFile"].toMap()["name"].toString().indexOf("flac") > -1) {
+        ext = "flac";
+    }
+    QString filename = query["songFile"].toMap()["name"].toString();
+    filename.replace("." + ext, "");
+    filename.replace(QRegularExpression("\\s"), "");
+    filename.replace(QRegularExpression("\\."), "_");
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
+    query["cookie"] = cookie;
+    const auto bitrate = 999000;
+    if (!query.contains("songFile")) {
+        return {
+            { "status", 500 },
+            { "body", QVariantMap
+                {
+                    { "msg", "请上传音乐文件" },
+                    { "code", 500 }
+                }
+            }
+        };
+    }
+    if (!query["songFile"].toMap().contains("md5")) {
+        auto songFile = query["songFile"].toMap();
+        auto data = songFile["data"].toByteArray();
+        QCryptographicHash hash(QCryptographicHash::Md5);
+        hash.addData(data);
+        songFile["md5"] = hash.result().toHex();
+        songFile["size"] = data.length();
+        query["songFile"] = songFile;
+    }
+    const QVariantMap res = request(
+        POST,
+        "https://interface.music.163.com/api/cloud/upload/check",
+        {
+         { "bitrate", QString::number(bitrate) },
+         { "ext", "" },
+         { "length", query["songFile"].toMap()["size"] },
+         { "md5", query["songFile"].toMap()["md5"] },
+         { "songId", "0" },
+         { "version", 1 },
+         },
+        {
+         { "crypto", "weapi" },
+         _PARAM,
+         }
+        );
+    QString artist = "";
+    QString album = "";
+    QString songName = "";
+
+    const auto tokenRes = request(
+        POST,
+        "https://music.163.com/weapi/nos/token/alloc",
+        {
+            { "bucket", "" },
+            { "ext", ext },
+            { "filename", filename },
+            { "local", false },
+            { "nos_product", 3 },
+            { "type", "audio" },
+            { "md5", query["songFile"].toMap()["md5"] }
+        },
+        {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] }
+        }
+        );
+
+    if (res["body"].toMap()["needUpload"].toBool()) {
+        const auto uploadInfo = uploadPlugin(query);
+    }
+    const auto res2 = request(
+        POST,
+        "https://music.163.com/api/upload/cloud/info/v2",
+        {
+            { "md5", query["songFile"].toMap()["md5"] },
+            { "songid", res["body"].toMap()["songId"] },
+            { "filename", query["songFile"].toMap()["name"] },
+            { "song", !songName.isEmpty() ? songName : filename },
+            { "album", !album.isEmpty() ? album : "未知专辑" },
+            { "artist", !artist.isEmpty() ? artist : "未知艺术家" },
+            { "bitrate", QString::number(bitrate) },
+            { "resourceId", tokenRes["body"].toMap()["result"].toMap()["resourceId"] }
+        },
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+    const auto res3 = request(
+        POST,
+        "https://interface.music.163.com/api/cloud/pub/v2",
+        {
+            { "songid", res2["body"].toMap()["songId"] }
+        },
+        {
+         { "crypto", "weapi" },
+         _PARAM,
+         }
+        );
+    return {
+        { "status", 200 },
+        { "body", QCloudMusicApi::Index::mergeMap(res["body"].toMap(), res3["body"].toMap()) },
+        { "cookie", res["cookie"] }
+    };
 }
 
 // 搜索
@@ -2383,6 +2500,41 @@ QVariantMap Api::register_anonimous(QVariantMap query) {
         };
     }
     return result;
+}
+
+// 歌单封面上传
+QVariantMap Api::playlist_cover_update(QVariantMap query) {
+    if (!query.contains("imgFile")) {
+        return {
+            { "status", 400 },
+            { "body", QVariantMap {
+                                 { "code", 400 },
+                                 { "msg", "imgFile is required" },
+                                 } }
+        };
+    }
+    const auto uploadInfo = uploadPlugin(query);
+    if (uploadInfo.isEmpty()) return {};
+    const auto res = request(
+        POST,
+        "https://music.163.com/weapi/playlist/cover/update",
+        {
+            { "id", query["id"] },
+            { "coverImgId", uploadInfo["imgId"] }
+        },
+        {
+            { "crypto", "weapi" },
+            { "ua", query.value("ua", "") },
+            _PARAM
+        }
+        );
+    return {
+        { "status", 200 },
+        { "body", QVariantMap {
+                             { "code", 200 },
+                             { "data", QCloudMusicApi::Index::mergeMap(uploadInfo, res["body"].toMap()) },
+                             } }
+    };
 }
 
 // 相关歌单

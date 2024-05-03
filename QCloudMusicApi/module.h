@@ -130,7 +130,7 @@ public:
     Q_INVOKABLE QVariantMap cloud_match(QVariantMap);
 
     // 云盘上传
-    // Q_INVOKABLE QVariantMap cloud(QVariantMap);
+    Q_INVOKABLE QVariantMap cloud(QVariantMap);
 
     // 搜索
     Q_INVOKABLE QVariantMap cloudsearch(QVariantMap);
@@ -415,6 +415,9 @@ public:
 
     // 游客登录
     Q_INVOKABLE QVariantMap register_anonimous(QVariantMap);
+
+    // 歌单封面上传
+    Q_INVOKABLE QVariantMap playlist_cover_update(QVariantMap);
 
     // 相关歌单
     Q_INVOKABLE QVariantMap related_playlist(QVariantMap);
