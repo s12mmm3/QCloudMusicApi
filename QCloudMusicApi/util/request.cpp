@@ -199,12 +199,10 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         auto body = reply->readAll();
         DEBUG.noquote() << "body" << body;
 
-        if(reply->header(QNetworkRequest::SetCookieHeader).isValid()) {
-            // 去掉cookie中的domain属性
-            auto cookie = QString(reply->rawHeader("set-cookie"));
-            cookie.replace(QRegularExpression("\\s*Domain=[^;]*"), "");
-            answer["cookie"] = cookie;
-        }
+        auto cookie = QString(reply->rawHeader("set-cookie"));
+        cookie.replace(QRegularExpression("\\s*Domain=[^;]*"), "");
+        answer["cookie"] = cookie;
+
         if(options["crypto"].toString() == "eapi") {
             answer["body"] = QJsonDocument::fromJson(
                                  Crypto::aesDecrypt(body, "ecb", Crypto::eapiKey.toUtf8().data(), "")
