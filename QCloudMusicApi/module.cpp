@@ -2645,7 +2645,7 @@ QVariantMap Api::song_download_url(QVariantMap query) {
 // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
 QVariantMap Api::song_url_v1(QVariantMap query) {
     QVariantMap data {
-        { "ids", query["id"].toList() },
+        { "ids", "[" + query["id"].toString() + "]" },
         { "level", query["level"].toString() },
         { "encodeType", "flac" }
     };
