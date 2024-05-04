@@ -167,15 +167,15 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         }
     }
 
-    DEBUG.noquote() << QJsonDocument::fromVariant(headers).toJson();
-
     QUrlQuery query;
     query.setQuery(QUrl(url).query());
     for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
         query.addQueryItem(i.key(), QUrl::toPercentEncoding(i.value().toString()));
     }
+    DEBUG << "method" << method;
+    DEBUG << "url" << url;
+    DEBUG << "data" << data;
     QNetworkReply* reply = axios(method, url, data, headers, query.toString().toUtf8(), proxy);
-    reply->deleteLater();
     reply->manager()->deleteLater();
 
     QVariantMap answer {

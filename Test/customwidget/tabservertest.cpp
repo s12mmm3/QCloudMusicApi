@@ -63,7 +63,6 @@ void TabServerTest::on_pushButton_send_clicked()
                 arg,
                 headers,
                 query.toString().toUtf8());
-    reply->deleteLater();
     reply->manager()->deleteLater();
     auto ret = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
     DEBUG.noquote() << reply->rawHeaderPairs();

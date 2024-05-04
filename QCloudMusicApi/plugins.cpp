@@ -48,7 +48,6 @@ QVariantMap Plugins::upload(QVariantMap query)
                                     { "Content-Type", "image/jpeg" }
                                 },
                                 query["imgFile"].toMap()["data"].toByteArray());
-    reply->deleteLater();
     reply->manager()->deleteLater();
 
     // 读取响应内容

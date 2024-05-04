@@ -17,7 +17,7 @@ public:
                                      QVariantMap data,
                                      QVariantMap options);
 
-    // 仿axios的网络请求，需要手动析构QNetworkReply和QNetworkAccessManager
+    // 仿axios的网络请求，需要手动析构QNetworkAccessManager, QNetworkReply生命周期由其控制
     static QNetworkReply* axios(QNetworkAccessManager::Operation method,
                                 QString url,
                                 const QVariantMap &urlQuery,
