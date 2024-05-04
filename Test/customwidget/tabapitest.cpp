@@ -30,13 +30,9 @@ void TabApiTest::on_pushButton_tabApiTest_send_clicked() {
     ui->textEdit_ret->clear();
     QVariantMap rets;
     QMutex mutex;
-    auto invoke = [](const QString member, const QVariantMap arg) {
-        QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
-        return ret;
-    };
     QtConcurrent::map(members, [&](auto member) {
         QVariantMap arg = ServiceLocator::config()[member].toObject().toVariantMap();
-        QVariantMap ret = invoke(member, arg);
+        QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
 
         mutex.lock();
         rets[member] = QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact);

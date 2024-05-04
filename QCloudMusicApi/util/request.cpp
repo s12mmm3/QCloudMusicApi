@@ -201,9 +201,9 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
         if(reply->header(QNetworkRequest::SetCookieHeader).isValid()) {
             // 去掉cookie中的domain属性
-            auto cookie = reply->header(QNetworkRequest::SetCookieHeader).value<QList<QNetworkCookie>>()[0];
-            cookie.setDomain("");
-            answer["cookie"] = cookie.toRawForm();
+            auto cookie = QString(reply->rawHeader("set-cookie"));
+            cookie.replace(QRegularExpression("\\s*Domain=[^;]*"), "");
+            answer["cookie"] = cookie;
         }
         if(options["crypto"].toString() == "eapi") {
             answer["body"] = QJsonDocument::fromJson(
