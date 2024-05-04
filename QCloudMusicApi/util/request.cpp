@@ -199,21 +199,20 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         auto body = reply->readAll();
         DEBUG.noquote() << "body" << body;
 
-        auto cookie = QString(reply->rawHeader("set-cookie"));
-        cookie.replace(QRegularExpression("\\s*Domain=[^;]*"), "");
+        QString cookie;
+        for (auto& i : QString(reply->rawHeader("set-cookie")).split("\n")) {
+            cookie.append(i.replace(QRegularExpression("\\s*Domain=[^;]*"), ""));
+        }
         answer["cookie"] = cookie;
 
         if(options["crypto"].toString() == "eapi") {
-            answer["body"] = QJsonDocument::fromJson(
-                                 Crypto::aesDecrypt(body, "ecb", Crypto::eapiKey.toUtf8().data(), "")
-                                 ).toVariant().toMap();
+            answer["body"] = QJsonDocument::fromJson(Crypto::decrypt(body)).toVariant().toMap();
             if(answer["body"].toMap().isEmpty()) {
                 answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
             }
         }
         else {
-            if(!QJsonDocument::fromJson(body).isNull()) answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
-            else answer["body"] = QString::fromUtf8(body);
+            answer["body"] = answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
         }
         answer["status"] = answer["body"].toMap().value("code", reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
         if(QList<int> { 201, 302, 400, 502, 800, 801, 802, 803 }.indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
@@ -224,7 +223,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                                ? answer["status"]
                                : 400;
     }
-
+    DEBUG << answer;
     return answer;
 }
 
