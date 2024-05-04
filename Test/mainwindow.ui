@@ -66,15 +66,23 @@
         </attribute>
        </widget>
       </widget>
-      <widget class="TabLogin_cellphone" name="tabLogin_cellphone">
+      <widget class="QTabWidget" name="tabLogin">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
        <attribute name="title">
-        <string>login_cellphone</string>
+        <string>login</string>
        </attribute>
-      </widget>
-      <widget class="TabLogin_qr" name="tabLogin_qr">
-       <attribute name="title">
-        <string>login_qr</string>
-       </attribute>
+       <widget class="TabLogin_cellphone" name="tabLogin_cellphone">
+        <attribute name="title">
+         <string>login_cellphone</string>
+        </attribute>
+       </widget>
+       <widget class="TabLogin_qr" name="tabLogin_qr">
+        <attribute name="title">
+         <string>login_qr</string>
+        </attribute>
+       </widget>
       </widget>
       <widget class="TabServerTest" name="tabServerTest">
        <attribute name="title">

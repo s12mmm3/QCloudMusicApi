@@ -14,6 +14,7 @@
 std::string currentPath_c;
 QCoreApplication *app = Q_NULLPTR;
 char* data = Q_NULLPTR;
+ApiHelper helper;
 
 void freeApp() {
     if (app) {
@@ -57,7 +58,6 @@ void init() {
 QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
     init();
 
-    ApiHelper helper;
     QVariantMap ret = helper.invoke(memberName, QJsonDocument::fromJson(value).toVariant().toMap());
     std::string result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
 

@@ -2360,9 +2360,11 @@ QVariantMap Api::login_status(QVariantMap query) {
         body["cookie"] = result["cookie"];
         result = QVariantMap {
             { "status", 200 },
-            { "body", {
-                         { "data", result["body"] }
-                     } },
+            { "body", QVariantMap
+                {
+                    { "data", result["body"] }
+                }
+            },
             { "cookie", result["cookie"] }
         };
     }

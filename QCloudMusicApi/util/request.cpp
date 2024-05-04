@@ -223,7 +223,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                                ? answer["status"]
                                : 400;
     }
-    DEBUG << answer;
+    DEBUG << "answer" << answer;
     return answer;
 }
 
