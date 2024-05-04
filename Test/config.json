@@ -277,5 +277,82 @@
     "login_cellphone": {
         "phone": "xxx",
         "password": "xxx"
+    },
+    "login_qr_create": {
+        "key": "xxx"
+    },
+    "login_qr_check": {
+        "key": "xxx"
+    },
+    "mlog_music_rcmd": {
+        "songid": "2058263032"
+    },
+    "mlog_to_video": {
+        "id": "a1qOVPTWKS1ZrK8"
+    },
+    "mlog_url": {
+        "id": "a1qOVPTWKS1ZrK8"
+    },
+    "playlist_create": {
+        "name": "测试歌单"
+    },
+    "playlist_delete": {
+        "id": "xxx, xxx"
+    },
+    "playlist_desc_update": {
+        "id": "24381616",
+        "desc": "描述"
+    },
+    "playlist_detail_dynamic": {
+        "id": "24381616"
+    },
+    "playlist_detail": {
+        "id": "24381616"
+    },
+    "playlist_name_update": {
+        "id": "24381616",
+        "name": "歌单名"
+    },
+    "playlist_order_update": {
+        "ids": "[111, 222]"
+    },
+    "playlist_privacy": {
+        "id": "24381616"
+    },
+    "playlist_subscribe": {
+        "id": "24381616",
+        "t": 1
+    },
+    "playlist_subscribers": {
+        "id": "24381616"
+    },
+    "playlist_tags_update": {
+        "id": "24381616",
+        "tags": "学习"
+    },
+    "playlist_track_add": {
+        "pid": "24381616",
+        "ids": "186041,186041"
+    },
+    "playlist_track_all": {
+        "id": "24381616"
+    },
+    "playlist_track_delete": {
+        "pid": "24381616",
+        "ids": "186041,186041"
+    },
+    "playlist_tracks": {
+        "pid": "24381616",
+        "op": "add",
+        "tracks": "186041,186041"
+    },
+    "playlist_update_playcount": {
+        "id": "24381616"
+    },
+    "playlist_update": {
+        "id": "24381616",
+        "name": "新歌单",
+        "desc": "描述",
+        "tags": "欧美"
     }
 }

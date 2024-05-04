@@ -6,7 +6,9 @@
 #define LOGGER_NAME ApiLogger
 
 namespace QCloudMusicApi {
+
 Q_DECLARE_LOGGING_CATEGORY(LOGGER_NAME)
+
 }
 
 #define DEBUG qCDebug(LOGGER_NAME)

@@ -7,6 +7,8 @@
 #include <QVariantMap>
 
 namespace QCloudMusicApi {
+
+// 加解密管理类，参考原项目文件util/crypto.js
 class QCLOUDMUSICAPI_EXPORT Crypto {
 public:
     static const QString iv;
@@ -29,7 +31,7 @@ public:
     static QVariantMap eapi(QString url, QJsonDocument object);
 
     static QByteArray decrypt(QByteArray cipherBuffer);
-
 };
+
 }
 #endif // CRYPTO_H

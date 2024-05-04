@@ -28,15 +28,18 @@ void TabPlaylist_cover_update::on_pushButton_select_file_clicked()
 void TabPlaylist_cover_update::on_pushButton_playlist_cover_update_clicked()
 {
     auto filePath = ui->label_path->property("filePath").toString();
-    QFile file(filePath);
-    file.open(QFile::ReadOnly);
+
     QImage image(filePath);
     int imgSize = 300;
     if (!image.isNull()) {
         // 默认以图片宽度为上传尺寸
         imgSize = image.width();
     }
+
+    QFile file(filePath);
+    file.open(QFile::ReadOnly);
     auto data = file.readAll();
+
     auto arg = QVariantMap {
         { "id", ui->lineEdit_id->text() },
         { "imgSize", imgSize },

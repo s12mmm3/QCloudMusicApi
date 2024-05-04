@@ -84,18 +84,8 @@ void TabApi_c::update(QVariantMap ret)
 
 void TabApi_c::on_pushButton_select_clicked()
 {
-    auto filePath = QFileDialog::getOpenFileName(this);
-    if (!filePath.isEmpty()) {
-        library.unload();
-        library.setFileName(filePath);
-        if (library.load()) {
-            ui->lineEdit_library_fileName->setText(filePath);
-            libarayLoadSucceed();
-        }
-        else {
-            libraryLoadFailed();
-        }
-    }
+    auto fileName = QFileDialog::getOpenFileName(this);
+    libraryLoad(fileName);
 }
 
 void TabApi_c::libarayLoadSucceed()
@@ -127,5 +117,29 @@ void TabApi_c::on_pushButton_unload_clicked()
     else {
         libraryUnloadFailed();
     }
+}
+
+
+void TabApi_c::on_pushButton_load_clicked()
+{
+    libraryLoad(ui->lineEdit_library_fileName->text());
+}
+
+bool TabApi_c::libraryLoad(QString fileName)
+{
+    bool result = false;
+    if (!fileName.isEmpty()) {
+        library.unload();
+        library.setFileName(fileName);
+        result = library.load();
+        if (result) {
+            ui->lineEdit_library_fileName->setText(fileName);
+            libarayLoadSucceed();
+        }
+        else {
+            libraryLoadFailed();
+        }
+    }
+    return result;
 }
 

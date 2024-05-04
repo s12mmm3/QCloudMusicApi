@@ -9,6 +9,8 @@
 #include "../global.h"
 
 namespace QCloudMusicApi {
+
+// 请求管理类，参考原项目文件util/request.js
 class QCLOUDMUSICAPI_EXPORT Request {
 public:
     static QString chooseUserAgent(QString ua = "");
@@ -25,6 +27,7 @@ public:
                                 const QByteArray &data,
                                 QNetworkProxy proxy = QNetworkProxy::NoProxy);
 };
+
 }
 
 #endif // REQUEST_H

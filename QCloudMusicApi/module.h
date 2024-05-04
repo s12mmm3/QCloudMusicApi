@@ -410,14 +410,90 @@ public:
     // 歌词
     Q_INVOKABLE QVariantMap lyric(QVariantMap);
 
+    // 歌曲相关视频
+    Q_INVOKABLE QVariantMap mlog_music_rcmd(QVariantMap);
+
+    // 将mlog id转为video id
+    Q_INVOKABLE QVariantMap mlog_to_video(QVariantMap);
+
+    // mlog链接
+    Q_INVOKABLE QVariantMap mlog_url(QVariantMap);
+
     // 重复昵称检测
     Q_INVOKABLE QVariantMap nickname_check(QVariantMap);
 
-    // 游客登录
-    Q_INVOKABLE QVariantMap register_anonimous(QVariantMap);
+    // 全部歌单分类
+    Q_INVOKABLE QVariantMap playlist_catlist(QVariantMap);
 
     // 歌单封面上传
     Q_INVOKABLE QVariantMap playlist_cover_update(QVariantMap);
+
+    // 创建歌单
+    Q_INVOKABLE QVariantMap playlist_create(QVariantMap);
+
+    // 删除歌单
+    Q_INVOKABLE QVariantMap playlist_delete(QVariantMap);
+
+    // 更新歌单描述
+    Q_INVOKABLE QVariantMap playlist_desc_update(QVariantMap);
+
+    // 初始化名字
+    Q_INVOKABLE QVariantMap playlist_detail_dynamic(QVariantMap);
+
+    // 歌单详情
+    Q_INVOKABLE QVariantMap playlist_detail(QVariantMap);
+
+    // 精品歌单 tags
+    Q_INVOKABLE QVariantMap playlist_highquality_tags(QVariantMap);
+
+    // 热门歌单分类
+    Q_INVOKABLE QVariantMap playlist_hot(QVariantMap);
+
+    // 获取点赞过的视频
+    Q_INVOKABLE QVariantMap playlist_mylike(QVariantMap);
+
+    // 更新歌单名
+    Q_INVOKABLE QVariantMap playlist_name_update(QVariantMap);
+
+    // 编辑歌单顺序
+    Q_INVOKABLE QVariantMap playlist_order_update(QVariantMap);
+
+    // 公开隐私歌单
+    Q_INVOKABLE QVariantMap playlist_privacy(QVariantMap);
+
+    // 收藏与取消收藏歌单
+    Q_INVOKABLE QVariantMap playlist_subscribe(QVariantMap);
+
+    // 歌单收藏者
+    Q_INVOKABLE QVariantMap playlist_subscribers(QVariantMap);
+
+    // 更新歌单标签
+    Q_INVOKABLE QVariantMap playlist_tags_update(QVariantMap);
+
+    // 收藏视频到视频歌单
+    Q_INVOKABLE QVariantMap playlist_track_add(QVariantMap);
+
+    // 通过传过来的歌单id拿到所有歌曲数据
+    // 支持传递参数limit来限制获取歌曲的数据数量 例如: /playlist/track/all?id=7044354223&limit=10
+    Q_INVOKABLE QVariantMap playlist_track_all(QVariantMap);
+
+    // 收藏单曲到歌单 从歌单删除歌曲
+    Q_INVOKABLE QVariantMap playlist_track_delete(QVariantMap);
+
+    // 收藏单曲到歌单 从歌单删除歌曲
+    Q_INVOKABLE QVariantMap playlist_tracks(QVariantMap);
+
+    // 歌单打卡
+    Q_INVOKABLE QVariantMap playlist_update_playcount(QVariantMap);
+
+    // 编辑歌单
+    Q_INVOKABLE QVariantMap playlist_update(QVariantMap);
+
+    // 最近播放的视频
+    Q_INVOKABLE QVariantMap playlist_video_recent(QVariantMap);
+
+    // 游客登录
+    Q_INVOKABLE QVariantMap register_anonimous(QVariantMap);
 
     // 相关歌单
     Q_INVOKABLE QVariantMap related_playlist(QVariantMap);

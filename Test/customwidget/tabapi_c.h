@@ -34,7 +34,11 @@ private slots:
 
     void on_pushButton_unload_clicked();
 
+    void on_pushButton_load_clicked();
+
 private:
+    bool libraryLoad(QString fileName);
+
     void libarayLoadSucceed();
     void libraryLoadFailed();
 
