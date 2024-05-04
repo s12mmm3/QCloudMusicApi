@@ -172,7 +172,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     QUrlQuery query;
     query.setQuery(QUrl(url).query());
     for(auto i = data.constBegin(); i != data.constEnd(); ++i) {
-        query.addQueryItem(i.key(), i.value().toString());
+        query.addQueryItem(i.key(), QUrl::toPercentEncoding(i.value().toString()));
     }
     QNetworkReply* reply = axios(method, url, data, headers, query.toString().toUtf8(), proxy);
     reply->deleteLater();
@@ -245,8 +245,10 @@ QNetworkReply *Request::axios(QNetworkAccessManager::Operation method,
     QUrlQuery query;
     QUrl qurl(url);
     query.setQuery(qurl.query());
-    for(auto i = urlQuery.constBegin(); i != urlQuery.constEnd(); ++i) {
-        query.addQueryItem(i.key(), i.value().toString());
+    if (method != QNetworkAccessManager::PostOperation) {
+        for(auto i = urlQuery.constBegin(); i != urlQuery.constEnd(); ++i) {
+            query.addQueryItem(i.key(), i.value().toString());
+        }
     }
     qurl.setQuery(query);
     request.setUrl(qurl);
