@@ -514,6 +514,65 @@ QVariantMap Api::artists(QVariantMap query) {
         );
 }
 
+// 听歌识曲
+QVariantMap Api::audio_match(QVariantMap query) {
+    auto createRandomString = [](int len) {
+        const QString str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        QString result;
+        for (int i = 0; i < len; ++i) {
+            int index = QRandomGenerator::global()->bounded(str.length());
+            result.append(str.at(index));
+        }
+        return result;
+    };
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data {
+        { "algorithmCode", "shazam_v2" },
+        { "times", 1 },
+        { "sessionId", createRandomString(16) },
+        { "duration", query["duration"] },
+        { "from", "recognize-song" },
+        { "decrypt", "1" },
+        { "rawdata", query["audioFP"] },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/music/audio/match",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 更新头像
+QVariantMap Api::avatar_upload(QVariantMap query) {
+    auto uploadInfo = uploadPlugin(query);
+    const QVariantMap res = request(
+        POST,
+        "https://music.163.com/weapi/user/avatar/upload/v1",
+        {
+            { "imgid", uploadInfo["imgId"] }
+        },
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+    return {
+        { "status", 200 },
+        { "body", QVariantMap
+            {
+                { "code", 200 },
+                { "data", QCloudMusicApi::Index::mergeMap(uploadInfo, res["body"].toMap()) },
+            }
+        }
+    };
+}
+
 // 批量请求接口
 QVariantMap Api::batch(QVariantMap query) {
     QVariantMap data {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TabPlaylist_cover_update</class>
- <widget class="QWidget" name="TabPlaylist_cover_update">
+ <class>TabAvatar_upload</class>
+ <widget class="QWidget" name="TabAvatar_upload">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -58,18 +58,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBox_3">
-        <property name="title">
-         <string>id</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QLineEdit" name="lineEdit_id"/>
-         </item>
-        </layout>
-       </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">

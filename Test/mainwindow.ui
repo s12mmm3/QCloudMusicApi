@@ -89,10 +89,23 @@
         <string>serverTest</string>
        </attribute>
       </widget>
-      <widget class="TabPlaylist_cover_update" name="tabPlaylist_cover_update">
+      <widget class="QTabWidget" name="tabUploadPlugin">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
        <attribute name="title">
-        <string>playlist_cover_update</string>
+        <string>uploadPlugin</string>
        </attribute>
+       <widget class="TabPlaylist_cover_update" name="tabPlaylist_cover_update">
+        <attribute name="title">
+         <string>playlist_cover_update</string>
+        </attribute>
+       </widget>
+       <widget class="TabAvatar_upload" name="tabAvatar_upload">
+        <attribute name="title">
+         <string>avatar_upload</string>
+        </attribute>
+       </widget>
       </widget>
       <widget class="TabApi_c" name="tabApi_c">
        <attribute name="title">
@@ -161,6 +174,11 @@
    <class>TabApi_c</class>
    <extends>QWidget</extends>
    <header>tabapi_c.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TabAvatar_upload</class>
+   <extends>QWidget</extends>
+   <header>tabavatar_upload.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

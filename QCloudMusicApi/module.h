@@ -105,6 +105,12 @@ public:
     // 歌手单曲
     Q_INVOKABLE QVariantMap artists(QVariantMap);
 
+    // 听歌识曲
+    Q_INVOKABLE QVariantMap audio_match(QVariantMap);
+
+    // 更新头像
+    Q_INVOKABLE QVariantMap avatar_upload(QVariantMap);
+
     // 批量请求接口
     Q_INVOKABLE QVariantMap batch(QVariantMap);
 

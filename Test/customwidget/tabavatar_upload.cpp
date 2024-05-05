@@ -1,23 +1,23 @@
-#include "tabplaylist_cover_update.h"
-#include "ui_tabplaylist_cover_update.h"
+#include "TabAvatar_upload.h"
+#include "ui_tabavatar_upload.h"
 #include "../servicelocator.h"
 
 #include <QFileDialog>
 #include <QFileInfo>
 
-TabPlaylist_cover_update::TabPlaylist_cover_update(QWidget *parent) :
+TabAvatar_upload::TabAvatar_upload(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::TabPlaylist_cover_update)
+    ui(new Ui::TabAvatar_upload)
 {
     ui->setupUi(this);
 }
 
-TabPlaylist_cover_update::~TabPlaylist_cover_update()
+TabAvatar_upload::~TabAvatar_upload()
 {
     delete ui;
 }
 
-void TabPlaylist_cover_update::on_pushButton_select_file_clicked()
+void TabAvatar_upload::on_pushButton_select_file_clicked()
 {
     QFileInfo fileInfo = QFileInfo(QFileDialog::getOpenFileName(this));
     auto filePath = fileInfo.filePath();
@@ -28,7 +28,7 @@ void TabPlaylist_cover_update::on_pushButton_select_file_clicked()
 }
 
 
-void TabPlaylist_cover_update::on_pushButton_send_clicked()
+void TabAvatar_upload::on_pushButton_send_clicked()
 {
     auto filePath = ui->label_path->property("filePath").toString();
 
@@ -44,7 +44,6 @@ void TabPlaylist_cover_update::on_pushButton_send_clicked()
     auto data = file.readAll();
 
     auto arg = QVariantMap {
-        { "id", ui->lineEdit_id->text() },
         { "imgSize", imgSize },
         { "imgFile", QVariantMap {
                            { "name", ui->label_path->text() },
@@ -52,7 +51,7 @@ void TabPlaylist_cover_update::on_pushButton_send_clicked()
                        }
         }
     };
-    QVariantMap ret = ServiceLocator::helper().invoke("playlist_cover_update", arg);
+    QVariantMap ret = ServiceLocator::helper().invoke("avatar_upload", arg);
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
 }
 

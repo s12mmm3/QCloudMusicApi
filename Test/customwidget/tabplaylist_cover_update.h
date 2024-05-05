@@ -19,7 +19,7 @@ public:
 private slots:
     void on_pushButton_select_file_clicked();
 
-    void on_pushButton_playlist_cover_update_clicked();
+    void on_pushButton_send_clicked();
 
 private:
     Ui::TabPlaylist_cover_update *ui;
