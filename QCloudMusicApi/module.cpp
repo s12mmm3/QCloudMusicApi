@@ -633,7 +633,7 @@ QVariantMap Api::cellphone_existence_check(QVariantMap query) {
 // 歌曲可用性
 QVariantMap Api::check_music(QVariantMap query) {
     const QVariantMap data {
-        { "ids", QStringList { query["id"].toString() } },
+        { "ids", "[" + query["id"].toString() + "]" },
         { "br", query.value("br", 999000) }
     };
     QVariantMap result = request(
