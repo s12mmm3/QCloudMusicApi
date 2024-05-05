@@ -354,5 +354,11 @@
         "name": "新歌单",
         "desc": "描述",
         "tags": "欧美"
+    },
+    "msg_comments": {
+        "uid": "79248480"
+    },
+    "msg_private_history": {
+        "uid": "79248480"
     }
 }

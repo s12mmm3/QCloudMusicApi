@@ -2489,6 +2489,111 @@ QVariantMap Api::mlog_url(QVariantMap query) {
         );
 }
 
+// 评论
+QVariantMap Api::msg_comments(QVariantMap query) {
+    const QVariantMap data {
+        { "beforeTime", query.value("beforeTime", "-1") },
+        { "limit", query.value("limit", 30) },
+        { "total", "true" },
+        { "uid", query["uid"] },
+        };
+    return request(
+        POST,
+        "https://music.163.com/api/v1/user/comments/" + query["uid"].toString(),
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// @我
+QVariantMap Api::msg_forwards(QVariantMap query) {
+    const QVariantMap data {
+        { "offset", query.value("offset", "0") },
+        { "limit", query.value("limit", 30) },
+        { "total", "true" },
+        };
+    return request(
+        POST,
+        "https://music.163.com/api/forwards/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 通知
+QVariantMap Api::msg_notices(QVariantMap query) {
+    const QVariantMap data {
+        { "offset", query.value("offset", "0") },
+        { "limit", query.value("limit", 30) },
+        };
+    return request(
+        POST,
+        "https://music.163.com/api/msg/notices",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 私信内容
+QVariantMap Api::msg_private_history(QVariantMap query) {
+    const QVariantMap data {
+        { "userId", query["uid"] },
+        { "limit", query.value("limit", 30) },
+        { "time", query.value("before", "0") },
+        { "total", "true" },
+        };
+    return request(
+        POST,
+        "https://music.163.com/api/msg/private/history",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 最近联系
+QVariantMap Api::msg_recentcontact(QVariantMap query) {
+    const QVariantMap data {};
+    return request(
+        POST,
+        "https://music.163.com/api/msg/recentcontact/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 私信
+QVariantMap Api::msg_private(QVariantMap query) {
+    const QVariantMap data {
+        { "offset", query.value("offset", "0") },
+        { "limit", query.value("limit", 30) },
+        { "total", "true" },
+        };
+    return request(
+        POST,
+        "https://music.163.com/api/msg/private/users",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 重复昵称检测
 QVariantMap Api::nickname_check(QVariantMap query) {
     QVariantMap data {

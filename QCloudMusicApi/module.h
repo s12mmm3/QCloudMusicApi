@@ -419,6 +419,24 @@ public:
     // mlog链接
     Q_INVOKABLE QVariantMap mlog_url(QVariantMap);
 
+    // 评论
+    Q_INVOKABLE QVariantMap msg_comments(QVariantMap);
+
+    // @我
+    Q_INVOKABLE QVariantMap msg_forwards(QVariantMap);
+
+    // 通知
+    Q_INVOKABLE QVariantMap msg_notices(QVariantMap);
+
+    // 私信内容
+    Q_INVOKABLE QVariantMap msg_private_history(QVariantMap);
+
+    // 最近联系
+    Q_INVOKABLE QVariantMap msg_recentcontact(QVariantMap);
+
+    // 私信
+    Q_INVOKABLE QVariantMap msg_private(QVariantMap);
+
     // 重复昵称检测
     Q_INVOKABLE QVariantMap nickname_check(QVariantMap);
 
