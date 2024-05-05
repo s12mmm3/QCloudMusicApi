@@ -61,6 +61,7 @@ QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
     QVariantMap ret = helper.invoke(memberName, QJsonDocument::fromJson(value).toVariant().toMap());
     std::string result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
 
+    // 这里多线程可能会有问题，会同时修改data；还没想好怎么改
     freeData();
     data = new char[result.size() + 1];
     std::strcpy(data, result.c_str());
