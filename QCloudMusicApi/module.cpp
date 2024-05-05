@@ -3394,6 +3394,92 @@ QVariantMap Api::search(QVariantMap query) {
         );
 }
 
+// 相似歌手
+QVariantMap Api::simi_artist(QVariantMap query) {
+    QVariantMap data {
+        { "artistid", query["id"] },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/discovery/simiArtist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 相似MV
+QVariantMap Api::simi_mv(QVariantMap query) {
+    QVariantMap data {
+        { "mvid", query["mvid"] },
+        };
+    return request(
+        POST,
+        "https://music.163.com/weapi/discovery/simiMV",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 相似歌单
+QVariantMap Api::simi_playlist(QVariantMap query) {
+    QVariantMap data {
+        { "songid", query["id"] },
+        { "limit", query.value("limit", 50) },
+        { "offset", query.value("offset", 0) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/discovery/simiPlaylist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 相似歌曲
+QVariantMap Api::simi_song(QVariantMap query) {
+    QVariantMap data {
+        { "songid", query["id"] },
+        { "limit", query.value("limit", 50) },
+        { "offset", query.value("offset", 0) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/v1/discovery/simiSong",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 相似用户
+QVariantMap Api::simi_user(QVariantMap query) {
+    QVariantMap data {
+        { "songid", query["id"] },
+        { "limit", query.value("limit", 50) },
+        { "offset", query.value("offset", 0) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/discovery/simiUser",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
 // 获取客户端歌曲下载链接
 QVariantMap Api::song_download_url(QVariantMap query) {
     QVariantMap data {

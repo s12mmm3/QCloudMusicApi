@@ -543,6 +543,21 @@ public:
     // 搜索
     Q_INVOKABLE QVariantMap search(QVariantMap);
 
+    // 相似歌手
+    Q_INVOKABLE QVariantMap simi_artist(QVariantMap);
+
+    // 相似歌手
+    Q_INVOKABLE QVariantMap simi_mv(QVariantMap);
+
+    // 相似歌单
+    Q_INVOKABLE QVariantMap simi_playlist(QVariantMap);
+
+    // 相似歌曲
+    Q_INVOKABLE QVariantMap simi_song(QVariantMap);
+
+    // 相似用户
+    Q_INVOKABLE QVariantMap simi_user(QVariantMap);
+
     // 获取客户端歌曲下载链接
     Q_INVOKABLE QVariantMap song_download_url(QVariantMap);
 
