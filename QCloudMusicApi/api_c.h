@@ -36,6 +36,13 @@ QCLOUDMUSICAPI_EXPORT char* memberName(int i);
  */
 QCLOUDMUSICAPI_EXPORT int memberCount();
 
+/**
+ * @brief 设置全局代理
+ *
+ * @param proxy 代理地址
+ */
+QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy);
+
 #ifdef __cplusplus
 }
 #endif

@@ -24,6 +24,11 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
         //使用存储的cookie
         arg["cookie"] = cookie();
     }
+
+    // 设置全局代理
+    if (!proxy().isEmpty()) {
+        arg["proxy"] = proxy();
+    }
 }
 
 void ApiHelper::afterInvoke(QVariantMap& ret)

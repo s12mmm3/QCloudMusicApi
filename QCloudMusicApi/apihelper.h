@@ -17,12 +17,13 @@ public:
 
     void set_cookie(QString cookie);
 
+    DEFINE_VALUE(QVariantMap, cookie, {})
+
+    DEFINE_VALUE(QString, proxy, "")
+
 private:
     void beforeInvoke(QVariantMap& arg);
     void afterInvoke(QVariantMap& ret);
-
-private:
-    DEFINE_VALUE(QVariantMap, cookie, {})
 
 public:
     static QStringList memberList();

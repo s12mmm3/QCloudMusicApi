@@ -77,3 +77,7 @@ QCLOUDMUSICAPI_EXPORT int memberCount() {
     NeteaseCloudMusicApi api;
     return api.metaObject()->methodCount() - QObject().metaObject()->methodCount();
 }
+
+QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy) {
+    helper.set_proxy(proxy);
+}
