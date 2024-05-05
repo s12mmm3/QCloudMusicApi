@@ -3358,6 +3358,84 @@ QVariantMap Api::related_playlist(QVariantMap query) {
     return result;
 }
 
+// 默认搜索关键词
+QVariantMap Api::search_default(QVariantMap query) {
+    return request(
+        POST,
+        "https://interface3.music.163.com/eapi/search/defaultkeyword/get",
+        {},
+        {
+            { "crypto", "eapi" },
+            { "url", "/api/search/defaultkeyword/get" },
+            _PARAM,
+        }
+        );
+}
+
+// 热搜列表
+QVariantMap Api::search_hot_detail(QVariantMap query) {
+    return request(
+        POST,
+        "https://music.163.com/weapi/hotsearchlist/get",
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 热搜列表
+QVariantMap Api::search_hot(QVariantMap query) {
+    const QVariantMap data {
+        { "type", "1111" }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/search/hot",
+        data,
+        {
+            { "crypto", "weapi" },
+            { "ua", "mobile" },
+            _PARAM,
+        }
+        );
+}
+
+// 多类型搜索
+QVariantMap Api::search_multimatch(QVariantMap query) {
+    const QVariantMap data {
+        { "type", query.value("type", 1) },
+        { "s", query.value("keywords", "") }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/search/suggest/multimatch",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 搜索建议
+QVariantMap Api::search_suggest(QVariantMap query) {
+    const QVariantMap data {
+        { "s", query.value("keywords", "") }
+    };
+    QString type = query["type"] == "mobile" ? "keyword" : "web";
+    return request(
+        POST,
+        "https://music.163.com/weapi/search/suggest/" + type,
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
 // 搜索
 QVariantMap Api::search(QVariantMap query) {
     if (query.contains("type") && query["type"].toString() == "2000") {

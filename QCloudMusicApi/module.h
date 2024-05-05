@@ -540,6 +540,21 @@ public:
     // 相关歌单
     Q_INVOKABLE QVariantMap related_playlist(QVariantMap);
 
+    // 默认搜索关键词
+    Q_INVOKABLE QVariantMap search_default(QVariantMap);
+
+    // 热搜列表
+    Q_INVOKABLE QVariantMap search_hot_detail(QVariantMap);
+
+    // 热门搜索
+    Q_INVOKABLE QVariantMap search_hot(QVariantMap);
+
+    // 多类型搜索
+    Q_INVOKABLE QVariantMap search_multimatch(QVariantMap);
+
+    // 搜索建议
+    Q_INVOKABLE QVariantMap search_suggest(QVariantMap);
+
     // 搜索
     Q_INVOKABLE QVariantMap search(QVariantMap);
 

@@ -388,5 +388,11 @@
     },
     "simi_user": {
         "id": "79248480"
+    },
+    "search_multimatch": {
+        "keywords": "電音部"
+    },
+    "search_suggest": {
+        "keywords": "電音部"
     }
 }
