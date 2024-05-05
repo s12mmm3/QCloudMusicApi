@@ -437,6 +437,30 @@ public:
     // 私信
     Q_INVOKABLE QVariantMap msg_private(QVariantMap);
 
+    // 全部MV
+    Q_INVOKABLE QVariantMap mv_all(QVariantMap);
+
+    // MV 点赞转发评论数数据
+    Q_INVOKABLE QVariantMap mv_detail_info(QVariantMap);
+
+    // MV详情
+    Q_INVOKABLE QVariantMap mv_detail(QVariantMap);
+
+    // 网易出品
+    Q_INVOKABLE QVariantMap mv_exclusive_rcmd(QVariantMap);
+
+    // 最新MV
+    Q_INVOKABLE QVariantMap mv_first(QVariantMap);
+
+    // 收藏与取消收藏MV
+    Q_INVOKABLE QVariantMap mv_sub(QVariantMap);
+
+    // 已收藏MV列表
+    Q_INVOKABLE QVariantMap mv_sublist(QVariantMap);
+
+    // MV链接
+    Q_INVOKABLE QVariantMap mv_url(QVariantMap);
+
     // 重复昵称检测
     Q_INVOKABLE QVariantMap nickname_check(QVariantMap);
 

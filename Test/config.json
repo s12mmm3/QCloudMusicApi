@@ -360,5 +360,18 @@
     },
     "msg_private_history": {
         "uid": "79248480"
+    },
+    "mv_detail_info": {
+        "mvid": "14572641"
+    },
+    "mv_detail": {
+        "mvid": "14572641"
+    },
+    "mv_sub": {
+        "mvid": "14572641",
+        "t": 1
+    },
+    "mv_url": {
+        "id": "14572641"
     }
 }
