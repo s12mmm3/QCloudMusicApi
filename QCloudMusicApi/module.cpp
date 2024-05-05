@@ -2816,6 +2816,129 @@ QVariantMap Api::nickname_check(QVariantMap query) {
         );
 }
 
+// 私人FM
+QVariantMap Api::personal_fm(QVariantMap query) {
+    return request(
+        POST,
+        "https://music.163.com/weapi/v1/radio/get",
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 推荐电台
+QVariantMap Api::personalized_djprogram(QVariantMap query) {
+    return request(
+        POST,
+        "https://music.163.com/weapi/personalized/djprogram",
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 推荐MV
+QVariantMap Api::personalized_mv(QVariantMap query) {
+    return request(
+        POST,
+        "https://music.163.com/weapi/personalized/mv",
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 推荐新歌
+QVariantMap Api::personalized_newsong(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const QVariantMap data {
+        { "type", "recommend" },
+        { "limit", query.value("limit", 10) },
+        { "areaId", query.value("areaId", 0) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/personalized/newsong",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 独家放送列表
+QVariantMap Api::personalized_privatecontent_list(QVariantMap query) {
+    const QVariantMap data {
+        { "offset", query.value("offset", 10) },
+        { "total", "true" },
+        { "limit", query.value("limit", 60) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/v2/privatecontent/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 独家放送
+QVariantMap Api::personalized_privatecontent(QVariantMap query) {
+    return request(
+        POST,
+        "https://music.163.com/weapi/personalized/privatecontent",
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 推荐歌单
+QVariantMap Api::personalized(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 30) },
+        // { "offset", query.value("offset", 0) },
+        { "total", "true" },
+        { "n", 1000 },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/personalized/playlist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 数字专辑-新碟上架
+QVariantMap Api::pl_count(QVariantMap query) {
+    return request(
+        POST,
+        "https://music.163.com/weapi/pl/count",
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 全部歌单分类
 QVariantMap Api::playlist_catlist(QVariantMap query) {
     return request(

@@ -470,6 +470,30 @@ public:
     // 重复昵称检测
     Q_INVOKABLE QVariantMap nickname_check(QVariantMap);
 
+    // 私人FM
+    Q_INVOKABLE QVariantMap personal_fm(QVariantMap);
+
+    // 推荐电台
+    Q_INVOKABLE QVariantMap personalized_djprogram(QVariantMap);
+
+    // 推荐MV
+    Q_INVOKABLE QVariantMap personalized_mv(QVariantMap);
+
+    // 推荐新歌
+    Q_INVOKABLE QVariantMap personalized_newsong(QVariantMap);
+
+    // 独家放送列表
+    Q_INVOKABLE QVariantMap personalized_privatecontent_list(QVariantMap);
+
+    // 独家放送
+    Q_INVOKABLE QVariantMap personalized_privatecontent(QVariantMap);
+
+    // 推荐歌单
+    Q_INVOKABLE QVariantMap personalized(QVariantMap);
+
+    // 数字专辑-新碟上架
+    Q_INVOKABLE QVariantMap pl_count(QVariantMap);
+
     // 全部歌单分类
     Q_INVOKABLE QVariantMap playlist_catlist(QVariantMap);
 
