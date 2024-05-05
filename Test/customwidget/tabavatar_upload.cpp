@@ -1,4 +1,4 @@
-#include "TabAvatar_upload.h"
+#include "tabavatar_upload.h"
 #include "ui_tabavatar_upload.h"
 #include "../servicelocator.h"
 
