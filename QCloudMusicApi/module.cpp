@@ -3648,6 +3648,160 @@ QVariantMap Api::threshold_detail_get(QVariantMap query) {
         );
 }
 
+// 新碟上架
+QVariantMap Api::top_album(QVariantMap query) {
+    QDateTime date = QDateTime::currentDateTime();
+    QVariantMap data {
+        { "area", query.value("area", "ALL") }, // //ALL:全部,ZH:华语,EA:欧美,KR:韩国,JP:日本
+        { "limit", query.value("limit", 50) },
+        { "offset", query.value("offset", 0) },
+        { "type", query.value("type", "new") },
+        { "year", query.value("year", date.date().year()) },
+        { "month", query.value("month", date.date().month()) },
+        { "total", false },
+        { "rcmd", true }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/discovery/new/albums/area",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 热门歌手
+QVariantMap Api::top_artists(QVariantMap query) {
+    QVariantMap data {
+        { "limit", query.value("limit", 50) },
+        { "offset", query.value("offset", 0) },
+        { "total", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/artist/top",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// MV排行榜
+QVariantMap Api::top_mv(QVariantMap query) {
+    QVariantMap data {
+        { "area", query.value("area", "") },
+        { "limit", query.value("limit", 50) },
+        { "offset", query.value("offset", 0) },
+        { "total", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/mv/toplist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 精品歌单
+QVariantMap Api::top_playlist_highquality(QVariantMap query) {
+    QVariantMap data {
+        { "cat", query.value("cat", "全部") }, // 全部,华语,欧美,韩语,日语,粤语,小语种,运动,ACG,影视原声,流行,摇滚,后摇,古风,民谣,轻音乐,电子,器乐,说唱,古典,爵士
+        { "limit", query.value("limit", 50) },
+        { "lasttime", query.value("lasttime", 0) }, // 歌单updateTime
+        { "total", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/playlist/highquality/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 分类歌单
+QVariantMap Api::top_playlist(QVariantMap query) {
+    QVariantMap data {
+        { "cat", query.value("cat", "全部") }, // 全部,华语,欧美,韩语,日语,粤语,小语种,运动,ACG,影视原声,流行,摇滚,后摇,古风,民谣,轻音乐,电子,器乐,说唱,古典,爵士
+        { "order", query.value("order", "hot") }, // hot,new
+        { "limit", query.value("limit", 50) },
+        { "offset", query.value("offset", 0) },
+        { "total", true },
+    };
+    const auto res = request(
+        POST,
+        "https://music.163.com/weapi/playlist/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+    const auto result = QString(QJsonDocument::fromVariant(res).toJson())
+                            .replace(QRegularExpression("avatarImgId_str"), "avatarImgIdStr");
+    return QJsonDocument::fromJson(result.toUtf8()).toVariant().toMap();
+}
+
+// 新歌速递
+QVariantMap Api::top_song(QVariantMap query) {
+    QVariantMap data {
+        { "areaId", query.value("type", 0) }, // 全部:0 华语:7 欧美:96 日本:8 韩国:16
+        // { "limit", query.value("limit", 100) },
+        // { "offset", query.value("offset", 0) },
+        { "total", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/v1/discovery/new/songs",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 歌手榜
+QVariantMap Api::toplist_artist(QVariantMap query) {
+    QVariantMap data {
+        { "type", query.value("type", 1) },
+        { "limit", query.value("limit", 100) },
+        { "offset", query.value("offset", 0) },
+        { "total", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/toplist/artist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 所有榜单内容摘要
+QVariantMap Api::toplist_detail(QVariantMap query) {
+    return request(
+        POST,
+        "https://music.163.com/weapi/toplist/detail",
+        {},
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 所有榜单介绍
 QVariantMap Api::toplist(QVariantMap query) {
     return request(

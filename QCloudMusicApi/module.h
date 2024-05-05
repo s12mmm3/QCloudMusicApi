@@ -590,6 +590,33 @@ public:
     // 获取达人达标信息
     Q_INVOKABLE QVariantMap threshold_detail_get(QVariantMap);
 
+    // 新碟上架
+    Q_INVOKABLE QVariantMap top_album(QVariantMap);
+
+    // 热门歌手
+    Q_INVOKABLE QVariantMap top_artists(QVariantMap);
+
+    // 排行榜
+    // Q_INVOKABLE QVariantMap top_list(QVariantMap);
+
+    // MV排行榜
+    Q_INVOKABLE QVariantMap top_mv(QVariantMap);
+
+    // 精品歌单
+    Q_INVOKABLE QVariantMap top_playlist_highquality(QVariantMap);
+
+    // 分类歌单
+    Q_INVOKABLE QVariantMap top_playlist(QVariantMap);
+
+    // 新歌速递
+    Q_INVOKABLE QVariantMap top_song(QVariantMap);
+
+    // 歌手榜
+    Q_INVOKABLE QVariantMap toplist_artist(QVariantMap);
+
+    // 所有榜单内容摘要
+    Q_INVOKABLE QVariantMap toplist_detail(QVariantMap);
+
     // 所有榜单介绍
     Q_INVOKABLE QVariantMap toplist(QVariantMap);
 
