@@ -394,5 +394,17 @@
     },
     "search_suggest": {
         "keywords": "電音部"
+    },
+    "video_detail_info": {
+        "vid": "89ADDE33C0AAE8EC14B99F6750DB954D"
+    },
+    "video_detail": {
+        "id": "89ADDE33C0AAE8EC14B99F6750DB954D"
+    },
+    "video_group": {
+        "id": "9104"
+    },
+    "video_url": {
+        "id": "89ADDE33C0AAE8EC14B99F6750DB954D"
     }
 }

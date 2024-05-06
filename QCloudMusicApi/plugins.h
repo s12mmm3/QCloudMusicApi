@@ -6,6 +6,7 @@
 #include <QVariantMap>
 
 namespace QCloudMusicApi {
+
 class QCLOUDMUSICAPI_EXPORT Plugins : public QObject
 {
     Q_OBJECT
@@ -15,6 +16,7 @@ public:
     Q_INVOKABLE static QVariantMap upload(QVariantMap);
 signals:
 };
+
 }
 
 #endif // PLUGINS_H

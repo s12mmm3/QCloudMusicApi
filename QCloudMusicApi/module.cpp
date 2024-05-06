@@ -2964,7 +2964,6 @@ QVariantMap Api::playlist_cover_update(QVariantMap query) {
         };
     }
     const auto uploadInfo = uploadPlugin(query);
-    if (uploadInfo.isEmpty()) return {};
     const auto res = request(
         POST,
         "https://music.163.com/weapi/playlist/cover/update",
@@ -4392,6 +4391,163 @@ QVariantMap Api::user_update(QVariantMap query) {
     return request(
         POST,
         "https://music.163.com/api/user/profile/update",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 视频分类列表
+QVariantMap Api::video_category_list(QVariantMap query) {
+    const QVariantMap data {
+        { "offset", query.value("offset", 0) },
+        { "total", true },
+        { "limit", query.value("limit", 99) },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/cloudvideo/category/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 视频点赞转发评论数数据
+QVariantMap Api::video_detail_info(QVariantMap query) {
+    const QVariantMap data {
+        { "threadid", "R_VI_62_" + query["vid"].toString() },
+        { "composeliked", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/comment/commentthread/info",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 视频详情
+QVariantMap Api::video_detail(QVariantMap query) {
+    const QVariantMap data {
+        { "id", query["id"] },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/cloudvideo/v1/video/detail",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 视频标签列表
+QVariantMap Api::video_group_list(QVariantMap query) {
+    const QVariantMap data {};
+    return request(
+        POST,
+        "https://music.163.com/api/cloudvideo/group/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 视频标签/分类下的视频
+QVariantMap Api::video_group(QVariantMap query) {
+    const QVariantMap data {
+        { "groupId", query["id"] },
+        { "offset", query.value("offset", 0) },
+        { "need_preview_url", "true" },
+        { "total", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/videotimeline/videogroup/otherclient/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 收藏与取消收藏视频
+QVariantMap Api::video_sub(QVariantMap query) {
+    query["t"] = query.value("t", 1) == 1 ? "sub" : "unsub";
+    const QVariantMap data {
+        { "id", query["id"] }
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/cloudvideo/video/" + query["t"].toString(),
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 全部视频列表
+QVariantMap Api::video_timeline_all(QVariantMap query) {
+    const QVariantMap data {
+        { "groupId", 0 },
+        { "offset", query.value("offset", 0) },
+        { "need_preview_url", "true" },
+        { "total", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/videotimeline/otherclient/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 推荐视频
+QVariantMap Api::video_timeline_recommend(QVariantMap query) {
+    const QVariantMap data {
+        { "offset", query.value("offset", 0) },
+        { "filterLives", "[]" },
+        { "withProgramInfo", "true" },
+        { "needUrl", "1" },
+        { "resolution", "480" },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/videotimeline/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 视频链接
+QVariantMap Api::video_url(QVariantMap query) {
+    const QVariantMap data {
+        { "ids", "[\"" + query["id"].toString() + "\"]" },
+        { "resolution", query.value("res", 1080) },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/cloudvideo/playurl",
         data,
         {
             { "crypto", "weapi" },

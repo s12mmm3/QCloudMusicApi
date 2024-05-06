@@ -37,7 +37,6 @@ QVariantMap Plugins::upload(QVariantMap query)
          { "proxy", query["proxy"] },
          }
         );
-    if (res["body"].toMap().isEmpty()) return {};
     auto reply = Request::axios(QNetworkAccessManager::PostOperation,
                                 "https://nosup-hz1.127.net/yyimgs/"
                                     + res["body"].toMap()["result"].toMap()["objectKey"].toString()

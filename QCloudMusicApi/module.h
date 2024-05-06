@@ -720,6 +720,33 @@ public:
     // 编辑用户信息
     Q_INVOKABLE QVariantMap user_update(QVariantMap);
 
+    // 视频分类列表
+    Q_INVOKABLE QVariantMap video_category_list(QVariantMap);
+
+    // 视频点赞转发评论数数据
+    Q_INVOKABLE QVariantMap video_detail_info(QVariantMap);
+
+    // 视频详情
+    Q_INVOKABLE QVariantMap video_detail(QVariantMap);
+
+    // 视频标签列表
+    Q_INVOKABLE QVariantMap video_group_list(QVariantMap);
+
+    // 视频标签/分类下的视频
+    Q_INVOKABLE QVariantMap video_group(QVariantMap);
+
+    // 视频标签/分类下的视频
+    Q_INVOKABLE QVariantMap video_sub(QVariantMap);
+
+    // 全部视频列表
+    Q_INVOKABLE QVariantMap video_timeline_all(QVariantMap);
+
+    // 推荐视频
+    Q_INVOKABLE QVariantMap video_timeline_recommend(QVariantMap);
+
+    // 视频链接
+    Q_INVOKABLE QVariantMap video_url(QVariantMap);
+
     // 云贝 todo 任务
     Q_INVOKABLE QVariantMap yunbei_tasks_todo(QVariantMap);
 

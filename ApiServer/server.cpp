@@ -92,7 +92,8 @@ void Server::consturctServer(QVariantMap options)
             }
             arg.insert("realIP", ip);
 
-            INFO << "[OK]" << request.url().path();
+            auto url = request.url();
+            INFO.noquote() << "[OK]" << url.path() + (url.hasQuery() ? "?" + url.query() : "");
 
             QUrlQuery urlQuery;
             if (request.method() == QHttpServerRequest::Method::Post) {
