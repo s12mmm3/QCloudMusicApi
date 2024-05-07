@@ -585,6 +585,9 @@ public:
     // 游客登录
     Q_INVOKABLE QVariantMap register_anonimous(QVariantMap);
 
+    // 注册账号
+    Q_INVOKABLE QVariantMap register_cellphone(QVariantMap);
+
     // 相关歌单
     Q_INVOKABLE QVariantMap related_playlist(QVariantMap);
 

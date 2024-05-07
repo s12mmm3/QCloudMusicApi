@@ -5,6 +5,7 @@
 #include <QEventLoop>
 #include <QJsonDocument>
 #include <QNetworkReply>
+#include <QRegularExpression>
 
 const static auto &request = QCloudMusicApi::Request::createRequest;
 const static auto &POST = QNetworkAccessManager::PostOperation;

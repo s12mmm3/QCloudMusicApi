@@ -3587,6 +3587,29 @@ QVariantMap Api::register_anonimous(QVariantMap query) {
     return result;
 }
 
+// 注册账号
+QVariantMap Api::register_cellphone(QVariantMap query) {
+    auto cookie = query["cookie"].toMap();
+    cookie["os"] = "iOS";
+    query["cookie"] = cookie;
+    const QVariantMap data {
+        { "captcha", query["captcha"] },
+        { "phone", query["phone"] },
+        { "password", QCryptographicHash::hash(query["password"].toString().toUtf8(), QCryptographicHash::Md5) },
+        { "nickname", query["nickname"] },
+        { "countrycode", query.value("countrycode", "86") }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/register/cellphone",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 相关歌单
 QVariantMap Api::related_playlist(QVariantMap query) {
     QVariantMap result = request(
