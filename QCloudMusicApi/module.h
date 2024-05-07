@@ -564,6 +564,24 @@ public:
     // 最近播放的视频
     Q_INVOKABLE QVariantMap playlist_video_recent(QVariantMap);
 
+    // 最近播放-专辑
+    Q_INVOKABLE QVariantMap record_recent_album(QVariantMap);
+
+    // 最近播放-播客
+    Q_INVOKABLE QVariantMap record_recent_dj(QVariantMap);
+
+    // 最近播放-歌单
+    Q_INVOKABLE QVariantMap record_recent_playlist(QVariantMap);
+
+    // 最近播放-歌曲
+    Q_INVOKABLE QVariantMap record_recent_song(QVariantMap);
+
+    // 最近播放-视频
+    Q_INVOKABLE QVariantMap record_recent_video(QVariantMap);
+
+    // 最近播放-声音
+    Q_INVOKABLE QVariantMap record_recent_voice(QVariantMap);
+
     // 游客登录
     Q_INVOKABLE QVariantMap register_anonimous(QVariantMap);
 

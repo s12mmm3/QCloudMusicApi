@@ -3438,6 +3438,102 @@ QVariantMap Api::playlist_video_recent(QVariantMap query) {
         );
 }
 
+// 最近播放-专辑
+QVariantMap Api::record_recent_album(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/play-record/album/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 最近播放-播客
+QVariantMap Api::record_recent_dj(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/play-record/djradio/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 最近播放-歌单
+QVariantMap Api::record_recent_playlist(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/play-record/playlist/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 最近播放-歌曲
+QVariantMap Api::record_recent_song(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/play-record/song/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 最近播放-视频
+QVariantMap Api::record_recent_video(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/play-record/newvideo/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 最近播放-声音
+QVariantMap Api::record_recent_voice(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 100) }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/play-record/voice/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 游客登录
 QVariantMap Api::register_anonimous(QVariantMap query) {
     auto cookie = query["cookie"].toMap();
