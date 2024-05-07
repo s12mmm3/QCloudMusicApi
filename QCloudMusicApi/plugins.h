@@ -13,6 +13,8 @@ class QCLOUDMUSICAPI_EXPORT Plugins : public QObject
 public:
     explicit Plugins(QObject *parent = nullptr);
 
+    Q_INVOKABLE static QVariantMap songUpload(QVariantMap);
+
     Q_INVOKABLE static QVariantMap upload(QVariantMap);
 signals:
 };

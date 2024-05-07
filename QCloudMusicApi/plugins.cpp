@@ -15,6 +15,55 @@ Plugins::Plugins(QObject *parent)
     : QObject{parent}
 {}
 
+QVariantMap Plugins::songUpload(QVariantMap query)
+{
+    QString ext = "mp3";
+    if (query["songFile"].toMap()["name"].toString().indexOf("flac") > -1) {
+        ext = "flac";
+    }
+    QString filename = query["songFile"].toMap()["name"].toString()
+                           .replace("." + ext, "")
+                           .replace(QRegularExpression("\\s"), "")
+                           .replace(QRegularExpression("\\."), "_");
+    const QVariantMap data ;
+    //   获取key和token
+    const auto tokenRes = request(
+        POST,
+        "https://music.163.com/weapi/nos/token/alloc",
+        {
+            { "bucket", "jd-musicrep-privatecloud-audio-public" },
+            { "ext", ext },
+            { "filename", filename },
+            { "local", false },
+            { "nos_product", 3 },
+            { "type", "audio" },
+            { "md5", query["songFile"].toMap()["md5"] },
+        },
+        {
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+        }
+        );
+    const auto objectKey = tokenRes["body"].toMap()["result"].toMap()["objectKey"].toString().replace("/", "%2F");
+    auto reply = Request::axios(
+        QNetworkAccessManager::PostOperation,
+        "http://45.127.129.8/jd-musicrep-privatecloud-audio-public/"
+            + objectKey
+            + "?offset=0&complete=true&version=1.0",
+        {},
+        {
+            { "x-nos-token", tokenRes["body"].toMap()["result"].toMap()["token"] },
+            { "Content-MD5", query["songFile"].toMap()["md5"] },
+            { "Content-Type", "audio/mpeg" },
+            { "Content-Length", query["songFile"].toMap()["size"] },
+        },
+        query["imgFile"].toMap()["data"].toByteArray());
+    reply->manager()->deleteLater();
+
+    return tokenRes;
+}
+
 QVariantMap Plugins::upload(QVariantMap query)
 {
     const QVariantMap data {
@@ -70,19 +119,19 @@ QVariantMap Plugins::upload(QVariantMap query)
             .arg(imgSize),
         {},
         {
-         { "crypto", "weapi" },
-         { "cookie", query["cookie"] },
-         { "proxy", query["proxy"] },
-         { "ua", query.value("ua", "") },
-         }
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "proxy", query["proxy"] },
+            { "ua", query.value("ua", "") },
+        }
         );
 
     return {
-            // ...res.body.result,
-            // ...res2.data,
-            // ...res3.body,
-            { "url_pre", "https://p1.music.126.net/" + res["body"].toMap()["result"].toMap()["objectKey"].toString() },
-            { "url", res3["body"].toMap()["url"] },
-            { "imgId", res3["body"].toMap()["id"] },
-            };
+        // ...res.body.result,
+        // ...res2.data,
+        // ...res3.body,
+        { "url_pre", "https://p1.music.126.net/" + res["body"].toMap()["result"].toMap()["objectKey"].toString() },
+        { "url", res3["body"].toMap()["url"] },
+        { "imgId", res3["body"].toMap()["id"] },
+    };
 }

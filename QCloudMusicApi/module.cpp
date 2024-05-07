@@ -26,7 +26,6 @@ const static auto &POST = QNetworkAccessManager::PostOperation;
 const static auto &GET = QNetworkAccessManager::GetOperation;
 const static auto &resourceTypeMap = QCloudMusicApi::Config::resourceTypeMap;
 
-const static auto &uploadPlugin = QCloudMusicApi::Plugins::upload;
 
 // 初始化名字
 NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject *parent)
@@ -550,7 +549,7 @@ QVariantMap Api::audio_match(QVariantMap query) {
 
 // 更新头像
 QVariantMap Api::avatar_upload(QVariantMap query) {
-    auto uploadInfo = uploadPlugin(query);
+    auto uploadInfo = QCloudMusicApi::Plugins::upload(query);
     const QVariantMap res = request(
         POST,
         "https://music.163.com/weapi/user/avatar/upload/v1",
@@ -825,7 +824,7 @@ QVariantMap Api::cloud(QVariantMap query) {
         );
 
     if (res["body"].toMap()["needUpload"].toBool()) {
-        const auto uploadInfo = uploadPlugin(query);
+        const auto uploadInfo = QCloudMusicApi::Plugins::songUpload(query);
     }
     const auto res2 = request(
         POST,
@@ -2963,7 +2962,7 @@ QVariantMap Api::playlist_cover_update(QVariantMap query) {
                                  } }
         };
     }
-    const auto uploadInfo = uploadPlugin(query);
+    const auto uploadInfo = QCloudMusicApi::Plugins::upload(query);
     const auto res = request(
         POST,
         "https://music.163.com/weapi/playlist/cover/update",
