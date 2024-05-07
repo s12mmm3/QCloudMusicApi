@@ -3781,6 +3781,28 @@ QVariantMap Api::song_url_v1(QVariantMap query) {
         );
 }
 
+// 歌曲详情
+QVariantMap Api::song_detail(QVariantMap query) {
+    const QVariantMap data {
+        { "c", "[" + [&]() -> QString {
+             QStringList c;
+             for (auto& item: query["id"].toString().split(",")) {
+                 c.append("{\"id\":" + item + "}");
+             }
+             return c.join(",");
+         }() + "]" }
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/v3/song/detail",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 音乐百科基础信息
 QVariantMap Api::song_wiki_summary(QVariantMap query) {
     QVariantMap data {

@@ -611,6 +611,9 @@ public:
     // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
     Q_INVOKABLE QVariantMap song_url_v1(QVariantMap);
 
+    // 歌曲详情
+    Q_INVOKABLE QVariantMap song_detail(QVariantMap);
+
     // 音乐百科基础信息
     Q_INVOKABLE QVariantMap song_wiki_summary(QVariantMap);
 
