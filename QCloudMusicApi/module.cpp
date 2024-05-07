@@ -756,10 +756,10 @@ QVariantMap Api::cloud(QVariantMap query) {
     if (query["songFile"].toMap()["name"].toString().indexOf("flac") > -1) {
         ext = "flac";
     }
-    QString filename = query["songFile"].toMap()["name"].toString();
-    filename.replace("." + ext, "");
-    filename.replace(QRegularExpression("\\s"), "");
-    filename.replace(QRegularExpression("\\."), "_");
+    QString filename = query["songFile"].toMap()["name"].toString()
+                           .replace("." + ext, "")
+                           .replace(QRegularExpression("\\s"), "")
+                           .replace(QRegularExpression("\\."), "_");
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
     cookie["appver"] = "2.9.7";
@@ -4570,6 +4570,81 @@ QVariantMap Api::video_url(QVariantMap query) {
     return request(
         POST,
         "https://music.163.com/weapi/cloudvideo/playurl",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 播客声音详情
+QVariantMap Api::voice_detail(QVariantMap query) {
+    const QVariantMap data {
+        { "id", query["id"] }
+    };
+    return request(
+        POST,
+        "https://interface.music.163.com/weapi/voice/workbench/voice/detail",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 声音搜索
+QVariantMap Api::voicelist_list_search(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 200) },
+        { "offset", query.value("offset", 0) },
+        { "name", query.value("name") },
+        { "displayStatus", query.value("displayStatus") },
+        { "type", query.value("type") },
+        { "voiceFeeType", query.value("voiceFeeType") },
+        { "radioId", query["voiceListId"] },
+    };
+    return request(
+        POST,
+        "https://interface.music.163.com/api/voice/workbench/voice/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 播客声音列表
+QVariantMap Api::voicelist_list(QVariantMap query) {
+    const QVariantMap data {
+        { "limit", query.value("limit", 200) },
+        { "offset", query.value("offset", 0) },
+        { "voiceListId", query["voiceListId"] },
+    };
+    return request(
+        POST,
+        "https://interface.music.163.com/weapi/voice/workbench/voices/by/voicelist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 播客列表
+QVariantMap Api::voicelist_search(QVariantMap query) {
+    const QVariantMap data {
+        { "fee", "-1" },
+        { "limit", query.value("limit", 200) },
+        { "offset", query.value("offset", 0) },
+        { "podcastName", query.value("podcastName", "") },
+    };
+    return request(
+        POST,
+        "https://interface.music.163.com/weapi/voice/workbench/voicelist/search",
         data,
         {
             { "crypto", "weapi" },

@@ -750,6 +750,18 @@ public:
     // 视频链接
     Q_INVOKABLE QVariantMap video_url(QVariantMap);
 
+    // 播客声音详情
+    Q_INVOKABLE QVariantMap voice_detail(QVariantMap);
+
+    // 声音搜索
+    Q_INVOKABLE QVariantMap voicelist_list_search(QVariantMap);
+
+    // 播客声音列表
+    Q_INVOKABLE QVariantMap voicelist_list(QVariantMap);
+
+    // 播客列表
+    Q_INVOKABLE QVariantMap voicelist_search(QVariantMap);
+
     // 云贝 todo 任务
     Q_INVOKABLE QVariantMap yunbei_tasks_todo(QVariantMap);
 
