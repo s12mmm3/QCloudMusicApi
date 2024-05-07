@@ -46,6 +46,9 @@ qDebug() << helper.invoke(&NeteaseCloudMusicApi::lyric, { { "id", 1408586353 } }
 ```
 
 调用ApiHelper::set_cookie设置cookie，支持QVariantMap和QString
+
+如果在传递参数时传递了 `"do-cache": 1` （1可以为任意值），结果会被缓存 5 分钟，下次调用时会直接返回缓存的结果。修改了参数，如将 `1` 改为其他值，会进行重新请求。
+
 #### 使用NeteaseCloudMusicApi类
 若无需保存cookie，可直接使用该类
 

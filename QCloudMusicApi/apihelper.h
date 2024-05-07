@@ -4,6 +4,30 @@
 #include "module.h"
 
 #include <QObject>
+#include <QMutex>
+#include <QDateTime>
+#include <functional>
+#include <QVariantMap>
+#include <QMap>
+#include <QJsonDocument>
+
+class CacheManager {
+public:
+    QVariantMap getOrQueryCache(const QString& key, std::function<QVariantMap()> callback);
+    QString createCacheKey(const QString& member, const QVariantMap& arg);
+
+private:
+    QMap<QString, QPair<QVariantMap, QDateTime>> cache;
+    int cacheDurationSeconds = 300;
+    QMutex mutex;
+
+    // 检查缓存是否有效
+    bool isCacheValid(const QString& key);
+    // 更新缓存
+    void updateCache(const QString& key, QVariantMap response);
+    // 清理已过期的缓存
+    void cleanupExpiredCache();
+};
 
 class QCLOUDMUSICAPI_EXPORT ApiHelper : public NeteaseCloudMusicApi
 {
@@ -24,6 +48,8 @@ public:
 private:
     void beforeInvoke(QVariantMap& arg);
     void afterInvoke(QVariantMap& ret);
+
+    CacheManager cacheManager;
 
 public:
     static QStringList memberList();
