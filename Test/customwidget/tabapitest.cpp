@@ -5,6 +5,7 @@
 
 #include <QMutex>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QDebug>
 #include <QtConcurrent>
 

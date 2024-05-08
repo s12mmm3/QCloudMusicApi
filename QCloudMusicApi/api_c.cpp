@@ -4,6 +4,7 @@
 #include <QMetaMethod>
 #include <QMetaObject>
 #include <QDir>
+#include <QUrlQuery>
 
 #include <cstring>
 #include <iostream>

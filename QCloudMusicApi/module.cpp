@@ -7,6 +7,7 @@
 #include <QVariantMap>
 #include <QRegularExpression>
 #include <QRandomGenerator>
+#include <QCryptographicHash>
 
 #include "util/config.h"
 #include "util/request.h"

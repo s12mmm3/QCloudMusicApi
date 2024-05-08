@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QtConcurrent>
+#include <QUrlQuery>
 #include <QNetworkReply>
 
 #include "../servicelocator.h"
