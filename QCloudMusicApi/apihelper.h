@@ -17,7 +17,7 @@ public:
     QString createCacheKey(const QString& member, const QVariantMap& arg);
 
 private:
-    QMap<QString, QPair<QVariantMap, QDateTime>> cache;
+    QMap<QString, QPair<QString, QDateTime>> cache;
     int cacheDurationSeconds = 300;
     QMutex mutex;
 

@@ -10,13 +10,19 @@ QVariantMap CacheManager::getOrQueryCache(const QString& key, std::function<QVar
     // 在获取缓存前先清理过期缓存
     cleanupExpiredCache();
 
+    mutex.lock();
     if (isCacheValid(key)) {
-        return cache[key].first;
-    } else {
-        QVariantMap response = callback();
-        updateCache(key, response);
+        auto responseStr = cache[key].first;
+        auto response = QJsonDocument::fromJson(responseStr.toUtf8()).toVariant().toMap();
+        mutex.unlock();
+
         return response;
     }
+    mutex.unlock();
+
+    QVariantMap response = callback();
+    updateCache(key, response);
+    return response;
 }
 
 QString CacheManager::createCacheKey(const QString& member, const QVariantMap& arg)
@@ -40,7 +46,8 @@ void CacheManager::updateCache(const QString& key, QVariantMap response)
 {
     QDateTime expiry = QDateTime::currentDateTime().addSecs(cacheDurationSeconds);
     mutex.lock();
-    cache[key] = qMakePair(response, expiry);
+    auto responseStr = QJsonDocument::fromVariant(response).toJson(QJsonDocument::Compact);
+    cache[key] = qMakePair(responseStr, expiry);
     mutex.unlock();
 }
 
