@@ -28,55 +28,39 @@ link_directories(${LIBRARY_DIR}/bin)
 ```
 
 #### 使用ApiHelper类
-该类实现了API的cookie管理
+该类实现了API的cookie管理；所有方法均支持Qt反射调用
 
-代码中包含头文件apihelper.h
-```C++
-#include "apihelper.h"
-```
 通过对应方法字符串调用
 ```C++
+#include "apihelper.h"
+
 ApiHelper helper;
 qDebug() << helper.invoke("lyric", { { "id", 1408586353 } });
 ```
-直接调用API的方法
+可通过传入Url调用
 ```C++
 ApiHelper helper;
-qDebug() << helper.invoke(&NeteaseCloudMusicApi::lyric, { { "id", 1408586353 } });
+qDebug() << helper.invoke("/song/url/v1?id=2058263032, 2057797340&level=exhigh");
+qDebug() << helper.invoke("http://localhost:3000/activate/init/profile");
 ```
 
 调用ApiHelper::set_cookie设置cookie，支持QVariantMap和QString
 #### 使用NeteaseCloudMusicApi类
-若无需保存cookie，可直接使用该类
-
-代码中包含头文件module.h
-```C++
-#include "module.h"
-```
+若无需保存cookie，可直接使用该类；所有方法均支持Qt反射调用
 
 可直接调用类函数
 ```C++
+#include "module.h"
+
 NeteaseCloudMusicApi api;
 qDebug() << api.lyric({ { "id", 1408586353 } });
 ```
 
-也可以通过Qt的反射调用
-```C++
-NeteaseCloudMusicApi api;
-QVariantMap ret;
-QMetaObject::invokeMethod(&api, "lyric"
-                              , Qt::DirectConnection
-                              , Q_RETURN_ARG(QVariantMap, ret)
-                              , Q_ARG(QVariantMap, QVariantMap({ {"id", 1408586353} }));
-qDebug() << ret;
-```
-
 ### 跨语言调用
 动态库提供C接口，开放给Python、Java和C#等支持与C语言交互的语言调用
-```C
+```C++
 /**
  * @brief 通过反射调用API的成员函数。
- *
  * @param memberName 调用成员函数的名称
  * @param value 参数的JSON格式字符串
  * @return 调用结果的JSON格式字符串
@@ -109,25 +93,24 @@ if __name__ == '__main__':
 ```CMake
 add_subdirectory(QCloudMusicApi)
 
-add_executable(YourProjectName
+add_executable(${PROJECT_NAME}
     ./QCloudMusicApi/QCloudMusicApi/module.h
   main.cpp
 )
 
-target_compile_definitions(YourProjectName PRIVATE QCLOUDMUSICAPI_LIBRARY)
-# 添加需要链接的库
-target_link_libraries(YourProjectName  QCloudMusicApi)
+target_compile_definitions(${PROJECT_NAME} PRIVATE QCLOUDMUSICAPI_LIBRARY)
+target_link_libraries(${PROJECT_NAME}  QCloudMusicApi)
 ```
-
-C++代码中加上
+引用头文件
 ```C++
 #include "QCloudMusicApi/QCloudMusicApi/module.h"
 ```
 
 ### 手动编译
-手动安装好Qt库后
+安装好Qt库后
 ```Shell
 git clone --recursive https://github.com/s12mmm3/QCloudMusicApi.git
+cd QCloudMusicApi
 cmake -B build
 cmake --build build -j
 ```
