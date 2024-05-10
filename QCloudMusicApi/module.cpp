@@ -3772,6 +3772,95 @@ QVariantMap Api::search(QVariantMap query) {
         );
 }
 
+// 私信专辑
+QVariantMap Api::send_album(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.10.90";
+    query["cookie"] = cookie;
+    QVariantMap data {
+        { "id", query["id"] },
+        { "msg", query.value("msg", "") },
+        { "type", "album" },
+        { "userIds", "[" + query["user_ids"].toString() + "]" },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/msg/private/send",
+        data,
+        {
+            { "crypto", "api" },
+            _PARAM,
+        }
+        );
+}
+
+// 私信歌单
+QVariantMap Api::send_playlist(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    QVariantMap data {
+        { "id", query["playlist"] },
+        { "type", "playlist" },
+        { "msg", query.value("msg", "") },
+        { "userIds", "[" + query["user_ids"].toString() + "]" },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/msg/private/send",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 私信歌曲
+QVariantMap Api::send_song(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.10.90";
+    query["cookie"] = cookie;
+    QVariantMap data {
+        { "id", query["id"] },
+        { "msg", query.value("msg", "") },
+        { "type", "song" },
+        { "userIds", "[" + query["user_ids"].toString() + "]" },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/msg/private/send",
+        data,
+        {
+            { "crypto", "api" },
+            _PARAM,
+        }
+        );
+}
+
+// 私信
+QVariantMap Api::send_text(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    QVariantMap data {
+        { "type", "playlist" },
+        { "msg", query.value("msg", "") },
+        { "userIds", "[" + query["user_ids"].toString() + "]" },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/msg/private/send",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
 // 相似歌手
 QVariantMap Api::simi_artist(QVariantMap query) {
     QVariantMap data {

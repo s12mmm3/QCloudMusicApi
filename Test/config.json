@@ -409,5 +409,21 @@
     },
     "video_url": {
         "id": "89ADDE33C0AAE8EC14B99F6750DB954D"
+    },
+    "send_album": {
+        "id": "149114512",
+        "user_ids": "79248480, 2608402"
+    },
+    "send_playlist": {
+        "playlist": "24381616",
+        "user_ids": "79248480, 2608402"
+    },
+    "send_song": {
+        "id": "2058263032",
+        "user_ids": "79248480, 2608402"
+    },
+    "send_text": {
+        "msg": "666",
+        "user_ids": "79248480, 2608402"
     }
 }

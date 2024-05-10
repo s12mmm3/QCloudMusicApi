@@ -609,6 +609,18 @@ public:
     // 搜索
     Q_INVOKABLE QVariantMap search(QVariantMap);
 
+    // 私信专辑
+    Q_INVOKABLE QVariantMap send_album(QVariantMap);
+
+    // 私信歌单
+    Q_INVOKABLE QVariantMap send_playlist(QVariantMap);
+
+    // 私信歌曲
+    Q_INVOKABLE QVariantMap send_song(QVariantMap);
+
+    // 私信
+    Q_INVOKABLE QVariantMap send_text(QVariantMap);
+
     // 相似歌手
     Q_INVOKABLE QVariantMap simi_artist(QVariantMap);
 
