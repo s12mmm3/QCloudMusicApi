@@ -17,6 +17,14 @@ extern "C" {
 QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value);
 
 /**
+ * @brief 通过反射调用API的成员函数。
+ *
+ * @param @param url 要调用的API的URL，例如："/song/url/v1?id=2058263032, 2057797340&level=exhigh", "http://localhost:3000/activate/init/profile"
+ * @return 函数调用结果的JSON格式字符串。
+ */
+QCLOUDMUSICAPI_EXPORT const char* invokeUrl(char* url);
+
+/**
  * @brief 释放资源，结束时调用
  */
 QCLOUDMUSICAPI_EXPORT void freeApi();

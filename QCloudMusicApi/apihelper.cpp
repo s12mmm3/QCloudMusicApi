@@ -1,7 +1,10 @@
 #include "apihelper.h"
 #include "util/index.h"
+#include "util/logger.h"
 
 #include <QMetaMethod>
+#include <QUrl>
+#include <QUrlQuery>
 
 using namespace QCloudMusicApi;
 ApiHelper::ApiHelper(QObject *parent)
@@ -69,6 +72,25 @@ QVariantMap ApiHelper::invoke(QVariantMap (NeteaseCloudMusicApi::*member)(QVaria
     afterInvoke(ret);
 
     return ret;
+}
+
+QVariantMap ApiHelper::invokeUrl(QString url)
+{
+    QUrl qurl(url);
+    auto member = qurl.path();
+    if (member.startsWith('/')) {
+        member.remove(0, 1);
+    }
+    member = member.replace("/", "_").trimmed();
+    QVariantMap arg;
+    for (auto& queryItem: QUrlQuery(qurl.query()).queryItems()) {
+        arg[queryItem.first] = queryItem.second;
+    }
+    DEBUG << "host" << qurl.host()
+          << "port" << qurl.port()
+          << "member" << member
+          << "arg" << arg;
+    return invoke(member, arg);
 }
 
 QStringList ApiHelper::memberList()

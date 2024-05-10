@@ -56,10 +56,7 @@ void init() {
     }
 }
 
-QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
-    init();
-
-    QVariantMap ret = helper.invoke(memberName, QJsonDocument::fromJson(value).toVariant().toMap());
+const char* invoke_p(QVariantMap ret) {
     std::string result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
 
     // 这里多线程可能会有问题，会同时修改data；还没想好怎么改
@@ -67,6 +64,20 @@ QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
     data = new char[result.size() + 1];
     std::strcpy(data, result.c_str());
     return data;
+}
+
+QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
+    init();
+
+    QVariantMap ret = helper.invoke(memberName, QJsonDocument::fromJson(value).toVariant().toMap());
+    return invoke_p(ret);
+}
+
+QCLOUDMUSICAPI_EXPORT const char *invokeUrl(char *url) {
+    init();
+
+    QVariantMap ret = helper.invokeUrl(url);
+    return invoke_p(ret);
 }
 
 QCLOUDMUSICAPI_EXPORT char* memberName(int i) {
