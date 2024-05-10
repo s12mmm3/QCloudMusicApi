@@ -4028,6 +4028,126 @@ QVariantMap Api::song_wiki_summary(QVariantMap query) {
         );
 }
 
+// 曲风-专辑
+QVariantMap Api::style_album(QVariantMap query) {
+    QVariantMap data {
+        { "cursor", query.value("cursor", 0) },
+        { "size", query.value("size", 20) },
+        { "tagId", query["tagId"] },
+        { "sort", query.value("sort", 0) },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/style-tag/home/album",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 曲风-歌手
+QVariantMap Api::style_artist(QVariantMap query) {
+    QVariantMap data {
+        { "cursor", query.value("cursor", 0) },
+        { "size", query.value("size", 20) },
+        { "tagId", query["tagId"] },
+        { "sort", query.value("sort", 0) },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/style-tag/home/artist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 曲风详情
+QVariantMap Api::style_detail(QVariantMap query) {
+    QVariantMap data {
+        { "tagId", query["tagId"] },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/style-tag/home/head",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 曲风列表
+QVariantMap Api::style_list(QVariantMap query) {
+    QVariantMap data {};
+    return request(
+        POST,
+        "https://music.163.com/api/tag/list/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 曲风-歌单
+QVariantMap Api::style_playlist(QVariantMap query) {
+    QVariantMap data {
+        { "cursor", query.value("cursor", 0) },
+        { "size", query.value("size", 20) },
+        { "tagId", query["tagId"] },
+        { "sort", query.value("sort", 0) },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/style-tag/home/playlist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 曲风偏好
+QVariantMap Api::style_preference(QVariantMap query) {
+    QVariantMap data {};
+    return request(
+        POST,
+        "https://music.163.com/api/tag/my/preference/get",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 曲风-歌曲
+QVariantMap Api::style_song(QVariantMap query) {
+    QVariantMap data {
+        { "cursor", query.value("cursor", 0) },
+        { "size", query.value("size", 20) },
+        { "tagId", query["tagId"] },
+        { "sort", query.value("sort", 0) },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/style-tag/home/song",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
 // 年度听歌报告2017-2022
 QVariantMap Api::summary_annual(QVariantMap query) {
     QVariantMap data { };

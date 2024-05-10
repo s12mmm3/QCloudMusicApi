@@ -650,6 +650,27 @@ public:
     // 音乐百科基础信息
     Q_INVOKABLE QVariantMap song_wiki_summary(QVariantMap);
 
+    // 曲风-专辑
+    Q_INVOKABLE QVariantMap style_album(QVariantMap);
+
+    // 曲风-歌手
+    Q_INVOKABLE QVariantMap style_artist(QVariantMap);
+
+    // 曲风详情
+    Q_INVOKABLE QVariantMap style_detail(QVariantMap);
+
+    // 曲风列表
+    Q_INVOKABLE QVariantMap style_list(QVariantMap);
+
+    // 曲风-歌单
+    Q_INVOKABLE QVariantMap style_playlist(QVariantMap);
+
+    // 曲风偏好
+    Q_INVOKABLE QVariantMap style_preference(QVariantMap);
+
+    // 曲风-歌曲
+    Q_INVOKABLE QVariantMap style_song(QVariantMap);
+
     // 年度听歌报告2017-2022
     Q_INVOKABLE QVariantMap summary_annual(QVariantMap);
 
