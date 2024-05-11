@@ -23,7 +23,7 @@ public:
      * @param arg 调用参数
      * @return QVariantMap 返回调用结果
      */
-    QVariantMap invoke(QString member, QVariantMap arg);
+    Q_INVOKABLE QVariantMap invoke(QString member, QVariantMap arg);
 
     /**
      * @brief 调用API的成员函数
@@ -39,7 +39,7 @@ public:
      * @param url 要调用的API的URL，例如："/song/url/v1?id=2058263032, 2057797340&level=exhigh", "http://localhost:3000/activate/init/profile"
      * @return QVariantMap 返回API调用结果
      */
-    QVariantMap invokeUrl(QString url);
+    Q_INVOKABLE QVariantMap invokeUrl(QString url);
 
     /**
      * @brief 设置cookie
@@ -56,7 +56,7 @@ private:
     void afterInvoke(QVariantMap& ret);
 
 public:
-    static QStringList memberList();
+    Q_INVOKABLE static QStringList memberList();
 };
 
 #endif // APIHELPER_H
