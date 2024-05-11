@@ -9,6 +9,8 @@
 #include <QRandomGenerator>
 #include <QCryptographicHash>
 
+#include <algorithm>
+
 #include "util/config.h"
 #include "util/request.h"
 #include "util/index.h"
@@ -3989,6 +3991,42 @@ QVariantMap Api::song_url_v1(QVariantMap query) {
         );
 }
 
+// 歌曲链接
+QVariantMap Api::song_url(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
+    const auto ids = query["id"].toString().split(",");
+    const QVariantMap data {
+        { "ids", QJsonDocument::fromVariant(ids).toJson() },
+        { "br", query.value("br", 999000) },
+    };
+    const auto res = request(
+        POST,
+        "https://interface.music.163.com/eapi/song/enhance/player/url/v1",
+        data,
+        {
+            { "crypto", "eapi" },
+            { "url", "/api/song/enhance/player/url" },
+            _PARAM,
+        }
+        );
+    auto result = res["body"].toMap()["data"].toList();
+    std::sort(result.begin(), result.end(), [&ids](const QVariant& a, const QVariant& b) {
+        return ids.indexOf(QString::number(a.toMap()["id"].toInt())) < ids.indexOf(QString::number(b.toMap()["id"].toInt()));
+    });
+
+    return QVariantMap {
+        { "status", 200 },
+        { "body", QVariantMap
+            {
+                { "code", 200 },
+                { "data", result }
+            }
+        }
+    };
+}
+
 // 歌曲详情
 QVariantMap Api::song_detail(QVariantMap query) {
     const QVariantMap data {
@@ -4024,6 +4062,42 @@ QVariantMap Api::song_wiki_summary(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/song/play/about/block/page" }
+        }
+        );
+}
+
+// 更新歌曲顺序
+QVariantMap Api::song_order_update(QVariantMap query) {
+    QVariantMap data {
+        { "pid", query["pid"] },
+        { "trackIds", query["ids"] },
+        { "op", "update" },
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/api/playlist/manipulate/tracks",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+            { "url", "/api/playlist/desc/update" }
+        }
+        );
+}
+
+// 已购单曲
+QVariantMap Api::song_purchased(QVariantMap query) {
+    QVariantMap data {
+        { "limit", query.value("limit", 20) },
+        { "offset", query.value("offset", 0) },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/single/mybought/song/list",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
         }
         );
 }
@@ -4301,6 +4375,56 @@ QVariantMap Api::top_song(QVariantMap query) {
         );
 }
 
+// 获取话题详情热门动态
+QVariantMap Api::topic_detail_event_hot(QVariantMap query) {
+    QVariantMap data {
+        { "actid", query["actid"] },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/act/event/hot",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 获取话题详情
+QVariantMap Api::topic_detail(QVariantMap query) {
+    QVariantMap data {
+        { "actid", query["actid"] },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/act/detail",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 收藏的专栏
+QVariantMap Api::topic_sublist(QVariantMap query) {
+    QVariantMap data {
+        { "limit", query.value("limit", 50) },
+        { "offset", query.value("offset", 0) },
+        { "total", true },
+    };
+    return request(
+        POST,
+        "https://music.163.com/api/topic/sublist",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
 // 歌手榜
 QVariantMap Api::toplist_artist(QVariantMap query) {
     QVariantMap data {
@@ -4398,6 +4522,31 @@ QVariantMap Api::ugc_artist_search(QVariantMap query) {
         );
 }
 
+// 用户贡献内容
+QVariantMap Api::ugc_detail(QVariantMap query) {
+    const QVariantMap data {
+        { "auditStatus", query.value("auditStatus", "") },
+        //待审核:0 未采纳:-5 审核中:1 部分审核通过:4 审核通过:5
+        //WAIT:0 REJECT:-5 AUDITING:1 PARTLY_APPROVED:4 PASS:5
+        { "limit", query.value("limit", 10) },
+        { "offset", query.value("offset", 0) },
+        { "order", query.value("order", "desc") },
+        { "sortBy", query.value("sortBy", "createTime") },
+        { "type", query.value("type", 1) },
+        //曲库纠错 ARTIST:1 ALBUM:2 SONG:3 MV:4 LYRIC:5 TLYRIC:6
+        //曲库补充 ALBUM:101 MV:103
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/rep/ugc/detail",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
 // mv简要百科信息
 QVariantMap Api::ugc_mv_get(QVariantMap query) {
     const QVariantMap data {
@@ -4428,6 +4577,21 @@ QVariantMap Api::ugc_song_get(QVariantMap query) {
             { "crypto", "eapi" },
             _PARAM,
             { "url", "/api/rep/ugc/song/get" }
+        }
+        );
+}
+
+// 用户贡献条目、积分、云贝数量
+QVariantMap Api::ugc_user_devote(QVariantMap query) {
+    const QVariantMap data {};
+    return request(
+        POST,
+        "https://music.163.com/weapi/rep/ugc/user/devote",
+        data,
+        {
+            { "crypto", "eapi" },
+            _PARAM,
+            { "url", "/api/rep/ugc/user/devote" }
         }
         );
 }

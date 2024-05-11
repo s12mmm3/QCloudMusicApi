@@ -425,5 +425,33 @@
     "send_text": {
         "msg": "666",
         "user_ids": "79248480, 2608402"
+    },
+    "style_album": {
+        "tagId": "1000"
+    },
+    "style_artist": {
+        "tagId": "1000"
+    },
+    "style_detail": {
+        "tagId": "1000"
+    },
+    "style_playlist": {
+        "tagId": "1000"
+    },
+    "style_song": {
+        "tagId": "1000"
+    },
+    "song_url": {
+        "id": "2058263032,2057797340"
+    },
+    "song_order_update": {
+        "pid": "24381616",
+        "ids": "[2058263032,2057797340]"
+    },
+    "topic_detail_event_hot": {
+        "actid": "111551188"
+    },
+    "topic_detail": {
+        "actid": "111551188"
     }
 }

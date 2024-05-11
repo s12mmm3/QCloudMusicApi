@@ -644,11 +644,20 @@ public:
     // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
     Q_INVOKABLE QVariantMap song_url_v1(QVariantMap);
 
+    // 歌曲链接
+    Q_INVOKABLE QVariantMap song_url(QVariantMap);
+
     // 歌曲详情
     Q_INVOKABLE QVariantMap song_detail(QVariantMap);
 
     // 音乐百科基础信息
     Q_INVOKABLE QVariantMap song_wiki_summary(QVariantMap);
+
+    // 更新歌曲顺序
+    Q_INVOKABLE QVariantMap song_order_update(QVariantMap);
+
+    // 已购单曲
+    Q_INVOKABLE QVariantMap song_purchased(QVariantMap);
 
     // 曲风-专辑
     Q_INVOKABLE QVariantMap style_album(QVariantMap);
@@ -698,6 +707,15 @@ public:
     // 新歌速递
     Q_INVOKABLE QVariantMap top_song(QVariantMap);
 
+    // 获取话题详情热门动态
+    Q_INVOKABLE QVariantMap topic_detail_event_hot(QVariantMap);
+
+    // 获取话题详情
+    Q_INVOKABLE QVariantMap topic_detail(QVariantMap);
+
+    // 收藏的专栏
+    Q_INVOKABLE QVariantMap topic_sublist(QVariantMap);
+
     // 歌手榜
     Q_INVOKABLE QVariantMap toplist_artist(QVariantMap);
 
@@ -720,8 +738,14 @@ public:
     // mv简要百科信息
     Q_INVOKABLE QVariantMap ugc_mv_get(QVariantMap);
 
+    // 用户贡献内容
+    Q_INVOKABLE QVariantMap ugc_detail(QVariantMap);
+
     // 歌曲简要百科信息
     Q_INVOKABLE QVariantMap ugc_song_get(QVariantMap);
+
+    // 用户贡献条目、积分、云贝数量
+    Q_INVOKABLE QVariantMap ugc_user_devote(QVariantMap);
 
     // 获取账号信息
     Q_INVOKABLE QVariantMap user_account(QVariantMap);
