@@ -1,5 +1,7 @@
 #include "index.h"
 
+#include <QRandomGenerator>
+
 using namespace QCloudMusicApi;
 
 bool Index::toBoolean(const QVariant &val) {
@@ -27,6 +29,29 @@ QString Index::cookieObjToString(const QVariantMap &cookie) {
         string.append(i.key() + "=" + i.value().toString() + "; ");
     }
     return string;
+}
+
+int Index::getRandom(int num) {
+    int random = QRandomGenerator::global()->bounded(1, 9) + 1;
+    random += QRandomGenerator::global()->generate();
+    random *= qPow(10, num - 1);
+    return random;
+}
+
+QString Index::generateRandomChineseIP() {
+    QStringList chinaIPPrefixes { "116.25", "116.76", "116.77", "116.78" };
+    QString randomPrefix = chinaIPPrefixes.at(QRandomGenerator::global()->bounded(chinaIPPrefixes.size()));
+    return QString("%1.%2.%3").arg(randomPrefix).arg(generateIPSegment()).arg(generateIPSegment());
+}
+
+// 生成一个随机整数
+int Index::getRandomInt(int min, int max) {
+    return QRandomGenerator::global()->bounded(min, max + 1);
+}
+
+// 生成一个随机IP地址段
+int Index::generateIPSegment() {
+    return getRandomInt(1, 255);
 }
 
 QVariantMap Index::mergeMap(const QVariantMap &map0, const QVariantMap &map1)

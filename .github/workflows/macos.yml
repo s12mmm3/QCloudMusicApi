@@ -24,8 +24,8 @@ jobs:
           # 6.2.4
           - qt_version: 6.2.4
             qt_arch: clang_64
-          # 6.6.0
-          - qt_version: 6.6.2
+          # 6.7.1
+          - qt_version: 6.7.1
             qt_arch: clang_64
             modules: 'qthttpserver qtwebsockets'
     env:

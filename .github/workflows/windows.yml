@@ -34,8 +34,8 @@ jobs:
           - qt_version: 6.2.4
             qt_arch: win64_msvc2019_64
             arch: x64
-          # 6.7.0
-          - qt_version: 6.7.0
+          # 6.7.1
+          - qt_version: 6.7.1
             qt_arch: win64_msvc2019_64
             arch: x64
             modules: 'qthttpserver qtwebsockets'
