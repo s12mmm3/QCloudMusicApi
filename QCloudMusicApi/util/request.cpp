@@ -22,7 +22,7 @@
 #include "logger.h"
 
 using namespace QCloudMusicApi;
-QString Request::chooseUserAgent(QString ua) {
+QString Request::chooseUserAgent(QString uaType) {
     const QMap<QString, QString> userAgentList {
         {
             QStringLiteral("mobile"),
@@ -33,7 +33,7 @@ QString Request::chooseUserAgent(QString ua) {
             QStringLiteral("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0")
         }
     };
-    if(ua == "mobile") {
+    if(uaType == "mobile") {
         return userAgentList["mobile"];
     }
     return userAgentList["pc"];
@@ -88,14 +88,11 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         if(!cookie.contains("MUSIC_U")) {
             // 游客
             if(!cookie.contains("MUSIC_A")) {
-                //options.cookie.MUSIC_A = config.anonymous_token
                 cookie["MUSIC_A"] = Config::anonymous_token;
-                cookie["os"] = cookie.value("os", "ios");
-                cookie["appver"] = cookie.value("appver", "8.10.90");
             }
         }
         options["cookie"] = cookie;
-        headers["Cookie"] = Index::mapToString(cookie);
+        headers["Cookie"] = Index::cookieObjToString(cookie);
     }
     else if(options.contains("cookie")) {
         headers["Cookie"] = options["cookie"];
@@ -105,8 +102,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
 
     if(options["crypto"].toString() == "weapi") {
-        headers["User-Agent"] =
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.69";
+        headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
         QRegularExpression csrfTokenRegex("_csrf=([^;]+)");
         QRegularExpressionMatch match = csrfTokenRegex.match(headers.value("Cookie", "").toString());
         data["csrf_token"] = match.hasMatch() ? match.captured(1) : "";
@@ -126,7 +122,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     else if(options["crypto"].toString() == "eapi") {
         const QVariantMap cookie = options["cookie"].userType() == QMetaType::QVariantMap
                                        ? options["cookie"].toMap()
-                                       : Index::stringToMap(options.value("cookie", "").toString());
+                                       : Index::cookieToJson(options.value("cookie", "").toString());
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header {
                            { "osver", cookie.value("osver", "17.1.2") }, //系统版本
@@ -147,7 +143,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         if(cookie.contains("MUSIC_U")) header["MUSIC_U"] = cookie["MUSIC_U"];
         if(cookie.contains("MUSIC_A")) header["MUSIC_A"] = cookie["MUSIC_A"];
 
-        headers["Cookie"] = Index::mapToString(header);
+        headers["Cookie"] = Index::cookieObjToString(header);
         data["header"] = QVariant::fromValue(header);
         data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
         url = url.replace(QRegularExpression("\\w*api"), "eapi");

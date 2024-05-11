@@ -36,7 +36,7 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
 
 void ApiHelper::afterInvoke(QVariantMap& ret)
 {
-    auto newCookie = Index::stringToMap(ret["cookie"].toString());
+    auto newCookie = Index::cookieToJson(ret["cookie"].toString());
     if (!newCookie.isEmpty()) {
         set_cookie(Index::mergeMap(cookie(), newCookie));
     }
@@ -105,5 +105,5 @@ QStringList ApiHelper::memberList()
 
 void ApiHelper::set_cookie(QString cookie)
 {
-    set_cookie(Index::stringToMap(cookie));
+    set_cookie(Index::cookieToJson(cookie));
 }

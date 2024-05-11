@@ -111,7 +111,7 @@ void Server::consturctServer(QVariantMap options)
             for(auto& i: request.headers()) {
                 headers[i.first] = i.second;
             }
-            auto cookie = Index::stringToMap(headers["Cookie"].toString());
+            auto cookie = Index::cookieToJson(headers["Cookie"].toString());
             if (!cookie.isEmpty()) {
                 arg["cookie"] = cookie;
             }

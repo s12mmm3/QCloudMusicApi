@@ -2,19 +2,26 @@
 
 using namespace QCloudMusicApi;
 
-QVariantMap Index::stringToMap(const QString &cookie) {
+bool Index::toBoolean(const QVariant &val) {
+    if (val.userType() == QMetaType::Bool) return val.toBool();
+    if (val == "") return val.toBool();
+    return val == "true" || val == "1";
+}
+
+QVariantMap Index::cookieToJson(const QString &cookie) {
     if (cookie.isEmpty()) return QVariantMap();
-    QVariantMap map;
-    for (const QString &i : cookie.split(";")) {
+    auto cookieArr = cookie.split(";");
+    QVariantMap obj;
+    for (const QString &i : cookieArr) {
         QStringList arr = i.trimmed().split("=");
         // 如果子串的个数不等于2，跳过这个元素
         if (arr.size() != 2) continue;
-        map.insert(arr[0], arr[1]);
+        obj.insert(arr[0], arr[1]);
     }
-    return map;
+    return obj;
 }
 
-QString Index::mapToString(const QVariantMap &cookie) {
+QString Index::cookieObjToString(const QVariantMap &cookie) {
     QString string;
     for(auto i = cookie.begin(); i != cookie.end(); ++i) {
         string.append(i.key() + "=" + i.value().toString() + "; ");

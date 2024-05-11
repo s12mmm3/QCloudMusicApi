@@ -9,8 +9,9 @@ namespace QCloudMusicApi {
 
 class QCLOUDMUSICAPI_EXPORT Index {
 public:
-    static QVariantMap stringToMap(const QString &cookie);
-    static QString mapToString(const QVariantMap &cookie);
+    static bool toBoolean(const QVariant &val);
+    static QVariantMap cookieToJson(const QString &cookie);
+    static QString cookieObjToString(const QVariantMap &cookie);
     static QVariantMap mergeMap(const QVariantMap &map0, const QVariantMap &map1);
 };
 

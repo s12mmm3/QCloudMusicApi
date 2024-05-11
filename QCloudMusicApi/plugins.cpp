@@ -43,6 +43,7 @@ QVariantMap Plugins::songUpload(QVariantMap query)
         {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
+            { "ua", query.value("ua", "") },
             { "proxy", query["proxy"] },
         }
         );
@@ -87,10 +88,11 @@ QVariantMap Plugins::upload(QVariantMap query)
         "https://music.163.com/weapi/nos/token/alloc",
         data,
         {
-         { "crypto", "weapi" },
-         { "cookie", query["cookie"] },
-         { "proxy", query["proxy"] },
-         }
+            { "crypto", "weapi" },
+            { "cookie", query["cookie"] },
+            { "ua", query.value("ua", "") },
+            { "proxy", query["proxy"] },
+        }
         );
     auto reply = Request::axios(QNetworkAccessManager::PostOperation,
                                 "https://nosup-hz1.127.net/yyimgs/"
@@ -127,6 +129,7 @@ QVariantMap Plugins::upload(QVariantMap query)
         {
             { "crypto", "weapi" },
             { "cookie", query["cookie"] },
+            { "ua", query.value("ua", "") },
             { "proxy", query["proxy"] },
             { "ua", query.value("ua", "") },
         }

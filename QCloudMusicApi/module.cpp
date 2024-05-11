@@ -20,6 +20,7 @@
 //定义一些重复参数
 #define _PARAM \
 { "cookie", query["cookie"] }, \
+{ "ua", query.value("ua", "") }, \
 { "proxy", query["proxy"] }, \
 { "realIP", query["realIP"] } \
 
@@ -256,10 +257,6 @@ QVariantMap Api::artist_desc(QVariantMap query) {
 
 // 歌手详情
 QVariantMap Api::artist_detail(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.20.21";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -367,10 +364,6 @@ QVariantMap Api::artist_mv(QVariantMap query) {
 
 // 关注歌手新 MV
 QVariantMap Api::artist_new_mv(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "limit", query.value("limit", 20) },
         { "startTimestamp", query.value("before", QDateTime::currentDateTime().toMSecsSinceEpoch()) }
@@ -388,10 +381,6 @@ QVariantMap Api::artist_new_mv(QVariantMap query) {
 
 // 关注歌手新歌
 QVariantMap Api::artist_new_song(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "limit", query.value("limit", 20) },
         { "startTimestamp", query.value("before", QDateTime::currentDateTime().toMSecsSinceEpoch()) }
@@ -411,6 +400,7 @@ QVariantMap Api::artist_new_song(QVariantMap query) {
 QVariantMap Api::artist_songs(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "id", query["id"] },
@@ -736,10 +726,6 @@ QVariantMap Api::check_music(QVariantMap query) {
 
 // 云盘歌曲信息匹配纠正
 QVariantMap Api::cloud_match(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "userId", query["uid"] },
         { "songId", query["sid"] },
@@ -892,9 +878,10 @@ QVariantMap Api::cloudsearch(QVariantMap query) {
 
 // 专辑评论
 QVariantMap Api::comment_album(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "pc";
-    query["cookie"] = cookie;
+    // QVariantMap cookie = query["cookie"].toMap();
+    // cookie["os"] = "pc";
+    // cookie["appver"] = "2.9.7";
+    // query["cookie"] = cookie;
     const QVariantMap data {
         { "rid", query["id"] },
         { "limit", query.value("limit", 20) },
@@ -903,7 +890,7 @@ QVariantMap Api::comment_album(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/resource/comments/R_AL_3_" + query["id"].toString(),
+        "https://music.163.com/api/v1/resource/comments/R_AL_3_" + query["id"].toString(),
         data,
         {
             { "crypto", "weapi" },
@@ -916,6 +903,7 @@ QVariantMap Api::comment_album(QVariantMap query) {
 QVariantMap Api::comment_dj(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "rid", query["id"] },
@@ -976,6 +964,7 @@ QVariantMap Api::comment_floor(QVariantMap query) {
 QVariantMap Api::comment_hot(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     query["type"] = resourceTypeMap[query["type"].toString()];
     const QVariantMap data {
@@ -997,10 +986,6 @@ QVariantMap Api::comment_hot(QVariantMap query) {
 
 // 评论抱一抱列表
 QVariantMap Api::comment_hug_list(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     query["type"] = resourceTypeMap[query.value("type", "0").toString()];
     const QString threadId = query["type"].toString() + query["sid"].toString();
     const QVariantMap data {
@@ -1027,6 +1012,7 @@ QVariantMap Api::comment_hug_list(QVariantMap query) {
 QVariantMap Api::comment_like(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     query["t"] = query["t"].toInt() == 1 ? "like" : "unlike";
     query["type"] = resourceTypeMap[query["type"].toString()];
@@ -1052,6 +1038,7 @@ QVariantMap Api::comment_like(QVariantMap query) {
 QVariantMap Api::comment_music(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "rid", query["id"] },
@@ -1074,6 +1061,7 @@ QVariantMap Api::comment_music(QVariantMap query) {
 QVariantMap Api::comment_mv(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "rid", query["id"] },
@@ -1096,6 +1084,7 @@ QVariantMap Api::comment_mv(QVariantMap query) {
 QVariantMap Api::comment_new(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     query["type"] = resourceTypeMap[query["type"].toString()];
     const QString threadId = query["type"].toString() + query["id"].toString();
@@ -1143,6 +1132,7 @@ QVariantMap Api::comment_new(QVariantMap query) {
 QVariantMap Api::comment_playlist(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "rid", query["id"] },
@@ -1165,6 +1155,7 @@ QVariantMap Api::comment_playlist(QVariantMap query) {
 QVariantMap Api::comment_video(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "rid", query["id"] },
@@ -1345,14 +1336,14 @@ QVariantMap Api::digitalAlbum_sales(QVariantMap query) {
 
 // 电台banner
 QVariantMap Api::dj_banner(QVariantMap query) {
-    const QVariantMap data { };
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     return request(
         POST,
         "https://music.163.com/weapi/djradio/banner/get",
-        data,
+        {},
         {
             { "crypto", "weapi" },
             _PARAM
@@ -1524,7 +1515,7 @@ QVariantMap Api::dj_program(QVariantMap query) {
         { "radioId", query["rid"] },
         { "limit", query.value("limit", 30) },
         { "offset", query.value("offset", 0) },
-        { "asc", query["asc"] }
+        { "asc", QCloudMusicApi::Index::toBoolean(query["asc"]) }
     };
     return request(
         POST,
@@ -1787,6 +1778,7 @@ QVariantMap Api::event_del(QVariantMap query) {
 QVariantMap Api::event_forward(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "forwards", query["forwards"] },
@@ -1923,6 +1915,7 @@ QVariantMap Api::fm_trash(QVariantMap query) {
 QVariantMap Api::follow(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     query["t"] = query["t"].toInt() == 1 ? "follow" : "delfollow";
     return request(
@@ -1995,10 +1988,6 @@ QVariantMap Api::history_recommend_songs(QVariantMap query) {
 // 这个接口为移动端接口，首页-发现页，数据结构可以参考 https://github.com/hcanyz/flutter-netease-music-api/blob/master/lib/src/api/uncategorized/bean.dart#L259 HomeBlockPageWrap
 // query.refresh 是否刷新数据
 QVariantMap Api::homepage_block_page(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "refresh", query.value("refresh", false) },
         { "cursor", query["cursor"] }
@@ -2019,10 +2008,6 @@ QVariantMap Api::homepage_block_page(QVariantMap query) {
 // 数据结构可以参考 https://github.com/hcanyz/flutter-netease-music-api/blob/master/lib/src/api/uncategorized/bean.dart#L290 HomeDragonBallWrap
 // !需要登录或者游客登录，非登录返回 []
 QVariantMap Api::homepage_dragon_ball(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data { };
     return request(
         POST,
@@ -2055,10 +2040,6 @@ QVariantMap Api::hot_topic(QVariantMap query) {
 
 // 抱一抱评论
 QVariantMap Api::hug_comment(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     query["type"] = resourceTypeMap[query.value("type", 0).toString()];
     const QString threadId = query["type"].toString() + query["sid"].toString();
     const QVariantMap data {
@@ -2079,10 +2060,6 @@ QVariantMap Api::hug_comment(QVariantMap query) {
 
 // 红心与取消红心歌曲
 QVariantMap Api::like(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "pc";
-    cookie["appver"] = "2.9.7";
-    query["cookie"] = cookie;
     query["like"] = query["like"].toString() == "false" ? false : true;
     const QVariantMap data {
         { "alg", "itembased" },
@@ -2283,10 +2260,6 @@ QVariantMap Api::listentogether_sync_playlist_get(QVariantMap query) {
 
 // 手机登录
 QVariantMap Api::login_cellphone(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "phone", query["phone"] },
         { "countrycode", query.value("countrycode", 86) },
@@ -2865,6 +2838,7 @@ QVariantMap Api::personalized_mv(QVariantMap query) {
 QVariantMap Api::personalized_newsong(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "type", "recommend" },
@@ -2996,6 +2970,7 @@ QVariantMap Api::playlist_cover_update(QVariantMap query) {
 QVariantMap Api::playlist_create(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "name", query["name"] },
@@ -3017,6 +2992,7 @@ QVariantMap Api::playlist_create(QVariantMap query) {
 QVariantMap Api::playlist_delete(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "ids", "[" + query["id"].toString() + "]" }
@@ -3152,6 +3128,7 @@ QVariantMap Api::playlist_name_update(QVariantMap query) {
 QVariantMap Api::playlist_order_update(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "ids", query["ids"] }
@@ -3193,7 +3170,7 @@ QVariantMap Api::playlist_subscribe(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/playlist/" + query["t"].toString(),
+        "https://music.163.com/api/playlist/" + query["t"].toString(),
         data,
         {
             { "crypto", "weapi" },
@@ -3211,7 +3188,7 @@ QVariantMap Api::playlist_subscribers(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/playlist/subscribers",
+        "https://music.163.com/api/playlist/subscribers",
         data,
         {
             { "crypto", "weapi" },
@@ -3242,6 +3219,7 @@ QVariantMap Api::playlist_tags_update(QVariantMap query) {
 QVariantMap Api::playlist_track_add(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     query["ids"] = query.value("ids", "");
     const QVariantMap data {
@@ -3315,6 +3293,7 @@ QVariantMap Api::playlist_track_all(QVariantMap query) {
 QVariantMap Api::playlist_track_delete(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     query["ids"] = query.value("ids", "");
     const QVariantMap data {
@@ -3411,6 +3390,7 @@ QVariantMap Api::playlist_update_playcount(QVariantMap query) {
 QVariantMap Api::playlist_update(QVariantMap query) {
     QVariantMap cookie = query["cookie"].toMap();
     cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     query["desc"] = query.value("desc", "");
     query["tags"] = query.value("tags", "");
@@ -3587,7 +3567,8 @@ QVariantMap Api::register_anonimous(QVariantMap query) {
 // 注册账号
 QVariantMap Api::register_cellphone(QVariantMap query) {
     auto cookie = query["cookie"].toMap();
-    cookie["os"] = "iOS";
+    cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
     query["cookie"] = cookie;
     const QVariantMap data {
         { "captcha", query["captcha"] },
@@ -3751,6 +3732,9 @@ QVariantMap Api::search(QVariantMap query) {
             }
             );
     }
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
     const QVariantMap data {
         { "s", query["keywords"] },
         { "type", query.value("type", 1) },// 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
@@ -3770,10 +3754,6 @@ QVariantMap Api::search(QVariantMap query) {
 
 // 私信专辑
 QVariantMap Api::send_album(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     QVariantMap data {
         { "id", query["id"] },
         { "msg", query.value("msg", "") },
@@ -3793,9 +3773,6 @@ QVariantMap Api::send_album(QVariantMap query) {
 
 // 私信歌单
 QVariantMap Api::send_playlist(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "pc";
-    query["cookie"] = cookie;
     QVariantMap data {
         { "id", query["playlist"] },
         { "type", "playlist" },
@@ -3815,10 +3792,6 @@ QVariantMap Api::send_playlist(QVariantMap query) {
 
 // 私信歌曲
 QVariantMap Api::send_song(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     QVariantMap data {
         { "id", query["id"] },
         { "msg", query.value("msg", "") },
@@ -3838,9 +3811,6 @@ QVariantMap Api::send_song(QVariantMap query) {
 
 // 私信
 QVariantMap Api::send_text(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "pc";
-    query["cookie"] = cookie;
     QVariantMap data {
         { "type", "playlist" },
         { "msg", query.value("msg", "") },
@@ -4019,9 +3989,6 @@ QVariantMap Api::song_url_v1(QVariantMap query) {
 
 // 歌曲链接
 QVariantMap Api::song_url(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "pc";
-    query["cookie"] = cookie;
     const auto ids = query["id"].toString().split(",");
     const QVariantMap data {
         { "ids", QJsonDocument::fromVariant(ids).toJson() },
@@ -4718,10 +4685,6 @@ QVariantMap Api::user_cloud(QVariantMap query) {
 
 // 获取用户历史评论
 QVariantMap Api::user_comment_history(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "compose_reminder", "true" },
         { "compose_hot_comment", "true" },
@@ -4772,10 +4735,6 @@ QVariantMap Api::user_dj(QVariantMap query) {
 
 // 用户动态
 QVariantMap Api::user_event(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "getcounts", true },
         { "time", query.value("lasttime", -1) },
@@ -4916,10 +4875,6 @@ QVariantMap Api::user_subcount(QVariantMap query) {
 
 // 编辑用户信息
 QVariantMap Api::user_update(QVariantMap query) {
-    QVariantMap cookie = query["cookie"].toMap();
-    cookie["os"] = "ios";
-    cookie["appver"] = "8.10.90";
-    query["cookie"] = cookie;
     const QVariantMap data {
         { "birthday", query["birthday"] },
         { "city", query["city"] },
