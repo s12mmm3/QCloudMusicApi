@@ -1,6 +1,7 @@
 #include "index.h"
 
 #include <QRandomGenerator>
+#include <QtMath>
 
 using namespace QCloudMusicApi;
 
