@@ -256,6 +256,10 @@ QVariantMap Api::artist_desc(QVariantMap query) {
 
 // 歌手详情
 QVariantMap Api::artist_detail(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "ios";
+    cookie["appver"] = "8.20.21";
+    query["cookie"] = cookie;
     const QVariantMap data {
         { "id", query["id"] }
     };
@@ -3538,36 +3542,26 @@ QVariantMap Api::record_recent_voice(QVariantMap query) {
 
 // 游客登录
 QVariantMap Api::register_anonimous(QVariantMap query) {
+    const QByteArray ID_XOR_KEY_1 = "3go8&$833h0k(2)2";
+
+    auto cloudmusic_dll_encode_id = [ID_XOR_KEY_1](QString some_id) {
+        QString xoredString;
+        for (int i = 0; i < some_id.size(); i++) {
+            auto charCode = QChar(some_id[i].unicode() ^ ID_XOR_KEY_1[i % ID_XOR_KEY_1.size()]);
+            xoredString.append(charCode);
+        }
+        const auto wordArray = xoredString.toUtf8();
+        return QCryptographicHash::hash(wordArray, QCryptographicHash::Md5).toBase64();
+    };
+
     auto cookie = query["cookie"].toMap();
     cookie["os"] = "iOS";
     query["cookie"] = cookie;
-
-    const QByteArray ID_XOR_KEY_1 = QByteArray::fromStdString("3go8&$833h0k(2)2");
-
-    auto cloudmusic_dll_encode_id = [ID_XOR_KEY_1](QString some_id) {
-        QString xored;
-        for (int i = 0; i < some_id.size(); i++) {
-            xored.append(QChar(some_id[i].unicode() ^ ID_XOR_KEY_1[i % ID_XOR_KEY_1.size()]));
-        }
-        QByteArray digest = QCryptographicHash::hash(xored.toUtf8(), QCryptographicHash::Md5);
-        return digest.toBase64();
-    };
-
-    auto createRandomDeviceId = []() {
-        const QString t = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        const int e = 6;
-        QString n = "";
-        for (int i = 0; i < e; i++) n += t.at(QRandomGenerator::global()->bounded(e));
-        return n;
-    };
-
-    const auto deviceId = createRandomDeviceId();
-    const auto encodedId = QString(deviceId + " " + cloudmusic_dll_encode_id(deviceId)).toUtf8();
-    const auto username = encodedId.toBase64();
+    const QString deviceId = "NMUSIC";
+    const auto encodedId = QString(deviceId + " " + cloudmusic_dll_encode_id(deviceId)).toUtf8().toBase64();
     const QVariantMap data {
-                              /* A base64 encoded string. */
-                              { "username", username },
-                              };
+        { "username", encodedId },
+    };
 
     QVariantMap result = request(
         POST,
@@ -3855,6 +3849,38 @@ QVariantMap Api::send_text(QVariantMap query) {
     return request(
         POST,
         "https://music.163.com/weapi/msg/private/send",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 设置
+QVariantMap Api::setting(QVariantMap query) {
+    QVariantMap data {};
+    return request(
+        POST,
+        "https://music.163.com/api/user/setting",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM,
+        }
+        );
+}
+
+// 分享歌曲到动态
+QVariantMap Api::share_resource(QVariantMap query) {
+    QVariantMap data {
+        { "type", query.value("type", "song") }, // song,playlist,mv,djprogram,djradio,noresource
+        { "msg", query.value("msg", "") },
+        { "id", query.value("id", "") },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/share/friends/resource",
         data,
         {
             { "crypto", "weapi" },
@@ -4222,7 +4248,7 @@ QVariantMap Api::style_song(QVariantMap query) {
         );
 }
 
-// 年度听歌报告2017-2022
+// 年度听歌报告2017-2023
 QVariantMap Api::summary_annual(QVariantMap query) {
     QVariantMap data { };
     const QString key = QStringList { "2017", "2018", "2019 "}.indexOf(query["year"].toString()) > -1 ? "userdata" : "data";

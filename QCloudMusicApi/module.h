@@ -621,6 +621,12 @@ public:
     // 私信
     Q_INVOKABLE QVariantMap send_text(QVariantMap);
 
+    // 设置
+    Q_INVOKABLE QVariantMap setting(QVariantMap);
+
+    // 分享歌曲到动态
+    Q_INVOKABLE QVariantMap share_resource(QVariantMap);
+
     // 相似歌手
     Q_INVOKABLE QVariantMap simi_artist(QVariantMap);
 
@@ -680,7 +686,7 @@ public:
     // 曲风-歌曲
     Q_INVOKABLE QVariantMap style_song(QVariantMap);
 
-    // 年度听歌报告2017-2022
+    // 年度听歌报告2017-2023
     Q_INVOKABLE QVariantMap summary_annual(QVariantMap);
 
     // 获取达人达标信息

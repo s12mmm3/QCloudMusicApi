@@ -26,13 +26,13 @@ QVariantMap Plugins::songUpload(QVariantMap query)
                            .replace("." + ext, "")
                            .replace(QRegularExpression("\\s"), "")
                            .replace(QRegularExpression("\\."), "_");
-    const QVariantMap data ;
+    const QString bucket = "jd-musicrep-privatecloud-audio-public";
     //   获取key和token
     const auto tokenRes = request(
         POST,
         "https://music.163.com/weapi/nos/token/alloc",
         {
-            { "bucket", "jd-musicrep-privatecloud-audio-public" },
+            { "bucket", bucket },
             { "ext", ext },
             { "filename", filename },
             { "local", false },
@@ -47,11 +47,16 @@ QVariantMap Plugins::songUpload(QVariantMap query)
         }
         );
     const auto objectKey = tokenRes["body"].toMap()["result"].toMap()["objectKey"].toString().replace("/", "%2F");
+
     auto reply = Request::axios(
+        QNetworkAccessManager::GetOperation,
+        "https://wanproxy.127.net/lbs?version=1.0&bucketname=" + bucket,
+        {}, {}, "");
+    reply->manager()->deleteLater();
+    const QVariantMap lbs = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
+    reply = Request::axios(
         QNetworkAccessManager::PostOperation,
-        "http://45.127.129.8/jd-musicrep-privatecloud-audio-public/"
-            + objectKey
-            + "?offset=0&complete=true&version=1.0",
+        "http://" + lbs["upload}"].toList()[0].toString() + "/" + bucket + "/" + objectKey + "?offset=0&complete=true&version=1.0",
         {},
         {
             { "x-nos-token", tokenRes["body"].toMap()["result"].toMap()["token"] },
