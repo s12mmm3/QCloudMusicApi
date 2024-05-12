@@ -802,6 +802,13 @@ QVariantMap Api::cloud(QVariantMap query) {
             }
         };
     }
+
+    if (query.contains("dataAsBase64")) {
+        auto songFile = query["songFile"].toMap();
+        songFile["data"] = QByteArray::fromBase64(songFile["data"].toByteArray());
+        query["songFile"] = songFile;
+    }
+
     if (!query["songFile"].toMap().contains("md5")) {
         auto songFile = query["songFile"].toMap();
         auto data = songFile["data"].toByteArray();
