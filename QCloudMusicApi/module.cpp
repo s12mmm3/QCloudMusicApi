@@ -838,6 +838,16 @@ QVariantMap Api::cloud(QVariantMap query) {
     QString album = "";
     QString songName = "";
 
+    if (query.contains("artist")) {
+        artist = query["artist"].toString();
+    }
+    if (query.contains("album")) {
+        album = query["album"].toString();
+    }
+    if (query.contains("songName")) {
+        songName = query["songName"].toString();
+    }
+
     const auto tokenRes = request(
         POST,
         "https://music.163.com/weapi/nos/token/alloc",
