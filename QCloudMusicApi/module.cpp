@@ -1,4 +1,4 @@
-﻿#include <QJsonDocument>
+#include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QNetworkRequest>
@@ -779,7 +779,7 @@ QVariantMap Api::cloud_match(QVariantMap query) {
 // 云盘上传
 QVariantMap Api::cloud(QVariantMap query) {
     QString ext = "mp3";
-    if (query["songFile"].toMap()["name"].toString().indexOf("flac") > -1) {
+    if (query["songFile"].toMap()["name"].toString().toLower().indexOf("flac") > -1) {
         ext = "flac";
     }
     QString filename = query["songFile"].toMap()["name"].toString()
@@ -802,6 +802,13 @@ QVariantMap Api::cloud(QVariantMap query) {
             }
         };
     }
+
+    if (query.contains("dataAsBase64")) {
+        auto songFile = query["songFile"].toMap();
+        songFile["data"] = QByteArray::fromBase64(songFile["data"].toByteArray());
+        query["songFile"] = songFile;
+    }
+
     if (!query["songFile"].toMap().contains("md5")) {
         auto songFile = query["songFile"].toMap();
         auto data = songFile["data"].toByteArray();
@@ -830,6 +837,16 @@ QVariantMap Api::cloud(QVariantMap query) {
     QString artist = "";
     QString album = "";
     QString songName = "";
+
+    if (query.contains("artist")) {
+        artist = query["artist"].toString();
+    }
+    if (query.contains("album")) {
+        album = query["album"].toString();
+    }
+    if (query.contains("songName")) {
+        songName = query["songName"].toString();
+    }
 
     const auto tokenRes = request(
         POST,
