@@ -3872,7 +3872,7 @@ QVariantMap Api::resource_like(QVariantMap query) {
     query["cookie"] = cookie;
     query["t"] = query["t"] == 1 ? "like" : "unlike";
     query["type"] = resourceTypeMap[query["type"].toString()];
-    const QVariantMap data {
+    QVariantMap data {
         { "threadId", query["type"].toString() + query["id"].toString() }
     };
     if (query["type"] == "A_EV_2_") {
