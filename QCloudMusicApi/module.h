@@ -768,6 +768,9 @@ public:
     // 新碟上架
     Q_INVOKABLE QVariantMap top_album(QVariantMap);
 
+    // 听歌打卡
+    Q_INVOKABLE QVariantMap scrobble(QVariantMap query);
+
     // 热门歌手
     Q_INVOKABLE QVariantMap top_artists(QVariantMap);
 

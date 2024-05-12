@@ -4701,6 +4701,32 @@ QVariantMap Api::top_album(QVariantMap query) {
         );
 }
 
+// 听歌打卡
+QVariantMap Api::scrobble(QVariantMap query)
+{
+    auto logs = QVariantList{
+        QVariantMap{
+            {"action", "play"},
+            {"json", QVariantMap{
+                         {"download", 0},
+                         {"end", "playend"},
+                         {"id", query["id"]},
+                         {"sourceId", query["sourceid"]},
+                         {"time", query["time"]},
+                         {"type", "song"},
+                         {"wifi", 0},
+                         {"source", "list"}}}}};
+
+    const QVariantMap data{
+        {"logs", QJsonDocument(QJsonArray::fromVariantList(logs)).toJson(QJsonDocument::JsonFormat::Compact)}};
+    return request(
+        POST,
+        "https://music.163.com/weapi/feedback/weblog",
+        data,
+        {{"crypto", "weapi"},
+         _PARAM});
+}
+
 // 热门歌手
 QVariantMap Api::top_artists(QVariantMap query) {
     QVariantMap data {
