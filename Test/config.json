@@ -456,5 +456,53 @@
     },
     "share_resource": {
         "id": "2058263032"
+    },
+    "music_first_listen_info": {
+        "id": "2058263032"
+    },
+    "personal_fm_mode": {
+        "mode": "DEFAULT",
+        "subMode": "FAMILIAR"
+    },
+    "song_music_detail": {
+        "id": "2058263032"
+    },
+    "song_red_count": {
+        "id": "2058263032"
+    },
+    "playmode_intelligence_list": {
+        "songId": "2058263032",
+        "pid": "24381616"
+    },
+    "playmode_song_vector": {
+        "ids": "2058263032,2057797340"
+    },
+    "recommend_songs_dislike": {
+        "id": "2058263032"
+    },
+    "related_allvideo": {
+        "id": "89ADDE33C0AAE8EC14B99F6750DB954D"
+    },
+    "resource_like": {
+        "t": 1,
+        "type": 1,
+        "id": "5436712"
+    },
+    "scrobble": {
+        "id": "2058263032",
+        "sourceid": "168223858"
+    },
+    "search_match": {
+        "title": "フューチャー・イヴ",
+        "album": "未来イヴ",
+        "artist": "sasakure.UK",
+        "duration": 219,
+        "md5": "bd708d006912a09d827f02e754cf8e56"
+    },
+    "sheet_list": {
+        "id": "2058263032"
+    },
+    "sheet_preview": {
+        "id": "143190"
     }
 }

@@ -35,8 +35,13 @@ void TabCommon::on_pushButton_send_clicked()
 {
     ui->textEdit_ret->clear();
 
-    auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
-    ui->textEdit_arg->setText(QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toJson(JsonFormat));
+    {
+        // 更新arg的Json格式
+        auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
+        auto arg = ui->textEdit_arg->toPlainText();
+        auto arg_new = QJsonDocument::fromJson(arg.toUtf8()).toJson(JsonFormat);
+        if (arg != arg_new) ui->textEdit_arg->setText(arg_new);
+    }
 
     QString member = ui->comboBox->currentText();
     QVariantMap arg = QJsonDocument::fromJson(ui->textEdit_arg->toPlainText().toUtf8()).toVariant().toMap();
@@ -49,6 +54,7 @@ void TabCommon::on_pushButton_send_clicked()
 
 void TabCommon::on_comboBox_currentTextChanged(const QString &arg1)
 {
+    // 从config中读取当前接口的测试数据
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_arg->setText(
         QJsonDocument(ServiceLocator::config()[arg1].toObject())
@@ -59,16 +65,13 @@ void TabCommon::on_comboBox_currentTextChanged(const QString &arg1)
 
 void TabCommon::on_checkBox_stateChanged(int arg1)
 {
+    // 更新ret的Json格式
     auto JsonFormat = arg1 ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_ret->setText(QJsonDocument::fromJson(ui->textEdit_ret->toPlainText().toUtf8()).toJson(JsonFormat));
 }
 
 void TabCommon::update(QVariantMap ret)
 {
-    if(ui->checkBox->isChecked()) {
-        ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
-    }
-    else {
-        ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Compact));
-    }
+    auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
+    ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(JsonFormat));
 }

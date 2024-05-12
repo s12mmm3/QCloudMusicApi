@@ -14,7 +14,7 @@
 
 std::string currentPath_c;
 QCoreApplication *app = Q_NULLPTR;
-char* data = Q_NULLPTR;
+std::string result;
 ApiHelper helper;
 
 void freeApp() {
@@ -24,16 +24,8 @@ void freeApp() {
     }
 }
 
-void freeData() {
-    if (data) {
-        delete[] data;
-        data = Q_NULLPTR;
-    }
-}
-
 QCLOUDMUSICAPI_EXPORT void freeApi() {
     freeApp();
-    freeData();
 }
 
 void init() {
@@ -57,13 +49,9 @@ void init() {
 }
 
 const char* invoke_p(QVariantMap ret) {
-    std::string result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
-
-    // 这里多线程可能会有问题，会同时修改data；还没想好怎么改
-    freeData();
-    data = new char[result.size() + 1];
-    std::strcpy(data, result.c_str());
-    return data;
+    // 这里多线程可能会有问题，会同时修改result；还没想好怎么改
+    result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
+    return result.c_str();
 }
 
 QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
@@ -93,4 +81,8 @@ QCLOUDMUSICAPI_EXPORT int memberCount() {
 
 QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy) {
     helper.set_proxy(proxy);
+}
+
+QCLOUDMUSICAPI_EXPORT void set_cookie(char *cookie) {
+    helper.set_cookie(cookie);
 }

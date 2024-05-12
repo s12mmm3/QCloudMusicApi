@@ -13,6 +13,13 @@ public:
     // 初始化名字
     Q_INVOKABLE QVariantMap activate_init_profile(QVariantMap);
 
+    // 私人 DJ
+
+    // 实际请求参数如下, 部分内容省略, 敏感信息已进行混淆
+    // 可按需修改此 API 的代码
+    /* {"extInfo":"{\"lastRequestTimestamp\":1692358373509,\"lbsInfoList\":[{\"lat\":40.23076381,\"lon\":129.07545186,\"time\":1692358543},{\"lat\":40.23076381,\"lon\":129.07545186,\"time\":1692055283}],\"listenedTs\":false,\"noAidjToAidj\":true}","header":"{}","e_r":true} */
+    Q_INVOKABLE QVariantMap aidj_content_rcmd(QVariantMap);
+
     // 专辑动态信息
     Q_INVOKABLE QVariantMap album_detail_dynamic(QVariantMap);
 
@@ -303,6 +310,9 @@ public:
     // 新晋电台榜/热门电台榜
     Q_INVOKABLE QVariantMap dj_toplist(QVariantMap);
 
+    // 电台排行榜获取
+    Q_INVOKABLE QVariantMap djRadio_top(QVariantMap);
+
     // 删除动态
     Q_INVOKABLE QVariantMap event_del(QVariantMap);
 
@@ -437,11 +447,14 @@ public:
     // 私信内容
     Q_INVOKABLE QVariantMap msg_private_history(QVariantMap);
 
+    // 私信
+    Q_INVOKABLE QVariantMap msg_private(QVariantMap);
+
     // 最近联系
     Q_INVOKABLE QVariantMap msg_recentcontact(QVariantMap);
 
-    // 私信
-    Q_INVOKABLE QVariantMap msg_private(QVariantMap);
+    // 回忆坐标
+    Q_INVOKABLE QVariantMap music_first_listen_info(QVariantMap);
 
     // 全部MV
     Q_INVOKABLE QVariantMap mv_all(QVariantMap);
@@ -469,6 +482,12 @@ public:
 
     // 重复昵称检测
     Q_INVOKABLE QVariantMap nickname_check(QVariantMap);
+
+    // 私人FM - 模式选择
+
+    // aidj, DEFAULT, FAMILIAR, EXPLORE, SCENE_RCMD ( EXERCISE, FOCUS, NIGHT_EMO  )
+    // 来不及解释这几个了
+    Q_INVOKABLE QVariantMap personal_fm_mode(QVariantMap);
 
     // 私人FM
     Q_INVOKABLE QVariantMap personal_fm(QVariantMap);
@@ -564,6 +583,27 @@ public:
     // 最近播放的视频
     Q_INVOKABLE QVariantMap playlist_video_recent(QVariantMap);
 
+    // 智能播放
+    Q_INVOKABLE QVariantMap playmode_intelligence_list(QVariantMap);
+
+    // 云随机播放
+    Q_INVOKABLE QVariantMap playmode_song_vector(QVariantMap);
+
+    // 推荐节目
+    Q_INVOKABLE QVariantMap program_recommend(QVariantMap);
+
+    // 更换手机
+    Q_INVOKABLE QVariantMap rebind(QVariantMap);
+
+    // 每日推荐歌单
+    Q_INVOKABLE QVariantMap recommend_resource(QVariantMap);
+
+    // 每日推荐歌曲-不感兴趣
+    Q_INVOKABLE QVariantMap recommend_songs_dislike(QVariantMap);
+
+    // 每日推荐歌曲
+    Q_INVOKABLE QVariantMap recommend_songs(QVariantMap);
+
     // 最近播放-专辑
     Q_INVOKABLE QVariantMap record_recent_album(QVariantMap);
 
@@ -588,8 +628,17 @@ public:
     // 注册账号
     Q_INVOKABLE QVariantMap register_cellphone(QVariantMap);
 
+    // 相关视频
+    Q_INVOKABLE QVariantMap related_allvideo(QVariantMap);
+
     // 相关歌单
     Q_INVOKABLE QVariantMap related_playlist(QVariantMap);
+
+    // 点赞与取消点赞资源
+    Q_INVOKABLE QVariantMap resource_like(QVariantMap);
+
+    // 听歌打卡
+    Q_INVOKABLE QVariantMap scrobble(QVariantMap);
 
     // 默认搜索关键词
     Q_INVOKABLE QVariantMap search_default(QVariantMap);
@@ -599,6 +648,9 @@ public:
 
     // 热门搜索
     Q_INVOKABLE QVariantMap search_hot(QVariantMap);
+
+    // 本地歌曲匹配音乐信息
+    Q_INVOKABLE QVariantMap search_match(QVariantMap);
 
     // 多类型搜索
     Q_INVOKABLE QVariantMap search_multimatch(QVariantMap);
@@ -626,6 +678,18 @@ public:
 
     // 分享歌曲到动态
     Q_INVOKABLE QVariantMap share_resource(QVariantMap);
+
+    // 乐谱列表
+    Q_INVOKABLE QVariantMap sheet_list(QVariantMap);
+
+    // 乐谱预览
+    Q_INVOKABLE QVariantMap sheet_preview(QVariantMap);
+
+    // 乐签信息
+    Q_INVOKABLE QVariantMap sign_happy_info(QVariantMap);
+
+    // 签到进度
+    Q_INVOKABLE QVariantMap signin_progress(QVariantMap);
 
     // 相似歌手
     Q_INVOKABLE QVariantMap simi_artist(QVariantMap);
@@ -659,11 +723,20 @@ public:
     // 音乐百科基础信息
     Q_INVOKABLE QVariantMap song_wiki_summary(QVariantMap);
 
+    // 云村星评馆 - 简要评论列表
+    Q_INVOKABLE QVariantMap starpick_comments_summary(QVariantMap);
+
+    // 歌曲音质详情
+    Q_INVOKABLE QVariantMap song_music_detail(QVariantMap);
+
     // 更新歌曲顺序
     Q_INVOKABLE QVariantMap song_order_update(QVariantMap);
 
     // 已购单曲
     Q_INVOKABLE QVariantMap song_purchased(QVariantMap);
+
+    // 歌曲红心数量
+    Q_INVOKABLE QVariantMap song_red_count(QVariantMap);
 
     // 曲风-专辑
     Q_INVOKABLE QVariantMap style_album(QVariantMap);
@@ -834,8 +907,17 @@ public:
     // 视频链接
     Q_INVOKABLE QVariantMap video_url(QVariantMap);
 
+    // 播客删除
+    Q_INVOKABLE QVariantMap voice_delete(QVariantMap);
+
     // 播客声音详情
     Q_INVOKABLE QVariantMap voice_detail(QVariantMap);
+
+    // 获取声音歌词
+    Q_INVOKABLE QVariantMap voice_lyric(QVariantMap);
+
+    // 播客列表详情
+    Q_INVOKABLE QVariantMap voicelist_detail(QVariantMap);
 
     // 声音搜索
     Q_INVOKABLE QVariantMap voicelist_list_search(QVariantMap);
@@ -845,6 +927,12 @@ public:
 
     // 播客列表
     Q_INVOKABLE QVariantMap voicelist_search(QVariantMap);
+
+    // 播客声音排序
+    Q_INVOKABLE QVariantMap voicelist_trans(QVariantMap);
+
+    // 操作记录
+    Q_INVOKABLE QVariantMap weblog(QVariantMap);
 
     // 云贝 todo 任务
     Q_INVOKABLE QVariantMap yunbei_tasks_todo(QVariantMap);

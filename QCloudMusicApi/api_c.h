@@ -18,8 +18,7 @@ QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value);
 
 /**
  * @brief 通过反射调用API的成员函数。
- *
- * @param @param url 要调用的API的URL，例如："/song/url/v1?id=2058263032, 2057797340&level=exhigh", "http://localhost:3000/activate/init/profile"
+ * @param url 要调用的API的URL，例如："/song/url/v1?id=2058263032, 2057797340&level=exhigh", "http://localhost:3000/activate/init/profile"
  * @return 函数调用结果的JSON格式字符串。
  */
 QCLOUDMUSICAPI_EXPORT const char* invokeUrl(char* url);
@@ -31,7 +30,6 @@ QCLOUDMUSICAPI_EXPORT void freeApi();
 
 /**
  * @brief 通过索引检索成员的名称。
- *
  * @param i 成员的索引。
  * @return 指定索引处成员的名称。
  */
@@ -39,17 +37,21 @@ QCLOUDMUSICAPI_EXPORT char* memberName(int i);
 
 /**
  * @brief 获取API中成员函数的数量。
- *
  * @return 成员函数的数量。
  */
 QCLOUDMUSICAPI_EXPORT int memberCount();
 
 /**
  * @brief 设置全局代理
- *
  * @param proxy 代理地址
  */
 QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy);
+
+/**
+ * @brief 设置全局cookie
+ * @param cookie
+ */
+QCLOUDMUSICAPI_EXPORT void set_cookie(char* cookie);
 
 #ifdef __cplusplus
 }
