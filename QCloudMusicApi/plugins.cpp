@@ -65,7 +65,7 @@ QVariantMap Plugins::songUpload(QVariantMap query)
             { "Content-Type", "audio/mpeg" },
             { "Content-Length", query["songFile"].toMap()["size"] },
         },
-        query["imgFile"].toMap()["data"].toByteArray());
+        query["songFile"].toMap()["data"].toByteArray());
     reply->manager()->deleteLater();
 
     return tokenRes;
