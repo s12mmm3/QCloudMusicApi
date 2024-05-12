@@ -19,7 +19,7 @@ Plugins::Plugins(QObject *parent)
 QVariantMap Plugins::songUpload(QVariantMap query)
 {
     QString ext = "mp3";
-    if (query["songFile"].toMap()["name"].toString().indexOf("flac") > -1) {
+    if (query["songFile"].toMap()["name"].toString().toLower().indexOf("flac") > -1) {
         ext = "flac";
     }
     QString filename = query["songFile"].toMap()["name"].toString()
