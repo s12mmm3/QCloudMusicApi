@@ -48,7 +48,7 @@ void TabCommonUnit::on_comboBox_currentTextChanged(const QString &arg1)
     // 从config中读取当前接口的测试数据
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_arg->setText(
-        QJsonDocument(ServiceLocator::config()[arg1].toObject())
+        QJsonDocument(ServiceLocator::config().object()[arg1].toObject())
             .toJson(JsonFormat)
         );
 }

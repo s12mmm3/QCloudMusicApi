@@ -6,7 +6,7 @@
 #include <QNetworkInterface>
 #include <QVariantMap>
 #include <QRegularExpression>
-#include <QRandomGenerator>
+// #include <QRandomGenerator>
 #include <QCryptographicHash>
 
 #include <algorithm>
@@ -64,7 +64,7 @@ QVariantMap Api::aidj_content_rcmd(QVariantMap query) {
             QVariantMap {
                 { "lat", query["latitude"] },
                 { "lon", query["longitude"] },
-                { "time", QDateTime::currentSecsSinceEpoch() }
+                { "time", QDateTime::currentMSecsSinceEpoch() / 1000 }
             }
         };
     }
@@ -550,7 +550,8 @@ QVariantMap Api::audio_match(QVariantMap query) {
         const QString str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         QString result;
         for (int i = 0; i < len; ++i) {
-            int index = QRandomGenerator::global()->bounded(str.length());
+            qsrand(QTime::currentTime().msec());
+            int index = qrand() % str.length();
             result.append(str.at(index));
         }
         return result;

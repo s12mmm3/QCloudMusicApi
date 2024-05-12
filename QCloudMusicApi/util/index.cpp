@@ -1,6 +1,6 @@
 #include "index.h"
 
-#include <QRandomGenerator>
+// #include <QRandomGenerator>
 #include <QtMath>
 
 using namespace QCloudMusicApi;
@@ -33,21 +33,21 @@ QString Index::cookieObjToString(const QVariantMap &cookie) {
 }
 
 int Index::getRandom(int num) {
-    int random = QRandomGenerator::global()->bounded(1, 9) + 1;
+    int random;/* = QRandomGenerator::global()->bounded(1, 9) + 1;
     random += QRandomGenerator::global()->generate();
-    random *= qPow(10, num - 1);
+    random *= qPow(10, num - 1);*/
     return random;
 }
 
 QString Index::generateRandomChineseIP() {
     QStringList chinaIPPrefixes { "116.25", "116.76", "116.77", "116.78" };
-    QString randomPrefix = chinaIPPrefixes.at(QRandomGenerator::global()->bounded(chinaIPPrefixes.size()));
+    QString randomPrefix/* = chinaIPPrefixes.at(QRandomGenerator::global()->bounded(chinaIPPrefixes.size()))*/;
     return QString("%1.%2.%3").arg(randomPrefix).arg(generateIPSegment()).arg(generateIPSegment());
 }
 
 // 生成一个随机整数
 int Index::getRandomInt(int min, int max) {
-    return QRandomGenerator::global()->bounded(min, max + 1);
+    return 0/*QRandomGenerator::global()->bounded(min, max + 1)*/;
 }
 
 // 生成一个随机IP地址段

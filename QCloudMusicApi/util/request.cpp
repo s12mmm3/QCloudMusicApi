@@ -8,7 +8,7 @@
 #include <QTimer>
 #include <QVariantMap>
 #include <QByteArray>
-#include <QRandomGenerator>
+// #include <QRandomGenerator>
 #include <QNetworkCookie>
 #include <QNetworkProxyFactory>
 #include <QNetworkReply>
@@ -73,7 +73,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     auto randomBytes = []() {
         QByteArray bytes;
         for(int i = 0; i < 16; ++i) {
-            bytes.append(QRandomGenerator::global()->generate());
+            bytes.append(qrand());
         }
         return bytes;
     };
@@ -137,7 +137,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                            { "channel", cookie["channel"] },
                            { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
                                                 + "_"
-                                                + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
+                                                + QString::number((int)(qrand() * 1.0 * 1000)).rightJustified(4, '0')
                            },
                            };
         if(cookie.contains("MUSIC_U")) header["MUSIC_U"] = cookie["MUSIC_U"];

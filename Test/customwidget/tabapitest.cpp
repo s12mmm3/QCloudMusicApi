@@ -32,7 +32,7 @@ void TabApiTest::on_pushButton_tabApiTest_send_clicked() {
     QVariantMap rets;
     QMutex mutex;
     QtConcurrent::map(members, [&](auto member) {
-        QVariantMap arg = ServiceLocator::config()[member].toObject().toVariantMap();
+        QVariantMap arg = ServiceLocator::config().object()[member].toObject().toVariantMap();
         QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
 
         mutex.lock();

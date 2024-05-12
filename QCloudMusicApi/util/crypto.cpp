@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QVariantMap>
 #include <QJsonDocument>
-#include <QRandomGenerator>
+#include <QTime>
+// #include <QRandomGenerator>
 #include <QCryptographicHash>
 
 extern "C" {
@@ -165,7 +166,8 @@ QVariantMap Crypto::weapi(QJsonDocument object) {
     secretKey.resize(16);
 
     for (int i = 0; i < secretKey.size(); i++) {
-        quint8 byte = QRandomGenerator::global()->generate() & 0xFF;
+        qsrand(QTime::currentTime().msec());
+        quint8 byte = qrand() & 0xFF;
         int index = byte % base62.length();
         secretKey[i] = base62.at(index).toLatin1();
     }
