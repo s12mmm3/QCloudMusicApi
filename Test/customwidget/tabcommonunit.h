@@ -3,6 +3,7 @@
 
 #include <QComboBox>
 #include <QWidget>
+#include <functional>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,7 +21,7 @@ public:
     ~TabCommonUnit();
     // 点击send按钮触发的动作
     std::function<QVariantMap(QString member, QString arg)> callback = Q_NULLPTR;
-    QComboBox* comboBox;
+    QComboBox* comboBox = Q_NULLPTR;
 
 private slots:
     void on_pushButton_send_clicked();
