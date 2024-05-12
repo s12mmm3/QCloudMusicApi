@@ -2,8 +2,6 @@
 #define TABCOMMON_H
 
 #include <QWidget>
-#include <QJsonDocument>
-#include <QVariantMap>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,15 +17,6 @@ class TabCommon : public QWidget
 public:
     explicit TabCommon(QWidget *parent = nullptr);
     ~TabCommon();
-
-private slots:
-    void on_pushButton_send_clicked();
-
-    void on_comboBox_currentTextChanged(const QString &arg1);
-
-    void on_checkBox_stateChanged(int arg1);
-
-    void update(QVariantMap ret);
 
 private:
     Ui::TabCommon *ui;

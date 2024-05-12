@@ -2,8 +2,6 @@
 #define TABAPI_C_H
 
 #include <QWidget>
-#include <QJsonDocument>
-#include <QVariantMap>
 #include <QLibrary>
 
 QT_BEGIN_NAMESPACE
@@ -22,14 +20,6 @@ public:
     ~TabApi_c();
 
 private slots:
-    void on_pushButton_send_clicked();
-
-    void on_comboBox_currentTextChanged(const QString &arg1);
-
-    void on_checkBox_stateChanged(int arg1);
-
-    void update(QVariantMap ret);
-
     void on_pushButton_select_clicked();
 
     void on_pushButton_unload_clicked();
