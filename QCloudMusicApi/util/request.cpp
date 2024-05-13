@@ -199,7 +199,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         for (auto& i : QString(reply->rawHeader("set-cookie")).split("\n")) {
             cookie.append(i.replace(QRegularExpression("\\s*Domain=[^;]*"), ""));
         }
-        answer["cookie"] = Index::cookieToJson(cookie);
+        answer["cookie"] = cookie;
 
         if(options["crypto"].toString() == "eapi") {
             answer["body"] = QJsonDocument::fromJson(Crypto::decrypt(body)).toVariant().toMap();
