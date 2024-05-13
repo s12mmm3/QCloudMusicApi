@@ -20,7 +20,9 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
             set_cookie(arg["cookie"].toMap());
         }
         else if(arg["cookie"].userType() == QMetaType::QString) {
-            set_cookie(arg["cookie"].toString());
+            auto cookieMap = Index::cookieToJson(arg["cookie"].toString());
+            set_cookie(cookieMap);
+            arg["cookie"] = cookieMap;
         }
     }
     else {
@@ -36,7 +38,16 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
 
 void ApiHelper::afterInvoke(QVariantMap& ret)
 {
-    auto newCookie = Index::cookieToJson(ret["cookie"].toString());
+    QVariantMap newCookie;
+    if (ret["cookie"].userType() == QMetaType::QString)
+    {
+        newCookie = Index::cookieToJson(ret["cookie"].toString());
+        ret["cookie"] = newCookie;
+    }
+    else if (ret["cookie"].userType() == QMetaType::QVariantMap)
+    {
+        newCookie = ret["cookie"].toMap();
+    }
     if (!newCookie.isEmpty()) {
         set_cookie(Index::mergeMap(cookie(), newCookie));
     }
