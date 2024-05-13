@@ -49,10 +49,10 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
     beforeInvoke(arg);
 
     QVariantMap ret;
-    QMetaObject::invokeMethod(this, member.toUtf8()
-                              , Qt::DirectConnection
-                              , Q_RETURN_ARG(QVariantMap, ret)
-                              , Q_ARG(QVariantMap, arg));
+    QMetaObject::invokeMethod(this, member.toUtf8(),
+                              Qt::DirectConnection,
+                              Q_RETURN_ARG(QVariantMap, ret),
+                              Q_ARG(QVariantMap, arg));
 
     afterInvoke(ret);
 

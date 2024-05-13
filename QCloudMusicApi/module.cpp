@@ -31,11 +31,11 @@ const static auto &GET = QNetworkAccessManager::GetOperation;
 const static auto &resourceTypeMap = QCloudMusicApi::Config::resourceTypeMap;
 
 
-// 初始化名字
 NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject *parent)
     : QObject{parent}
 {}
 
+// 初始化名字
 QVariantMap Api::activate_init_profile(QVariantMap query) {
     QVariantMap data {
         { "nickname", query["nickname"] }

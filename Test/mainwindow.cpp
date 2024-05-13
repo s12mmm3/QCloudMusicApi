@@ -7,22 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle(PROJECT_NAME);
-
-    ui->tabApiTest->setFunctions({
-        "banner",
-        "lyric",
-        "toplist"
-    });
-    ui->tabEapiTest->setFunctions({
-        "lyric_new",
-        "song_download_url",
-        "song_url_v1"
-    });
-    ui->tabWeapiTest->setFunctions({
-        "album",
-        "artist_detail",
-        "user_detail"
-    });
 }
 
 MainWindow::~MainWindow()

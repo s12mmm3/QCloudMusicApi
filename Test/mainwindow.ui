@@ -25,29 +25,6 @@
         <string>Common</string>
        </attribute>
       </widget>
-      <widget class="QTabWidget" name="tabApiTestParent">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <attribute name="title">
-        <string>api_test</string>
-       </attribute>
-       <widget class="TabApiTest" name="tabApiTest">
-        <attribute name="title">
-         <string>api_test</string>
-        </attribute>
-       </widget>
-       <widget class="TabApiTest" name="tabEapiTest">
-        <attribute name="title">
-         <string>eapi_test</string>
-        </attribute>
-       </widget>
-       <widget class="TabApiTest" name="tabWeapiTest">
-        <attribute name="title">
-         <string>weapi_test</string>
-        </attribute>
-       </widget>
-      </widget>
       <widget class="QTabWidget" name="tabCrypto">
        <property name="currentIndex">
         <number>0</number>
@@ -139,11 +116,6 @@
    <class>TabRsa</class>
    <extends>QWidget</extends>
    <header>tabrsa.h</header>
-  </customwidget>
-  <customwidget>
-   <class>TabApiTest</class>
-   <extends>QWidget</extends>
-   <header>tabapitest.h</header>
   </customwidget>
   <customwidget>
    <class>TabCommon</class>
