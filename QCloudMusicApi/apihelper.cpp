@@ -20,13 +20,11 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
             set_cookie(arg["cookie"].toMap());
         }
         else if(arg["cookie"].userType() == QMetaType::QString) {
-            set_cookie(arg["cookie"].toString());
+            set_cookie(Index::cookieToJson(arg["cookie"].toString()));
         }
     }
-    else {
-        //使用存储的cookie
-        arg["cookie"] = cookie();
-    }
+    //使用存储的cookie
+    arg["cookie"] = cookie();
 
     // 设置全局代理
     if (!proxy().isEmpty()) {

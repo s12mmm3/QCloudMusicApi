@@ -8,6 +8,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <QMutex>
 
 #include "api_c.h"
 #include "../QCloudMusicApi/apihelper.h"
@@ -16,6 +17,8 @@ std::string currentPath_c;
 QCoreApplication *app = Q_NULLPTR;
 std::string result;
 ApiHelper helper;
+QMutex mutex;
+char initialized = 0;
 
 void freeApp() {
     if (app) {
@@ -29,6 +32,11 @@ QCLOUDMUSICAPI_EXPORT void freeApi() {
 }
 
 void init() {
+    mutex.lock();
+    if (initialized) {
+        mutex.unlock();
+        return;
+    }
     /*
      * Python调用时，QCoreApplication::libraryPaths只返回python可执行程序的路径，因此需要手动添加API动态库的路径；
      * Qt网络库会在路径下查找插件，用于实现ssl加解密
@@ -46,6 +54,8 @@ void init() {
         app = new QCoreApplication(argc, argv);
         // a->deleteLater();
     }
+    initialized = 1;
+    mutex.unlock();
 }
 
 const char* invoke_p(QVariantMap ret) {
