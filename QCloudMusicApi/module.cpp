@@ -4418,10 +4418,11 @@ QVariantMap Api::song_url(QVariantMap query) {
 
 // 歌曲详情
 QVariantMap Api::song_detail(QVariantMap query) {
+    query["ids"] = query["ids"].toString().split(QRegularExpression("\\s*,\\s*"));
     const QVariantMap data {
         { "c", "[" + [&]() -> QString {
              QStringList c;
-             for (auto& item: query["id"].toString().split(",")) {
+             for (auto& item: query["ids"].toStringList()) {
                  c.append("{\"id\":" + item + "}");
              }
              return c.join(",");
