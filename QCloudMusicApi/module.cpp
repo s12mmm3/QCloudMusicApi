@@ -2131,6 +2131,10 @@ QVariantMap Api::hug_comment(QVariantMap query) {
 // 红心与取消红心歌曲
 QVariantMap Api::like(QVariantMap query) {
     query["like"] = query["like"] == "false" ? false : true;
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
+    query["cookie"] = cookie;
     const QVariantMap data {
         { "alg", "itembased" },
         { "trackId", query["id"] },
