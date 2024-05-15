@@ -18,8 +18,6 @@ TabServerTest::TabServerTest(QWidget *parent) :
     ui->setupUi(this);
 
     ui->tabCommonUnit->callback = [this](QString, QString arg_str) -> QVariantMap {
-        QVariantMap ret;
-
         auto method = ui->checkBox_post->isChecked() ? QNetworkAccessManager::PostOperation : QNetworkAccessManager::GetOperation;
         QString url = ui->lineEdit_url->text();
         if (ui->checkBox_timestamp->isChecked()) {
@@ -46,16 +44,16 @@ TabServerTest::TabServerTest(QWidget *parent) :
                     headers,
                     query.toString().toUtf8());
         reply->manager()->deleteLater();
-        ret = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
+
         DEBUG.noquote() << reply->rawHeaderPairs();
 
-        return ret;
+        return QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
     };
 
     setUrl();
     connect(ui->lineEdit_address, &QLineEdit::textChanged, this, &TabServerTest::setUrl);
     connect(ui->lineEdit_port, &QLineEdit::textChanged, this, &TabServerTest::setUrl);
-    connect(ui->tabCommonUnit->comboBox, &QComboBox::currentTextChanged, this, &TabServerTest::setUrl);
+    connect(ui->tabCommonUnit->comboBox_function, &QComboBox::currentTextChanged, this, &TabServerTest::setUrl);
 }
 
 TabServerTest::~TabServerTest()
@@ -67,7 +65,7 @@ void TabServerTest::setUrl()
 {
     QUrl url;
     url.setUrl(ui->lineEdit_address->text());
-    url.setPath("/" + ui->tabCommonUnit->comboBox->currentText().replace("_", "/"));
+    url.setPath("/" + ui->tabCommonUnit->comboBox_function->currentText().replace("_", "/"));
     url.setPort(ui->lineEdit_port->text().toInt());
     ui->lineEdit_url->setText(url.toString());
 }

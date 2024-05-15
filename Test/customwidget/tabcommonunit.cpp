@@ -13,9 +13,13 @@ TabCommonUnit::TabCommonUnit(QWidget *parent) :
     ui(new Ui::TabCommonUnit)
 {
     ui->setupUi(this);
-    comboBox = ui->comboBox;
+
+    comboBox_function = ui->comboBox_function;
+    textEdit_arg = ui->textEdit_arg;
+    textEdit_ret = ui->textEdit_ret;
+
     //将Api中的方法名称取出
-    ui->comboBox->addItems(ApiHelper::memberList());
+    ui->comboBox_function->addItems(ApiHelper::memberList());
 }
 
 TabCommonUnit::~TabCommonUnit()
@@ -34,7 +38,7 @@ void TabCommonUnit::on_pushButton_send_clicked()
     if (arg != arg_new) ui->textEdit_arg->setText(arg_new);
 
     if (callback) {
-        QString member = ui->comboBox->currentText();
+        QString member = ui->comboBox_function->currentText();
         QString arg = ui->textEdit_arg->toPlainText();
         QVariantMap ret = callback(member, arg);
 
@@ -43,7 +47,7 @@ void TabCommonUnit::on_pushButton_send_clicked()
 }
 
 
-void TabCommonUnit::on_comboBox_currentTextChanged(const QString &arg1)
+void TabCommonUnit::on_comboBox_function_currentTextChanged(const QString &arg1)
 {
     // 从config中读取当前接口的测试数据
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
