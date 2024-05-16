@@ -34,11 +34,11 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
 
 void ApiHelper::afterInvoke(QVariantMap& ret)
 {
-    auto newCookie = Index::cookieToJson(ret["cookie"].toString());
+    auto newCookie = Index::cookieToJson(ret.value("cookie").toString());
     if (!newCookie.isEmpty()) {
         set_cookie(Index::mergeMap(cookie(), newCookie));
     }
-    auto token = ret["body"].toMap()["token"].toString();
+    auto token = ret.value("body").toMap()["token"].toString();
     if (!token.isEmpty()) {
         m_cookie["MUSIC_A"] = token;
     }

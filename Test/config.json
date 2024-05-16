@@ -62,15 +62,10 @@
         "id": "149114512"
     },
     "album_list_style": {
-        "area": "Z_H",
-        "offset": 2
-    },
-    "album_list": {
-        "limit": 10
+        "area": "Z_H"
     },
     "album_new": {
-        "area": "KR",
-        "limit": 10
+        "area": "KR"
     },
     "album_newest": {},
     "album_songsaleboard": {

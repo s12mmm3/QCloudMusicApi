@@ -643,8 +643,7 @@ QVariantMap Api::banner(QVariantMap query) {
         },
         {
             { "crypto", "api" },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] }
+            _PARAM
         }
         );
 }
@@ -2350,7 +2349,7 @@ QVariantMap Api::login_cellphone(QVariantMap query) {
         data,
         {
             { "crypto", "weapi" },
-            { "ua", "pc" },
+            { "uaType", "pc" },
             _PARAM
         }
         );
@@ -2440,7 +2439,7 @@ QVariantMap Api::login_refresh(QVariantMap query) {
         {},
         {
             { "crypto", "weapi" },
-            { "ua", "pc" },
+            { "uaType", "pc" },
             _PARAM
         }
         );
@@ -2490,8 +2489,8 @@ QVariantMap Api::logout(QVariantMap query) {
         "https://music.163.com/weapi/logout",
         {},
         {
-            { "crypto", "eapi" },
-            { "ua", "pc" },
+            { "crypto", "weapi" },
+            { "uaType", "pc" },
             _PARAM
         }
         );
@@ -2641,8 +2640,8 @@ QVariantMap Api::msg_forwards(QVariantMap query) {
 // 通知
 QVariantMap Api::msg_notices(QVariantMap query) {
     const QVariantMap data {
-        { "offset", query.value("offset", "0") },
         { "limit", query.value("limit", 30) },
+        { "time", query.value("lasttime", -1) },
         };
     return request(
         POST,
@@ -4963,6 +4962,7 @@ QVariantMap Api::ugc_artist_search(QVariantMap query) {
         data,
         {
             { "crypto", "weapi" },
+            { "url", "/api/rep/ugc/artist/search" },
             _PARAM
         }
         );
