@@ -21,6 +21,8 @@
 #include "request.h"
 #include "logger.h"
 
+const QString iosAppVersion = "9.0.65";
+
 using namespace QCloudMusicApi;
 QString Request::chooseUserAgent(QString uaType) {
     const QMap<QString, QString> userAgentList {
@@ -52,9 +54,13 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                 { "options", options}
             }
             ).toJson();
+    const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
     QVariantMap headers {
-        { "User-Agent", options.value("ua", chooseUserAgent(options["uaType"].toString())) }
+        { "User-Agent", !options.value("ua").toString().isEmpty() ? options.value("ua") : chooseUserAgent(options["uaType"].toString()) },
+        { "os", cookie.value("cookie", "ios") },
+        { "appver", cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "") },
     };
+    options["headers"] = options.value("headers", QVariantMap()).toMap();
     headers = Index::mergeMap(headers, options["headers"].toMap());
 
     if(method == QNetworkAccessManager::PostOperation) {
@@ -63,9 +69,9 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     if(url.contains("music.163.com")) {
         headers["Referer"] = "https://music.163.com";
     }
-    QString ip = options.value("realIP", options.value("ip", "").toString()).toString();
+    QString ip = options.value("realIP", options.value("ip", "")).toString();
 
-    if(ip.length() > 0) {
+    if(!ip.isEmpty()) {
         headers["X-Real-IP"] = ip;
         headers["X-Forwarded-For"] = ip;
     }
@@ -78,27 +84,42 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         return bytes;
     };
     if(options["cookie"].userType() == QMetaType::QVariantMap) {
-        auto cookie = options["cookie"].toMap();
-        cookie.insert("__remember_me", true);
-        //        cookie.insert("NMTID", randomBytes().toHex());
-        cookie.insert("_ntes_nuid", randomBytes().toHex());
+        options["cookie"] =
+            Index::mergeMap(options["cookie"].toMap(),
+                            {
+                                { "__remember_me", true },
+                                { "NMTID", randomBytes().toHex() },
+                                { "_ntes_nuid", randomBytes().toHex() },
+                                { "os", options["cookie"].toMap().value("os", "ios") },
+                                { "appver", options["cookie"].toMap().value("appver", cookie.value("os") != "pc" ? iosAppVersion : "") },
+                             });
         if (url.indexOf("login") == -1) {
+            auto cookie = options["cookie"].toMap();
             cookie["NMTID"] = randomBytes().toHex();
+            options["cookie"] = cookie;
         }
-        if(!cookie.contains("MUSIC_U")) {
+        if(!options["cookie"].toMap().contains("MUSIC_U")) {
             // 游客
-            if(!cookie.contains("MUSIC_A")) {
+            if(!options["cookie"].toMap().contains("MUSIC_A")) {
+                auto cookie = options["cookie"].toMap();
                 cookie["MUSIC_A"] = Config::anonymous_token;
+                options["cookie"] = cookie;
             }
         }
-        options["cookie"] = cookie;
-        headers["Cookie"] = Index::cookieObjToString(cookie);
+        headers["Cookie"] = Index::cookieObjToString(options["cookie"].toMap());
     }
     else if(options.contains("cookie")) {
-        headers["Cookie"] = options["cookie"];
+        // cookie string
+        auto cookie = Index::cookieToJson(options["cookie"].toString());
+        cookie["os"] = cookie.value("os", "ios");
+        cookie["appver"] = cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "");
+        headers["Cookie"] = Index::cookieObjToString(cookie);
     }
     else {
-        headers["Cookie"] = "__remember_me=true; NMTID=xxx";
+        const auto cookie = Index::cookieToJson("__remember_me=true; NMTID=xxx");
+        cookie["os"] = cookie.value("os", "ios");
+        cookie["appver"] = cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "");
+        headers["Cookie"] = Index::cookieObjToString(cookie);
     }
 
     if(options["crypto"].toString() == "weapi") {
@@ -120,31 +141,37 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         url = "https://music.163.com/api/linux/forward";
     }
     else if(options["crypto"].toString() == "eapi") {
-        const QVariantMap cookie = options["cookie"].userType() == QMetaType::QVariantMap
-                                       ? options["cookie"].toMap()
-                                       : Index::cookieToJson(options.value("cookie", "").toString());
+        const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header {
-                           { "osver", cookie.value("osver", "17.1.2") }, //系统版本
-                           { "deviceId", cookie["deviceId"] },
-                           { "appver", cookie.value("appver", "9.0.65") }, // app版本
-                           { "versioncode", cookie.value("versioncode", "140") }, //版本号
-                           { "mobilename", cookie.value("mobilename", "") }, //设备model
-                           { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
-                           { "resolution", cookie.value("resolution", "1920x1080") }, //设备分辨率
-                           { "__csrf", csrfToken },
-                           { "os", cookie.value("os", "ios") },
-                           { "channel", cookie["channel"] },
-                           { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
-                                                + "_"
-                                                + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
-                           },
-                           };
+            { "osver", cookie.value("osver", "17.4.1") }, //系统版本
+            { "deviceId", cookie["deviceId"] },
+            { "appver", cookie.value("appver", iosAppVersion) }, // app版本
+            { "versioncode", cookie.value("versioncode", "140") }, //版本号
+            { "mobilename", cookie.value("mobilename", "") }, //设备model
+            { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
+            { "resolution", cookie.value("resolution", "1920x1080") }, //设备分辨率
+            { "__csrf", csrfToken },
+            { "os", cookie.value("os", "ios") },
+            { "channel", cookie.value("channel", "") },
+            { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
+                                + "_"
+                                + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
+            },
+            };
         if(cookie.contains("MUSIC_U")) header["MUSIC_U"] = cookie["MUSIC_U"];
         if(cookie.contains("MUSIC_A")) header["MUSIC_A"] = cookie["MUSIC_A"];
 
-        headers["Cookie"] = Index::cookieObjToString(header);
-        data["header"] = QVariant::fromValue(header);
+        headers["Cookie"] = [&header]() -> QString {
+            QStringList result;
+            for (auto i = header.constBegin(); i != header.constEnd(); i++) {
+                result.push_back(
+                    QUrl::toPercentEncoding(i.key()) + "=" + QUrl::toPercentEncoding(i.value().toString())
+                    );
+            }
+            return result.join("; ");
+        }();
+        data["header"] = header;
         data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
         url = url.replace(QRegularExpression("\\w*api"), "eapi");
     }
@@ -212,6 +239,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         }
         answer["status"] = answer["body"].toMap().value("code", reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
         if(QList<int> { 201, 302, 400, 502, 800, 801, 802, 803 }.indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
+            // 特殊状态码
             answer["status"] = 200;
         }
 

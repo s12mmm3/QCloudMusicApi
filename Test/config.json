@@ -15,7 +15,6 @@
     "related_playlist": {
         "id": "2057797340"
     },
-    "register_anonimous": {},
     "album": {
         "id": "149114512"
     },
@@ -25,7 +24,6 @@
     "artists": {
         "id": "15396"
     },
-    "toplist": {},
     "user_detail": {
         "uid": "79248480"
     },
@@ -67,7 +65,6 @@
     "album_new": {
         "area": "KR"
     },
-    "album_newest": {},
     "album_songsaleboard": {
         "type": "year",
         "year": 2020,
@@ -77,7 +74,6 @@
         "id": "149114512",
         "t": 1
     },
-    "album_sublist": {},
     "artist_desc": {
         "id": "15396"
     },

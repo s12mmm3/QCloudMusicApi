@@ -8,7 +8,6 @@
 /**
  * @class ApiHelper
  * @brief API助手类，通过反射机制调用API。
- *
  * 继承自NeteaseCloudMusicApi，提供了调用API的高级接口。
  */
 class QCLOUDMUSICAPI_EXPORT ApiHelper : public NeteaseCloudMusicApi
@@ -35,7 +34,6 @@ public:
 
     /**
      * @brief 调用API的成员函数
-     *
      * @param url 要调用的API的URL，例如："/song/url/v1?id=2058263032, 2057797340&level=exhigh", "http://localhost:3000/activate/init/profile"
      * @return QVariantMap 返回API调用结果
      */

@@ -1,6 +1,7 @@
 #include "index.h"
 
 #include <QRandomGenerator>
+#include <QUrl>
 #include <QtMath>
 
 using namespace QCloudMusicApi;
@@ -25,11 +26,13 @@ QVariantMap Index::cookieToJson(const QString &cookie) {
 }
 
 QString Index::cookieObjToString(const QVariantMap &cookie) {
-    QString string;
-    for(auto i = cookie.begin(); i != cookie.end(); ++i) {
-        string.append(i.key() + "=" + i.value().toString() + "; ");
+    QStringList result;
+    for (auto i = cookie.constBegin(); i != cookie.constEnd(); i++) {
+        result.push_back(
+            QUrl::toPercentEncoding(i.key()) + "=" + QUrl::toPercentEncoding(i.value().toString())
+            );
     }
-    return string;
+    return result.join("; ");
 }
 
 int Index::getRandom(int num) {

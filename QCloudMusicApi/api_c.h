@@ -9,7 +9,6 @@ extern "C" {
 
 /**
  * @brief 通过反射调用API的成员函数。
- *
  * @param memberName 要调用的成员函数的名称。
  * @param value 函数参数的JSON格式字符串。
  * @return 函数调用结果的JSON格式字符串。
