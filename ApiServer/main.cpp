@@ -1,14 +1,27 @@
 ﻿#include <QCoreApplication>
 
 #include "server.h"
+#include "generateconfig.h"
+
+void start() {
+    // 检测是否存在 anonymous_token 文件,没有则生成
+    QFile file(QDir(tmpPath).absoluteFilePath("anonymous_token"));
+    if (!file.exists()) {
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        file.close();
+    }
+    // 启动时更新anonymous_token
+    generateConfig();
+    Server server;
+    server.serveNcmApi({
+        { "checkVersion", true }
+    });
+}
 
 int main(int argc, char *argv[])
 {
     qSetMessagePattern("%{time yyyy-MM-dd hh:mm:ss.zzz} : %{pid} : %{category} : %{type} : %{line} : %{function} : %{message}");
     QCoreApplication a(argc, argv);
-    Server server;
-    server.serveNcmApi({
-
-    });
+    start();
     return a.exec();
 }

@@ -14,12 +14,20 @@
 #include <QNetworkReply>
 #include <QUrlQuery>
 #include <QRegularExpression>
+#include <QStandardPaths>
+#include <QDir>
 
 #include "crypto.h"
-#include "config.h"
 #include "index.h"
 #include "request.h"
 #include "logger.h"
+
+const QString anonymous_token = []() {
+    QString tmpPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    QFile file(QDir(tmpPath).absoluteFilePath("anonymous_token"));
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    return file.readAll();
+}();
 
 const QString iosAppVersion = "9.0.65";
 
@@ -75,7 +83,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         headers["X-Real-IP"] = ip;
         headers["X-Forwarded-For"] = ip;
     }
-    //    headers["X-Real-IP"] = "118.88.88.88";
+    // headers["X-Real-IP"] = "118.88.88.88";
     auto randomBytes = []() {
         QByteArray bytes;
         for(int i = 0; i < 16; ++i) {
@@ -102,7 +110,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             // 游客
             if(!options["cookie"].toMap().contains("MUSIC_A")) {
                 auto cookie = options["cookie"].toMap();
-                cookie["MUSIC_A"] = Config::anonymous_token;
+                cookie["MUSIC_A"] = anonymous_token;
                 options["cookie"] = cookie;
             }
         }
@@ -124,9 +132,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
     if(options["crypto"].toString() == "weapi") {
         headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
-        QRegularExpression csrfTokenRegex("_csrf=([^;]+)");
-        QRegularExpressionMatch match = csrfTokenRegex.match(headers.value("Cookie", "").toString());
-        data["csrf_token"] = match.hasMatch() ? match.captured(1) : "";
+        data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
 
         data = Crypto::weapi(QJsonDocument::fromVariant(data));
         url = url.replace(QRegularExpression("\\w*api"), "weapi");
@@ -185,7 +191,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             proxy.setPort(purl.port(80));
 
         } else {
-            proxy = QNetworkProxy::NoProxy;
+            proxy = QNetworkProxy::DefaultProxy;
             DEBUG << "代理配置无效，不使用代理";
         }
     }

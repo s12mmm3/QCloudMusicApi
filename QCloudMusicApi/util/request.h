@@ -25,7 +25,7 @@ public:
                                 const QVariantMap &urlQuery,
                                 const QVariantMap &headers,
                                 const QByteArray &data,
-                                QNetworkProxy proxy = QNetworkProxy::NoProxy);
+                                QNetworkProxy proxy = QNetworkProxy::DefaultProxy);
 };
 
 }
