@@ -57,7 +57,7 @@ QVariantMap Plugins::songUpload(QVariantMap query)
     const QVariantMap lbs = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
     reply = Request::axios(
         QNetworkAccessManager::PostOperation,
-        "http://" + lbs["upload}"].toList()[0].toString() + "/" + bucket + "/" + objectKey + "?offset=0&complete=true&version=1.0",
+        "http://" + lbs["upload"].toList()[0].toString() + "/" + bucket + "/" + objectKey + "?offset=0&complete=true&version=1.0",
         {},
         {
             { "x-nos-token", tokenRes["body"].toMap()["result"].toMap()["token"] },
