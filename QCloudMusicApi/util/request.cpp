@@ -116,7 +116,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         headers["Cookie"] = Index::cookieObjToString(cookie);
     }
     else {
-        const auto cookie = Index::cookieToJson("__remember_me=true; NMTID=xxx");
+        auto cookie = Index::cookieToJson("__remember_me=true; NMTID=xxx");
         cookie["os"] = cookie.value("os", "ios");
         cookie["appver"] = cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "");
         headers["Cookie"] = Index::cookieObjToString(cookie);
