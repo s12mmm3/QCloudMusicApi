@@ -31,7 +31,7 @@ TabServerTest::TabServerTest(QWidget *parent) :
 
         // QtConcurrent::run
         QVariantMap headers;
-        // headers["Content-Type"] = "application/x-www-form-urlencoded";
+        headers["Content-Type"] = "application/x-www-form-urlencoded";
         QUrlQuery query;
         query.setQuery(QUrl(url).query());
         for(auto i = arg.constBegin(); i != arg.constEnd(); ++i) {

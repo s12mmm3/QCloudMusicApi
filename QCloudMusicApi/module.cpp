@@ -14,6 +14,7 @@
 #include "util/config.h"
 #include "util/request.h"
 #include "util/index.h"
+#include "util/crypto.h"
 #include "module.h"
 #include "plugins.h"
 
@@ -1825,6 +1826,36 @@ QVariantMap Api::djRadio_top(QVariantMap query) {
             _PARAM
         }
         );
+}
+
+// eapi 解析接口
+QVariantMap Api::eapi_decrypt(QVariantMap query) {
+    const auto hexString = query["hexString"].toString();
+    const auto isReq = query["isReq"] != "false";
+    if (hexString.isEmpty()) {
+        return {
+            { "status", 400 },
+            { "body", QVariantMap {
+                         { "code", 400 },
+                         { "message", "hex string is required" },
+                      }
+            }
+        };
+    }
+    // 去除空格
+    auto pureHexString = hexString;
+    pureHexString = pureHexString.replace(QRegularExpression(R"(\s)"), "");
+    return {
+        { "status", 200 },
+        { "body", QVariantMap {
+                     { "code", 200 },
+                     { "data", isReq
+                                  ? QCloudMusicApi::Crypto::eapiReqDecrypt(pureHexString.toUtf8())
+                                    : QCloudMusicApi::Crypto::eapiResDecrypt(pureHexString.toUtf8())
+                     },
+            }
+        }
+    };
 }
 
 // 删除动态

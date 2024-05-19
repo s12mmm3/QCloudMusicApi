@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QRandomGenerator>
 #include <QCryptographicHash>
+#include <QRegularExpression>
 
 extern "C" {
 #include "openssl/err.h"
@@ -71,13 +72,14 @@ QByteArray Crypto::aesEncrypt (const QByteArray &plainText, const QString mode, 
  * @param iv 偏移量
  * @return QString 明文数据，如果解密失败则为空字符串
  */
-QByteArray Crypto::aesDecrypt(const QByteArray &cipherText, const QString mode, const QByteArray &key, const QByteArray &iv)
+QByteArray Crypto::aesDecrypt(const QByteArray &cipherText, const QString mode, const QByteArray &key, const QByteArray &iv, QString format)
 {
     auto cipher = (mode == "cbc") ? EVP_aes_128_cbc : /*ecb*/ EVP_aes_128_ecb;
     EVP_CIPHER_CTX *ctx;
 
     int len;
-    unsigned char *plainText = new unsigned char[cipherText.size()];
+    auto cipherText_p = format == "base64" ? QByteArray::fromBase64(cipherText) : QByteArray::fromHex(cipherText);
+    unsigned char *plainText = new unsigned char[cipherText_p.size()];
     int plaintext_len;
 
     if (! (ctx = EVP_CIPHER_CTX_new ())) ERR_print_errors_fp (stderr);
@@ -87,7 +89,7 @@ QByteArray Crypto::aesDecrypt(const QByteArray &cipherText, const QString mode, 
                                 (unsigned char *)iv.constData()))
         ERR_print_errors_fp (stderr);
 
-    if (1 != EVP_DecryptUpdate (ctx, plainText, &len, (unsigned char *)cipherText.constData(), cipherText.size()))
+    if (1 != EVP_DecryptUpdate (ctx, plainText, &len, (unsigned char *)cipherText_p.constData(), cipherText_p.size()))
         ERR_print_errors_fp (stderr);
     plaintext_len = len;
 
@@ -204,6 +206,30 @@ QVariantMap Crypto::eapi(QString url, QJsonDocument object) {
     return {
         { "params", aesEncrypt(data.toUtf8(), "ecb", eapiKey.toUtf8().data(), QStringLiteral("").toUtf8().data(), "hex") }
     };
+}
+
+QVariantMap Crypto::eapiResDecrypt(const QByteArray &encryptedParams) {
+    // 使用aesDecrypt解密参数
+    auto decryptedData = aesDecrypt(encryptedParams, "ecb", eapiKey.toUtf8(), "", "hex");
+    return QJsonDocument::fromJson(decryptedData).toVariant().toMap();
+}
+
+QVariantMap Crypto::eapiReqDecrypt(const QByteArray &encryptedParams) {
+    // 使用aesDecrypt解密参数
+    auto decryptedData = aesDecrypt(encryptedParams, "ecb", eapiKey.toUtf8(), "", "hex");
+    // 使用正则表达式解析出URL和数据
+    QRegularExpressionMatch match = QRegularExpression("(.*?)-36cd479b6b5-(.*?)-36cd479b6b5-(.*)").match(decryptedData);
+    if (match.hasMatch()) {
+        const auto url = match.captured(1);
+        const auto data = QJsonDocument::fromJson(match.captured(2).toUtf8()).toVariant().toMap();
+        return {
+            { "url", url },
+            { "data", data }
+        };
+    }
+
+    // 如果没有匹配到，返回null
+    return {};
 }
 
 QByteArray Crypto::decrypt(QByteArray cipherBuffer) {

@@ -32,15 +32,15 @@ void TabAes::on_pushButton_encrypt_clicked()
 
 void TabAes::on_pushButton_decrypt_clicked()
 {
-    auto arg = ui->radioButton_base64->isChecked()
-                   ? QByteArray::fromBase64(ui->textEdit_arg->toPlainText().toUtf8())
-                   : QByteArray::fromHex(ui->textEdit_arg->toPlainText().toLower().toUtf8());
+    auto arg = ui->textEdit_arg->toPlainText().toUtf8();
     auto mode = ui->radioButton_ecb->isChecked() ? "ecb" : "cbc";
     auto key = ui->lineEdit_key->text().toUtf8();
     auto iv = ui->lineEdit_iv->text().toUtf8();
-    auto ret = Crypto::aesDecrypt(arg, mode,
+    auto ret = Crypto::aesDecrypt(arg,
+                                  mode,
                                   key,
-                                  iv);
+                                  iv,
+                                  ui->radioButton_base64->isChecked() ? "base64" : "hex");
     ui->textEdit_ret->setText(ret);
 }
 

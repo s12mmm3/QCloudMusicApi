@@ -313,6 +313,9 @@ public:
     // 电台排行榜获取
     Q_INVOKABLE QVariantMap djRadio_top(QVariantMap);
 
+    // eapi 解析接口
+    Q_INVOKABLE QVariantMap eapi_decrypt(QVariantMap);
+
     // 删除动态
     Q_INVOKABLE QVariantMap event_del(QVariantMap);
 
