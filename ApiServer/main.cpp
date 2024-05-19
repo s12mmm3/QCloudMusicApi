@@ -3,6 +3,7 @@
 #include "server.h"
 #include "generateconfig.h"
 
+Server server;
 void start() {
     // 检测是否存在 anonymous_token 文件,没有则生成
     QFile file(QDir(tmpPath).absoluteFilePath("anonymous_token"));
@@ -12,7 +13,6 @@ void start() {
     }
     // 启动时更新anonymous_token
     generateConfig();
-    Server server;
     server.serveNcmApi({
         { "checkVersion", true }
     });

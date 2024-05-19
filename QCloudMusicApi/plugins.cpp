@@ -47,6 +47,8 @@ QVariantMap Plugins::songUpload(QVariantMap query)
             { "proxy", query["proxy"] },
         }
         );
+
+    // 上传
     const auto objectKey = tokenRes["body"].toMap()["result"].toMap()["objectKey"].toString().replace("/", "%2F");
 
     auto reply = Request::axios(
