@@ -95,21 +95,27 @@ void Server::consturctServer(QVariantMap options)
             auto url = request.url();
             INFO.noquote() << "[OK]" << url.path() + (url.hasQuery() ? "?" + url.query() : "");
 
-            QUrlQuery urlQuery;
+            QUrlQuery urlQuery = request.query();
             if (request.method() == QHttpServerRequest::Method::Post) {
                 auto body = request.body();
-                urlQuery.setQuery(body);
+                if (request.value("Content-Type") == "application/json") {
+                    auto bodyMap = QJsonDocument::fromJson(body).toVariant().toMap();
+                    for (auto i = bodyMap.constBegin(); i != bodyMap.constEnd(); i++) {
+                        urlQuery.addQueryItem(i.key(), i.value().toString());
+                    }
+                }
+                else {
+                    urlQuery.setQueryItems(urlQuery.queryItems() + QUrlQuery(body).queryItems());
+                }
             }
-            else {
-                urlQuery = request.query();
-            }
+
             for (auto& i : urlQuery.queryItems()) {
                 arg[i.first] = i.second;
             }
 
             QVariantMap headers;
             for(auto& i: request.headers()) {
-                headers[i.first] = i.second;
+                headers[QUrl::fromPercentEncoding(i.first)] = QUrl::fromPercentEncoding(i.second);
             }
             auto cookie = Index::cookieToJson(headers["Cookie"].toString());
             if (!cookie.isEmpty()) {
