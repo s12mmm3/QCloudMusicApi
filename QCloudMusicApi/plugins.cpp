@@ -19,10 +19,10 @@ Plugins::Plugins(QObject *parent)
 QVariantMap Plugins::songUpload(QVariantMap query)
 {
     QString ext = "mp3";
-    if (query["songFile"].toMap()["name"].toString().toLower().indexOf("flac") > -1) {
+    if (query.value("songFile").toMap()["name"].toString().toLower().indexOf("flac") > -1) {
         ext = "flac";
     }
-    QString filename = query["songFile"].toMap()["name"].toString()
+    QString filename = query.value("songFile").toMap()["name"].toString()
                            .replace("." + ext, "")
                            .replace(QRegularExpression("\\s"), "")
                            .replace(QRegularExpression("\\."), "_");
@@ -57,7 +57,7 @@ QVariantMap Plugins::songUpload(QVariantMap query)
     const QVariantMap lbs = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
     reply = Request::axios(
         QNetworkAccessManager::PostOperation,
-        "http://" + lbs["upload"].toList()[0].toString() + "/" + bucket + "/" + objectKey + "?offset=0&complete=true&version=1.0",
+        "http://" + lbs["upload"].toList().value(0).toString() + "/" + bucket + "/" + objectKey + "?offset=0&complete=true&version=1.0",
         {},
         {
             { "x-nos-token", tokenRes["body"].toMap()["result"].toMap()["token"] },

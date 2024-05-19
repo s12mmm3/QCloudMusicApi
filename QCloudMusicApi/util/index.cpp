@@ -18,9 +18,7 @@ QVariantMap Index::cookieToJson(const QString &cookie) {
     QVariantMap obj;
     for (const QString &i : cookieArr) {
         QStringList arr = i.trimmed().split("=");
-        // 如果子串的个数不等于2，跳过这个元素
-        if (arr.size() != 2) continue;
-        obj.insert(arr[0], arr[1]);
+        obj.insert(arr.value(0), arr.value(1));
     }
     return obj;
 }

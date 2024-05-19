@@ -735,7 +735,7 @@ QVariantMap Api::check_music(QVariantMap query) {
         );
     auto playable = false;
     if(result["body"].toMap()["code"] == 200) {
-        if(result["body"].toMap()["data"].toList()[0].toMap()["code"] == 200) {
+        if(result["body"].toMap()["data"].toList().value(0).toMap()["code"] == 200) {
             playable = true;
         }
     }
@@ -778,10 +778,10 @@ QVariantMap Api::cloud_match(QVariantMap query) {
 // 云盘上传
 QVariantMap Api::cloud(QVariantMap query) {
     QString ext = "mp3";
-    if (query["songFile"].toMap()["name"].toString().toLower().indexOf("flac") > -1) {
+    if (query.value("songFile").toMap()["name"].toString().toLower().indexOf("flac") > -1) {
         ext = "flac";
     }
-    QString filename = query["songFile"].toMap()["name"].toString()
+    QString filename = query.value("songFile").toMap()["name"].toString()
                            .replace("." + ext, "")
                            .replace(QRegularExpression("\\s"), "")
                            .replace(QRegularExpression("\\."), "_");
@@ -3860,19 +3860,19 @@ QVariantMap Api::related_playlist(QVariantMap query) {
                     {
                         "creator", {
                             QVariantMap {
-                                { "userId", result[4].split("/user/home?id=")[1] },
-                                { "nickname", result[5] }
+                                { "userId", result.value(4).split("/user/home?id=").value(1) },
+                                { "nickname", result.value(5) }
                             }
                         }
                     },
                     {
-                        "coverImgUrl", result[1].split("?param=50y50")[0]
+                        "coverImgUrl", result.value(1).split("?param=50y50").value(0)
                     },
                     {
-                        "name", result[3]
+                        "name", result.value(3)
                     },
                     {
-                        "id", result[2].split("/playlist?id=")[1]
+                        "id", result.value(2).split("/playlist?id=").value(1)
                     }
                 }
                 )
