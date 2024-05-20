@@ -96,17 +96,15 @@ void Server::consturctServer(QVariantMap options)
             INFO.noquote() << "[OK]" << url.path() + (url.hasQuery() ? "?" + url.query() : "");
 
             QUrlQuery urlQuery = request.query();
-            if (request.method() == QHttpServerRequest::Method::Post) {
-                auto body = request.body();
-                if (request.value("Content-Type") == "application/json") {
-                    auto bodyMap = QJsonDocument::fromJson(body).toVariant().toMap();
-                    for (auto i = bodyMap.constBegin(); i != bodyMap.constEnd(); i++) {
-                        urlQuery.addQueryItem(i.key(), i.value().toString());
-                    }
+            auto body = request.body();
+            if (request.value("Content-Type") == "application/json") {
+                auto bodyMap = QJsonDocument::fromJson(body).toVariant().toMap();
+                for (auto i = bodyMap.constBegin(); i != bodyMap.constEnd(); i++) {
+                    urlQuery.addQueryItem(i.key(), i.value().toString());
                 }
-                else {
-                    urlQuery.setQueryItems(urlQuery.queryItems() + QUrlQuery(body).queryItems());
-                }
+            }
+            else {
+                urlQuery.setQueryItems(urlQuery.queryItems() + QUrlQuery(body).queryItems());
             }
 
             for (auto& i : urlQuery.queryItems()) {
