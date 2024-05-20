@@ -61,11 +61,25 @@ qDebug() << api.lyric({ { "id", 1408586353 } });
 ```C++
 /**
  * @brief 通过反射调用API的成员函数。
- * @param memberName 调用成员函数的名称
- * @param value 参数的JSON格式字符串
- * @return 调用结果的JSON格式字符串
+ * @param memberName 要调用的成员函数的名称。
+ * @param value 函数参数的JSON格式字符串。
+ * @return 函数调用结果的ID。
  */
 const char* invoke(char* memberName, char* value);
+
+/**
+ * @brief 获取调用结果。
+ * @param key 调用时返回的键。
+ * @return 函数调用结果的JSON格式字符串。
+ */
+QCLOUDMUSICAPI_EXPORT const char *get_result(int key);
+
+/**
+ * @brief 释放指定的结果资源。
+ * @param key 调用时返回的键。
+ */
+QCLOUDMUSICAPI_EXPORT void free_result(int key);
+
 ```
 其他例子可以在```QCloudMusicApi/example```路径下查看
 #### Python调用
