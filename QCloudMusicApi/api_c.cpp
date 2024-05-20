@@ -67,6 +67,7 @@ int storeResult(const std::string &result) {
     int key = ++callCounter;
 
     // Ensure unique key
+    // We don't care about the overflow, as long as it is unique
     while (results.contains(key)) {
         key = ++callCounter;
     }
