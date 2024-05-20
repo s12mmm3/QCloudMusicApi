@@ -17,6 +17,8 @@ std::string currentPath_c;
 QCoreApplication *app = Q_NULLPTR;
 std::string result;
 ApiHelper helper;
+QMap<int, std::string> results; // Global map to store results
+int callCounter = 0;
 QMutex mutex;
 char initialized = 0;
 
@@ -32,6 +34,7 @@ QCLOUDMUSICAPI_EXPORT void freeApi() {
 }
 
 void init() {
+    static QMutex mutex;
     mutex.lock();
     if (initialized) {
         mutex.unlock();
@@ -58,24 +61,51 @@ void init() {
     mutex.unlock();
 }
 
-const char* invoke_p(QVariantMap ret) {
-    // 这里多线程可能会有问题，会同时修改result；还没想好怎么改
-    result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
-    return result.c_str();
+// Store the result in the map and return the key
+int storeResult(const std::string &result) {
+    mutex.lock();
+    int key = ++callCounter;
+
+    // Ensure unique key
+    while (results.contains(key)) {
+        key = ++callCounter;
+    }
+
+    results[key] = result;
+    mutex.unlock();
+    return key;
 }
 
-QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
+int invoke_p(QVariantMap ret) {
+    std::string result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
+    return storeResult(result);
+}
+
+QCLOUDMUSICAPI_EXPORT int invoke(char* memberName, char* value) {
     init();
 
     QVariantMap ret = helper.invoke(memberName, QJsonDocument::fromJson(value).toVariant().toMap());
     return invoke_p(ret);
 }
 
-QCLOUDMUSICAPI_EXPORT const char *invokeUrl(char *url) {
+QCLOUDMUSICAPI_EXPORT int invokeUrl(char *url) {
     init();
 
     QVariantMap ret = helper.invokeUrl(url);
     return invoke_p(ret);
+}
+
+QCLOUDMUSICAPI_EXPORT const char *get_result(int key) {
+    mutex.lock();
+    const char* result = results.contains(key) ? results[key].c_str() : nullptr;
+    mutex.unlock();
+    return result;
+}
+
+QCLOUDMUSICAPI_EXPORT void free_result(int key) {
+    mutex.lock();
+    results.remove(key);
+    mutex.unlock();
 }
 
 QCLOUDMUSICAPI_EXPORT char* memberName(int i) {

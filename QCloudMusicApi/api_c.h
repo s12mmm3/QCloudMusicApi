@@ -11,16 +11,29 @@ extern "C" {
  * @brief 通过反射调用API的成员函数。
  * @param memberName 要调用的成员函数的名称。
  * @param value 函数参数的JSON格式字符串。
- * @return 函数调用结果的JSON格式字符串。
+ * @return 函数调用结果的ID。
  */
-QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value);
+QCLOUDMUSICAPI_EXPORT int invoke(char* memberName, char* value);
 
 /**
  * @brief 通过反射调用API的成员函数。
  * @param url 要调用的API的URL，例如："/song/url/v1?id=2058263032, 2057797340&level=exhigh", "http://localhost:3000/activate/init/profile"
+ * @return 函数调用结果的ID。
+ */
+QCLOUDMUSICAPI_EXPORT int invokeUrl(char* url);
+
+/**
+ * @brief 获取调用结果。
+ * @param key 调用时返回的键。
  * @return 函数调用结果的JSON格式字符串。
  */
-QCLOUDMUSICAPI_EXPORT const char* invokeUrl(char* url);
+QCLOUDMUSICAPI_EXPORT const char *get_result(int key);
+
+/**
+ * @brief 释放指定的结果资源。
+ * @param key 调用时返回的键。
+ */
+QCLOUDMUSICAPI_EXPORT void free_result(int key);
 
 /**
  * @brief 释放资源，结束时调用
