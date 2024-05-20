@@ -9,9 +9,9 @@ def get_library_filename(libname):
     if system == "Windows":
         return f"{libname}.dll"
     elif system == "Linux":
-        return f"lib{libname}.so"
+        return f"{libname}.so"
     elif system == "Darwin":
-        return f"lib{libname}.dylib"
+        return f"{libname}.dylib"
     else:
         raise NotImplementedError(f"Unsupported OS: {system}")
 
