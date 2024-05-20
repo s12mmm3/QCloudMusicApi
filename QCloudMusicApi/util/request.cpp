@@ -22,12 +22,7 @@
 #include "request.h"
 #include "logger.h"
 
-const QString anonymous_token = []() {
-    QString tmpPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-    QFile file(QDir(tmpPath).absoluteFilePath("anonymous_token"));
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    return file.readAll();
-}();
+QString anonymous_token;
 
 const QString iosAppVersion = "9.0.65";
 
@@ -110,7 +105,15 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             // 游客
             if(!options["cookie"].toMap().contains("MUSIC_A")) {
                 auto cookie = options["cookie"].toMap();
-                cookie["MUSIC_A"] = anonymous_token;
+                cookie["MUSIC_A"] = []() -> QString {
+                    if (anonymous_token.isEmpty()) {
+                        QString tmpPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+                        QFile file(QDir(tmpPath).absoluteFilePath("anonymous_token"));
+                        file.open(QIODevice::ReadOnly | QIODevice::Text);
+                        anonymous_token = file.readAll();
+                    }
+                    return anonymous_token;
+                }();
                 options["cookie"] = cookie;
             }
         }
@@ -130,14 +133,14 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         headers["Cookie"] = Index::cookieObjToString(cookie);
     }
 
-    if(options["crypto"].toString() == "weapi") {
+    if(options["crypto"] == "weapi") {
         headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
         data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
 
         data = Crypto::weapi(QJsonDocument::fromVariant(data));
         url = url.replace(QRegularExpression("\\w*api"), "weapi");
     }
-    else if(options["crypto"].toString() == "linuxapi") {
+    else if(options["crypto"] == "linuxapi") {
         data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap {
             { "method", method },
             { "url", url.replace(QRegularExpression("\\w*api"), "api") },
@@ -146,7 +149,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         headers["User-Agent"] ="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
         url = "https://music.163.com/api/linux/forward";
     }
-    else if(options["crypto"].toString() == "eapi") {
+    else if(options["crypto"] == "eapi") {
         const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header {
@@ -234,7 +237,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         }
         answer["cookie"] = cookie;
 
-        if(options["crypto"].toString() == "eapi") {
+        if(options["crypto"] == "eapi") {
             answer["body"] = QJsonDocument::fromJson(Crypto::decrypt(body)).toVariant().toMap();
             if(answer["body"].toMap().isEmpty()) {
                 answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
