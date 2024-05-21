@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QUrlQuery>
 
+#include <thread>
 #include <cstring>
 #include <iostream>
 #include <QMutex>
@@ -15,7 +16,7 @@
 
 std::string currentPath_c;
 QCoreApplication *app = Q_NULLPTR;
-std::string result;
+thread_local std::string result;
 ApiHelper helper;
 QMutex mutex;
 char initialized = 0;
