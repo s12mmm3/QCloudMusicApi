@@ -5,21 +5,16 @@
 #include <QMetaObject>
 #include <QDir>
 #include <QUrlQuery>
-
-#include <thread>
-#include <cstring>
-#include <iostream>
 #include <QMutex>
 
 #include "api_c.h"
 #include "../QCloudMusicApi/apihelper.h"
 
-std::string currentPath_c;
 QCoreApplication *app = Q_NULLPTR;
 thread_local std::string result;
 ApiHelper helper;
 QMutex mutex;
-char initialized = 0;
+bool inited = false;
 
 void freeApp() {
     if (app) {
@@ -33,34 +28,30 @@ QCLOUDMUSICAPI_EXPORT void freeApi() {
 }
 
 void init() {
-    mutex.lock();
-    if (initialized) {
-        mutex.unlock();
+    QMutexLocker locker(&mutex);
+    if (inited) {
         return;
     }
     /*
      * Python调用时，QCoreApplication::libraryPaths只返回python可执行程序的路径，因此需要手动添加API动态库的路径；
      * Qt网络库会在路径下查找插件，用于实现ssl加解密
      */
-    QString currentPath = QDir::currentPath();
-    currentPath_c = currentPath.toStdString();
-    if (!QCoreApplication::libraryPaths().contains(currentPath)) {
-        QCoreApplication::addLibraryPath(currentPath);
+    auto currentPath = QDir::currentPath().toStdString();
+    if (!QCoreApplication::libraryPaths().contains(QString::fromUtf8(currentPath))) {
+        QCoreApplication::addLibraryPath(QString::fromUtf8(currentPath));
     }
 
     // 创建一个QCoreApplication单例，用于支持事件循环QEventLoop
     if (!QCoreApplication::instance()) {
         int argc = 1;
-        char* argv[1] = { (char*)currentPath_c.c_str() };
+        char* argv[1] = { (char*)currentPath.c_str() };
         app = new QCoreApplication(argc, argv);
         // a->deleteLater();
     }
-    initialized = 1;
-    mutex.unlock();
+    inited = true;
 }
 
 const char* invoke_p(QVariantMap ret) {
-    // 这里多线程可能会有问题，会同时修改result；还没想好怎么改
     result = QString::fromUtf8(QJsonDocument::fromVariant(ret["body"].toMap()).toJson(QJsonDocument::Compact)).toStdString();
     return result.c_str();
 }
@@ -79,10 +70,10 @@ QCLOUDMUSICAPI_EXPORT const char *invokeUrl(char *url) {
     return invoke_p(ret);
 }
 
-QCLOUDMUSICAPI_EXPORT char* memberName(int i) {
+QCLOUDMUSICAPI_EXPORT const char* memberName(int index) {
     NeteaseCloudMusicApi api;
-    auto data = api.metaObject()->method(QObject().metaObject()->methodCount() + i).name().data();
-    return data;
+    result = api.metaObject()->method(QObject().metaObject()->methodCount() + index).name().data();
+    return result.c_str();
 }
 
 QCLOUDMUSICAPI_EXPORT int memberCount() {

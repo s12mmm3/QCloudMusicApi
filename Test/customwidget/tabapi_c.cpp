@@ -8,6 +8,7 @@
 
 #include "tabapi_c.h"
 #include "ui_tabapi_c.h"
+#include "../logger.h"
 
 TabApi_c::TabApi_c(QWidget *parent) :
     QWidget(parent),
@@ -18,7 +19,7 @@ TabApi_c::TabApi_c(QWidget *parent) :
     ui->tabCommonUnit->callback = [this](QString member, QString arg) -> QVariantMap {
         QVariantMap ret;
         // 调用动态库的C接口invoke
-        typedef const char* (*Invoke)(const char*, const char*);
+        using Invoke = const char* (*)(const char* memberName, const char* value);
         Invoke invoke = (Invoke)library.resolve("invoke");
         if (invoke) {
             ret = (QJsonDocument::fromJson(invoke(member.toStdString().c_str(), arg.toStdString().c_str())).toVariant().toMap());
@@ -88,6 +89,23 @@ bool TabApi_c::libraryLoad(QString fileName)
         if (result) {
             ui->lineEdit_library_fileName->setText(fileName);
             libarayLoadSucceed();
+
+            // 获取API中成员函数的数量
+            using MemberCount = int (*)();
+            MemberCount memberCount = (MemberCount)library.resolve("memberCount");
+            int count = 0;
+            if (memberCount) {
+                count = memberCount();
+            }
+
+            // 通过索引检索成员的名称
+            using MemberName = char* (*)(int index);
+            MemberName memberName = (MemberName)library.resolve("memberName");
+            if (memberName) {
+                for (int i = 0; i < count; i++) {
+                    DEBUG << i << memberName(i);
+                }
+            }
         }
         else {
             libraryLoadFailed();

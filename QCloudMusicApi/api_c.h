@@ -29,10 +29,10 @@ QCLOUDMUSICAPI_EXPORT void freeApi();
 
 /**
  * @brief 通过索引检索成员的名称。
- * @param i 成员的索引。
+ * @param index 成员的索引。
  * @return 指定索引处成员的名称。
  */
-QCLOUDMUSICAPI_EXPORT char* memberName(int i);
+QCLOUDMUSICAPI_EXPORT const char* memberName(int index);
 
 /**
  * @brief 获取API中成员函数的数量。
