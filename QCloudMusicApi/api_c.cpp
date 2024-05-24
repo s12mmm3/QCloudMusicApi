@@ -37,8 +37,8 @@ void init() {
      * Qt网络库会在路径下查找插件，用于实现ssl加解密
      */
     auto currentPath = QDir::currentPath().toStdString();
-    if (!QCoreApplication::libraryPaths().contains(QString::fromUtf8(currentPath))) {
-        QCoreApplication::addLibraryPath(QString::fromUtf8(currentPath));
+    if (!QCoreApplication::libraryPaths().contains(QString::fromStdString(currentPath))) {
+        QCoreApplication::addLibraryPath(QString::fromStdString(currentPath));
     }
 
     // 创建一个QCoreApplication单例，用于支持事件循环QEventLoop
