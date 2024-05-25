@@ -5594,7 +5594,7 @@ QVariantMap Api::video_url(QVariantMap query) {
 
 // 黑胶时光机
 QVariantMap Api::vip_timemachine(QVariantMap query) {
-    const QVariantMap data {};
+    QVariantMap data {};
     if (query.contains("startTime") && query.contains("endTime")) {
         data["startTime"] = query["startTime"];
         data["endTime"] = query["endTime"];
