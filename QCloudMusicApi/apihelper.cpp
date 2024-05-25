@@ -17,14 +17,14 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
     if(arg.contains("cookie")) {
         //如果传入新的cookie，替换原有的cookie
         if(arg["cookie"].userType() == QMetaType::QVariantMap) {
-            set_cookie(arg["cookie"].toMap());
+            m_cookie = arg["cookie"].toMap();
         }
         else if(arg["cookie"].userType() == QMetaType::QString) {
-            set_cookie(Index::cookieToJson(arg["cookie"].toString()));
+            m_cookie = Index::cookieToJson(arg["cookie"].toString());
         }
     }
     //使用存储的cookie
-    arg["cookie"] = cookie();
+    arg["cookie"] = m_cookie;
 
     // 设置全局代理
     if (!proxy().isEmpty()) {
@@ -36,7 +36,7 @@ void ApiHelper::afterInvoke(QVariantMap& ret)
 {
     auto newCookie = Index::cookieToJson(ret.value("cookie").toString());
     if (!newCookie.isEmpty()) {
-        set_cookie(Index::mergeMap(cookie(), newCookie));
+        m_cookie = Index::mergeMap(m_cookie, newCookie);
     }
     auto token = ret.value("body").toMap()["token"].toString();
     if (!token.isEmpty()) {
@@ -103,5 +103,10 @@ QStringList ApiHelper::memberList()
 
 void ApiHelper::set_cookie(QString cookie)
 {
-    set_cookie(Index::cookieToJson(cookie));
+    m_cookie = Index::cookieToJson(cookie);
+}
+
+QString ApiHelper::cookie()
+{
+    return Index::cookieObjToString(m_cookie);
 }

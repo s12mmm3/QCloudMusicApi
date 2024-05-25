@@ -43,18 +43,29 @@ public:
      * @brief 设置cookie
      * @param cookie 用于API调用的cookie字符串
      */
-    void set_cookie(QString cookie);
+    Q_INVOKABLE void set_cookie(QString cookie);
 
-    DEFINE_VALUE(QVariantMap, cookie, {})
+    /**
+     * @brief 获取cookie
+     * @return QString cookie
+     */
+    Q_INVOKABLE QString cookie();
 
+    /**
+     * @brief 获取API列表
+     * @return QStringList API列表
+     */
+    Q_INVOKABLE static QStringList memberList();
+
+public:
     DEFINE_VALUE(QString, proxy, "")
 
 private:
     void beforeInvoke(QVariantMap& arg);
     void afterInvoke(QVariantMap& ret);
 
-public:
-    Q_INVOKABLE static QStringList memberList();
+private:
+    QVariantMap m_cookie;
 };
 
 #endif // APIHELPER_H

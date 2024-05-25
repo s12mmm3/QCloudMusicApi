@@ -89,3 +89,15 @@ QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy) {
 QCLOUDMUSICAPI_EXPORT void set_cookie(char *cookie) {
     helper.set_cookie(cookie);
 }
+
+QCLOUDMUSICAPI_EXPORT const char* cookie()
+{
+    result = helper.cookie().toStdString();
+    return result.c_str();
+}
+
+QCLOUDMUSICAPI_EXPORT const char* proxy()
+{
+    result = helper.proxy().toStdString();
+    return result.c_str();
+}

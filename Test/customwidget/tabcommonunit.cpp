@@ -18,7 +18,7 @@ TabCommonUnit::TabCommonUnit(QWidget *parent) :
     textEdit_arg = ui->textEdit_arg;
     textEdit_ret = ui->textEdit_ret;
 
-    //将Api中的方法名称取出
+    // 将Api中的方法名称取出
     ui->comboBox_function->addItems(ApiHelper::memberList());
 }
 

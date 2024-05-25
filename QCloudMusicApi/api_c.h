@@ -41,16 +41,28 @@ QCLOUDMUSICAPI_EXPORT const char* memberName(int index);
 QCLOUDMUSICAPI_EXPORT int memberCount();
 
 /**
+ * @brief 设置全局cookie
+ * @param cookie
+ */
+QCLOUDMUSICAPI_EXPORT void set_cookie(char* cookie);
+
+/**
+ * @brief 获取cookie
+ * @return char* cookie
+ */
+QCLOUDMUSICAPI_EXPORT const char* cookie();
+
+/**
  * @brief 设置全局代理
  * @param proxy 代理地址
  */
 QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy);
 
 /**
- * @brief 设置全局cookie
- * @param cookie
+ * @brief 获取代理
+ * @return char* 代理地址
  */
-QCLOUDMUSICAPI_EXPORT void set_cookie(char* cookie);
+QCLOUDMUSICAPI_EXPORT const char* proxy();
 
 #ifdef __cplusplus
 }
