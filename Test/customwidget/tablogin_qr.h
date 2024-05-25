@@ -28,7 +28,10 @@ private:
      */
     QVariantMap invoke(const QString member, const QVariantMap arg);
 
-    QPixmap generateQRCode(QString strUrl, qint32 temp_width, qint32 temp_height, int offset);
+    QImage generateQRCode(QString url, qint32 width = -1, qint32 height = -1, qint32 offset = 0);
+
+public slots:
+    void showQrCode(QString url);
 
 private slots:
     void on_pushButton_login_qr_create_clicked();

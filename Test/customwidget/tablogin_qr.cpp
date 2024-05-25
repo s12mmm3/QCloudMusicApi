@@ -14,31 +14,44 @@ TabLogin_qr::TabLogin_qr(QWidget *parent) :
     ui(new Ui::TabLogin_qr)
 {
     ui->setupUi(this);
+
+    connect(ui->lineEdit_url, &QLineEdit::textChanged, this, &TabLogin_qr::showQrCode);
 }
 
 TabLogin_qr::~TabLogin_qr()
 {
     delete ui;
 }
-QPixmap TabLogin_qr::generateQRCode(QString strUrl, qint32 temp_width, qint32 temp_height, int offset) {
-    QPixmap mainmap;
-    if (strUrl.isEmpty()) {
-        return mainmap;
+
+QImage TabLogin_qr::generateQRCode(QString url, qint32 width, qint32 height, qint32 offset) {
+    QImage image;
+    if (url.isEmpty()) {
+        return image;
     }
     // 生成 QR 码的位图数组
-    QRcode *qrcode = QRcode_encodeString(strUrl.toStdString().c_str(), 2, QRecLevel::QR_ECLEVEL_Q, QRencodeMode::QR_MODE_8, 1);
+    QSharedPointer<QRcode> qrcode(QRcode_encodeString(url.toStdString().c_str(), 2, QRecLevel::QR_ECLEVEL_Q, QRencodeMode::QR_MODE_8, 1));
+
+
     // QR 码的宽度
     qint32 qrcode_width = qrcode->width > 0 ? qrcode->width : 1;
-    // 缩放比例
-    double scale_x = (double)temp_width / (double)qrcode_width;
-    double scale_y = (double)temp_height / (double)qrcode_width;
 
-    QImage mainimg = QImage(temp_width + offset * 2, temp_height + offset * 2, QImage::Format_ARGB32);
-    QPainter painter(&mainimg);
+    qint32 realWidth = width;
+    qint32 realHeight = height;
+    // 缩放比例
+    double scale_x = 1;
+    double scale_y = 1;
+
+    if (realWidth > 0) scale_x = (double)realWidth / (double)qrcode_width;
+    else realWidth = qrcode_width;
+    if (realHeight > 0) scale_y = (double)realHeight / (double)qrcode_width;
+    else realHeight = qrcode_width;
+
+    image = QImage(realWidth + offset * 2, realHeight + offset * 2, QImage::Format_ARGB32);
+    QPainter painter(&image);
     // 设置背景色为白色
     painter.setBrush(QColor(Qt::white));
     painter.setPen(Qt::NoPen);
-    painter.drawRect(offset, offset, temp_width, temp_height);
+    painter.drawRect(offset, offset, realWidth, realHeight);
     // 设置前景色为黑色
     painter.setBrush(QColor(Qt::black));
     // 绘制黑色方块
@@ -51,9 +64,13 @@ QPixmap TabLogin_qr::generateQRCode(QString strUrl, qint32 temp_width, qint32 te
             }
         }
     }
-    mainmap = QPixmap::fromImage(mainimg);
-    delete qrcode;
-    return mainmap;
+    return image;
+}
+
+void TabLogin_qr::showQrCode(QString url)
+{
+    int size = qMin(ui->label->width(), ui->label->height());
+    ui->label->setPixmap(QPixmap::fromImage(generateQRCode(url, size, size)));
 }
 
 QVariantMap TabLogin_qr::invoke(const QString member, const QVariantMap arg) {
@@ -69,8 +86,8 @@ void TabLogin_qr::on_pushButton_login_qr_create_clicked()
                      { "key", unikey }
                  });
     QString qrurl = ret["body"].toMap()["data"].toMap()["qrurl"].toString();
-    int size = qMin(ui->label->width(), ui->label->height());
-    ui->label->setPixmap(generateQRCode(qrurl, size, size, 0));
+
+    ui->lineEdit_url->setText(qrurl);
 }
 
 
