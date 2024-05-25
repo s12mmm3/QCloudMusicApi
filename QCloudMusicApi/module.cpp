@@ -5378,6 +5378,63 @@ QVariantMap Api::user_update(QVariantMap query) {
         );
 }
 
+// 验证接口-二维码生成
+QVariantMap Api::verify_getQr(QVariantMap query) {
+    const QVariantMap data {
+        { "verifyConfigId", query["vid"] },
+        { "verifyType", query["type"] },
+        { "token", query["token"] },
+        { "params", QJsonDocument::fromVariant(
+                       QVariantMap {
+                            { "event_id", query["evid"] },
+                            { "sign", query["sign"] },
+                   }).toJson()
+        },
+        { "size", 150 },
+        };
+    const auto res = request(
+        POST,
+        "https://music.163.com/weapi/frontrisk/verify/qrcodestatus",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+    const QString result = "https://st.music.163.com/encrypt-pages?qrCode="
+                           + res["body"].toMap()["data"].toMap()["qrCode"].toString()
+                           + "&verifyToken=" + query["token"].toString() + "&verifyId=" + query["vid"].toString() + "&verifyType="
+                           + query["type"].toString()
+                           + "&params=" + QJsonDocument::fromVariant(
+                                              QVariantMap {
+                                                          { "event_id", query["evid"] },
+                                                          { "sign", query["sign"] },
+                                                          }).toJson();
+    return {
+        { "status", 200 },
+        { "body", QVariantMap {
+                     { "qrCode", res["body"].toMap()["data"].toMap()["qrCode"] },
+                     { "qrurl", result },
+                 } },
+    };
+}
+
+// 验证接口-二维码检测
+QVariantMap Api::verify_qrcodestatus(QVariantMap query) {
+    const QVariantMap data {
+        { "qrCode", query["qr"] },
+    };
+    return request(
+        POST,
+        "https://music.163.com/weapi/frontrisk/verify/qrcodestatus",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+    );
+}
+
 // 视频分类列表
 QVariantMap Api::video_category_list(QVariantMap query) {
     const QVariantMap data {
@@ -5527,6 +5584,26 @@ QVariantMap Api::video_url(QVariantMap query) {
     return request(
         POST,
         "https://music.163.com/weapi/cloudvideo/playurl",
+        data,
+        {
+            { "crypto", "weapi" },
+            _PARAM
+        }
+        );
+}
+
+// 黑胶时光机
+QVariantMap Api::vip_timemachine(QVariantMap query) {
+    const QVariantMap data {};
+    if (query.contains("startTime") && query.contains("endTime")) {
+        data["startTime"] = query["startTime"];
+        data["endTime"] = query["endTime"];
+        data["type"] = 1;
+        data["limit"] = query.value("limit", 60);
+    }
+    return request(
+        POST,
+        "https://music.163.com/weapi/vipmusic/newrecord/weekflow",
         data,
         {
             { "crypto", "weapi" },

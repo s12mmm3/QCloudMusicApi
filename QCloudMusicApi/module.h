@@ -883,6 +883,12 @@ public:
     // 编辑用户信息
     Q_INVOKABLE QVariantMap user_update(QVariantMap);
 
+    // 验证接口-二维码生成
+    Q_INVOKABLE QVariantMap verify_getQr(QVariantMap);
+
+    // 验证接口-二维码检测
+    Q_INVOKABLE QVariantMap verify_qrcodestatus(QVariantMap);
+
     // 视频分类列表
     Q_INVOKABLE QVariantMap video_category_list(QVariantMap);
 
@@ -909,6 +915,9 @@ public:
 
     // 视频链接
     Q_INVOKABLE QVariantMap video_url(QVariantMap);
+
+    // 黑胶时光机
+    Q_INVOKABLE QVariantMap vip_timemachine(QVariantMap);
 
     // 播客删除
     Q_INVOKABLE QVariantMap voice_delete(QVariantMap);
