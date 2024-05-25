@@ -11,6 +11,7 @@
 #include "../QCloudMusicApi/apihelper.h"
 
 QCoreApplication *app = Q_NULLPTR;
+std::string currentPath;
 thread_local std::string result;
 ApiHelper helper;
 QMutex mutex;
@@ -36,7 +37,7 @@ void init() {
      * Python调用时，QCoreApplication::libraryPaths只返回python可执行程序的路径，因此需要手动添加API动态库的路径；
      * Qt网络库会在路径下查找插件，用于实现ssl加解密
      */
-    auto currentPath = QDir::currentPath().toStdString();
+    currentPath = QDir::currentPath().toStdString();
     if (!QCoreApplication::libraryPaths().contains(QString::fromStdString(currentPath))) {
         QCoreApplication::addLibraryPath(QString::fromStdString(currentPath));
     }
@@ -44,7 +45,7 @@ void init() {
     // 创建一个QCoreApplication单例，用于支持事件循环QEventLoop
     if (!QCoreApplication::instance()) {
         int argc = 1;
-        char* argv[1] = { (char*)currentPath.c_str() };
+        char* argv[1] { (char*)currentPath.c_str() };
         app = new QCoreApplication(argc, argv);
         // a->deleteLater();
     }
