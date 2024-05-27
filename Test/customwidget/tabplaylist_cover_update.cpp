@@ -43,7 +43,7 @@ void TabPlaylist_cover_update::on_pushButton_send_clicked()
     file.open(QFile::ReadOnly);
     auto data = file.readAll();
 
-    auto arg = QVariantMap {
+    QVariantMap arg {
         { "id", ui->lineEdit_id->text() },
         { "imgSize", imgSize },
         { "imgFile", QVariantMap {
@@ -52,7 +52,7 @@ void TabPlaylist_cover_update::on_pushButton_send_clicked()
                        }
         }
     };
-    QVariantMap ret = ServiceLocator::helper().invoke("playlist_cover_update", arg);
+    auto ret = ServiceLocator::helper().invoke("playlist_cover_update", arg);
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
 }
 
