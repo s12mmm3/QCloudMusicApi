@@ -7,3 +7,6 @@
 [submodule "QCloudMusicApi/quazip"]
 	path = QCloudMusicApi/quazip
 	url = https://github.com/stachenov/quazip.git
+[submodule "QCloudMusicApi/zlib"]
+	path = QCloudMusicApi/zlib
+	url = https://github.com/madler/zlib.git

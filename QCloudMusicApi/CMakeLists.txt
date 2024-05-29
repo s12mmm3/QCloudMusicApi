@@ -26,6 +26,10 @@ if(NOT OPENSSL_FOUND)
 endif()
 
 set (HAVE_OPENSSL 1)
+
+set(ZLIB_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/zlib")
+list(APPEND CMAKE_PREFIX_PATH "${ZLIB_ROOT}")
+
 include_directories (${OPENSSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/quazip/quazip)
 
 set (QUAZIP_INSTALL OFF)
