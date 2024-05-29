@@ -4,3 +4,6 @@
 [submodule "Test/libqrencode"]
 	path = Test/libqrencode
 	url = https://github.com/fukuchi/libqrencode.git
+[submodule "QCloudMusicApi/quazip"]
+	path = QCloudMusicApi/quazip
+	url = https://github.com/stachenov/quazip.git
