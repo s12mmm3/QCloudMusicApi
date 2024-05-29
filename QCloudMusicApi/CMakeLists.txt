@@ -27,8 +27,24 @@ endif()
 
 set (HAVE_OPENSSL 1)
 
-set(ZLIB_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/zlib")
-list(APPEND CMAKE_PREFIX_PATH "${ZLIB_ROOT}")
+include(ExternalProject)
+
+# Add the zlib project
+ExternalProject_Add(
+    zlib
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/zlib
+    BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/zlib/lib/libz.a
+)
+
+# Set paths to zlib include and library directories
+set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib)
+set(ZLIB_LIBRARIES ${CMAKE_BINARY_DIR}/zlib/lib/libz.a)
+
+# Cache these variables so they are used by the find_package calls
+set(ZLIB_FOUND TRUE CACHE BOOL "zlib found" FORCE)
+set(ZLIB_INCLUDE_DIRS ${ZLIB_INCLUDE_DIR} CACHE STRING "zlib include directories" FORCE)
+set(ZLIB_LIBRARY ${ZLIB_LIBRARIES} CACHE STRING "zlib library" FORCE)
 
 include_directories (${OPENSSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/quazip/quazip)
 
@@ -38,6 +54,8 @@ add_subdirectory(
     ${CMAKE_CURRENT_SOURCE_DIR}/quazip
     ${CMAKE_CURRENT_BINARY_DIR}/quazip
 )
+
+add_dependencies(QuaZip zlib)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
