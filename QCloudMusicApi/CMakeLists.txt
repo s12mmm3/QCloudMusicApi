@@ -29,37 +29,11 @@ set (HAVE_OPENSSL 1)
 
 include(ExternalProject)
 
-# Hot patch zlib
-set(FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/zlib/gzguts.h")
-set(LINE_TO_ADD "#include <unistd.h>")
-
-file(READ "${FILE_PATH}" FILE_CONTENTS)
-
-# Split the first line
-string(FIND "${FILE_CONTENTS}" "\n" NEWLINE_POS)
-
-# Check if the first line matches the line to add
-if(NOT NEWLINE_POS EQUAL -1)
-    string(SUBSTRING "${FILE_CONTENTS}" 0 ${NEWLINE_POS} FIRST_LINE)
-
-    if(NOT FIRST_LINE STREQUAL "${LINE_TO_ADD}")
-        set(MODIFIED_CONTENTS "${LINE_TO_ADD}\n${FILE_CONTENTS}")
-        file(WRITE "${FILE_PATH}" "${MODIFIED_CONTENTS}")
-    endif()
-else()
-    set(MODIFIED_CONTENTS "${LINE_TO_ADD}\n${FILE_CONTENTS}")
-    file(WRITE "${FILE_PATH}" "${MODIFIED_CONTENTS}")
-endif()
-
-if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h.included)
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h.included)
-endif()
-
 # Add the zlib project
 ExternalProject_Add(
     zlib
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/zlib -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DRENAME_ZCONF=OFF
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/zlib -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/zlib/lib/libz.a
 )
 
