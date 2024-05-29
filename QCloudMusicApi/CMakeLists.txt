@@ -38,7 +38,9 @@ ExternalProject_Add(
 )
 
 if (WIN32)
+    message(STATUS "Windows")
     if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h)
+        message(STATUS "Copy zconf.h")
         file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h.included DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h)
     endif()
 endif()
