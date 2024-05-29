@@ -16,6 +16,7 @@
 #include <QUrlQuery>
 #include <QNetworkReply>
 #include <QEventLoop>
+#include <math.h>
 #include "util/logger.h"
 
 #include <algorithm>
@@ -3822,8 +3823,8 @@ QByteArray createZipFromByteArray(QByteArray data, QString zip_filename)
 }
 
 quint32 generateRandomNumber(int length) {
-    int lowerBound = qPow(10, length - 1);
-    int upperBound = qPow(10, length) - 1;
+    int lowerBound = std::pow(10, length - 1);
+    int upperBound = std::pow(10, length) - 1;
 
     return QRandomGenerator::global()->bounded(lowerBound, upperBound + 1);
 }
