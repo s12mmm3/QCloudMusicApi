@@ -75,7 +75,7 @@ jobs:
         shell: cmd
         run: |
           cmake -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_INSTALL_PREFIX=${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
-          ls QCloudMusicApi/zlib
+          ls
       # CMake Install
       - name: CMake Install
         env:
@@ -84,7 +84,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           cmake --build ${{ env.BUILD_PATH }} --target install --config ${{ env.BUILD_TYPE }} -j
-          ls QCloudMusicApi/zlib
+          ls
       # 拷贝依赖 
       - name: Copy Dependency
         id: copyDependency
