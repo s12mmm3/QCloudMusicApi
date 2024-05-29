@@ -37,6 +37,12 @@ ExternalProject_Add(
     BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/zlib/lib/libz.a
 )
 
+if (WIN32)
+    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h)
+        file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h.included DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h)
+    endif()
+endif()
+
 # Set paths to zlib include and library directories
 set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib)
 set(ZLIB_LIBRARIES ${CMAKE_BINARY_DIR}/zlib/lib/libz.a)
