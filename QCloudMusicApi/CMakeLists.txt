@@ -30,11 +30,7 @@ include_directories (${OPENSSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/quazip/q
 
 set (QUAZIP_INSTALL OFF)
 set (QUAZIP_USE_QT_ZLIB OFF)
-add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/quazip ${CMAKE_CURRENT_BINARY_DIR}/quazip EXCLUDE_FROM_ALL)
-
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/quazip/CMakeLists.txt")
-    add_definitions(-DWITH_QUAZIP)
-endif()
+add_subdirectory (quazip)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)

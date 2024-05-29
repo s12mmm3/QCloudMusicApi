@@ -11,10 +11,8 @@
 #include <QHttpMultiPart>
 #include <QHttpPart>
 #include <QBuffer>
-#ifdef WITH_QUAZIP
 #include <quazip.h>
 #include <quazipfile.h>
-#endif
 #include <QUrlQuery>
 #include <QNetworkReply>
 #include <QEventLoop>
@@ -3801,7 +3799,6 @@ QVariantMap Api::scrobble(QVariantMap query) {
         );
 }
 
-#ifdef WITH_QUAZIP
 QByteArray createZipFromByteArray(QByteArray data, QString zip_filename)
 {
     QByteArray zipData;
@@ -3833,10 +3830,6 @@ quint32 generateRandomNumber(int length) {
 }
 
 // 听歌打卡PC
-// 需要的参数
-// actions: [ { ... }, { ... } ]
-// 每一个map包含的参数有
-// 
 QVariantMap Api::scrobble_pc(QVariantMap query) {
     QByteArray data = "";
 
@@ -3976,7 +3969,6 @@ QVariantMap Api::scrobble_pc(QVariantMap query) {
 
     return answer;
 }
-#endif
 
 // 默认搜索关键词
 QVariantMap Api::search_default(QVariantMap query) {
