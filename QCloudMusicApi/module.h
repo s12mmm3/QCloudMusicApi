@@ -643,6 +643,9 @@ public:
     // 听歌打卡
     Q_INVOKABLE QVariantMap scrobble(QVariantMap);
 
+    // PC听歌打卡
+    Q_INVOKABLE QVariantMap scrobble_pc(QVariantMap);
+
     // 默认搜索关键词
     Q_INVOKABLE QVariantMap search_default(QVariantMap);
 

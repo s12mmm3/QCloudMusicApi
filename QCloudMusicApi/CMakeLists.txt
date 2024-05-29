@@ -26,7 +26,11 @@ if(NOT OPENSSL_FOUND)
 endif()
 
 set (HAVE_OPENSSL 1)
-include_directories (${OPENSSL_INCLUDE_DIR})
+include_directories (${OPENSSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/quazip/quazip)
+
+set (QUAZIP_INSTALL OFF)
+set (QUAZIP_USE_QT_ZLIB OFF)
+add_subdirectory (quazip)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
@@ -39,7 +43,7 @@ add_library(${PROJECT_NAME}
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
-target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} QuaZip)
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     QCLOUDMUSICAPI_LIBRARY

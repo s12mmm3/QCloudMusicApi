@@ -8,6 +8,15 @@
 #include <QRegularExpression>
 #include <QRandomGenerator>
 #include <QCryptographicHash>
+#include <QHttpMultiPart>
+#include <QHttpPart>
+#include <QBuffer>
+#include <quazip.h>
+#include <quazipfile.h>
+#include <QUrlQuery>
+#include <QNetworkReply>
+#include <QEventLoop>
+#include "util/logger.h"
 
 #include <algorithm>
 
@@ -3787,6 +3796,177 @@ QVariantMap Api::scrobble(QVariantMap query) {
             _WEAPI
         }
         );
+}
+
+QByteArray createZipFromByteArray(QByteArray data, QString zip_filename)
+{
+    QByteArray zipData;
+    QBuffer zipBuffer(&zipData);
+    zipBuffer.open(QIODevice::WriteOnly);
+
+    QuaZip zip(&zipBuffer);
+    zip.open(QuaZip::mdCreate);
+
+    QuaZipFile zipFile(&zip);
+    QuaZipNewInfo newInfo(zip_filename);
+    newInfo.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ReadGroup | QFileDevice::ReadOther);
+
+    zipFile.open(QIODevice::WriteOnly, newInfo);
+    zipFile.write(data);
+    zipFile.close();
+
+    zip.close();
+    zipBuffer.close();
+
+    return zipData;
+}
+
+quint32 generateRandomNumber(int length) {
+    int lowerBound = qPow(10, length - 1);
+    int upperBound = qPow(10, length) - 1;
+
+    return QRandomGenerator::global()->bounded(lowerBound, upperBound + 1);
+}
+
+// 听歌打卡PC
+QVariantMap Api::scrobble_pc(QVariantMap query) {
+    QByteArray data = "";
+
+    QVariantList actions = query["actions"].toList();
+
+    for (auto &action: actions) {
+        QVariantMap actionMap = action.toMap();
+        
+        auto timestamp = actionMap["timestamp"].toLongLong();  // seconds
+        data.append(QString::number(timestamp).toUtf8());
+        data.append('\x01');
+
+        data.append(actionMap["action"].toString().toUtf8());
+        data.append('\x01');
+
+        auto playedTime = actionMap["time"].toInt();  // seconds
+        auto startlogtime = (timestamp - playedTime) * 1000 - generateRandomNumber(3);  // milliseconds
+        auto bitrate = actionMap.value("bitrate", 0.0).toDouble();
+
+        auto jsonPayload = QVariantMap {
+            { "type", "song" },
+            { "id", actionMap["id"] },
+            { "artistid", actionMap["artistid"] },
+            { "time", playedTime },
+            { "download", 0 },
+            { "end", "playend" },
+            { "source", "list" },
+            { "network", 1 },
+            { "bitrate", bitrate },
+            { "startlogtime", startlogtime },
+            { "status", "back" },
+            { "fee", actionMap.value("fee", 0).toInt() },
+            { "wifi", 1 },
+            { "play_mode", "random" },
+            { "mspm", actionMap["mspm"] },
+            { "alg", "" },
+            { "sourceId", actionMap["sourceId"] },
+            { "seq", actionMap["seq"] },
+            { "sessionid", actionMap["sessionid"] }
+        };
+        data.append(QJsonDocument::fromVariant(jsonPayload).toJson(QJsonDocument::Compact));
+
+        data.append("\n\n");
+    }
+
+    QString random_string = QString::number(generateRandomNumber(10));
+    QString zip_filename = random_string + "log.zip";
+
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+
+    QString formattedDateTime = currentDateTime.toString("yyyy-MM-dd HH:mm:ss");
+    QString log_filename = random_string + "_" + formattedDateTime + ".log";
+
+    QByteArray zipData = createZipFromByteArray(data, log_filename);
+
+    QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+    QHttpPart filePart;
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"attach\"; filename=\"" + zip_filename + "\""));
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/zip"));
+
+    QBuffer* buffer = new QBuffer;
+    buffer->setData(zipData);
+    buffer->open(QIODevice::ReadOnly);
+    filePart.setBodyDevice(buffer);
+    buffer->setParent(multiPart);
+
+    multiPart->append(filePart);
+
+    QVariantMap cookie = query["cookie"].toMap();
+
+    QVariantMap headers {
+        { "User-Agent", QCloudMusicApi::Request::chooseUserAgent("pc") },
+        { "os", "osx" },
+        { "appver", "2.3.19" },
+        { "Cookie", QCloudMusicApi::Index::cookieObjToString(cookie) }
+    };
+
+    QVariantMap params = {
+        { "MUSIC_U", cookie["MUSIC_U"] }
+    };
+
+    QString url = "https://music.163.com/api/feedback/client/log";
+    QUrl qurl(url);
+    QUrlQuery urlQuery;
+    urlQuery.setQuery(QUrl(url).query());
+    for(auto i = params.constBegin(); i != params.constEnd(); ++i) {
+        urlQuery.addQueryItem(i.key(), i.value().toString());
+    }
+    qurl.setQuery(urlQuery);
+
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    QNetworkRequest request;
+
+    for (auto i = headers.constBegin(); i != headers.constEnd(); i++) {
+        request.setRawHeader(i.key().toUtf8(), i.value().toByteArray());
+    }
+
+    request.setUrl(qurl);
+
+    QNetworkReply* reply = manager->post(request, multiPart);
+    QEventLoop eventLoop;
+    QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
+    eventLoop.exec();
+
+    QVariantMap answer {
+        { "status", 500 },
+        { "body", {} },
+        { "cookie", {} }
+    };
+
+    if(reply->error() != QNetworkReply::NoError) { // http请求出错，进行错误处理
+        answer["body"] = QVariantMap {
+            { "code", 502 },
+            { "msg", reply->errorString() }
+        };
+        answer["status"] = 502;
+    }
+    else {
+        // 打印响应头
+        qCDebug(QCloudMusicApi::ApiLogger).noquote() << reply->rawHeaderPairs();
+
+        // 读取响应内容
+        auto body = reply->readAll();
+        qCDebug(QCloudMusicApi::ApiLogger).noquote() << "body" << body;
+
+        answer["body"] = answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+        answer["status"] = answer["body"].toMap().value("code", reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
+        if(QList<int> { 201, 302, 400, 502, 800, 801, 802, 803 }.indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
+            // 特殊状态码
+            answer["status"] = 200;
+        }
+
+        answer["status"] = 100 < answer["status"].toInt() && answer["status"].toInt() < 600
+                               ? answer["status"]
+                               : 400;
+    }
+
+    return answer;
 }
 
 // 默认搜索关键词
