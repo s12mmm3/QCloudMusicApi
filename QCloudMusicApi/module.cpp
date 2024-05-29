@@ -3830,6 +3830,15 @@ quint32 generateRandomNumber(int length) {
 }
 
 // 听歌打卡PC
+// 需要的参数
+// query的格式： { "actions": [ { ... }, { ... } ] }
+// actions里面的每一个map包含的参数有
+// id: 歌曲的id
+// artistid: 歌手id
+// sourceId: 歌单id
+// mspm: 不清楚是什么，可能每个人不同，也可能是随机数，可以用抓包 `/api/feedback/client/log` 得到，不填看起来也没什么问题
+// seq: 这一个操作的顺序，一个整数，随便是多少；不同次之间最好保持递增的关系
+// sessionid: 一个整数，随便是多少；不同次之间最好保持相同
 QVariantMap Api::scrobble_pc(QVariantMap query) {
     QByteArray data = "";
 
