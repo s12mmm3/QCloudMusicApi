@@ -58,10 +58,12 @@ include_directories (${OPENSSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/quazip/q
 
 set (QUAZIP_INSTALL OFF)
 set (QUAZIP_USE_QT_ZLIB OFF)
+set (BUILD_SHARED_LIBS OFF)
 add_subdirectory(
     ${CMAKE_CURRENT_SOURCE_DIR}/quazip
     ${CMAKE_CURRENT_BINARY_DIR}/quazip
 )
+set (BUILD_SHARED_LIBS ON)
 
 add_dependencies(QuaZip zlib)
 
