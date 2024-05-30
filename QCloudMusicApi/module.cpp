@@ -3833,6 +3833,8 @@ quint32 generateRandomNumber(int length) {
 // 需要的参数
 // query的格式： { "actions": [ { ... }, { ... } ] }
 // actions里面的每一个map包含的参数有
+// timestamp: 操作的时间，就是歌曲播放完成的时间
+// time: 歌曲的长度，单位是秒，整数类型
 // id: 歌曲的id
 // artistid: 歌手id
 // sourceId: 歌单id
@@ -3851,7 +3853,7 @@ QVariantMap Api::scrobble_pc(QVariantMap query) {
         data.append(QString::number(timestamp).toUtf8());
         data.append('\x01');
 
-        data.append(actionMap["action"].toString().toUtf8());
+        data.append("play");
         data.append('\x01');
 
         auto playedTime = actionMap["time"].toInt();  // seconds
