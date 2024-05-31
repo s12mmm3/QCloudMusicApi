@@ -29,25 +29,30 @@ set (HAVE_OPENSSL 1)
 
 include(ExternalProject)
 
+if (WIN32)
+    string(TOLOWER ${CMAKE_BUILD_TYPE} build_type_lower)
+    if(build_type_lower STREQUAL "debug")
+        set(ZLIB_NAME "zlibstaticd.lib")
+    else()
+        set(ZLIB_NAME "zlibstatic.lib")
+    endif()
+    set(ZLIB_LIB_PATH ${CMAKE_BINARY_DIR}/zlib/lib/${ZLIB_NAME})
+else()
+    set(ZLIB_LIB_PATH ${CMAKE_BINARY_DIR}/zlib/lib/libz.a)
+endif()
+
 # Add the zlib project
 ExternalProject_Add(
     zlib
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/zlib -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/zlib/lib/libz.a
+    BUILD_BYPRODUCTS ${ZLIB_LIB_PATH}
 )
 
-if (WIN32)
-    message(STATUS "Windows")
-    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h)
-        message(STATUS "Copy zconf.h")
-        file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h.included DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zconf.h)
-    endif()
-endif()
-
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/zlib/include)
 # Set paths to zlib include and library directories
-set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib)
-set(ZLIB_LIBRARIES ${CMAKE_BINARY_DIR}/zlib/lib/libz.a)
+set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib ${CMAKE_BINARY_DIR}/zlib/include)
+set(ZLIB_LIBRARIES ${ZLIB_LIB_PATH})
 
 # Cache these variables so they are used by the find_package calls
 set(ZLIB_FOUND TRUE CACHE BOOL "zlib found" FORCE)
