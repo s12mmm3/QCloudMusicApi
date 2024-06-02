@@ -144,7 +144,6 @@ bool ApiHelper::unloadPlugin(const QString &fileName)
         auto pluginImpl = m_pluginImpls[i];
         if (pluginImpl->loader->fileName() == fileName) {
             m_pluginImpls.removeAt(i);
-            delete pluginImpl->plugin;
             pluginImpl->loader->deleteLater();
             result = pluginImpl->loader->unload();
             if (!result) {

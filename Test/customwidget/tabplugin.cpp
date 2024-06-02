@@ -50,7 +50,7 @@ void TabPlugin::libraryUnloadFailed()
 
 void TabPlugin::on_pushButton_unload_clicked()
 {
-    libraryUnload("");
+    libraryUnload(ui->lineEdit_library_fileName->text());
 }
 
 
