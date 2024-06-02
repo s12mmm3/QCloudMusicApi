@@ -79,19 +79,6 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
     return ret;
 }
 
-QVariantMap ApiHelper::invoke(QVariantMap (NeteaseCloudMusicApi::*member)(QVariantMap), QVariantMap arg)
-{
-    beforeInvoke(arg);
-
-    // auto bind = std::bind(member, &api, arg);
-    // QVariantMap ret = bind();
-    QVariantMap ret = (this->*member)(arg);
-
-    afterInvoke(ret);
-
-    return ret;
-}
-
 QVariantMap ApiHelper::invokeUrl(QString url)
 {
     QUrl qurl(url);
