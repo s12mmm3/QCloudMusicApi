@@ -66,12 +66,7 @@ void TabApi_c::libraryUnloadFailed()
 
 void TabApi_c::on_pushButton_unload_clicked()
 {
-    if (library.unload()) {
-        libarayUnloadSucceed();
-    }
-    else {
-        libraryUnloadFailed();
-    }
+    libraryUnload("");
 }
 
 
@@ -111,6 +106,20 @@ bool TabApi_c::libraryLoad(QString fileName)
         else {
             libraryLoadFailed();
         }
+    }
+    return result;
+}
+
+bool TabApi_c::libraryUnload(QString fileName)
+{
+    bool result = false;
+    Q_UNUSED(fileName)
+    if (library.unload()) {
+        libarayUnloadSucceed();
+        result = true;
+    }
+    else {
+        libraryUnloadFailed();
     }
     return result;
 }

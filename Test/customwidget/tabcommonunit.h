@@ -30,6 +30,9 @@ public:
     QTextEdit *textEdit_arg = Q_NULLPTR;
     QTextEdit *textEdit_ret = Q_NULLPTR;
 
+    // 设置API列表
+    void setFunctions(const QStringList &functions);
+
 private slots:
     void on_pushButton_send_clicked();
 
@@ -38,9 +41,6 @@ private slots:
     void on_checkBox_stateChanged(int arg1);
 
     void update(QVariantMap ret);
-
-    // 设置API列表
-    void setFunctions(const QStringList &functions);
 
 private:
     Ui::TabCommonUnit *ui;

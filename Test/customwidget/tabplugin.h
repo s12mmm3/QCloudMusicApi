@@ -1,23 +1,24 @@
-#ifndef TABAPI_C_H
-#define TABAPI_C_H
+#ifndef TABPLUGIN_H
+#define TABPLUGIN_H
 
 #include <QWidget>
-#include <QLibrary>
+
+#include "../../QCloudMusicApi/apihelper.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class TabApi_c;
+class TabPlugin;
 }
 QT_END_NAMESPACE
 
-// Api动态库调用C接口测试
-class TabApi_c : public QWidget
+// 插件测试
+class TabPlugin : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TabApi_c(QWidget *parent = nullptr);
-    ~TabApi_c();
+    explicit TabPlugin(QWidget *parent = nullptr);
+    ~TabPlugin();
 
 private slots:
     void on_pushButton_select_clicked();
@@ -37,8 +38,8 @@ private:
     void libraryUnloadFailed();
 
 private:
-    Ui::TabApi_c *ui;
-    QLibrary library;
+    Ui::TabPlugin *ui;
+    ApiHelper helper;
 };
 
-#endif // TABAPI_C_H
+#endif // TABPLUGIN_H

@@ -111,6 +111,14 @@ QStringList ApiHelper::memberList()
 
 bool ApiHelper::loadPlugin(const QString &fileName)
 {
+    // 加载过的插件不再重复加载
+    for (auto i = 0; i < m_pluginImpls.size(); i++) {
+        auto pluginImpl = m_pluginImpls[i];
+        if (pluginImpl->loader->fileName() == fileName) {
+            return true;
+        }
+    }
+
     ApiPluginImpl* pluginImpl = new ApiPluginImpl();
     QPluginLoader *loader = new QPluginLoader(this);
     loader->setFileName(fileName);
@@ -134,7 +142,8 @@ bool ApiHelper::unloadPlugin(const QString &fileName)
     for (auto i = 0; i < m_pluginImpls.size(); i++) {
         auto pluginImpl = m_pluginImpls[i];
         if (pluginImpl->loader->fileName() == fileName) {
-            m_pluginImpls.remove(i);
+            m_pluginImpls.removeAt(i);
+            delete pluginImpl->plugin;
             pluginImpl->loader->deleteLater();
             return pluginImpl->loader->unload();
         }
