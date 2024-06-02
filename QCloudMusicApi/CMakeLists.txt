@@ -27,9 +27,8 @@ endif()
 
 set (HAVE_OPENSSL 1)
 
-include(ExternalProject)
-
 if (WIN32)
+    include(ExternalProject)
     string(TOLOWER ${CMAKE_BUILD_TYPE} build_type_lower)
     if(build_type_lower STREQUAL "debug")
         set(ZLIB_NAME "zlibstaticd.lib")
@@ -37,27 +36,27 @@ if (WIN32)
         set(ZLIB_NAME "zlibstatic.lib")
     endif()
     set(ZLIB_LIB_PATH ${CMAKE_BINARY_DIR}/zlib/lib/${ZLIB_NAME})
-else()
-    set(ZLIB_LIB_PATH ${CMAKE_BINARY_DIR}/zlib/lib/libz.a)
+
+    # Add the zlib project
+    ExternalProject_Add(
+        zlib
+        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/zlib -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        BUILD_BYPRODUCTS ${ZLIB_LIB_PATH}
+    )
+
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/zlib/include)
+    # Set paths to zlib include and library directories
+    set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib ${CMAKE_BINARY_DIR}/zlib/include)
+    set(ZLIB_LIBRARIES ${ZLIB_LIB_PATH})
+
+    # Cache these variables so they are used by the find_package calls
+    set(ZLIB_FOUND TRUE CACHE BOOL "zlib found" FORCE)
+    set(ZLIB_INCLUDE_DIRS ${ZLIB_INCLUDE_DIR} CACHE STRING "zlib include directories" FORCE)
+    set(ZLIB_LIBRARY ${ZLIB_LIBRARIES} CACHE STRING "zlib library" FORCE)
+
+    add_dependencies(QuaZip zlib)
 endif()
-
-# Add the zlib project
-ExternalProject_Add(
-    zlib
-    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/zlib -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    BUILD_BYPRODUCTS ${ZLIB_LIB_PATH}
-)
-
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/zlib/include)
-# Set paths to zlib include and library directories
-set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib ${CMAKE_BINARY_DIR}/zlib/include)
-set(ZLIB_LIBRARIES ${ZLIB_LIB_PATH})
-
-# Cache these variables so they are used by the find_package calls
-set(ZLIB_FOUND TRUE CACHE BOOL "zlib found" FORCE)
-set(ZLIB_INCLUDE_DIRS ${ZLIB_INCLUDE_DIR} CACHE STRING "zlib include directories" FORCE)
-set(ZLIB_LIBRARY ${ZLIB_LIBRARIES} CACHE STRING "zlib library" FORCE)
 
 include_directories (${OPENSSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/quazip/quazip)
 
@@ -69,8 +68,6 @@ add_subdirectory(
     ${CMAKE_CURRENT_BINARY_DIR}/quazip
 )
 set (BUILD_SHARED_LIBS ON)
-
-add_dependencies(QuaZip zlib)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
