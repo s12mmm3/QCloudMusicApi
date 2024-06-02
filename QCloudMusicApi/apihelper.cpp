@@ -58,20 +58,20 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
 
     QVariantMap ret;
 
-    // 若方法重名，优先调用内部方法，尽量不要重名
-    if (m_memberList.contains(member)) {
+    // 若方法重名，优先调用插件方法，尽量不要重名
+    bool useNative = true;
+    for (auto& pluginImpl: m_pluginImpls) {
+        if (pluginImpl->plugin->memberList().contains(member)) {
+            ret = pluginImpl->plugin->invoke(member, arg);
+            useNative = false;
+            break;
+        }
+    }
+    if (useNative) {
         QMetaObject::invokeMethod(this, member.toUtf8(),
                                   Qt::DirectConnection,
                                   Q_RETURN_ARG(QVariantMap, ret),
                                   Q_ARG(QVariantMap, arg));
-    }
-    else {
-        for (auto& pluginImpl: m_pluginImpls) {
-            if (pluginImpl->plugin->memberList().contains(member)) {
-                ret = pluginImpl->plugin->invoke(member, arg);
-                break;
-            }
-        }
     }
 
     afterInvoke(ret);
@@ -139,16 +139,21 @@ bool ApiHelper::loadPlugin(const QString &fileName)
 
 bool ApiHelper::unloadPlugin(const QString &fileName)
 {
+    auto result = false;
     for (auto i = 0; i < m_pluginImpls.size(); i++) {
         auto pluginImpl = m_pluginImpls[i];
         if (pluginImpl->loader->fileName() == fileName) {
             m_pluginImpls.removeAt(i);
             delete pluginImpl->plugin;
             pluginImpl->loader->deleteLater();
-            return pluginImpl->loader->unload();
+            result = pluginImpl->loader->unload();
+            if (!result) {
+                DEBUG << pluginImpl->loader->errorString();
+            }
+            break;
         }
     }
-    return false;
+    return result;
 }
 
 void ApiHelper::set_cookie(QString cookie)
