@@ -19,7 +19,7 @@ TabCommonUnit::TabCommonUnit(QWidget *parent) :
     textEdit_ret = ui->textEdit_ret;
 
     // 将Api中的方法名称取出
-    ui->comboBox_function->addItems(ApiHelper::memberList());
+    setFunctions(ServiceLocator::helper().memberList());
 }
 
 TabCommonUnit::~TabCommonUnit()
@@ -69,4 +69,9 @@ void TabCommonUnit::update(QVariantMap ret)
 {
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(JsonFormat));
+}
+
+void TabCommonUnit::setFunctions(const QStringList &functions)
+{
+    ui->comboBox_function->addItems(functions);
 }

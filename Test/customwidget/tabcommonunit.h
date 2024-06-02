@@ -39,6 +39,9 @@ private slots:
 
     void update(QVariantMap ret);
 
+    // 设置API列表
+    void setFunctions(const QStringList &functions);
+
 private:
     Ui::TabCommonUnit *ui;
 };

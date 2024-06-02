@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <string>
 
+#include "../servicelocator.h"
 #include "tabapi_c.h"
 #include "ui_tabapi_c.h"
 #include "../logger.h"

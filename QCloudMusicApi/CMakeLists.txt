@@ -29,7 +29,7 @@ set (HAVE_OPENSSL 1)
 include_directories (${OPENSSL_INCLUDE_DIR})
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Gui)
 
 FILE(GLOB HEADERS ./*.h ./util/*.h)
 FILE(GLOB SOURCES ./*.cpp ./util/*.cpp)
@@ -39,7 +39,7 @@ add_library(${PROJECT_NAME}
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
-target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Gui ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     QCLOUDMUSICAPI_LIBRARY

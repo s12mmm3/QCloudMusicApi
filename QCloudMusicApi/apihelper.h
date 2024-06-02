@@ -5,6 +5,8 @@
 
 #include <QObject>
 
+class ApiPluginImpl;
+
 /**
  * @class ApiHelper
  * @brief API助手类，通过反射机制调用API。
@@ -55,7 +57,21 @@ public:
      * @brief 获取API列表
      * @return QStringList API列表
      */
-    Q_INVOKABLE static QStringList memberList();
+    Q_INVOKABLE QStringList memberList();
+
+    /**
+     * @brief 加载插件
+     * @param fileName 插件路径
+     * @return bool 加载结果
+     */
+    Q_INVOKABLE bool loadPlugin(const QString &fileName);
+
+    /**
+     * @brief 卸载插件
+     * @param fileName 插件路径
+     * @return bool 卸载结果
+     */
+    Q_INVOKABLE bool unloadPlugin(const QString &fileName);
 
 public:
     DEFINE_VALUE(QString, proxy, "")
@@ -66,6 +82,8 @@ private:
 
 private:
     QVariantMap m_cookie;
+    QStringList m_memberList;
+    QList<ApiPluginImpl*> m_pluginImpls;
 };
 
 #endif // APIHELPER_H
