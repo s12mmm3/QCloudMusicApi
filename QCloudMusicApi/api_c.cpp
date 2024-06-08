@@ -101,3 +101,13 @@ QCLOUDMUSICAPI_EXPORT const char* proxy()
     result = helper.proxy().toStdString();
     return result.c_str();
 }
+
+QCLOUDMUSICAPI_EXPORT bool loadPlugin(char *fileName)
+{
+    return helper.loadPlugin(fileName);
+}
+
+QCLOUDMUSICAPI_EXPORT bool unloadPlugin(char *fileName)
+{
+    return helper.unloadPlugin(fileName);
+}
