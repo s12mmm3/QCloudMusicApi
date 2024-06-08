@@ -57,6 +57,12 @@ public:
      */
     Q_INVOKABLE static QStringList memberList();
 
+    /**
+     * @brief 设置log规则
+     * @param rules log规则
+     */
+    Q_INVOKABLE void setFilterRules(const QString &rules);
+
 public:
     DEFINE_VALUE(QString, proxy, "")
 

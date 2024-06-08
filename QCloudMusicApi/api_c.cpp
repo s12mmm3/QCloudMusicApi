@@ -101,3 +101,8 @@ QCLOUDMUSICAPI_EXPORT const char* proxy()
     result = helper.proxy().toStdString();
     return result.c_str();
 }
+
+QCLOUDMUSICAPI_EXPORT void setFilterRules(char *rules)
+{
+    helper.setFilterRules(rules);
+}

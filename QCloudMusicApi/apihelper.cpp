@@ -110,3 +110,8 @@ QString ApiHelper::cookie()
 {
     return Index::cookieObjToString(m_cookie);
 }
+
+void ApiHelper::setFilterRules(const QString &rules)
+{
+    LOGGER_NAME().setFilterRules(rules);
+}

@@ -64,6 +64,12 @@ QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy);
  */
 QCLOUDMUSICAPI_EXPORT const char* proxy();
 
+/**
+ * @brief 设置log规则
+ * @param rules log规则
+ */
+QCLOUDMUSICAPI_EXPORT void setFilterRules(char* rules);
+
 #ifdef __cplusplus
 }
 #endif

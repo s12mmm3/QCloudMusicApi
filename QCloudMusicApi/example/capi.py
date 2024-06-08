@@ -34,13 +34,23 @@ def invokeUrl(url):
     result = lib.invokeUrl(ctypes.create_string_buffer(url.encode()))
     return result
 
+# 设置全局cookie
+def set_cookie(cookie):
+    lib.set_cookie(ctypes.create_string_buffer(cookie.encode()))
+
+# 获取cookie
+def cookie():
+    result = lib.cookie()
+    return result
+
 # 设置全局代理
 def set_proxy(proxy):
     lib.set_proxy(ctypes.create_string_buffer(proxy.encode()))
 
-# 设置全局cookie
-def set_cookie(cookie):
-    lib.set_cookie(ctypes.create_string_buffer(cookie.encode()))
+# 获取代理
+def proxy():
+    result = lib.proxy()
+    return result
 
 # 获取API列表
 def memberList():
