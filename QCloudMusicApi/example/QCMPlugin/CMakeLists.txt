@@ -11,13 +11,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Gui)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui)
 
-add_library(QCMPlugin SHARED
-  aplugin.cpp
-  aplugin.h
-  QCMPlugin.json
-  api.h api.cpp
+FILE(GLOB HEADERS ./*.h)
+FILE(GLOB SOURCES ./*.cpp)
+add_library(${PROJECT_NAME} SHARED
+    ${HEADERS}
+    ${SOURCES}
 )
 
-target_link_libraries(QCMPlugin PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
 
-target_compile_definitions(QCMPlugin PRIVATE QCMPLUGIN_LIBRARY)
+target_compile_definitions(${PROJECT_NAME} PRIVATE QCMPLUGIN_LIBRARY)

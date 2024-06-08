@@ -1,8 +1,6 @@
 #ifndef TABPLUGIN_H
 #define TABPLUGIN_H
 
-#include <QWidget>
-
 #include "../../QCloudMusicApi/apihelper.h"
 #include "tabapi_c.h"
 
