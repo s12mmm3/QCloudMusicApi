@@ -1,6 +1,4 @@
 # QCloudMusicApi - Qt版 网易云音乐 API
-------------------------------------------
-
 
 [![GitHub Actions CI Status](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/windows.yml/badge.svg)](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/windows.yml)
 [![GitHub Actions CI Status](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/macos.yml/badge.svg)](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/macos.yml)

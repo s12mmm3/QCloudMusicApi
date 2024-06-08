@@ -57,9 +57,19 @@ def invokeUrl(url):
 def set_cookie(cookie):
     lib.set_cookie(ctypes.create_string_buffer(cookie.encode()))
 
+# 获取cookie
+def cookie():
+    result = lib.cookie()
+    return result
+
 # 设置全局代理
 def set_proxy(proxy):
     lib.set_proxy(ctypes.create_string_buffer(proxy.encode()))
+
+# 获取代理
+def proxy():
+    result = lib.proxy()
+    return result
 
 # 加载插件
 def loadPlugin(fileName):

@@ -100,6 +100,11 @@ QCLOUDMUSICAPI_EXPORT const char* proxy()
     return result.c_str();
 }
 
+QCLOUDMUSICAPI_EXPORT void setFilterRules(char *rules)
+{
+    helper.setFilterRules(rules);
+}
+
 QCLOUDMUSICAPI_EXPORT bool loadPlugin(char *fileName)
 {
     return helper.loadPlugin(fileName);

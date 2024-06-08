@@ -109,6 +109,21 @@ QStringList ApiHelper::memberList()
     return memberList;
 }
 
+void ApiHelper::set_cookie(QString cookie)
+{
+    m_cookie = Index::cookieToJson(cookie);
+}
+
+QString ApiHelper::cookie()
+{
+    return Index::cookieObjToString(m_cookie);
+}
+
+void ApiHelper::setFilterRules(const QString &rules)
+{
+    LOGGER_NAME().setFilterRules(rules);
+}
+
 bool ApiHelper::loadPlugin(const QString &fileName)
 {
     // 加载过的插件不再重复加载
@@ -153,14 +168,4 @@ bool ApiHelper::unloadPlugin(const QString &fileName)
         }
     }
     return result;
-}
-
-void ApiHelper::set_cookie(QString cookie)
-{
-    m_cookie = Index::cookieToJson(cookie);
-}
-
-QString ApiHelper::cookie()
-{
-    return Index::cookieObjToString(m_cookie);
 }

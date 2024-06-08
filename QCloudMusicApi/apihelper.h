@@ -52,6 +52,12 @@ public:
     Q_INVOKABLE QStringList memberList();
 
     /**
+     * @brief 设置log规则
+     * @param rules log规则
+     */
+    Q_INVOKABLE void setFilterRules(const QString &rules);
+
+    /**
      * @brief 加载插件
      * @param fileName 插件路径
      * @return bool 加载结果
