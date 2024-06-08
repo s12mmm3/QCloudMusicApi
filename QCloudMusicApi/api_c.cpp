@@ -72,7 +72,7 @@ QCLOUDMUSICAPI_EXPORT const char *invokeUrl(char *url) {
 }
 
 QCLOUDMUSICAPI_EXPORT const char* memberName(int index) {
-    result = helper.memberList().value(index).toUtf8();
+    result = helper.memberList().value(index).toStdString();
     return result.c_str();
 }
 
