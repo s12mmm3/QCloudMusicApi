@@ -1,6 +1,11 @@
-# QCloudMusicApi
-Qt版 网易云音乐 API
+QCloudMusicApi - Qt版 网易云音乐 API
+------------------------------------------
 
+
+[![GitHub Actions CI Status](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/windows.yml/badge.svg)](https://github.com/s12mmm3/QCloudMusicApi/actions)
+![Qt Version 5.12+](https://img.shields.io/badge/Qt-5.12+-green.svg)
+![GitHub license](https://img.shields.io/github/license/s12mmm3/QCloudMusicApi)
+********************************
 ## 简介
 本项目翻译自Node.js项目[Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
@@ -89,6 +94,7 @@ if __name__ == '__main__':
 ```
 
 ### 在项目中引用CMake项目
+
 在CMakeLists.txt文件中加上
 ```CMake
 add_subdirectory(QCloudMusicApi)
@@ -106,8 +112,8 @@ target_link_libraries(${PROJECT_NAME}  QCloudMusicApi)
 #include "QCloudMusicApi/QCloudMusicApi/module.h"
 ```
 
-### 手动编译
-安装好Qt库后
+## 编译方式
+
 ```Shell
 git clone --recursive https://github.com/s12mmm3/QCloudMusicApi.git
 cd QCloudMusicApi
