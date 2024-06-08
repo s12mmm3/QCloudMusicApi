@@ -3,60 +3,14 @@
 #include <QMessageBox>
 
 #include "tabplugin.h"
-#include "ui_tabplugin.h"
+#include "ui_tabapi_c.h"
 
 TabPlugin::TabPlugin(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::TabPlugin)
+    TabApi_c(parent)
 {
-    ui->setupUi(this);
-
     ui->tabCommonUnit->callback = [&](QString member, QString arg) -> QVariantMap {
         return helper.invoke(member, QJsonDocument::fromJson(arg.toUtf8()).toVariant().toMap());
     };
-}
-
-TabPlugin::~TabPlugin()
-{
-    delete ui;
-}
-
-void TabPlugin::on_pushButton_select_clicked()
-{
-    auto fileName = QFileDialog::getOpenFileName(this);
-    libraryLoad(fileName);
-}
-
-void TabPlugin::libarayLoadSucceed()
-{
-    QMessageBox::information(this, "", "Library load succeed!");
-}
-
-void TabPlugin::libraryLoadFailed()
-{
-    QMessageBox::warning(this, "Library load failed!", "");
-}
-
-void TabPlugin::libarayUnloadSucceed()
-{
-    QMessageBox::information(this, "", "Library unload succeed!");
-}
-
-void TabPlugin::libraryUnloadFailed()
-{
-    QMessageBox::warning(this, "Library unload failed!", "");
-}
-
-
-void TabPlugin::on_pushButton_unload_clicked()
-{
-    libraryUnload(ui->lineEdit_library_fileName->text());
-}
-
-
-void TabPlugin::on_pushButton_load_clicked()
-{
-    libraryLoad(ui->lineEdit_library_fileName->text());
 }
 
 bool TabPlugin::libraryLoad(QString fileName)
