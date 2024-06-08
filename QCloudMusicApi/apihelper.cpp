@@ -62,6 +62,7 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
     bool useNative = true;
     for (auto& pluginImpl: m_pluginImpls) {
         if (pluginImpl->plugin->memberList().contains(member)) {
+            DEBUG << QString("found member %1 in: %2").arg(member).arg(pluginImpl->loader->fileName());
             ret = pluginImpl->plugin->invoke(member, arg);
             useNative = false;
             break;

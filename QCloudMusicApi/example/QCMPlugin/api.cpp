@@ -1,5 +1,7 @@
 #include "api.h"
 
+#include <QDebug>
+
 Api::Api(QObject *parent)
     : QObject{parent}
 {}
@@ -7,7 +9,10 @@ Api::Api(QObject *parent)
 QVariantMap Api::aaaaaaaaaaaaaaaaaaaa(QVariantMap query)
 {
     return {
-        { "A method from plugin", query },
+        { "status", 200 },
+        { "body", QVariantMap
+            { { "A method from plugin", query } }
+        }
     };
 }
 
@@ -15,6 +20,9 @@ QVariantMap Api::bbbbbbbbbbbbbbbbbbbb(QVariantMap query)
 {
     qDebug() << "bbbbbbbbbbbbbbbbbbbb";
     return {
-        { "bbbbbbbbbbbbbbbbbbbb", query },
-    };
+        { "status", 200 },
+        { "body", QVariantMap
+            { { "bbbbbbbbbbbbbbbbbbbb", query } }
+        }
+    };;
 }
