@@ -84,10 +84,23 @@
         </attribute>
        </widget>
       </widget>
-      <widget class="TabApi_c" name="tabApi_c">
+      <widget class="QTabWidget" name="tabLibrary">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
        <attribute name="title">
-        <string>api_c</string>
+        <string>library</string>
        </attribute>
+       <widget class="TabApi_c" name="tabApi_c">
+        <attribute name="title">
+         <string>api_c</string>
+        </attribute>
+       </widget>
+       <widget class="TabPlugin" name="tabPlugin">
+        <attribute name="title">
+         <string>plugin</string>
+        </attribute>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -151,6 +164,11 @@
    <class>TabAvatar_upload</class>
    <extends>QWidget</extends>
    <header>tabavatar_upload.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TabPlugin</class>
+   <extends>QWidget</extends>
+   <header>tabplugin.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

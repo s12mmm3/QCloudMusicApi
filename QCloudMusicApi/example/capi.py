@@ -17,11 +17,30 @@ lib.freeApi.restype = ctypes.c_void_p
 lib.memberName.restype = ctypes.c_char_p
 lib.memberCount.restype = ctypes.c_int
 
+lib.set_cookie.argtypes = [ ctypes.c_char_p ]
+lib.set_cookie.restype = ctypes.c_void_p
+
+lib.cookie.argtypes = [ ]
+lib.cookie.restype = ctypes.c_char_p
+
 lib.set_proxy.argtypes = [ ctypes.c_char_p ]
 lib.set_proxy.restype = ctypes.c_void_p
 
-lib.set_cookie.argtypes = [ ctypes.c_char_p ]
-lib.set_cookie.restype = ctypes.c_void_p
+lib.proxy.argtypes = [ ]
+lib.proxy.restype = ctypes.c_char_p
+
+lib.loadPlugin.argtypes = [ ctypes.c_char_p ]
+lib.loadPlugin.restype = ctypes.c_bool
+
+lib.unloadPlugin.argtypes = [ ctypes.c_char_p ]
+lib.unloadPlugin.restype = ctypes.c_bool
+
+# 获取API列表
+def memberList():
+    list = []
+    for i in range(0, lib.memberCount()):
+        list.append(lib.memberName(i))
+    return list
 
 # 反射调用API的成员函数
 def invoke(name, value):
@@ -52,12 +71,13 @@ def proxy():
     result = lib.proxy()
     return result
 
-# 获取API列表
-def memberList():
-    list = []
-    for i in range(0, lib.memberCount()):
-        list.append(lib.memberName(i))
-    return list
+# 加载插件
+def loadPlugin(fileName):
+    return lib.loadPlugin(ctypes.create_string_buffer(fileName.encode()))
+
+# 卸载插件
+def unloadPlugin(fileName):
+    return lib.unloadPlugin(ctypes.create_string_buffer(fileName.encode()))
 
 if __name__ == '__main__':
     result = invoke("lyric_new", "{\"id\": \"2058263032\"}")

@@ -1,44 +1,110 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-class Program
+class Api
 {
-    private const string dllName = "QCloudMusicApi.dll";
+    public const string dllName = "QCloudMusicApi.dll";
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-    private static extern IntPtr invoke(string memberName, string value);
+    public static extern IntPtr invoke(string memberName, string value);
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-    private static extern IntPtr memberName(int i);
+    public static extern IntPtr invokeUrl(string url);
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-    private static extern int memberCount();
+    public static extern IntPtr memberName(int i);
+    [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int memberCount();
+    [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void set_cookie(string cookie);
+    [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr cookie();
+    [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void set_proxy(string proxy);
+    [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr proxy();
+    [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool loadPlugin(string fileName);
+    [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool unloadPlugin(string fileName);
+}
 
-    static string api_invoke(string memberName, string value)
+class ApiHelper
+{
+    public static string PtrToStringUTF8(IntPtr str)
     {
-        // 因为invoke返回的是char*，在C#中对应为IntPtr，所以需要进行转换
-        IntPtr resultPtr = invoke(memberName, value);
-
-        // 将IntPtr转换为C#中的string
-        string result = Marshal.PtrToStringUTF8(resultPtr);
+        // 返回char*，在C#中对应IntPtr，需要转换为C#中的string
+        string result = Marshal.PtrToStringUTF8(str);
         return result;
     }
 
-    static List<string> api_memberList()
+    // 通过反射调用API的成员函数
+    public static string invoke(string memberName, string value)
+    {
+        return PtrToStringUTF8(Api.invoke(memberName, value));
+    }
+
+    // 通过反射调用API的成员函数
+    public static string invokeUrl(string url)
+    {
+        return PtrToStringUTF8(Api.invokeUrl(url));
+    }
+
+    //获取API列表
+    public static List<string> memberList()
     {
         List<string> list = [];
-        var count = memberCount();
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < Api.memberCount(); i++)
         {
-            var member = memberName(i);
-            list.Add(Marshal.PtrToStringAnsi(member));
+            var member = Api.memberName(i);
+            list.Add(PtrToStringUTF8(member));
         }
         return list;
     }
 
+    // 设置全局cookie
+    public static void set_cookie(string cookie)
+    {
+        Api.set_cookie(cookie);
+    }
+
+    // 获取cookie
+    public static string cookie()
+    {
+        return PtrToStringUTF8(Api.cookie());
+    }
+
+    // 设置全局代理
+    public static void set_proxy(string proxy)
+    {
+        Api.set_cookie(proxy);
+    }
+
+    // 获取代理
+    public static string proxy()
+    {
+        return PtrToStringUTF8(Api.proxy());
+    }
+
+    // 加载插件
+    public static bool loadPlugin(string fileName)
+    {
+        return Api.loadPlugin(fileName);
+    }
+
+    // 卸载插件
+    public static bool unloadPlugin(string fileName)
+    {
+        return Api.unloadPlugin(fileName);
+    }
+}
+
+class Program
+{
     static void Main()
     {
-        foreach (var member in api_memberList()) {
+        foreach (var member in ApiHelper.memberList()) {
             Console.WriteLine(member);
         }
 
-        Console.WriteLine("调用结果: " + api_invoke("lyric_new", "{\"id\": \"2058263032\"}"));
+        Console.WriteLine(ApiHelper.invoke("lyric_new", "{\"id\": \"2058263032\"}"));
+        Console.WriteLine(ApiHelper.invokeUrl("/lyric_new?id=2058263032, 2057797340&level=exhigh"));
     }
 };

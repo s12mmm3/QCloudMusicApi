@@ -26,8 +26,9 @@ private slots:
 
     void on_pushButton_load_clicked();
 
-private:
-    bool libraryLoad(QString fileName);
+protected:
+    virtual bool libraryLoad(QString fileName);
+    virtual bool libraryUnload(QString fileName);
 
     void libarayLoadSucceed();
     void libraryLoadFailed();
@@ -36,8 +37,10 @@ private:
     void libraryUnloadFailed();
 
 private:
-    Ui::TabApi_c *ui;
     QLibrary library;
+
+protected:
+    Ui::TabApi_c *ui;
 };
 
 #endif // TABAPI_C_H

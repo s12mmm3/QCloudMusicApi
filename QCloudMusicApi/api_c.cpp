@@ -72,14 +72,12 @@ QCLOUDMUSICAPI_EXPORT const char *invokeUrl(char *url) {
 }
 
 QCLOUDMUSICAPI_EXPORT const char* memberName(int index) {
-    NeteaseCloudMusicApi api;
-    result = api.metaObject()->method(QObject().metaObject()->methodCount() + index).name().data();
+    result = helper.memberList().value(index).toStdString();
     return result.c_str();
 }
 
 QCLOUDMUSICAPI_EXPORT int memberCount() {
-    NeteaseCloudMusicApi api;
-    return api.metaObject()->methodCount() - QObject().metaObject()->methodCount();
+    return helper.memberList().size();
 }
 
 QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy) {
@@ -105,4 +103,14 @@ QCLOUDMUSICAPI_EXPORT const char* proxy()
 QCLOUDMUSICAPI_EXPORT void setFilterRules(char *rules)
 {
     helper.setFilterRules(rules);
+}
+
+QCLOUDMUSICAPI_EXPORT bool loadPlugin(char *fileName)
+{
+    return helper.loadPlugin(fileName);
+}
+
+QCLOUDMUSICAPI_EXPORT bool unloadPlugin(char *fileName)
+{
+    return helper.unloadPlugin(fileName);
 }
