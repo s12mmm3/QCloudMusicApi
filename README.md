@@ -47,8 +47,8 @@ qDebug() << helper.invoke("lyric", { { "id", 1408586353 } });
 可通过传入Url调用
 ```C++
 ApiHelper helper;
-qDebug() << helper.invoke("/song/url/v1?id=2058263032, 2057797340&level=exhigh");
-qDebug() << helper.invoke("http://localhost:3000/activate/init/profile");
+qDebug() << helper.invokeUrl("/song/url/v1?id=2058263032, 2057797340&level=exhigh");
+qDebug() << helper.invokeUrl("http://localhost:3000/activate/init/profile");
 ```
 
 调用ApiHelper::set_cookie设置cookie，支持QVariantMap和QString
@@ -84,7 +84,6 @@ const char* invoke(char* memberName, char* value);
 ```Python
 import ctypes
 import json
-import os
 
 lib = ctypes.CDLL("./QCloudMusicApi.dll")
 lib.invoke.argtypes = [ ctypes.c_char_p, ctypes.c_char_p ]

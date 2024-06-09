@@ -21,6 +21,8 @@ class Api
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr proxy();
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void setFilterRules(string rules);
+    [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool loadPlugin(string fileName);
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool unloadPlugin(string fileName);
@@ -83,6 +85,12 @@ class ApiHelper
         return PtrToStringUTF8(Api.proxy());
     }
 
+    // 设置log规则
+    public static void setFilterRules(string rules)
+    {
+        Api.setFilterRules(rules);
+    }
+
     // 加载插件
     public static bool loadPlugin(string fileName)
     {
@@ -100,6 +108,7 @@ class Program
 {
     static void Main()
     {
+        ApiHelper.setFilterRules("*.debug=false");
         foreach (var member in ApiHelper.memberList()) {
             Console.WriteLine(member);
         }

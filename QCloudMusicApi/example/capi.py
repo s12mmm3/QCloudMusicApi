@@ -1,11 +1,19 @@
 import ctypes
 import json
-import os
+import platform
+# import os
 
 # 设置环境变量，不输出Debug级别日志
-os.putenv('QT_LOGGING_RULES', '*.debug=false')
+# os.putenv('QT_LOGGING_RULES', '*.debug=false')
 
-lib = ctypes.CDLL("./QCloudMusicApi.dll")
+def getSuffix():
+    return {
+        "Windows": "dll",
+        "Linux": "so",
+        "Darwin": "dylib",
+    }.get(platform.system())
+
+lib = ctypes.CDLL(f"./QCloudMusicApi.{getSuffix()}")
 
 lib.invoke.argtypes = [ ctypes.c_char_p, ctypes.c_char_p ]
 lib.invoke.restype = ctypes.c_char_p
@@ -28,6 +36,9 @@ lib.set_proxy.restype = ctypes.c_void_p
 
 lib.proxy.argtypes = [ ]
 lib.proxy.restype = ctypes.c_char_p
+
+lib.setFilterRules.argtypes = [ ctypes.c_char_p ]
+lib.setFilterRules.restype = ctypes.c_void_p
 
 lib.loadPlugin.argtypes = [ ctypes.c_char_p ]
 lib.loadPlugin.restype = ctypes.c_bool
@@ -71,6 +82,10 @@ def proxy():
     result = lib.proxy()
     return result
 
+# 设置log规则
+def setFilterRules(rules):
+    lib.setFilterRules(ctypes.create_string_buffer(rules.encode()))
+
 # 加载插件
 def loadPlugin(fileName):
     return lib.loadPlugin(ctypes.create_string_buffer(fileName.encode()))
@@ -80,6 +95,8 @@ def unloadPlugin(fileName):
     return lib.unloadPlugin(ctypes.create_string_buffer(fileName.encode()))
 
 if __name__ == '__main__':
+    setFilterRules("*.debug=false")
+
     result = invoke("lyric_new", "{\"id\": \"2058263032\"}")
     print("result", json.dumps(json.loads(result), indent = 4, ensure_ascii = False))
     
