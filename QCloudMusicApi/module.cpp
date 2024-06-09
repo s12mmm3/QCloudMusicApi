@@ -4546,6 +4546,37 @@ QVariantMap Api::top_artists(QVariantMap query) {
     );
 }
 
+// 排行榜
+QVariantMap Api::top_list(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    cookie["appver"] = "2.9.7";
+    query["cookie"] = cookie;
+    if (query.contains("idx")) {
+        return {
+            { "status", 500 },
+            { "body", QVariantMap{
+                { "code", 500 },
+                { "msg", "不支持此方式调用,只支持id调用" }
+            }}
+        };
+    }
+
+    QVariantMap data{
+        { "id", query["id"] },
+        { "n", "500" },
+        { "s", "0"},
+    };
+    return request(
+        POST,
+        "https://interface3.music.163.com/api/playlist/v4/detail",
+        data,
+        {
+            _WEAPI
+        }
+    );
+}
+
 // MV排行榜
 QVariantMap Api::top_mv(QVariantMap query) {
     QVariantMap data{

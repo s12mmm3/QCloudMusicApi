@@ -775,7 +775,7 @@ public:
     Q_INVOKABLE QVariantMap top_artists(QVariantMap);
 
     // 排行榜
-    // Q_INVOKABLE QVariantMap top_list(QVariantMap);
+    Q_INVOKABLE QVariantMap top_list(QVariantMap);
 
     // MV排行榜
     Q_INVOKABLE QVariantMap top_mv(QVariantMap);
