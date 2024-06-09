@@ -9,7 +9,7 @@ TabPlugin::TabPlugin(QWidget *parent) :
     TabApi_c(parent)
 {
     ui->tabCommonUnit->callback = [&](QString member, QString arg) -> QVariantMap {
-        return helper.invoke(member, QJsonDocument::fromJson(arg.toUtf8()).toVariant().toMap());
+        return helper.invoke(member, QJsonDocument::fromJson(arg.toUtf8()).toVariant().toMap())["body"].toMap();
     };
 }
 
