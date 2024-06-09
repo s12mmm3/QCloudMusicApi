@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <QPainter>
 
-TabLogin_qr::TabLogin_qr(QWidget *parent) :
+TabLogin_qr::TabLogin_qr(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabLogin_qr)
 {
@@ -82,9 +82,9 @@ void TabLogin_qr::on_pushButton_login_qr_create_clicked()
 {
     QString unikey = ui->lineEdit_qr_key->text();
     QVariantMap ret = invoke("login_qr_create",
-                 {
-                     { "key", unikey }
-                 });
+        {
+            { "key", unikey }
+        });
     QString qrurl = ret["body"].toMap()["data"].toMap()["qrurl"].toString();
 
     ui->lineEdit_url->setText(qrurl);
@@ -95,9 +95,9 @@ void TabLogin_qr::on_pushButton_login_qr_check_clicked()
 {
     QString unikey = ui->lineEdit_qr_key->text();
     QVariantMap ret = invoke("login_qr_check",
-                             {
-                                 { "key", unikey }
-                             });
+        {
+            { "key", unikey }
+        });
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
     auto cookie = ret["cookie"].toString();
     if (!cookie.isEmpty()) {

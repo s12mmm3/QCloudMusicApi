@@ -16,7 +16,7 @@ class QCLOUDMUSICAPI_EXPORT ApiHelper : public NeteaseCloudMusicApi
 {
     Q_OBJECT
 public:
-    explicit ApiHelper(QObject *parent = nullptr);
+    explicit ApiHelper(QObject* parent = nullptr);
 
     /**
      * @brief 调用API的成员函数
@@ -55,21 +55,21 @@ public:
      * @brief 设置log规则
      * @param rules log规则
      */
-    Q_INVOKABLE void setFilterRules(const QString &rules);
+    Q_INVOKABLE void setFilterRules(const QString& rules);
 
     /**
      * @brief 加载插件
      * @param fileName 插件路径
      * @return bool 加载结果
      */
-    Q_INVOKABLE bool loadPlugin(const QString &fileName);
+    Q_INVOKABLE bool loadPlugin(const QString& fileName);
 
     /**
      * @brief 卸载插件
      * @param fileName 插件路径
      * @return bool 卸载结果
      */
-    Q_INVOKABLE bool unloadPlugin(const QString &fileName);
+    Q_INVOKABLE bool unloadPlugin(const QString& fileName);
 
 public:
     DEFINE_VALUE(QString, proxy, "")

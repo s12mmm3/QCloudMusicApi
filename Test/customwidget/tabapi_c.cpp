@@ -11,7 +11,7 @@
 #include "ui_tabapi_c.h"
 #include "../logger.h"
 
-TabApi_c::TabApi_c(QWidget *parent) :
+TabApi_c::TabApi_c(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabApi_c)
 {
@@ -24,11 +24,12 @@ TabApi_c::TabApi_c(QWidget *parent) :
         Invoke invoke = (Invoke)library.resolve("invoke");
         if (invoke) {
             ret = (QJsonDocument::fromJson(invoke(member.toStdString().c_str(), arg.toStdString().c_str())).toVariant().toMap());
-        } else {
+        }
+        else {
             libraryLoadFailed();
         }
         return ret;
-    };
+        };
 }
 
 TabApi_c::~TabApi_c()

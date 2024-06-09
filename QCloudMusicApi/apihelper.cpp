@@ -9,12 +9,12 @@
 #include <QUrlQuery>
 
 using namespace QCloudMusicApi;
-ApiHelper::ApiHelper(QObject *parent)
-    : NeteaseCloudMusicApi{parent}
+ApiHelper::ApiHelper(QObject* parent)
+    : NeteaseCloudMusicApi{ parent }
 {
     m_memberList.clear();
     NeteaseCloudMusicApi api;
-    for(int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
+    for (int i = QObject().metaObject()->methodCount(); i < api.metaObject()->methodCount(); i++) {
         m_memberList.push_back(api.metaObject()->method(i).name());
     }
 }
@@ -22,12 +22,12 @@ ApiHelper::ApiHelper(QObject *parent)
 void ApiHelper::beforeInvoke(QVariantMap& arg)
 {
     // Api只能处理map类型的cookie
-    if(arg.contains("cookie")) {
+    if (arg.contains("cookie")) {
         // 若传入新的cookie，替换原有的cookie
-        if(arg["cookie"].userType() == QMetaType::QVariantMap) {
+        if (arg["cookie"].userType() == QMetaType::QVariantMap) {
             m_cookie = arg["cookie"].toMap();
         }
-        else if(arg["cookie"].userType() == QMetaType::QString) {
+        else if (arg["cookie"].userType() == QMetaType::QString) {
             m_cookie = Index::cookieToJson(arg["cookie"].toString());
         }
     }
@@ -60,7 +60,7 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
 
     // 若方法重名，优先调用插件方法，尽量不要重名
     bool useNative = true;
-    for (auto& pluginImpl: m_pluginImpls) {
+    for (auto& pluginImpl : m_pluginImpls) {
         if (pluginImpl->plugin->memberList().contains(member)) {
             DEBUG << QString("found member %1 in: %2").arg(member).arg(pluginImpl->loader->fileName());
             ret = pluginImpl->plugin->invoke(member, arg);
@@ -70,9 +70,9 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
     }
     if (useNative) {
         QMetaObject::invokeMethod(this, member.toUtf8(),
-                                  Qt::DirectConnection,
-                                  Q_RETURN_ARG(QVariantMap, ret),
-                                  Q_ARG(QVariantMap, arg));
+            Qt::DirectConnection,
+            Q_RETURN_ARG(QVariantMap, ret),
+            Q_ARG(QVariantMap, arg));
     }
 
     afterInvoke(ret);
@@ -89,13 +89,13 @@ QVariantMap ApiHelper::invokeUrl(QString url)
     }
     member = member.replace("/", "_").trimmed();
     QVariantMap arg;
-    for (auto& queryItem: QUrlQuery(qurl.query()).queryItems()) {
+    for (auto& queryItem : QUrlQuery(qurl.query()).queryItems()) {
         arg[queryItem.first] = queryItem.second;
     }
     DEBUG << "host" << qurl.host()
-          << "port" << qurl.port()
-          << "member" << member
-          << "arg" << arg;
+        << "port" << qurl.port()
+        << "member" << member
+        << "arg" << arg;
     return invoke(member, arg);
 }
 
@@ -104,7 +104,7 @@ QStringList ApiHelper::memberList()
     // 原生方法 + 插件中的方法
     auto memberList = m_memberList;
 
-    for (auto& pluginImpl: m_pluginImpls) {
+    for (auto& pluginImpl : m_pluginImpls) {
         memberList.append(pluginImpl->plugin->memberList());
     }
     return memberList;
@@ -120,12 +120,12 @@ QString ApiHelper::cookie()
     return Index::cookieObjToString(m_cookie);
 }
 
-void ApiHelper::setFilterRules(const QString &rules)
+void ApiHelper::setFilterRules(const QString& rules)
 {
     LOGGER_NAME().setFilterRules(rules);
 }
 
-bool ApiHelper::loadPlugin(const QString &fileName)
+bool ApiHelper::loadPlugin(const QString& fileName)
 {
     // 加载过的插件不再重复加载
     for (auto i = 0; i < m_pluginImpls.size(); i++) {
@@ -136,11 +136,11 @@ bool ApiHelper::loadPlugin(const QString &fileName)
     }
 
     ApiPluginImpl* pluginImpl = new ApiPluginImpl();
-    QPluginLoader *loader = new QPluginLoader(this);
+    QPluginLoader* loader = new QPluginLoader(this);
     loader->setFileName(fileName);
     if (loader->load())
     {
-        QCloudMusicApiPlugin *plugin = qobject_cast<QCloudMusicApiPlugin *>(loader->instance());
+        QCloudMusicApiPlugin* plugin = qobject_cast<QCloudMusicApiPlugin*>(loader->instance());
         if (plugin) {
             pluginImpl->loader = loader;
             pluginImpl->plugin = plugin;
@@ -153,7 +153,7 @@ bool ApiHelper::loadPlugin(const QString &fileName)
     return false;
 }
 
-bool ApiHelper::unloadPlugin(const QString &fileName)
+bool ApiHelper::unloadPlugin(const QString& fileName)
 {
     auto result = false;
     for (auto i = 0; i < m_pluginImpls.size(); i++) {

@@ -10,7 +10,7 @@
 #include "api_c.h"
 #include "../QCloudMusicApi/apihelper.h"
 
-QCoreApplication *app = Q_NULLPTR;
+QCoreApplication* app = Q_NULLPTR;
 std::string currentPath;
 thread_local std::string result;
 ApiHelper helper;
@@ -45,7 +45,7 @@ void init() {
     // 创建一个QCoreApplication单例，用于支持事件循环QEventLoop
     if (!QCoreApplication::instance()) {
         int argc = 1;
-        char* argv[1] { (char*)currentPath.c_str() };
+        char* argv[1]{ (char*)currentPath.c_str() };
         app = new QCoreApplication(argc, argv);
         // a->deleteLater();
     }
@@ -64,7 +64,7 @@ QCLOUDMUSICAPI_EXPORT const char* invoke(char* memberName, char* value) {
     return invoke_p(ret);
 }
 
-QCLOUDMUSICAPI_EXPORT const char *invokeUrl(char *url) {
+QCLOUDMUSICAPI_EXPORT const char* invokeUrl(char* url) {
     init();
 
     QVariantMap ret = helper.invokeUrl(url);
@@ -84,7 +84,7 @@ QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy) {
     helper.set_proxy(proxy);
 }
 
-QCLOUDMUSICAPI_EXPORT void set_cookie(char *cookie) {
+QCLOUDMUSICAPI_EXPORT void set_cookie(char* cookie) {
     helper.set_cookie(cookie);
 }
 
@@ -100,17 +100,17 @@ QCLOUDMUSICAPI_EXPORT const char* proxy()
     return result.c_str();
 }
 
-QCLOUDMUSICAPI_EXPORT void setFilterRules(char *rules)
+QCLOUDMUSICAPI_EXPORT void setFilterRules(char* rules)
 {
     helper.setFilterRules(rules);
 }
 
-QCLOUDMUSICAPI_EXPORT bool loadPlugin(char *fileName)
+QCLOUDMUSICAPI_EXPORT bool loadPlugin(char* fileName)
 {
     return helper.loadPlugin(fileName);
 }
 
-QCLOUDMUSICAPI_EXPORT bool unloadPlugin(char *fileName)
+QCLOUDMUSICAPI_EXPORT bool unloadPlugin(char* fileName)
 {
     return helper.unloadPlugin(fileName);
 }

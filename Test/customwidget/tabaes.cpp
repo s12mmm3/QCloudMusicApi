@@ -3,7 +3,7 @@
 #include "../../QCloudMusicApi/util/crypto.h"
 
 using namespace QCloudMusicApi;
-TabAes::TabAes(QWidget *parent) :
+TabAes::TabAes(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabAes)
 {
@@ -22,10 +22,10 @@ void TabAes::on_pushButton_encrypt_clicked()
     auto key = ui->lineEdit_key->text().toUtf8();
     auto iv = ui->lineEdit_iv->text().toUtf8();
     auto ret = Crypto::aesEncrypt(arg,
-                                  mode,
-                                  key,
-                                  iv,
-                                  ui->radioButton_base64->isChecked() ? "base64" : "hex");
+        mode,
+        key,
+        iv,
+        ui->radioButton_base64->isChecked() ? "base64" : "hex");
     ui->textEdit_ret->setText(ret);
 }
 
@@ -37,10 +37,10 @@ void TabAes::on_pushButton_decrypt_clicked()
     auto key = ui->lineEdit_key->text().toUtf8();
     auto iv = ui->lineEdit_iv->text().toUtf8();
     auto ret = Crypto::aesDecrypt(arg,
-                                  mode,
-                                  key,
-                                  iv,
-                                  ui->radioButton_base64->isChecked() ? "base64" : "hex");
+        mode,
+        key,
+        iv,
+        ui->radioButton_base64->isChecked() ? "base64" : "hex");
     ui->textEdit_ret->setText(ret);
 }
 

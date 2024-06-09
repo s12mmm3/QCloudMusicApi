@@ -11,7 +11,7 @@
 #include "tabservertest.h"
 #include "ui_tabservertest.h"
 
-TabServerTest::TabServerTest(QWidget *parent) :
+TabServerTest::TabServerTest(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabServerTest)
 {
@@ -29,26 +29,25 @@ TabServerTest::TabServerTest(QWidget *parent) :
         }
         QVariantMap arg = QJsonDocument::fromJson(arg_str.toUtf8()).toVariant().toMap();
 
-        // QtConcurrent::run
         QVariantMap headers;
         headers["Content-Type"] = "application/x-www-form-urlencoded";
         QUrlQuery query;
         query.setQuery(QUrl(url).query());
-        for(auto i = arg.constBegin(); i != arg.constEnd(); ++i) {
+        for (auto i = arg.constBegin(); i != arg.constEnd(); ++i) {
             query.addQueryItem(i.key(), i.value().toString());
         }
         auto reply = QCloudMusicApi::Request
             ::axios(method,
-                    url,
-                    arg,
-                    headers,
-                    query.toString().toUtf8());
+                url,
+                arg,
+                headers,
+                query.toString().toUtf8());
         reply->manager()->deleteLater();
 
         DEBUG.noquote() << reply->rawHeaderPairs();
 
         return QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
-    };
+        };
 
     setUrl();
     connect(ui->lineEdit_address, &QLineEdit::textChanged, this, &TabServerTest::setUrl);

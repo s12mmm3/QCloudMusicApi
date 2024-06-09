@@ -6,17 +6,17 @@
 
 using namespace QCloudMusicApi;
 
-bool Index::toBoolean(const QVariant &val) {
+bool Index::toBoolean(const QVariant& val) {
     if (val.userType() == QMetaType::Bool) return val.toBool();
     if (val == "") return val.toBool();
     return val == "true" || val == "1";
 }
 
-QVariantMap Index::cookieToJson(const QString &cookie) {
+QVariantMap Index::cookieToJson(const QString& cookie) {
     if (cookie.isEmpty()) return QVariantMap();
     auto cookieArr = cookie.split(";");
     QVariantMap obj;
-    for (const QString &i : cookieArr) {
+    for (const QString& i : cookieArr) {
         if (i.isEmpty()) continue;
         QStringList arr = i.trimmed().split("=");
         obj.insert(arr.value(0), arr.value(1));
@@ -24,12 +24,12 @@ QVariantMap Index::cookieToJson(const QString &cookie) {
     return obj;
 }
 
-QString Index::cookieObjToString(const QVariantMap &cookie) {
+QString Index::cookieObjToString(const QVariantMap& cookie) {
     QStringList result;
     for (auto i = cookie.constBegin(); i != cookie.constEnd(); i++) {
         result.push_back(
             i.key() + "=" + i.value().toString()
-            );
+        );
     }
     return result.join("; ");
 }
@@ -42,7 +42,7 @@ int Index::getRandom(int num) {
 }
 
 QString Index::generateRandomChineseIP() {
-    QStringList chinaIPPrefixes { "116.25", "116.76", "116.77", "116.78" };
+    QStringList chinaIPPrefixes{ "116.25", "116.76", "116.77", "116.78" };
     QString randomPrefix = chinaIPPrefixes.at(QRandomGenerator::global()->bounded(chinaIPPrefixes.size()));
     return QString("%1.%2.%3").arg(randomPrefix).arg(generateIPSegment()).arg(generateIPSegment());
 }
@@ -57,7 +57,7 @@ int Index::generateIPSegment() {
     return getRandomInt(1, 255);
 }
 
-QVariantMap Index::mergeMap(const QVariantMap &map0, const QVariantMap &map1)
+QVariantMap Index::mergeMap(const QVariantMap& map0, const QVariantMap& map1)
 {
     QVariantMap result = map0; //复制第一个map
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)

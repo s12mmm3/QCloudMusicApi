@@ -3,7 +3,7 @@
 #include "../../QCloudMusicApi/util/crypto.h"
 
 using namespace QCloudMusicApi;
-TabRsa::TabRsa(QWidget *parent) :
+TabRsa::TabRsa(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabRsa)
 {
@@ -20,7 +20,7 @@ void TabRsa::on_pushButton_encrypt_clicked()
     auto arg = ui->textEdit_arg->toPlainText();
     auto pubKey = ui->plainTextEdit_pubKey->toPlainText();
     auto ret = Crypto::rsaEncrypt(arg,
-                                  pubKey);
+        pubKey);
     ui->textEdit_ret->setText(ui->checkBox_hex->isChecked() ? ret.toHex() : ret);
 }
 

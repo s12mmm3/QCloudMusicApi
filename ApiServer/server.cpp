@@ -24,23 +24,23 @@ void Server::serveNcmApi(QVariantMap options)
 {
     QCommandLineParser parser;
     QCommandLineOption portOption(QStringList() << "PORT",
-                                  QCoreApplication::translate("main", "Set PORT."),
-                                  QCoreApplication::translate("main", "PORT"), "3000");
+        QCoreApplication::translate("main", "Set PORT."),
+        QCoreApplication::translate("main", "PORT"), "3000");
     QCommandLineOption hostOption(QStringList() << "HOST",
-                                  QCoreApplication::translate("main", "Set HOST."),
-                                  QCoreApplication::translate("main", "HOST"));
+        QCoreApplication::translate("main", "Set HOST."),
+        QCoreApplication::translate("main", "HOST"));
     parser.addOptions({ portOption, hostOption });
     parser.process(*QCoreApplication::instance());
 
     // 端口号
     const quint16 port = options.value("port", parser.value(portOption).toUInt()).toUInt();
     const QHostAddress host = options.value("host").isValid() ? QHostAddress(options["host"].toString())
-                      : !parser.value(hostOption).isEmpty() ? QHostAddress(parser.value(hostOption))
-                                                            : QHostAddress::Any;
+        : !parser.value(hostOption).isEmpty() ? QHostAddress(parser.value(hostOption))
+        : QHostAddress::Any;
 
     consturctServer({});
 
-    if(port == server.listen(host, port)) {
+    if (port == server.listen(host, port)) {
         DEBUG << "server running @ http://" + (host != QHostAddress::Any ? host.toString() : "localhost") + ":" + QString::number(port);
     }
     else {
@@ -52,36 +52,36 @@ void Server::consturctServer(QVariantMap options)
 {
     QCommandLineParser parser;
     QCommandLineOption option(QStringList() << "CORS_ALLOW_ORIGIN",
-                              QCoreApplication::translate("main", "Set CORS_ALLOW_ORIGIN."),
-                              QCoreApplication::translate("main", "CORS_ALLOW_ORIGIN"));
+        QCoreApplication::translate("main", "Set CORS_ALLOW_ORIGIN."),
+        QCoreApplication::translate("main", "CORS_ALLOW_ORIGIN"));
     parser.addOptions({ option });
     parser.process(*QCoreApplication::instance());
 
     const QString CORS_ALLOW_ORIGIN = parser.value(option);
 
     // 设置请求的路径和方法未知时的错误提示
-    server.setMissingHandler([] (const QHttpServerRequest &request, QHttpServerResponder &&responder) {
+    server.setMissingHandler([](const QHttpServerRequest& request, QHttpServerResponder&& responder) {
         QHttpServerResponse response(("Cannot GET "
-                                      + request.url().path()).toUtf8()
-                                     , QHttpServerResponse::StatusCode::NotFound);
+            + request.url().path()).toUtf8()
+            , QHttpServerResponse::StatusCode::NotFound);
         responder.sendResponse(response);
-    });
+        });
 
-    QVariantMap special {
+    QVariantMap special{
         { "daily_signin", "/daily_signin" },
         { "fm_trash", "/fm_trash" },
         { "personal_fm", "/personal_fm" },
-        };
+    };
     /**
    * Load every modules in this directory
    */
     auto moduleDefinitions = getModulesDefinitions(special);
 
-    for (auto& moduleDef: moduleDefinitions) {
+    for (auto& moduleDef : moduleDefinitions) {
         QString identifier = moduleDef.toMap()["identifier"].toString();
         auto route = moduleDef.toMap()["route"].toString();
 
-        auto ViewHandler = [=](const QHttpServerRequest &request) {
+        auto ViewHandler = [=](const QHttpServerRequest& request) {
             QVariantMap arg;
             // 参数注入客户端IP
             auto ip = request.remoteAddress().toString();
@@ -112,7 +112,7 @@ void Server::consturctServer(QVariantMap options)
             }
 
             QVariantMap headers;
-            for(auto& i: request.headers()) {
+            for (auto& i : request.headers()) {
                 headers[QUrl::fromPercentEncoding(i.first)] = QUrl::fromPercentEncoding(i.second);
             }
             auto cookie = Index::cookieToJson(headers["Cookie"].toString());
@@ -136,13 +136,13 @@ void Server::consturctServer(QVariantMap options)
                     { "Access-Control-Allow-Headers", "X-Requested-With,Content-Type" },
                     { "Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS" },
                     { "Content-Type", "application/json; charset=utf-8" },
-                });
+                    });
                 const auto cookies = ret["cookie"].toString();
                 response.setHeader("Set-Cookie", cookies.toUtf8());
                 return response;
-            });
+                });
 
-        };
+            };
         server.route(route, ViewHandler);
     }
 }
@@ -151,17 +151,17 @@ QVariantList Server::getModulesDefinitions(QVariantMap specificRoute)
 {
     auto parseRoute = [&](QString fileName) {
         return specificRoute.contains(fileName)
-                   ? specificRoute[fileName].toString()
-                   : "/" + fileName.replace("_", "/").trimmed();
-    };
+            ? specificRoute[fileName].toString()
+            : "/" + fileName.replace("_", "/").trimmed();
+        };
     QVariantList modules;
-    for (auto& identifier: ApiHelper().memberList()) {
+    for (auto& identifier : ApiHelper().memberList()) {
         auto route = parseRoute(identifier);
         modules.push_back(QVariantMap
-                          {
-                              { "identifier", identifier },
-                              { "route", route }
-                          });
+            {
+                { "identifier", identifier },
+                { "route", route }
+            });
     }
     return modules;
 }

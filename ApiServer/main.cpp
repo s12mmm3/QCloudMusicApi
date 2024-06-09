@@ -15,10 +15,10 @@ void start() {
     generateConfig();
     server.serveNcmApi({
         { "checkVersion", true }
-    });
+        });
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     qSetMessagePattern("%{time yyyy-MM-dd hh:mm:ss.zzz} : %{pid} : %{category} : %{type} : %{line} : %{function} : %{message}");
     QCoreApplication a(argc, argv);

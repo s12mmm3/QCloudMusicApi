@@ -5,7 +5,7 @@
 #include "tabcommon.h"
 #include "ui_tabcommon.h"
 
-TabCommon::TabCommon(QWidget *parent) :
+TabCommon::TabCommon(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabCommon)
 {
@@ -15,7 +15,7 @@ TabCommon::TabCommon(QWidget *parent) :
 
     ui->tabCommonUnit->callback = [](QString member, QString arg) -> QVariantMap {
         return ServiceLocator::helper().invoke(member, QJsonDocument::fromJson(arg.toUtf8()).toVariant().toMap());
-    };
+        };
 }
 
 TabCommon::~TabCommon()

@@ -22,9 +22,9 @@ QT_END_NAMESPACE
 class ApiPluginImpl
 {
 public:
-    QPluginLoader *loader = nullptr;
+    QPluginLoader* loader = nullptr;
 
-    QCloudMusicApiPlugin *plugin = nullptr;
+    QCloudMusicApiPlugin* plugin = nullptr;
 };
 
 #endif // QCLOUDMUSICAPIPLUGIN_H

@@ -7,13 +7,13 @@
 #include <QNetworkReply>
 #include <QRegularExpression>
 
-const static auto &request = QCloudMusicApi::Request::createRequest;
-const static auto &POST = QNetworkAccessManager::PostOperation;
-const static auto &GET = QNetworkAccessManager::GetOperation;
+const static auto& request = QCloudMusicApi::Request::createRequest;
+const static auto& POST = QNetworkAccessManager::PostOperation;
+const static auto& GET = QNetworkAccessManager::GetOperation;
 
 using namespace QCloudMusicApi;
-Plugins::Plugins(QObject *parent)
-    : QObject{parent}
+Plugins::Plugins(QObject* parent)
+    : QObject{ parent }
 {}
 
 QVariantMap Plugins::songUpload(QVariantMap query)
@@ -23,9 +23,9 @@ QVariantMap Plugins::songUpload(QVariantMap query)
         ext = "flac";
     }
     QString filename = query.value("songFile").toMap()["name"].toString()
-                           .replace("." + ext, "")
-                           .replace(QRegularExpression("\\s"), "")
-                           .replace(QRegularExpression("\\."), "_");
+        .replace("." + ext, "")
+        .replace(QRegularExpression("\\s"), "")
+        .replace(QRegularExpression("\\."), "_");
     const QString bucket = "jd-musicrep-privatecloud-audio-public";
     //   获取key和token
     const auto tokenRes = request(
@@ -75,7 +75,7 @@ QVariantMap Plugins::songUpload(QVariantMap query)
 
 QVariantMap Plugins::upload(QVariantMap query)
 {
-    const QVariantMap data {
+    const QVariantMap data{
         { "bucket", "yyimgs" },
         { "ext", "jpg" },
         { "filename", query["imgFile"].toMap()["name"] },
@@ -95,17 +95,17 @@ QVariantMap Plugins::upload(QVariantMap query)
             { "ua", query.value("ua", "") },
             { "proxy", query["proxy"] },
         }
-        );
+    );
     auto reply = Request::axios(QNetworkAccessManager::PostOperation,
-                                "https://nosup-hz1.127.net/yyimgs/"
-                                    + res["body"].toMap()["result"].toMap()["objectKey"].toString()
-                                    + "?offset=0&complete=true&version=1.0",
-                                {},
+        "https://nosup-hz1.127.net/yyimgs/"
+        + res["body"].toMap()["result"].toMap()["objectKey"].toString()
+        + "?offset=0&complete=true&version=1.0",
+        {},
                                 {
                                     { "x-nos-token", res["body"].toMap()["result"].toMap()["token"] },
                                     { "Content-Type", "image/jpeg" }
                                 },
-                                query["imgFile"].toMap()["data"].toByteArray());
+        query["imgFile"].toMap()["data"].toByteArray());
     reply->manager()->deleteLater();
 
     // 读取响应内容
@@ -122,11 +122,11 @@ QVariantMap Plugins::upload(QVariantMap query)
     const auto res3 = request(
         GET,
         QString("https://music.163.com/upload/img/op?id=%1&op=%2y%3y%4y%5")
-            .arg(res["body"].toMap()["result"].toMap()["docId"].toString())
-            .arg(imgX)
-            .arg(imgY)
-            .arg(imgSize)
-            .arg(imgSize),
+        .arg(res["body"].toMap()["result"].toMap()["docId"].toString())
+        .arg(imgX)
+        .arg(imgY)
+        .arg(imgSize)
+        .arg(imgSize),
         {},
         {
             { "crypto", "weapi" },

@@ -57,12 +57,12 @@ def memberList():
 def invoke(name, value):
     result = lib.invoke(ctypes.create_string_buffer(name.encode()),
                          ctypes.create_string_buffer(value.encode()))
-    return result
+    return result.decode()
 
 # 反射调用API的成员函数
 def invokeUrl(url):
     result = lib.invokeUrl(ctypes.create_string_buffer(url.encode()))
-    return result
+    return result.decode()
 
 # 设置全局cookie
 def set_cookie(cookie):
@@ -97,7 +97,9 @@ def unloadPlugin(fileName):
 if __name__ == '__main__':
     setFilterRules("*.debug=false")
 
-    result = invoke("lyric_new", "{\"id\": \"2058263032\"}")
+    result = invoke("lyric_new", json.dumps({
+        "id": "2058263032"
+    }))
     print("result", json.dumps(json.loads(result), indent = 4, ensure_ascii = False))
     
     lib.freeApi()

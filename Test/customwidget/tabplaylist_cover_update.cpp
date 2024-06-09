@@ -5,7 +5,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 
-TabPlaylist_cover_update::TabPlaylist_cover_update(QWidget *parent) :
+TabPlaylist_cover_update::TabPlaylist_cover_update(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabPlaylist_cover_update)
 {
@@ -43,7 +43,7 @@ void TabPlaylist_cover_update::on_pushButton_send_clicked()
     file.open(QFile::ReadOnly);
     auto data = file.readAll();
 
-    QVariantMap arg {
+    QVariantMap arg{
         { "id", ui->lineEdit_id->text() },
         { "imgSize", imgSize },
         { "imgFile", QVariantMap {

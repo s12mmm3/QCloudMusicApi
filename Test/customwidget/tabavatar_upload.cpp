@@ -5,7 +5,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 
-TabAvatar_upload::TabAvatar_upload(QWidget *parent) :
+TabAvatar_upload::TabAvatar_upload(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabAvatar_upload)
 {
@@ -43,7 +43,7 @@ void TabAvatar_upload::on_pushButton_send_clicked()
     file.open(QFile::ReadOnly);
     auto data = file.readAll();
 
-    auto arg = QVariantMap {
+    auto arg = QVariantMap{
         { "imgSize", imgSize },
         { "imgFile", QVariantMap {
                            { "name", ui->label_path->text() },

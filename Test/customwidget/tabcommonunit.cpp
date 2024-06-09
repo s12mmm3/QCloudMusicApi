@@ -8,7 +8,7 @@
 #include "tabcommonunit.h"
 #include "ui_tabcommonunit.h"
 
-TabCommonUnit::TabCommonUnit(QWidget *parent) :
+TabCommonUnit::TabCommonUnit(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabCommonUnit)
 {
@@ -47,14 +47,14 @@ void TabCommonUnit::on_pushButton_send_clicked()
 }
 
 
-void TabCommonUnit::on_comboBox_function_currentTextChanged(const QString &arg1)
+void TabCommonUnit::on_comboBox_function_currentTextChanged(const QString& arg1)
 {
     // 从config中读取当前接口的测试数据
     auto JsonFormat = ui->checkBox->isChecked() ? QJsonDocument::Indented : QJsonDocument::Compact;
     ui->textEdit_arg->setText(
         QJsonDocument(ServiceLocator::config()[arg1].toObject())
-            .toJson(JsonFormat)
-        );
+        .toJson(JsonFormat)
+    );
 }
 
 
@@ -71,7 +71,7 @@ void TabCommonUnit::update(QVariantMap ret)
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(JsonFormat));
 }
 
-void TabCommonUnit::setFunctions(const QStringList &functions)
+void TabCommonUnit::setFunctions(const QStringList& functions)
 {
     ui->comboBox_function->addItems(functions);
 }
