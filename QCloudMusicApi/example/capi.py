@@ -50,7 +50,7 @@ lib.unloadPlugin.restype = ctypes.c_bool
 def memberList():
     list = []
     for i in range(0, lib.memberCount()):
-        list.append(lib.memberName(i))
+        list.append(lib.memberName(i).decode())
     return list
 
 # 反射调用API的成员函数
@@ -70,7 +70,7 @@ def set_cookie(cookie):
 
 # 获取cookie
 def cookie():
-    result = lib.cookie()
+    result = lib.cookie().decode()
     return result
 
 # 设置全局代理
@@ -79,7 +79,7 @@ def set_proxy(proxy):
 
 # 获取代理
 def proxy():
-    result = lib.proxy()
+    result = lib.proxy().decode()
     return result
 
 # 设置log规则

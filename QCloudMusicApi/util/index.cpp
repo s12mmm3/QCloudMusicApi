@@ -17,6 +17,7 @@ QVariantMap Index::cookieToJson(const QString &cookie) {
     auto cookieArr = cookie.split(";");
     QVariantMap obj;
     for (const QString &i : cookieArr) {
+        if (i.isEmpty()) continue;
         QStringList arr = i.trimmed().split("=");
         obj.insert(arr.value(0), arr.value(1));
     }
@@ -27,7 +28,7 @@ QString Index::cookieObjToString(const QVariantMap &cookie) {
     QStringList result;
     for (auto i = cookie.constBegin(); i != cookie.constEnd(); i++) {
         result.push_back(
-            QUrl::toPercentEncoding(i.key()) + "=" + QUrl::toPercentEncoding(i.value().toString())
+            i.key() + "=" + i.value().toString()
             );
     }
     return result.join("; ");
