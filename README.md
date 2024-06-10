@@ -41,7 +41,7 @@
 #include "apihelper.h"
 
 ApiHelper helper;
-qDebug() << helper.invoke("lyric", { { "id", 1408586353 } });
+qDebug() << helper.invoke("lyric_new", { { "id", "1408586353" } });
 ```
 传入Url调用
 ```C++
@@ -59,7 +59,7 @@ qDebug() << helper.invokeUrl("http://localhost:3000/activate/init/profile");
 #include "module.h"
 
 NeteaseCloudMusicApi api;
-qDebug() << api.lyric({ { "id", 1408586353 } });
+qDebug() << api.lyric_new({ { "id", "1408586353" } });
 ```
 
 ### 跨语言调用
@@ -92,8 +92,10 @@ def invoke(name, value):
     return result.decode()
 
 if __name__ == '__main__':
-    result = invoke("lyric_new", "{\"id\": \"2058263032\"}")
-    print("result", json.loads(result))
+    result = invoke("lyric_new", json.dumps({
+        "id": "2058263032"
+    }))
+    print("result", json.dumps(json.loads(result), indent = 4, ensure_ascii = False))
 ```
 
 ### 引用动态库文件
