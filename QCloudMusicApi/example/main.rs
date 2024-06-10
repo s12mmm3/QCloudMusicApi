@@ -12,8 +12,8 @@ extern "C" {
     fn set_proxy(proxy: *const c_char);
     fn proxy() -> *const c_char;
     fn setFilterRules(rules: *const c_char);
-    fn loadPlugin(fileName: *const c_char);
-    fn unloadPlugin(fileName: *const c_char);
+    fn loadPlugin(fileName: *const c_char) -> bool;
+    fn unloadPlugin(fileName: *const c_char) -> bool;
 }
 
 pub struct ApiHelper;
@@ -22,35 +22,31 @@ impl ApiHelper {
 
     // 获取API列表
     pub fn memberList(&self) -> Vec<String> {
-        let mut list = Vec::new();
+        let mut _list = Vec::new();
         unsafe {
             for i in 0..memberCount() as i32 {
-                let name_cstr = CStr::from_ptr(memberName(i as i32));
-                list.push(name_cstr.to_str().unwrap().to_owned());
+                _list.push(CStr::from_ptr(memberName(i as i32)).to_str().unwrap().to_owned());
             }
         }
-        list
+        _list
     }
 
     // 反射调用API的成员函数
     pub fn invoke(&self, member_name: &str, value: &str) -> String {
-        let mut result = String::new();
+        let mut _result = String::new();
         unsafe {
-            result = CStr::from_ptr(invoke(CString::new(member_name).expect("").as_ptr(),
-             CString::new(value).expect("").as_ptr()))
-             .to_str().expect("").to_string()
+            _result = CStr::from_ptr(invoke(CString::new(member_name).expect("").as_ptr(),
+            CString::new(value).expect("").as_ptr()))
+            .to_str().expect("").to_string()
         }
-        result
+        _result
     }
 
     // 反射调用API的成员函数
     pub fn invokeUrl(&self, url: &str) -> String {
-        let mut result = String::new();
         unsafe {
-            result = CStr::from_ptr(invokeUrl(CString::new(url).expect("").as_ptr()))
-             .to_str().expect("").to_string()
+            CStr::from_ptr(invokeUrl(CString::new(url).expect("").as_ptr())).to_str().expect("").to_string()
         }
-        result
     }
 
     // 设置全局cookie
@@ -62,12 +58,9 @@ impl ApiHelper {
 
     // 获取cookie
     pub fn cookie(&self) -> String {
-        let mut result = String::new();
         unsafe {
-            result = CStr::from_ptr(cookie())
-            .to_str().expect("").to_string()
+            CStr::from_ptr(cookie()).to_str().expect("").to_string()
         }
-        result
     }
 
     // 设置全局代理
@@ -79,12 +72,9 @@ impl ApiHelper {
 
     // 获取代理
     pub fn proxy(&self) -> String {
-        let mut result = String::new();
         unsafe {
-            result = CStr::from_ptr(proxy())
-            .to_str().expect("").to_string()
+            CStr::from_ptr(proxy()).to_str().expect("").to_string()
         }
-        result
     }
 
     // 设置log规则
@@ -95,14 +85,14 @@ impl ApiHelper {
     }
 
     // 加载插件
-    pub fn loadPlugin(&self, fileName: &str) {
+    pub fn loadPlugin(&self, fileName: &str) -> bool {
         unsafe {
             loadPlugin(CString::new(fileName).expect("").as_ptr())
         }
     }
 
     // 卸载插件
-    pub fn unloadPlugin(&self, fileName: &str) {
+    pub fn unloadPlugin(&self, fileName: &str) -> bool {
         unsafe {
             unloadPlugin(CString::new(fileName).expect("").as_ptr())
         }
@@ -116,8 +106,8 @@ fn main() {
         println!("{}", method);
     }
 
-    println!("Result: {}", helper.invoke("artist_detail", "{\"id\": \"15396\"}"));
+    println!("{}", helper.invoke("artist_detail", "{\"id\": \"15396\"}"));
     
-    // println!("Result: {}", helper.invokeUrl("/song/url/v1?id=2058263032, 2057797340&level=exhigh"));
+    // println!("{}", helper.invokeUrl("/song/url/v1?id=2058263032, 2057797340&level=exhigh"));
 
 }
