@@ -8,7 +8,6 @@
 [![Qt version](https://img.shields.io/badge/Qt-5.12+-41CD52?logo=qt)](https://www.qt.io)
 [![Qt version](https://img.shields.io/badge/Qt-6.0+-41CD52?logo=qt)](https://www.qt.io)
 ![GitHub license](https://img.shields.io/github/license/s12mmm3/QCloudMusicApi)
-********************************
 
 ## 简介
 
