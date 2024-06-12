@@ -378,6 +378,9 @@ public:
     // 喜欢音乐列表
     Q_INVOKABLE QVariantMap likelist(QVariantMap);
 
+    // 一起听 接受邀请
+    Q_INVOKABLE QVariantMap listentogether_accept(QVariantMap);
+
     // 一起听 结束房间
     Q_INVOKABLE QVariantMap listentogether_end(QVariantMap);
 

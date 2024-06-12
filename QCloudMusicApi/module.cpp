@@ -2105,6 +2105,24 @@ QVariantMap Api::likelist(QVariantMap query) {
     );
 }
 
+// 一起听 接受邀请
+QVariantMap Api::listentogether_accept(QVariantMap query) {
+    const QVariantMap data{
+        { "refer", "inbox_invite" },
+        { "roomId", query["roomId"] },
+        { "inviterId", query["inviterId"] },
+    };
+    return request(
+        POST,
+        "http://interface.music.163.com/eapi/listen/together/play/invitation/accept",
+        data,
+        {
+            _EAPI,
+            { "url", "/api/listen/together/play/invitation/accept" }
+        }
+    );
+}
+
 // 一起听 结束房间
 QVariantMap Api::listentogether_end(QVariantMap query) {
     const QVariantMap data{
