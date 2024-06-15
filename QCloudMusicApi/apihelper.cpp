@@ -122,7 +122,7 @@ QString ApiHelper::cookie()
 
 void ApiHelper::setFilterRules(const QString& rules)
 {
-    LOGGER_NAME().setFilterRules(rules);
+    QLoggingCategory::setFilterRules(rules);
 }
 
 bool ApiHelper::loadPlugin(const QString& fileName)

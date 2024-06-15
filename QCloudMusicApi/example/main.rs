@@ -101,7 +101,7 @@ impl ApiHelper {
 
 fn main() {
     let helper = ApiHelper;
-    helper.setFilterRules("*.debug=false");
+    helper.setFilterRules("QCloudMusicApi.debug=false");
     for method in helper.memberList() {
         println!("{}", method);
     }

@@ -52,7 +52,7 @@ public:
     Q_INVOKABLE QStringList memberList();
 
     /**
-     * @brief 设置log规则
+     * @brief 设置全局log规则，例如："QCloudMusicApi.debug=false"
      * @param rules log规则
      */
     Q_INVOKABLE void setFilterRules(const QString& rules);

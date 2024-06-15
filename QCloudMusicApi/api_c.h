@@ -65,7 +65,7 @@ extern "C" {
     QCLOUDMUSICAPI_EXPORT const char* proxy();
 
     /**
-     * @brief 设置log规则
+     * @brief 设置全局log规则，例如："QCloudMusicApi.debug=false"
      * @param rules log规则
      */
     QCLOUDMUSICAPI_EXPORT void setFilterRules(char* rules);

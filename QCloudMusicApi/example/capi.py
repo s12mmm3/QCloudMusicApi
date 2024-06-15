@@ -95,7 +95,7 @@ def unloadPlugin(fileName):
     return lib.unloadPlugin(ctypes.create_string_buffer(fileName.encode()))
 
 if __name__ == '__main__':
-    setFilterRules("*.debug=false")
+    setFilterRules("QCloudMusicApi.debug=false")
 
     result = invoke("lyric_new", json.dumps({
         "id": "2058263032"

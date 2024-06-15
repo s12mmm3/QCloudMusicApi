@@ -108,7 +108,7 @@ class Program
 {
     static void Main()
     {
-        ApiHelper.setFilterRules("*.debug=false");
+        ApiHelper.setFilterRules("QCloudMusicApi.debug=false");
         foreach (var member in ApiHelper.memberList()) {
             Console.WriteLine(member);
         }
