@@ -449,11 +449,9 @@ QVariantMap Api::artist_songs(QVariantMap query) {
 // 收藏与取消收藏歌手
 QVariantMap Api::artist_sub(QVariantMap query) {
     query["t"] = query["t"] == 1 ? "sub" : "unsub";
-    QStringList artistIds;
-    artistIds.append(query["id"].toString());
     const QVariantMap data{
         { "artistId", query["id"] },
-        { "artistIds", artistIds }
+        { "artistIds", "[" + query["id"].toString() + "]" }
     };
     return request(
         POST,
