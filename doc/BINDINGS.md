@@ -84,8 +84,7 @@ class Api
 {
     public const string dllName = "QCloudMusicApi.dll";
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr invoke(string memberName, string value);decl)]
-    public static extern bool unloadPlugin(string fileName);
+    public static extern IntPtr invoke(string memberName, string value);
 }
 
 class ApiHelper
