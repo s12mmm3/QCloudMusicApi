@@ -74,29 +74,8 @@ qDebug() << api.lyric_new({ { "id", "1408586353" } });
  */
 const char* invoke(char* memberName, char* value);
 ```
-其他例子可以在```QCloudMusicApi/example```路径下查看
 
-#### Python调用
-
-```Python
-import ctypes
-import json
-
-lib = ctypes.CDLL("./QCloudMusicApi.dll")
-lib.invoke.argtypes = [ ctypes.c_char_p, ctypes.c_char_p ]
-lib.invoke.restype = ctypes.c_char_p
-
-def invoke(name, value):
-    result = lib.invoke(ctypes.create_string_buffer(name.encode()),
-                         ctypes.create_string_buffer(value.encode()))
-    return result.decode()
-
-if __name__ == '__main__':
-    result = invoke("lyric_new", json.dumps({
-        "id": "2058263032"
-    }))
-    print("result", json.dumps(json.loads(result), indent = 4, ensure_ascii = False))
-```
+调用例子参考[BINDINGS](./BINDINGS.md)
 
 ### 引用动态库文件
 
