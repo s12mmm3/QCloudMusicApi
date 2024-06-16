@@ -34,7 +34,9 @@ extern "C" {
 - [C#调用](#C#调用)
 - [Rust调用](#Rust调用)
 
-#### [Python调用](./QCloudMusicApi/example/capi.py)
+## Python调用
+
+[示例](./QCloudMusicApi/example/capi.py)
 
 使用ctypes在运行时调用动态库
 
@@ -66,7 +68,9 @@ if __name__ == '__main__':
     print("result", json.dumps(json.loads(result), indent = 4, ensure_ascii = False))
 ```
 
-#### [C#调用](./QCloudMusicApi/example/Program.cs)
+## C#调用
+
+[示例](./QCloudMusicApi/example/Program.cs)
 
 在代码中声明外部函数，从而可以调用存储在DLL中的函数
 
@@ -110,7 +114,9 @@ class Program
 
 ```
 
-#### [Rust调用](./QCloudMusicApi/example/main.rs)
+## Rust调用
+
+[示例](./QCloudMusicApi/example/main.rs)
 
 使用外部块（extern “C”）定义外部函数接口（FFI），调用C语言编写的动态库中的函数
 

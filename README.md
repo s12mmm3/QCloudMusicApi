@@ -13,7 +13,7 @@
 
 本项目翻译自Node.js项目[Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
-更新尽量与原项目同步，实现了大部分接口；支持跨语言调用，支持跨平台编译，支持多种编译器编译
+更新尽量与原项目同步，实现了大部分接口；支持[跨语言调用](./BINDINGS.md)，支持跨平台编译，支持多种编译器编译
 
 使用方式参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致；支持设置Http服务器（需要Qt6.4及以上）
 
@@ -75,7 +75,7 @@ qDebug() << api.lyric_new({ { "id", "1408586353" } });
 const char* invoke(char* memberName, char* value);
 ```
 
-调用例子参考[BINDINGS](./BINDINGS.md)
+调用例子参考[跨语言调用](./BINDINGS.md)
 
 ### 引用动态库文件
 
