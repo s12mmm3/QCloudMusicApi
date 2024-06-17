@@ -73,6 +73,7 @@ public:
 
 public:
     DEFINE_VALUE(QString, proxy, "")
+    DEFINE_VALUE(QString, realIP, "")
 
 private:
     void beforeInvoke(QVariantMap& arg);

@@ -80,10 +80,6 @@ QCLOUDMUSICAPI_EXPORT int memberCount() {
     return helper.memberList().size();
 }
 
-QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy) {
-    helper.set_proxy(proxy);
-}
-
 QCLOUDMUSICAPI_EXPORT void set_cookie(char* cookie) {
     helper.set_cookie(cookie);
 }
@@ -94,9 +90,23 @@ QCLOUDMUSICAPI_EXPORT const char* cookie()
     return result.c_str();
 }
 
+QCLOUDMUSICAPI_EXPORT void set_proxy(char* proxy) {
+    helper.set_proxy(proxy);
+}
+
 QCLOUDMUSICAPI_EXPORT const char* proxy()
 {
     result = helper.proxy().toStdString();
+    return result.c_str();
+}
+
+QCLOUDMUSICAPI_EXPORT void set_realIP(char* realIP) {
+    helper.set_realIP(realIP);
+}
+
+QCLOUDMUSICAPI_EXPORT const char* realIP()
+{
+    result = helper.realIP().toStdString();
     return result.c_str();
 }
 

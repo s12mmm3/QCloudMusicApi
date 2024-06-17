@@ -118,4 +118,4 @@ cmake --build build -j
 
 ## License
 
-[The MIT License (MIT)](https://github.com/s12mmm3/QCloudMusicApi/blob/master/LICENSE)
+[The MIT License (MIT)](LICENSE)

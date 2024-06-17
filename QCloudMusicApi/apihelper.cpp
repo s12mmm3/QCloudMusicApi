@@ -35,8 +35,13 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
     arg["cookie"] = m_cookie;
 
     // 设置全局代理
-    if (!proxy().isEmpty()) {
-        arg["proxy"] = proxy();
+    if (!proxy().isEmpty() && !arg.contains("proxy")) {
+        arg.insert("proxy", proxy());
+    }
+
+    // 设置全局realIP
+    if (!realIP().isEmpty() && !arg.contains("realIP")) {
+        arg.insert("realIP", realIP());
     }
 }
 

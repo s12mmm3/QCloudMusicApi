@@ -65,6 +65,18 @@ extern "C" {
     QCLOUDMUSICAPI_EXPORT const char* proxy();
 
     /**
+     * @brief 设置全局realIP
+     * @param realIP
+     */
+    QCLOUDMUSICAPI_EXPORT void set_realIP(char* realIP);
+
+    /**
+     * @brief 获取realIP
+     * @return char* realIP
+     */
+    QCLOUDMUSICAPI_EXPORT const char* realIP();
+
+    /**
      * @brief 设置全局log规则，例如："QCloudMusicApi.debug=false"
      * @param rules log规则
      */
