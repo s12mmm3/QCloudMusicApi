@@ -38,6 +38,9 @@ public:
     // 最新专辑
     Q_INVOKABLE QVariantMap album_newest(QVariantMap);
 
+    // 获取专辑歌曲的音质
+    Q_INVOKABLE QVariantMap album_privilege(QVariantMap);
+
     // 数字专辑&数字单曲-榜单
     Q_INVOKABLE QVariantMap album_songsaleboard(QVariantMap);
 
@@ -55,6 +58,9 @@ public:
 
     // 歌手介绍
     Q_INVOKABLE QVariantMap artist_desc(QVariantMap);
+
+    // 歌手动态信息
+    Q_INVOKABLE QVariantMap artist_detail_dynamic(QVariantMap);
 
     // 歌手详情
     Q_INVOKABLE QVariantMap artist_detail(QVariantMap);
@@ -516,7 +522,7 @@ public:
     // 推荐歌单
     Q_INVOKABLE QVariantMap personalized(QVariantMap);
 
-    // 数字专辑-新碟上架
+    // 私信和通知接口
     Q_INVOKABLE QVariantMap pl_count(QVariantMap);
 
     // 全部歌单分类
@@ -534,7 +540,7 @@ public:
     // 更新歌单描述
     Q_INVOKABLE QVariantMap playlist_desc_update(QVariantMap);
 
-    // 初始化名字
+    // 歌单动态信息
     Q_INVOKABLE QVariantMap playlist_detail_dynamic(QVariantMap);
 
     // 歌单详情
@@ -600,6 +606,9 @@ public:
 
     // 更换手机
     Q_INVOKABLE QVariantMap rebind(QVariantMap);
+
+    // 最近听歌列表
+    Q_INVOKABLE QVariantMap recent_listen_list(QVariantMap);
 
     // 每日推荐歌单
     Q_INVOKABLE QVariantMap recommend_resource(QVariantMap);

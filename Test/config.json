@@ -503,5 +503,11 @@
     },
     "top_list": {
         "id": "2809577409"
+    },
+    "album_privilege": {
+        "id": "149114512"
+    },
+    "artist_detail_dynamic": {
+        "id": "15396"
     }
 }

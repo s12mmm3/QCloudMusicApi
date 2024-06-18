@@ -194,6 +194,22 @@ QVariantMap Api::album_newest(QVariantMap query) {
         );
 }
 
+// 获取专辑歌曲的音质
+QVariantMap Api::album_privilege(QVariantMap query) {
+    const QVariantMap data{
+        { "id", query["id"] }
+    };
+    return request(
+        POST,
+        "https://interface.music.163.com/eapi/album/privilege",
+        data,
+        {
+            _EAPI,
+            { "url", "/api/album/privilege" }
+        }
+    );
+}
+
 // 数字专辑&数字单曲-榜单
 QVariantMap Api::album_songsaleboard(QVariantMap query) {
     QVariantMap data{
@@ -286,6 +302,22 @@ QVariantMap Api::artist_desc(QVariantMap query) {
             _WEAPI
         }
     );
+}
+
+// 歌手动态信息
+QVariantMap Api::artist_detail_dynamic(QVariantMap query) {
+    const QVariantMap data{
+        { "id", query["id"] }
+    };
+    return request(
+        POST,
+        "https://interface.music.163.com/eapi/artist/detail/dynamic",
+        data,
+        {
+            _EAPI,
+            { "url", "/api/artist/detail/dynamic" }
+        }
+        );
 }
 
 // 歌手详情
@@ -2928,7 +2960,7 @@ QVariantMap Api::personalized(QVariantMap query) {
     );
 }
 
-// 数字专辑-新碟上架
+// 私信和通知接口
 QVariantMap Api::pl_count(QVariantMap query) {
     return request(
         POST,
@@ -3041,7 +3073,7 @@ QVariantMap Api::playlist_desc_update(QVariantMap query) {
     );
 }
 
-// 初始化名字
+// 歌单动态信息
 QVariantMap Api::playlist_detail_dynamic(QVariantMap query) {
     const QVariantMap data{
         { "id", query["id"] },
@@ -3485,6 +3517,19 @@ QVariantMap Api::rebind(QVariantMap query) {
         data,
         {
             _WEAPI
+        }
+    );
+}
+
+// 最近听歌列表
+QVariantMap Api::recent_listen_list(QVariantMap query) {
+    return request(
+        POST,
+        "https://interface.music.163.com/eapi/pc/recent/listen/list",
+        {},
+        {
+            _EAPI,
+            { "url", "/api/pc/recent/listen/list" }
         }
     );
 }
