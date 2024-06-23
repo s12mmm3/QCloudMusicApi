@@ -15,7 +15,7 @@ namespace QCloudMusicApi {
     public:
         static QString chooseUserAgent(QString uaType);
         static QVariantMap createRequest(QNetworkAccessManager::Operation method,
-            QString url,
+            QString uri,
             QVariantMap data,
             QVariantMap options);
 

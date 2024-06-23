@@ -21,6 +21,7 @@
 #include "index.h"
 #include "request.h"
 #include "logger.h"
+#include "config.h"
 
 QString anonymous_token;
 
@@ -45,14 +46,14 @@ QString Request::chooseUserAgent(QString uaType) {
 }
 
 QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
-    QString url,
+    QString uri,
     QVariantMap data,
     QVariantMap options) {
     DEBUG.noquote() <<
         QJsonDocument::fromVariant(
             QVariantMap{
                 { "method", method },
-                { "url", url },
+                { "uri", uri },
                 { "data", data },
                 { "options", options}
             }
@@ -69,7 +70,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     if (method == QNetworkAccessManager::PostOperation) {
         headers["Content-Type"] = "application/x-www-form-urlencoded";
     }
-    if (url.contains("music.163.com")) {
+    if (uri.contains("music.163.com")) {
         headers["Referer"] = "https://music.163.com";
     }
     QString ip = options.value("realIP", options.value("ip", "")).toString();
@@ -96,7 +97,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                     { "os", options["cookie"].toMap().value("os", "ios") },
                     { "appver", options["cookie"].toMap().value("appver", cookie.value("os") != "pc" ? iosAppVersion : "") },
                 });
-        if (url.indexOf("login") == -1) {
+        if (uri.indexOf("login") == -1) {
             auto cookie = options["cookie"].toMap();
             cookie["NMTID"] = randomBytes().toHex();
             options["cookie"] = cookie;
@@ -133,40 +134,24 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         headers["Cookie"] = Index::cookieObjToString(cookie);
     }
 
-    if (options["crypto"] == "weapi") {
-        headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
-        data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
-
-        data = Crypto::weapi(QJsonDocument::fromVariant(data));
-        url = url.replace(QRegularExpression("\\w*api"), "weapi");
-    }
-    else if (options["crypto"] == "linuxapi") {
-        data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
-            { "method", method },
-            { "url", url.replace(QRegularExpression("\\w*api"), "api") },
-            { "params", data }
-            }));
-        headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
-        url = "https://music.163.com/api/linux/forward";
-    }
-    else if (options["crypto"] == "eapi") {
+    auto eapiEncrypt = [&]() {
         const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header{
-            { "osver", cookie.value("osver", "17.4.1") }, //系统版本
-            { "deviceId", cookie["deviceId"] },
-            { "appver", cookie.value("appver", iosAppVersion) }, // app版本
-            { "versioncode", cookie.value("versioncode", "140") }, //版本号
-            { "mobilename", cookie.value("mobilename", "") }, //设备model
-            { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
-            { "resolution", cookie.value("resolution", "1920x1080") }, //设备分辨率
-            { "__csrf", csrfToken },
-            { "os", cookie.value("os", "ios") },
-            { "channel", cookie.value("channel", "") },
-            { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
-                                + "_"
-                                + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
-            },
+                           { "osver", cookie.value("osver", "17.4.1") }, //系统版本
+                           { "deviceId", cookie["deviceId"] },
+                           { "appver", cookie.value("appver", iosAppVersion) }, // app版本
+                           { "versioncode", cookie.value("versioncode", "140") }, //版本号
+                           { "mobilename", cookie.value("mobilename", "") }, //设备model
+                           { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
+                           { "resolution", cookie.value("resolution", "1920x1080") }, //设备分辨率
+                           { "__csrf", csrfToken },
+                           { "os", cookie.value("os", "ios") },
+                           { "channel", cookie.value("channel", "") },
+                           { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
+                                                + "_"
+                                                + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
+                           },
         };
         if (cookie.contains("MUSIC_U")) header["MUSIC_U"] = cookie["MUSIC_U"];
         if (cookie.contains("MUSIC_A")) header["MUSIC_A"] = cookie["MUSIC_A"];
@@ -182,7 +167,45 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             }();
             data["header"] = header;
             data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
-            url = url.replace(QRegularExpression("\\w*api"), "eapi");
+        };
+
+    if (options["crypto"] == "weapi") {
+        headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
+        data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
+
+        data = Crypto::weapi(QJsonDocument::fromVariant(data));
+        uri = uri.replace(QRegularExpression("\\w*api"), "weapi");
+    }
+    else if (options["crypto"] == "linuxapi") {
+        data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
+            { "method", method },
+            { "url", uri.replace(QRegularExpression("\\w*api"), "api") },
+            { "params", data }
+            }));
+        headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
+        uri = "https://music.163.com/api/linux/forward";
+    }
+    else if (options["crypto"] == "eapi") {
+        eapiEncrypt();
+        uri = uri.replace(QRegularExpression("\\w*api"), "eapi");
+    }
+    else if (options["crypto"] == "api") {
+        auto getApiDomain = [&]() {
+            auto newApiDomain = Config::APP_CONF["newApiDomain"].toBool();
+            auto domain = Config::APP_CONF["domain"].toString();
+            if (newApiDomain) {
+                domain = domain.replace("//music", "//interface.music");
+            }
+            return domain;
+            };
+        if (Config::APP_CONF["encrypt"].toBool()) {
+            options["url"] = uri;
+
+            eapiEncrypt();
+
+            uri = getApiDomain() + "/eapi/" + uri.mid(5);
+        }
+        else uri = Config::APP_CONF["apiDomain"].toString() + uri;
     }
 
     QNetworkProxy proxy = QNetworkProxy::NoProxy;
@@ -201,14 +224,14 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
 
     QUrlQuery query;
-    query.setQuery(QUrl(url).query());
+    query.setQuery(QUrl(uri).query());
     for (auto i = data.constBegin(); i != data.constEnd(); ++i) {
         query.addQueryItem(i.key(), QUrl::toPercentEncoding(i.value().toString()));
     }
     DEBUG << "method" << method;
-    DEBUG << "url" << url;
+    DEBUG << "url" << uri;
     DEBUG << "data" << data;
-    QNetworkReply* reply = axios(method, url, data, headers, query.toString().toUtf8(), proxy);
+    QNetworkReply* reply = axios(method, uri, data, headers, query.toString().toUtf8(), proxy);
     reply->manager()->deleteLater();
 
     QVariantMap answer{

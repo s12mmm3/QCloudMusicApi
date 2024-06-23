@@ -16,6 +16,13 @@ namespace QCloudMusicApi {
             { "6", "A_EV_2_" },
             { "7", "A_DR_14_" }
         };
+        static QVariantMap APP_CONF{
+            { "apiDomain", "https://interface.music.163.com" },
+            { "domain", "https://music.163.com" },
+            { "encrypt", false },
+            { "encryptResponse", false },
+            { "newApiDomain", true },
+        };
     }
 }
 #endif // CONFIG_H
