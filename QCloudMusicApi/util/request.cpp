@@ -189,7 +189,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         eapiEncrypt();
         uri = uri.replace(QRegularExpression("\\w*api"), "eapi");
     }
-    else if (options["crypto"] == "api") {
+    else if (options["crypto"] == "api" || options["crypto"] == "") {
         auto getApiDomain = [&]() {
             auto newApiDomain = Config::APP_CONF["newApiDomain"].toBool();
             auto domain = Config::APP_CONF["domain"].toString();
@@ -324,4 +324,15 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
     eventLoop.exec(); // 启动事件循环
 
     return reply;
+}
+
+QVariantMap Request::options(QVariantMap query, QString crypto)
+{
+    return {
+        { "crypto", crypto },
+        { "cookie", query["cookie"] },
+        { "ua", query.value("ua", "") },
+        { "proxy", query["proxy"] },
+        { "realIP", query["realIP"] },
+    };
 }

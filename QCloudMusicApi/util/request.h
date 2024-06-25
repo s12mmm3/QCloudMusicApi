@@ -26,6 +26,8 @@ namespace QCloudMusicApi {
             const QVariantMap& headers,
             const QByteArray& data,
             QNetworkProxy proxy = QNetworkProxy::DefaultProxy);
+
+        static QVariantMap options(QVariantMap query, QString crypto = "");
     };
 
 }

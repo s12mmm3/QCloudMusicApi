@@ -29,21 +29,13 @@
 { "crypto", "weapi" }, \
 _PARAM \
 
-#define _EAPI \
-{ "crypto", "eapi" }, \
-_PARAM \
-
-#define _API \
-{ "crypto", "api" }, \
-_PARAM \
-
 using Api = NeteaseCloudMusicApi;
 const static auto& request = QCloudMusicApi::Request::createRequest;
 const static auto& POST = QNetworkAccessManager::PostOperation;
 const static auto& GET = QNetworkAccessManager::GetOperation;
 const static auto& resourceTypeMap = QCloudMusicApi::Config::resourceTypeMap;
 
-
+using namespace QCloudMusicApi;
 NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject* parent)
     : QObject{ parent }
 {}
@@ -57,9 +49,7 @@ QVariantMap Api::activate_init_profile(QVariantMap query) {
         POST,
         "/api/activate/initProfile",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -89,9 +79,7 @@ QVariantMap Api::aidj_content_rcmd(QVariantMap query) {
         POST,
         "/api/aidj/content/rcmd/info",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -102,11 +90,9 @@ QVariantMap Api::album_detail_dynamic(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/album/detail/dynamic",
+        "/api/album/detail/dynamic",
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -172,11 +158,9 @@ QVariantMap Api::album_new(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/album/new",
+        "/api/album/new",
         data,
-        {
-            _WEAPI
-        }
+        Request::options(query)
     );
 }
 
@@ -201,9 +185,7 @@ QVariantMap Api::album_privilege(QVariantMap query) {
         POST,
         "/api/album/privilege",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -310,9 +292,7 @@ QVariantMap Api::artist_detail_dynamic(QVariantMap query) {
         POST,
         "/api/artist/detail/dynamic",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -627,9 +607,7 @@ QVariantMap Api::batch(QVariantMap query) {
         POST,
         "/api/batch",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -649,9 +627,7 @@ QVariantMap Api::banner(QVariantMap query) {
         {
             { "clientType", type }
         },
-        {
-            _API
-        }
+        Request::options(query)
         );
 }
 
@@ -714,9 +690,7 @@ QVariantMap Api::cellphone_existence_check(QVariantMap query) {
         POST,
         "/api/cellphone/existence/check",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -915,9 +889,7 @@ QVariantMap Api::cloudsearch(QVariantMap query) {
         POST,
         "/api/cloudsearch/pc",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -1041,9 +1013,7 @@ QVariantMap Api::comment_hug_list(QVariantMap query) {
         POST,
         "/api/v2/resource/comments/hug/list",
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -1156,9 +1126,7 @@ QVariantMap Api::comment_new(QVariantMap query) {
         POST,
         "/api/v2/resource/comments",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -1246,9 +1214,7 @@ QVariantMap Api::countries_code_list(QVariantMap query) {
         POST,
         "/api/lbs/countries/v1",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -1259,9 +1225,7 @@ QVariantMap Api::creator_authinfo_get(QVariantMap query) {
         POST,
         "/api/user/creator/authinfo/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -1863,9 +1827,7 @@ QVariantMap Api::fanscenter_basicinfo_age_get(QVariantMap query) {
         POST,
         "/api/fanscenter/basicinfo/age/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -1876,9 +1838,7 @@ QVariantMap Api::fanscenter_basicinfo_gender_get(QVariantMap query) {
         POST,
         "/api/fanscenter/basicinfo/gender/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -1889,9 +1849,7 @@ QVariantMap Api::fanscenter_basicinfo_province_get(QVariantMap query) {
         POST,
         "/api/fanscenter/basicinfo/province/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -1902,9 +1860,7 @@ QVariantMap Api::fanscenter_overview_get(QVariantMap query) {
         POST,
         "/api/fanscenter/overview/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -1919,9 +1875,7 @@ QVariantMap Api::fanscenter_trend_list(QVariantMap query) {
         POST,
         "/api/fanscenter/trend/list",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2040,9 +1994,7 @@ QVariantMap Api::homepage_dragon_ball(QVariantMap query) {
         POST,
         "/api/homepage/dragon/ball/static",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2075,9 +2027,7 @@ QVariantMap Api::hug_comment(QVariantMap query) {
         POST,
         "/api/v2/resource/comments/hug/listener",
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -2130,9 +2080,7 @@ QVariantMap Api::listentogether_accept(QVariantMap query) {
         POST,
         "/api/listen/together/play/invitation/accept",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2145,9 +2093,7 @@ QVariantMap Api::listentogether_end(QVariantMap query) {
         POST,
         "/api/listen/together/end/v2",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2163,9 +2109,7 @@ QVariantMap Api::listentogether_heatbeat(QVariantMap query) {
         POST,
         "/api/listen/together/heartbeat",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2188,9 +2132,7 @@ QVariantMap Api::listentogether_play_command(QVariantMap query) {
         POST,
         "/api/listen/together/play/command/report",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2203,9 +2145,7 @@ QVariantMap Api::listentogether_room_check(QVariantMap query) {
         POST,
         "/api/listen/together/room/check",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2218,9 +2158,7 @@ QVariantMap Api::listentogether_room_create(QVariantMap query) {
         POST,
         "/api/listen/together/room/create",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2264,9 +2202,7 @@ QVariantMap Api::listentogether_sync_list_command(QVariantMap query) {
         POST,
         "/api/listen/together/sync/list/command/report",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2279,9 +2215,7 @@ QVariantMap Api::listentogether_sync_playlist_get(QVariantMap query) {
         POST,
         "/api/listen/together/sync/playlist/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2411,9 +2345,7 @@ QVariantMap Api::login_status(QVariantMap query) {
         POST,
         "/api/w/nuser/account/get",
         {},
-        {
-            _API
-        }
+        Request::options(query)
         );
     if (result["body"].toMap()["code"] == 200) {
         auto body = result["body"].toMap();
@@ -2461,9 +2393,7 @@ QVariantMap Api::lyric_new(QVariantMap query) {
         POST,
         "/api/song/lyric/v1",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2478,15 +2408,14 @@ QVariantMap Api::lyric(QVariantMap query) {
         { "tv", -1 },
         { "lv", -1 },
         { "rv", -1 },
-        { "kv", -1 }
+        { "kv", -1 },
+        { "_nmclfl", 1 }
     };
     return request(
         POST,
-        "/api/song/lyric?_nmclfl=1",
+        "/api/song/lyric",
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -2503,9 +2432,7 @@ QVariantMap Api::mlog_music_rcmd(QVariantMap query) {
         POST,
         "/api/mlog/rcmd/feed/list",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -2940,9 +2867,7 @@ QVariantMap Api::pl_count(QVariantMap query) {
         POST,
         "/api/pl/count",
         {},
-        {
-            _API
-        }
+        Request::options(query)
         );
 }
 
@@ -3040,9 +2965,7 @@ QVariantMap Api::playlist_desc_update(QVariantMap query) {
         POST,
         "/api/playlist/desc/update",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -3057,9 +2980,7 @@ QVariantMap Api::playlist_detail_dynamic(QVariantMap query) {
         POST,
         "/api/playlist/detail/dynamic",
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -3074,9 +2995,7 @@ QVariantMap Api::playlist_detail(QVariantMap query) {
         POST,
         "/api/v6/playlist/detail",
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -3131,9 +3050,7 @@ QVariantMap Api::playlist_name_update(QVariantMap query) {
         POST,
         "/api/playlist/update/name",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -3166,9 +3083,7 @@ QVariantMap Api::playlist_privacy(QVariantMap query) {
         POST,
         "/api/playlist/update/privacy",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -3215,9 +3130,7 @@ QVariantMap Api::playlist_tags_update(QVariantMap query) {
         POST,
         "/api/playlist/tags/update",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -3268,9 +3181,7 @@ QVariantMap Api::playlist_track_all(QVariantMap query) {
         POST,
         "/api/v6/playlist/detail",
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
     QVariantList trackIds = res["body"].toMap()["playlist"].toMap()["trackIds"].toList();
     QVariantMap idsData{
@@ -3286,9 +3197,7 @@ QVariantMap Api::playlist_track_all(QVariantMap query) {
         POST,
         "/api/v3/song/detail",
         idsData,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -3449,9 +3358,7 @@ QVariantMap Api::playmode_song_vector(QVariantMap query) {
         POST,
         "/api/playmode/song/vector/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -3496,9 +3403,7 @@ QVariantMap Api::recent_listen_list(QVariantMap query) {
         POST,
         "/api/pc/recent/listen/list",
         {},
-        {
-            _API,
-        }
+        Request::options(query)
         );
 }
 
@@ -3824,9 +3729,7 @@ QVariantMap Api::search_default(QVariantMap query) {
         POST,
         "/api/search/defaultkeyword/get",
         {},
-        {
-            _API,
-        }
+        Request::options(query)
         );
 }
 
@@ -3876,9 +3779,7 @@ QVariantMap Api::search_match(QVariantMap query) {
         POST,
         "/api/search/match/new",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -3963,9 +3864,7 @@ QVariantMap Api::send_album(QVariantMap query) {
         POST,
         "/api/msg/private/send",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -3999,9 +3898,7 @@ QVariantMap Api::send_song(QVariantMap query) {
         POST,
         "/api/msg/private/send",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4060,11 +3957,9 @@ QVariantMap Api::sheet_list(QVariantMap query) {
     };
     return request(
         POST,
-        "/eapi/music/sheet/list/v1",
+        "/api/music/sheet/list/v1",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4075,11 +3970,9 @@ QVariantMap Api::sheet_preview(QVariantMap query) {
     };
     return request(
         POST,
-        "/api/music/sheet/preview/info?id=" + query["id"].toString(),
+        "/api/music/sheet/preview/info",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4202,9 +4095,7 @@ QVariantMap Api::song_download_url(QVariantMap query) {
         POST,
         "/api/song/enhance/download/url",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4224,9 +4115,7 @@ QVariantMap Api::song_url_v1(QVariantMap query) {
         POST,
         "/api/song/enhance/player/url/v1",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4241,9 +4130,7 @@ QVariantMap Api::song_url(QVariantMap query) {
         POST,
         "/api/song/enhance/player/url/v1",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
     auto result = res["body"].toMap()["data"].toList();
     std::sort(result.begin(), result.end(), [&ids](const QVariant& a, const QVariant& b) {
@@ -4277,9 +4164,7 @@ QVariantMap Api::song_detail(QVariantMap query) {
         POST,
         "/api/v3/song/detail",
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -4292,9 +4177,7 @@ QVariantMap Api::song_wiki_summary(QVariantMap query) {
         POST,
         "/api/song/play/about/block/page",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4312,9 +4195,7 @@ QVariantMap Api::starpick_comments_summary(QVariantMap query) {
         POST,
         "/api/homepage/block/page",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4327,9 +4208,7 @@ QVariantMap Api::song_music_detail(QVariantMap query) {
         POST,
         "/api/song/music/detail/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4376,9 +4255,7 @@ QVariantMap Api::song_red_count(QVariantMap query) {
         POST,
         "/api/song/red/count",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4503,9 +4380,7 @@ QVariantMap Api::summary_annual(QVariantMap query) {
         POST,
         "/api/activity/summary/annual/" + query["year"].toString() + "/" + key,
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4516,9 +4391,7 @@ QVariantMap Api::threshold_detail_get(QVariantMap query) {
         POST,
         "/api/influencer/web/apply/threshold/detail/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4752,9 +4625,7 @@ QVariantMap Api::toplist(QVariantMap query) {
         POST,
         "/api/toplist",
         {},
-        {
-            _API
-        }
+        Request::options(query)
         );
 }
 
@@ -4767,9 +4638,7 @@ QVariantMap Api::ugc_album_get(QVariantMap query) {
         POST,
         "/api/rep/ugc/album/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4782,9 +4651,7 @@ QVariantMap Api::ugc_artist_get(QVariantMap query) {
         POST,
         "/api/rep/ugc/artist/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4839,9 +4706,7 @@ QVariantMap Api::ugc_mv_get(QVariantMap query) {
         POST,
         "/api/rep/ugc/mv/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4854,9 +4719,7 @@ QVariantMap Api::ugc_song_get(QVariantMap query) {
         POST,
         "/api/rep/ugc/song/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -4867,9 +4730,7 @@ QVariantMap Api::ugc_user_devote(QVariantMap query) {
         POST,
         "/api/rep/ugc/user/devote",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -5020,9 +4881,7 @@ QVariantMap Api::user_event(QVariantMap query) {
         POST,
         "/api/event/get/" + query["uid"].toString(),
         data,
-        {
-            _API
-        }
+        Request::options(query)
     );
 }
 
@@ -5039,9 +4898,7 @@ QVariantMap Api::user_followeds(QVariantMap query) {
         POST,
         "/api/user/getfolloweds/" + query["uid"].toString(),
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
@@ -5418,11 +5275,9 @@ QVariantMap Api::voice_lyric(QVariantMap query) {
     };
     return request(
         POST,
-        "/api/voice/lyric/get?programId=" + query["id"].toString(),
+        "/api/voice/lyric/get",
         data,
-        {
-            _API,
-        }
+        Request::options(query)
     );
 }
 
