@@ -135,6 +135,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
 
     auto eapiEncrypt = [&]() {
+        options["url"] = uri;
         const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header{
@@ -167,7 +168,8 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             }();
             data["header"] = header;
             data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
-        };
+            uri = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
+    };
 
     if (options["crypto"] == "weapi") {
         headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
@@ -187,23 +189,13 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
     else if (options["crypto"] == "eapi") {
         eapiEncrypt();
-        uri = uri.replace(QRegularExpression("\\w*api"), "eapi");
     }
-    else if (options["crypto"] == "api" || options["crypto"] == "") {
-        auto getApiDomain = [&]() {
-            auto newApiDomain = Config::APP_CONF["newApiDomain"].toBool();
-            auto domain = Config::APP_CONF["domain"].toString();
-            if (newApiDomain) {
-                domain = domain.replace("//music", "//interface.music");
-            }
-            return domain;
-            };
+    else if (options["crypto"] == "api") {
+        uri = Config::APP_CONF["apiDomain"].toString() + uri;
+    }
+    else if (options["crypto"] == "") {
         if (Config::APP_CONF["encrypt"].toBool()) {
-            options["url"] = uri;
-
             eapiEncrypt();
-
-            uri = getApiDomain() + "/eapi/" + uri.mid(5);
         }
         else uri = Config::APP_CONF["apiDomain"].toString() + uri;
     }
@@ -329,7 +321,7 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
 QVariantMap Request::options(QVariantMap query, QString crypto)
 {
     return {
-        { "crypto", crypto },
+        { "crypto", query.value("crypto", crypto) },
         { "cookie", query["cookie"] },
         { "ua", query.value("ua", "") },
         { "proxy", query["proxy"] },
