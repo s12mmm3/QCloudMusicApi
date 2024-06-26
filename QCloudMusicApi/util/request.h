@@ -15,7 +15,7 @@ namespace QCloudMusicApi {
     public:
         static QString chooseUserAgent(QString uaType);
         static QVariantMap createRequest(QNetworkAccessManager::Operation method,
-            QString url,
+            QString uri,
             QVariantMap data,
             QVariantMap options);
 
@@ -26,6 +26,8 @@ namespace QCloudMusicApi {
             const QVariantMap& headers,
             const QByteArray& data,
             QNetworkProxy proxy = QNetworkProxy::DefaultProxy);
+
+        static QVariantMap options(QVariantMap query, QString crypto = "");
     };
 
 }
