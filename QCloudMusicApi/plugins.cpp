@@ -30,7 +30,7 @@ QVariantMap Plugins::songUpload(QVariantMap query)
     //   获取key和token
     const auto tokenRes = request(
         POST,
-        "https://music.163.com/weapi/nos/token/alloc",
+        "/api/nos/token/alloc",
         {
             { "bucket", bucket },
             { "ext", ext },
@@ -82,7 +82,7 @@ QVariantMap Plugins::upload(QVariantMap query)
     //   获取key和token
     const auto res = request(
         POST,
-        "https://music.163.com/weapi/nos/token/alloc",
+        "/api/nos/token/alloc",
         data,
         Request::options(query, "weapi")
     );
@@ -104,29 +104,11 @@ QVariantMap Plugins::upload(QVariantMap query)
 
     QVariantMap res2 = QJsonDocument::fromJson(body).toVariant().toMap();
 
-    //   获取裁剪后图片的id
-    const int imgSize = query.value("imgSize", 300).toInt();
-    const int imgX = query.value("imgX", 0).toInt();
-    const int imgY = query.value("imgY", 0).toInt();
-
-    const auto res3 = request(
-        GET,
-        QString("https://music.163.com/upload/img/op?id=%1&op=%2y%3y%4y%5")
-        .arg(res["body"].toMap()["result"].toMap()["docId"].toString())
-        .arg(imgX)
-        .arg(imgY)
-        .arg(imgSize)
-        .arg(imgSize),
-        {},
-        Request::options(query, "weapi")
-        );
-
     return {
         // ...res.body.result,
         // ...res2.data,
         // ...res3.body,
         { "url_pre", "https://p1.music.126.net/" + res["body"].toMap()["result"].toMap()["objectKey"].toString() },
-        { "url", res3["body"].toMap()["url"] },
-        { "imgId", res3["body"].toMap()["id"] },
+        { "imgId", res["body"].toMap()["result"].toMap()["id"] },
     };
 }

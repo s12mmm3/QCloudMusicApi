@@ -92,7 +92,7 @@ QVariantMap Api::album_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/vipmall/albumproduct/detail",
+        "/api/vipmall/albumproduct/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -108,7 +108,7 @@ QVariantMap Api::album_list_style(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/vipmall/appalbum/album/style",
+        "/api/vipmall/appalbum/album/style",
         data,
         Request::options(query, "weapi")
     );
@@ -125,7 +125,7 @@ QVariantMap Api::album_list(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/vipmall/albumproduct/list",
+        "/api/vipmall/albumproduct/list",
         data,
         Request::options(query, "weapi")
     );
@@ -151,7 +151,7 @@ QVariantMap Api::album_new(QVariantMap query) {
 QVariantMap Api::album_newest(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/api/discovery/newAlbum",
+        "/api/discovery/newAlbum",
         {},
         Request::options(query, "weapi")
     );
@@ -179,7 +179,7 @@ QVariantMap Api::album_songsaleboard(QVariantMap query) {
     if (type == "year") data["year"] = query["year"];
     return request(
         POST,
-        "https://music.163.com/api/feealbum/songsaleboard/" + type + "/type",
+        "/api/feealbum/songsaleboard/" + type + "/type",
         data,
         Request::options(query, "weapi")
     );
@@ -193,7 +193,7 @@ QVariantMap Api::album_sub(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/album/" + query["t"].toString(),
+        "/api/album/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -208,7 +208,7 @@ QVariantMap Api::album_sublist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/album/sublist",
+        "/api/album/sublist",
         data,
         Request::options(query, "weapi")
     );
@@ -218,7 +218,7 @@ QVariantMap Api::album_sublist(QVariantMap query) {
 QVariantMap Api::album(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/v1/album/" + query["id"].toString(),
+        "/api/v1/album/" + query["id"].toString(),
         {},
         Request::options(query, "weapi")
     );
@@ -233,7 +233,7 @@ QVariantMap Api::artist_album(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/artist/albums/" + query["id"].toString(),
+        "/api/artist/albums/" + query["id"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -246,7 +246,7 @@ QVariantMap Api::artist_desc(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/artist/introduction",
+        "/api/artist/introduction",
         data,
         Request::options(query, "weapi")
     );
@@ -272,7 +272,7 @@ QVariantMap Api::artist_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/artist/head/info/get",
+        "/api/artist/head/info/get",
         data,
         Request::options(query, "weapi")
     );
@@ -287,7 +287,7 @@ QVariantMap Api::artist_fans(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/artist/fans/get",
+        "/api/artist/fans/get",
         data,
         Request::options(query, "weapi")
     );
@@ -300,7 +300,7 @@ QVariantMap Api::artist_follow_count(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/artist/follow/count/get",
+        "/api/artist/follow/count/get",
         data,
         Request::options(query, "weapi")
     );
@@ -335,7 +335,7 @@ QVariantMap Api::artist_list(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/v1/artist/list",
+        "/api/v1/artist/list",
         data,
         Request::options(query, "weapi")
     );
@@ -351,7 +351,7 @@ QVariantMap Api::artist_mv(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/artist/mvs",
+        "/api/artist/mvs",
         data,
         Request::options(query, "weapi")
     );
@@ -365,7 +365,7 @@ QVariantMap Api::artist_new_mv(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/sub/artist/new/works/mv/list",
+        "/api/sub/artist/new/works/mv/list",
         data,
         Request::options(query, "weapi")
     );
@@ -379,7 +379,7 @@ QVariantMap Api::artist_new_song(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/sub/artist/new/works/song/list",
+        "/api/sub/artist/new/works/song/list",
         data,
         Request::options(query, "weapi")
     );
@@ -401,7 +401,7 @@ QVariantMap Api::artist_songs(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/v1/artist/songs",
+        "/api/v1/artist/songs",
         data,
         Request::options(query, "weapi")
     );
@@ -416,7 +416,7 @@ QVariantMap Api::artist_sub(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/artist/" + query["t"].toString(),
+        "/api/artist/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -431,7 +431,7 @@ QVariantMap Api::artist_sublist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/artist/sublist",
+        "/api/artist/sublist",
         data,
         Request::options(query, "weapi")
     );
@@ -444,7 +444,7 @@ QVariantMap Api::artist_top_song(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/artist/top/song",
+        "/api/artist/top/song",
         data,
         Request::options(query, "weapi")
     );
@@ -463,7 +463,7 @@ QVariantMap Api::artist_video(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/mlog/artist/video",
+        "/api/mlog/artist/video",
         data,
         Request::options(query, "weapi")
     );
@@ -473,7 +473,7 @@ QVariantMap Api::artist_video(QVariantMap query) {
 QVariantMap Api::artists(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/v1/artist/" + query["id"].toString(),
+        "/api/v1/artist/" + query["id"].toString(),
         {},
         Request::options(query, "weapi")
     );
@@ -504,7 +504,7 @@ QVariantMap Api::audio_match(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/music/audio/match",
+        "/api/music/audio/match",
         data,
         Request::options(query, "weapi")
     );
@@ -515,7 +515,7 @@ QVariantMap Api::avatar_upload(QVariantMap query) {
     auto uploadInfo = QCloudMusicApi::Plugins::upload(query);
     const QVariantMap res = request(
         POST,
-        "https://music.163.com/weapi/user/avatar/upload/v1",
+        "/api/user/avatar/upload/v1",
         {
             { "imgid", uploadInfo["imgId"] }
         },
@@ -578,7 +578,7 @@ QVariantMap Api::calendar(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/mcalendar/detail",
+        "/api/mcalendar/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -592,7 +592,7 @@ QVariantMap Api::captcha_sent(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/sms/captcha/sent",
+        "/api/sms/captcha/sent",
         data,
         Request::options(query, "weapi")
     );
@@ -607,7 +607,7 @@ QVariantMap Api::captcha_verify(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/sms/captcha/verify",
+        "/api/sms/captcha/verify",
         data,
         Request::options(query, "weapi")
     );
@@ -635,7 +635,7 @@ QVariantMap Api::check_music(QVariantMap query) {
     };
     QVariantMap result = request(
         POST,
-        "https://music.163.com/weapi/song/enhance/player/url",
+        "/api/song/enhance/player/url",
         data,
         Request::options(query, "weapi")
     );
@@ -672,7 +672,7 @@ QVariantMap Api::cloud_match(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/cloud/user/song/match",
+        "/api/cloud/user/song/match",
         data,
         Request::options(query, "weapi")
     );
@@ -749,7 +749,7 @@ QVariantMap Api::cloud(QVariantMap query) {
 
     const auto tokenRes = request(
         POST,
-        "https://music.163.com/weapi/nos/token/alloc",
+        "/api/nos/token/alloc",
         {
             { "bucket", "" },
             { "ext", ext },
@@ -826,7 +826,7 @@ QVariantMap Api::comment_album(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/v1/resource/comments/R_AL_3_" + query["id"].toString(),
+        "/api/v1/resource/comments/R_AL_3_" + query["id"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -846,7 +846,7 @@ QVariantMap Api::comment_dj(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/resource/comments/A_DJ_1_" + query["id"].toString(),
+        "/api/v1/resource/comments/A_DJ_1_" + query["id"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -861,7 +861,7 @@ QVariantMap Api::comment_event(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/resource/comments/" + query["threadId"].toString(),
+        "/api/v1/resource/comments/" + query["threadId"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -878,7 +878,7 @@ QVariantMap Api::comment_floor(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/resource/comment/floor/get",
+        "/api/resource/comment/floor/get",
         data,
         Request::options(query, "weapi")
     );
@@ -899,7 +899,7 @@ QVariantMap Api::comment_hot(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/resource/hotcomments/" + query["type"].toString() + query["id"].toString(),
+        "/api/v1/resource/hotcomments/" + query["type"].toString() + query["id"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -943,7 +943,7 @@ QVariantMap Api::comment_like(QVariantMap query) {
     }
     return request(
         POST,
-        "https://music.163.com/weapi/v1/comment/" + query["t"].toString(),
+        "/api/v1/comment/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -963,7 +963,7 @@ QVariantMap Api::comment_music(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/v1/resource/comments/R_SO_4_" + query["id"].toString(),
+        "/api/v1/resource/comments/R_SO_4_" + query["id"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -983,7 +983,7 @@ QVariantMap Api::comment_mv(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/resource/comments/R_MV_5_" + query["id"].toString(),
+        "/api/v1/resource/comments/R_MV_5_" + query["id"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -1047,7 +1047,7 @@ QVariantMap Api::comment_playlist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/resource/comments/A_PL_0_" + query["id"].toString(),
+        "/api/v1/resource/comments/A_PL_0_" + query["id"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -1067,7 +1067,7 @@ QVariantMap Api::comment_video(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/resource/comments/R_VI_62_" + query["id"].toString(),
+        "/api/v1/resource/comments/R_VI_62_" + query["id"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -1098,7 +1098,7 @@ QVariantMap Api::comment(QVariantMap query) {
     }
     return request(
         POST,
-        "https://music.163.com/weapi/resource/comments/" + query["t"].toString(),
+        "/api/resource/comments/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -1140,7 +1140,7 @@ QVariantMap Api::daily_signin(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/point/dailyTask",
+        "/api/point/dailyTask",
         data,
         Request::options(query, "weapi")
     );
@@ -1153,7 +1153,7 @@ QVariantMap Api::digitalAlbum_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/vipmall/albumproduct/detail",
+        "/api/vipmall/albumproduct/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -1173,7 +1173,7 @@ QVariantMap Api::digitalAlbum_ordering(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/ordering/web/digital",
+        "/api/ordering/web/digital",
         data,
         Request::options(query, "weapi")
     );
@@ -1188,7 +1188,7 @@ QVariantMap Api::digitalAlbum_purchased(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/digitalAlbum/purchased",
+        "/api/digitalAlbum/purchased",
         data,
         Request::options(query, "weapi")
     );
@@ -1201,7 +1201,7 @@ QVariantMap Api::digitalAlbum_sales(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/vipmall/albumproduct/album/query/sales",
+        "/api/vipmall/albumproduct/album/query/sales",
         data,
         Request::options(query, "weapi")
     );
@@ -1215,7 +1215,7 @@ QVariantMap Api::dj_banner(QVariantMap query) {
     query["cookie"] = cookie;
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/banner/get",
+        "/api/djradio/banner/get",
         {},
         Request::options(query, "weapi")
     );
@@ -1226,7 +1226,7 @@ QVariantMap Api::dj_category_excludehot(QVariantMap query) {
     const QVariantMap data{ };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/category/excludehot",
+        "/api/djradio/category/excludehot",
         data,
         Request::options(query, "weapi")
     );
@@ -1237,7 +1237,7 @@ QVariantMap Api::dj_category_recommend(QVariantMap query) {
     const QVariantMap data{ };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/home/category/recommend",
+        "/api/djradio/home/category/recommend",
         data,
         Request::options(query, "weapi")
     );
@@ -1248,7 +1248,7 @@ QVariantMap Api::dj_catelist(QVariantMap query) {
     const QVariantMap data{ };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/category/get",
+        "/api/djradio/category/get",
         data,
         Request::options(query, "weapi")
     );
@@ -1261,7 +1261,7 @@ QVariantMap Api::dj_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/djradio/v2/get",
+        "/api/djradio/v2/get",
         data,
         Request::options(query, "weapi")
     );
@@ -1275,7 +1275,7 @@ QVariantMap Api::dj_hot(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/hot/v1",
+        "/api/djradio/hot/v1",
         data,
         Request::options(query, "weapi")
     );
@@ -1289,7 +1289,7 @@ QVariantMap Api::dj_paygift(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/home/paygift/list?_nmclfl=1",
+        "/api/djradio/home/paygift/list?_nmclfl=1",
         data,
         Request::options(query, "weapi")
     );
@@ -1302,7 +1302,7 @@ QVariantMap Api::dj_personalize_recommend(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/djradio/personalize/rcmd",
+        "/api/djradio/personalize/rcmd",
         data,
         Request::options(query, "weapi")
     );
@@ -1315,7 +1315,7 @@ QVariantMap Api::dj_program_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/dj/program/detail",
+        "/api/dj/program/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -1329,7 +1329,7 @@ QVariantMap Api::dj_program_toplist_hours(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/djprogram/toplist/hours",
+        "/api/djprogram/toplist/hours",
         data,
         Request::options(query, "weapi")
     );
@@ -1343,7 +1343,7 @@ QVariantMap Api::dj_program_toplist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/program/toplist/v1",
+        "/api/program/toplist/v1",
         data,
         Request::options(query, "weapi")
     );
@@ -1359,7 +1359,7 @@ QVariantMap Api::dj_program(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/dj/program/byradio",
+        "/api/dj/program/byradio",
         data,
         Request::options(query, "weapi")
     );
@@ -1374,7 +1374,7 @@ QVariantMap Api::dj_radio_hot(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/djradio/hot",
+        "/api/djradio/hot",
         data,
         Request::options(query, "weapi")
     );
@@ -1410,7 +1410,7 @@ QVariantMap Api::dj_recommend_type(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/recommend",
+        "/api/djradio/recommend",
         data,
         Request::options(query, "weapi")
     );
@@ -1420,7 +1420,7 @@ QVariantMap Api::dj_recommend_type(QVariantMap query) {
 QVariantMap Api::dj_recommend(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/recommend/v1",
+        "/api/djradio/recommend/v1",
         {},
         Request::options(query, "weapi")
     );
@@ -1434,7 +1434,7 @@ QVariantMap Api::dj_sub(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/" + query["t"].toString(),
+        "/api/djradio/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -1449,7 +1449,7 @@ QVariantMap Api::dj_sublist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/get/subed",
+        "/api/djradio/get/subed",
         data,
         Request::options(query, "weapi")
     );
@@ -1465,7 +1465,7 @@ QVariantMap Api::dj_subscriber(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/djradio/subscriber",
+        "/api/djradio/subscriber",
         data,
         Request::options(query, "weapi")
     );
@@ -1478,7 +1478,7 @@ QVariantMap Api::dj_today_perfered(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/home/today/perfered",
+        "/api/djradio/home/today/perfered",
         data,
         Request::options(query, "weapi")
     );
@@ -1492,7 +1492,7 @@ QVariantMap Api::dj_toplist_hours(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/dj/toplist/hours",
+        "/api/dj/toplist/hours",
         data,
         Request::options(query, "weapi")
     );
@@ -1506,7 +1506,7 @@ QVariantMap Api::dj_toplist_newcomer(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/dj/toplist/newcomer",
+        "/api/dj/toplist/newcomer",
         data,
         Request::options(query, "weapi")
     );
@@ -1520,7 +1520,7 @@ QVariantMap Api::dj_toplist_pay(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/djradio/toplist/pay",
+        "/api/djradio/toplist/pay",
         data,
         Request::options(query, "weapi")
     );
@@ -1534,7 +1534,7 @@ QVariantMap Api::dj_toplist_popular(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/dj/toplist/popular",
+        "/api/dj/toplist/popular",
         data,
         Request::options(query, "weapi")
     );
@@ -1553,7 +1553,7 @@ QVariantMap Api::dj_toplist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/djradio/toplist",
+        "/api/djradio/toplist",
         data,
         Request::options(query, "weapi")
     );
@@ -1612,7 +1612,7 @@ QVariantMap Api::event_del(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/eapi/event/delete",
+        "/api/event/delete",
         data,
         Request::options(query, "weapi")
     );
@@ -1631,7 +1631,7 @@ QVariantMap Api::event_forward(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/event/forward",
+        "/api/event/forward",
         data,
         Request::options(query, "weapi")
     );
@@ -1645,7 +1645,7 @@ QVariantMap Api::event(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/event/get",
+        "/api/v1/event/get",
         data,
         Request::options(query, "weapi")
     );
@@ -1717,7 +1717,7 @@ QVariantMap Api::fm_trash(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/radio/trash/add?alg=RT&songId="
+        "/api/radio/trash/add?alg=RT&songId="
         + query["id"].toString()
         + QStringLiteral("&time=")
         + query.value("time", 25).toString(),
@@ -1735,7 +1735,7 @@ QVariantMap Api::follow(QVariantMap query) {
     query["t"] = query["t"] == 1 ? "follow" : "delfollow";
     return request(
         POST,
-        "https://music.163.com/weapi/user/"
+        "/api/user/"
         + query["t"].toString()
         + QStringLiteral("/")
         + query["id"].toString(),
@@ -1751,7 +1751,7 @@ QVariantMap Api::get_userids(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/user/getUserIds",
+        "/api/user/getUserIds",
         data,
         Request::options(query, "weapi")
     );
@@ -1767,7 +1767,7 @@ QVariantMap Api::history_recommend_songs_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/discovery/recommend/songs/history/detail",
+        "/api/discovery/recommend/songs/history/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -1781,7 +1781,7 @@ QVariantMap Api::history_recommend_songs(QVariantMap query) {
     const QVariantMap data{ };
     return request(
         POST,
-        "https://music.163.com/api/discovery/recommend/songs/history/recent",
+        "/api/discovery/recommend/songs/history/recent",
         data,
         Request::options(query, "weapi")
     );
@@ -1797,7 +1797,7 @@ QVariantMap Api::homepage_block_page(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/homepage/block/page",
+        "/api/homepage/block/page",
         data,
         Request::options(query, "weapi")
     );
@@ -1825,7 +1825,7 @@ QVariantMap Api::hot_topic(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/act/hot",
+        "/api/act/hot",
         data,
         Request::options(query, "weapi")
     );
@@ -1863,7 +1863,7 @@ QVariantMap Api::like(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/radio/like",
+        "/api/radio/like",
         data,
         Request::options(query, "weapi")
     );
@@ -1876,7 +1876,7 @@ QVariantMap Api::likelist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/song/like/get",
+        "/api/song/like/get",
         data,
         Request::options(query, "weapi")
     );
@@ -1979,7 +1979,7 @@ QVariantMap Api::listentogether_room_create(QVariantMap query) {
 QVariantMap Api::listentogether_status(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/api/listen/together/status/get",
+        "/api/listen/together/status/get",
         {},
         Request::options(query, "weapi")
     );
@@ -2044,7 +2044,7 @@ QVariantMap Api::login_cellphone(QVariantMap query) {
     };
     QVariantMap result = request(
         POST,
-        "https://music.163.com/weapi/login/cellphone",
+        "/api/login/cellphone",
         data,
         Index::mergeMap(Request::options(query, "weapi"), { { "uaType", "pc" } })
     );
@@ -2068,7 +2068,7 @@ QVariantMap Api::login_qr_check(QVariantMap query) {
     };
     QVariantMap result = request(
         POST,
-        "https://music.163.com/weapi/login/qrcode/client/login",
+        "/api/login/qrcode/client/login",
         data,
         Request::options(query, "weapi")
     );
@@ -2089,7 +2089,7 @@ QVariantMap Api::login_qr_key(QVariantMap query) {
     };
     QVariantMap result = request(
         POST,
-        "https://music.163.com/weapi/login/qrcode/unikey",
+        "/api/login/qrcode/unikey",
         data,
         Request::options(query, "weapi")
     );
@@ -2124,7 +2124,7 @@ QVariantMap Api::login_qr_create(QVariantMap query) {
 QVariantMap Api::login_refresh(QVariantMap query) {
     QVariantMap result = request(
         POST,
-        "https://music.163.com/weapi/login/token/refresh",
+        "/api/login/token/refresh",
         {},
         Index::mergeMap(Request::options(query, "weapi"), { { "uaType", "pc" } })
     );
@@ -2168,7 +2168,7 @@ QVariantMap Api::login_status(QVariantMap query) {
 QVariantMap Api::logout(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/logout",
+        "/api/logout",
         {},
         Index::mergeMap(Request::options(query, "weapi"), { { "uaType", "pc" } })
     );
@@ -2241,7 +2241,7 @@ QVariantMap Api::mlog_to_video(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/mlog/video/convert/id",
+        "/api/mlog/video/convert/id",
         data,
         Request::options(query, "weapi")
     );
@@ -2256,7 +2256,7 @@ QVariantMap Api::mlog_url(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/mlog/detail/v1",
+        "/api/mlog/detail/v1",
         data,
         Request::options(query, "weapi")
     );
@@ -2272,7 +2272,7 @@ QVariantMap Api::msg_comments(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/v1/user/comments/" + query["uid"].toString(),
+        "/api/v1/user/comments/" + query["uid"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -2287,7 +2287,7 @@ QVariantMap Api::msg_forwards(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/forwards/get",
+        "/api/forwards/get",
         data,
         Request::options(query, "weapi")
     );
@@ -2301,7 +2301,7 @@ QVariantMap Api::msg_notices(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/msg/notices",
+        "/api/msg/notices",
         data,
         Request::options(query, "weapi")
     );
@@ -2317,7 +2317,7 @@ QVariantMap Api::msg_private_history(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/msg/private/history",
+        "/api/msg/private/history",
         data,
         Request::options(query, "weapi")
     );
@@ -2332,7 +2332,7 @@ QVariantMap Api::msg_private(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/msg/private/users",
+        "/api/msg/private/users",
         data,
         Request::options(query, "weapi")
     );
@@ -2343,7 +2343,7 @@ QVariantMap Api::msg_recentcontact(QVariantMap query) {
     const QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/msg/recentcontact/get",
+        "/api/msg/recentcontact/get",
         data,
         Request::options(query, "weapi")
     );
@@ -2391,7 +2391,7 @@ QVariantMap Api::mv_detail_info(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/comment/commentthread/info",
+        "/api/comment/commentthread/info",
         data,
         Request::options(query, "weapi")
     );
@@ -2405,7 +2405,7 @@ QVariantMap Api::mv_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/v1/mv/detail",
+        "/api/v1/mv/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -2450,7 +2450,7 @@ QVariantMap Api::mv_sub(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/mv/" + query["t"].toString(),
+        "/api/mv/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -2465,7 +2465,7 @@ QVariantMap Api::mv_sublist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/cloudvideo/allvideo/sublist",
+        "/api/cloudvideo/allvideo/sublist",
         data,
         Request::options(query, "weapi")
     );
@@ -2479,7 +2479,7 @@ QVariantMap Api::mv_url(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/song/enhance/play/mv/url",
+        "/api/song/enhance/play/mv/url",
         data,
         Request::options(query, "weapi")
     );
@@ -2492,7 +2492,7 @@ QVariantMap Api::nickname_check(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/nickname/duplicated",
+        "/api/nickname/duplicated",
         data,
         Request::options(query, "weapi")
     );
@@ -2520,7 +2520,7 @@ QVariantMap Api::personal_fm_mode(QVariantMap query) {
 QVariantMap Api::personal_fm(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/v1/radio/get",
+        "/api/v1/radio/get",
         {},
         Request::options(query, "weapi")
     );
@@ -2530,7 +2530,7 @@ QVariantMap Api::personal_fm(QVariantMap query) {
 QVariantMap Api::personalized_djprogram(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/personalized/djprogram",
+        "/api/personalized/djprogram",
         {},
         Request::options(query, "weapi")
     );
@@ -2540,7 +2540,7 @@ QVariantMap Api::personalized_djprogram(QVariantMap query) {
 QVariantMap Api::personalized_mv(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/personalized/mv",
+        "/api/personalized/mv",
         {},
         Request::options(query, "weapi")
     );
@@ -2559,7 +2559,7 @@ QVariantMap Api::personalized_newsong(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/personalized/newsong",
+        "/api/personalized/newsong",
         data,
         Request::options(query, "weapi")
     );
@@ -2574,7 +2574,7 @@ QVariantMap Api::personalized_privatecontent_list(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/v2/privatecontent/list",
+        "/api/v2/privatecontent/list",
         data,
         Request::options(query, "weapi")
     );
@@ -2584,7 +2584,7 @@ QVariantMap Api::personalized_privatecontent_list(QVariantMap query) {
 QVariantMap Api::personalized_privatecontent(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/personalized/privatecontent",
+        "/api/personalized/privatecontent",
         {},
         Request::options(query, "weapi")
     );
@@ -2600,7 +2600,7 @@ QVariantMap Api::personalized(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/personalized/playlist",
+        "/api/personalized/playlist",
         data,
         Request::options(query, "weapi")
     );
@@ -2620,7 +2620,7 @@ QVariantMap Api::pl_count(QVariantMap query) {
 QVariantMap Api::playlist_catlist(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/playlist/catalogue",
+        "/api/playlist/catalogue",
         {},
         Request::options(query, "weapi")
     );
@@ -2640,7 +2640,7 @@ QVariantMap Api::playlist_cover_update(QVariantMap query) {
     const auto uploadInfo = QCloudMusicApi::Plugins::upload(query);
     const auto res = request(
         POST,
-        "https://music.163.com/weapi/playlist/cover/update",
+        "/api/playlist/cover/update",
         {
             { "id", query["id"] },
             { "coverImgId", uploadInfo["imgId"] }
@@ -2669,7 +2669,7 @@ QVariantMap Api::playlist_create(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/playlist/create",
+        "/api/playlist/create",
         data,
         Request::options(query, "weapi")
     );
@@ -2686,7 +2686,7 @@ QVariantMap Api::playlist_delete(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/playlist/remove",
+        "/api/playlist/remove",
         data,
         Request::options(query, "weapi")
     );
@@ -2741,7 +2741,7 @@ QVariantMap Api::playlist_highquality_tags(QVariantMap query) {
     const QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/playlist/highquality/tags",
+        "/api/playlist/highquality/tags",
         data,
         Request::options(query, "weapi")
     );
@@ -2751,7 +2751,7 @@ QVariantMap Api::playlist_highquality_tags(QVariantMap query) {
 QVariantMap Api::playlist_hot(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/playlist/hottags",
+        "/api/playlist/hottags",
         {},
         Request::options(query, "weapi")
     );
@@ -2765,7 +2765,7 @@ QVariantMap Api::playlist_mylike(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/mlog/playlist/mylike/bytime/get",
+        "/api/mlog/playlist/mylike/bytime/get",
         data,
         Request::options(query, "weapi")
     );
@@ -2796,7 +2796,7 @@ QVariantMap Api::playlist_order_update(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/playlist/order/update",
+        "/api/playlist/order/update",
         data,
         Request::options(query, "weapi")
     );
@@ -2824,7 +2824,7 @@ QVariantMap Api::playlist_subscribe(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/playlist/" + query["t"].toString(),
+        "/api/playlist/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -2839,7 +2839,7 @@ QVariantMap Api::playlist_subscribers(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/playlist/subscribers",
+        "/api/playlist/subscribers",
         data,
         Request::options(query, "weapi")
     );
@@ -2882,7 +2882,7 @@ QVariantMap Api::playlist_track_add(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/playlist/track/add",
+        "/api/playlist/track/add",
         data,
         Request::options(query, "weapi")
     );
@@ -2947,7 +2947,7 @@ QVariantMap Api::playlist_track_delete(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/playlist/track/delete",
+        "/api/playlist/track/delete",
         data,
         Request::options(query, "weapi")
     );
@@ -2964,7 +2964,7 @@ QVariantMap Api::playlist_tracks(QVariantMap query) {
     };
     auto res = request(
         POST,
-        "https://music.163.com/weapi/playlist/manipulate/tracks",
+        "/api/playlist/manipulate/tracks",
         data,
         Request::options(query, "weapi")
     );
@@ -2978,7 +2978,7 @@ QVariantMap Api::playlist_tracks(QVariantMap query) {
     else if (code == 512) {
         return request(
             POST,
-            "https://music.163.com/api/playlist/manipulate/tracks",
+            "/api/playlist/manipulate/tracks",
             {
                 { "op", query["op"] }, // del,add
                 { "pid", query["pid"] }, // 歌单id
@@ -3003,7 +3003,7 @@ QVariantMap Api::playlist_update_playcount(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/playlist/update/playcount",
+        "/api/playlist/update/playcount",
         data,
         Request::options(query, "weapi")
     );
@@ -3024,7 +3024,7 @@ QVariantMap Api::playlist_update(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/batch",
+        "/api/batch",
         data,
         Request::options(query, "weapi")
     );
@@ -3035,7 +3035,7 @@ QVariantMap Api::playlist_video_recent(QVariantMap query) {
     const QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/playlist/video/recent",
+        "/api/playlist/video/recent",
         data,
         Request::options(query, "weapi")
     );
@@ -3052,7 +3052,7 @@ QVariantMap Api::playmode_intelligence_list(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/playmode/intelligence/list",
+        "/api/playmode/intelligence/list",
         data,
         Request::options(query, "weapi")
     );
@@ -3080,7 +3080,7 @@ QVariantMap Api::program_recommend(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/program/recommend/v1",
+        "/api/program/recommend/v1",
         data,
         Request::options(query, "weapi")
     );
@@ -3096,7 +3096,7 @@ QVariantMap Api::rebind(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/user/replaceCellphone",
+        "/api/user/replaceCellphone",
         data,
         Request::options(query, "weapi")
     );
@@ -3116,7 +3116,7 @@ QVariantMap Api::recent_listen_list(QVariantMap query) {
 QVariantMap Api::recommend_resource(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/v1/discovery/recommend/resource",
+        "/api/v1/discovery/recommend/resource",
         {},
         Request::options(query, "weapi")
     );
@@ -3131,7 +3131,7 @@ QVariantMap Api::recommend_songs_dislike(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v2/discovery/recommend/dislike",
+        "/api/v2/discovery/recommend/dislike",
         data,
         Request::options(query, "weapi")
     );
@@ -3145,7 +3145,7 @@ QVariantMap Api::recommend_songs(QVariantMap query) {
     const QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/v3/discovery/recommend/songs",
+        "/api/v3/discovery/recommend/songs",
         data,
         Request::options(query, "weapi")
     );
@@ -3158,7 +3158,7 @@ QVariantMap Api::record_recent_album(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/play-record/album/list",
+        "/api/play-record/album/list",
         data,
         Request::options(query, "weapi")
     );
@@ -3171,7 +3171,7 @@ QVariantMap Api::record_recent_dj(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/play-record/djradio/list",
+        "/api/play-record/djradio/list",
         data,
         Request::options(query, "weapi")
     );
@@ -3184,7 +3184,7 @@ QVariantMap Api::record_recent_playlist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/play-record/playlist/list",
+        "/api/play-record/playlist/list",
         data,
         Request::options(query, "weapi")
     );
@@ -3197,7 +3197,7 @@ QVariantMap Api::record_recent_song(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/play-record/song/list",
+        "/api/play-record/song/list",
         data,
         Request::options(query, "weapi")
     );
@@ -3210,7 +3210,7 @@ QVariantMap Api::record_recent_video(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/play-record/newvideo/list",
+        "/api/play-record/newvideo/list",
         data,
         Request::options(query, "weapi")
     );
@@ -3223,7 +3223,7 @@ QVariantMap Api::record_recent_voice(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/play-record/voice/list",
+        "/api/play-record/voice/list",
         data,
         Request::options(query, "weapi")
     );
@@ -3254,7 +3254,7 @@ QVariantMap Api::register_anonimous(QVariantMap query) {
 
     QVariantMap result = request(
         POST,
-        "https://music.163.com/api/register/anonimous",
+        "/api/register/anonimous",
         data,
         Request::options(query, "weapi")
     );
@@ -3285,7 +3285,7 @@ QVariantMap Api::register_cellphone(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/register/cellphone",
+        "/api/register/cellphone",
         data,
         Request::options(query, "weapi")
     );
@@ -3299,7 +3299,7 @@ QVariantMap Api::related_allvideo(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/cloudvideo/v1/allvideo/rcmd",
+        "/api/cloudvideo/v1/allvideo/rcmd",
         data,
         Request::options(query, "weapi")
     );
@@ -3364,7 +3364,7 @@ QVariantMap Api::resource_like(QVariantMap query) {
     }
     return request(
         POST,
-        "https://music.163.com/weapi/resource/" + query["t"].toString(),
+        "/api/resource/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -3391,7 +3391,7 @@ QVariantMap Api::scrobble(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/feedback/weblog",
+        "/api/feedback/weblog",
         data,
         Request::options(query, "weapi")
     );
@@ -3411,7 +3411,7 @@ QVariantMap Api::search_default(QVariantMap query) {
 QVariantMap Api::search_hot_detail(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/hotsearchlist/get",
+        "/api/hotsearchlist/get",
         {},
         Request::options(query, "weapi")
     );
@@ -3424,7 +3424,7 @@ QVariantMap Api::search_hot(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/search/hot",
+        "/api/search/hot",
         data,
         Index::mergeMap(Request::options(query, "weapi"), { { "uaType", "mobile" } })
     );
@@ -3460,7 +3460,7 @@ QVariantMap Api::search_multimatch(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/search/suggest/multimatch",
+        "/api/search/suggest/multimatch",
         data,
         Request::options(query, "weapi")
     );
@@ -3474,7 +3474,7 @@ QVariantMap Api::search_suggest(QVariantMap query) {
     QString type = query["type"] == "mobile" ? "keyword" : "web";
     return request(
         POST,
-        "https://music.163.com/weapi/search/suggest/" + type,
+        "/api/search/suggest/" + type,
         data,
         Request::options(query, "weapi")
     );
@@ -3491,7 +3491,7 @@ QVariantMap Api::search(QVariantMap query) {
         };
         return request(
             POST,
-            "https://music.163.com/api/search/voice/get",
+            "/api/search/voice/get",
             data,
             Request::options(query, "weapi")
         );
@@ -3507,7 +3507,7 @@ QVariantMap Api::search(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/search/get",
+        "/api/search/get",
         data,
         Request::options(query, "weapi")
     );
@@ -3539,7 +3539,7 @@ QVariantMap Api::send_playlist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/msg/private/send",
+        "/api/msg/private/send",
         data,
         Request::options(query, "weapi")
     );
@@ -3570,7 +3570,7 @@ QVariantMap Api::send_text(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/msg/private/send",
+        "/api/msg/private/send",
         data,
         Request::options(query, "weapi")
     );
@@ -3581,7 +3581,7 @@ QVariantMap Api::setting(QVariantMap query) {
     QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/user/setting",
+        "/api/user/setting",
         data,
         Request::options(query, "weapi")
     );
@@ -3596,7 +3596,7 @@ QVariantMap Api::share_resource(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/share/friends/resource",
+        "/api/share/friends/resource",
         data,
         Request::options(query, "weapi")
     );
@@ -3634,7 +3634,7 @@ QVariantMap Api::sign_happy_info(QVariantMap query) {
     QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/sign/happy/info",
+        "/api/sign/happy/info",
         data,
         Request::options(query, "weapi")
     );
@@ -3647,7 +3647,7 @@ QVariantMap Api::signin_progress(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/act/modules/signin/v2/progress",
+        "/api/act/modules/signin/v2/progress",
         data,
         Request::options(query, "weapi")
     );
@@ -3660,7 +3660,7 @@ QVariantMap Api::simi_artist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/discovery/simiArtist",
+        "/api/discovery/simiArtist",
         data,
         Request::options(query, "weapi")
     );
@@ -3673,7 +3673,7 @@ QVariantMap Api::simi_mv(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/discovery/simiMV",
+        "/api/discovery/simiMV",
         data,
         Request::options(query, "weapi")
     );
@@ -3688,7 +3688,7 @@ QVariantMap Api::simi_playlist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/discovery/simiPlaylist",
+        "/api/discovery/simiPlaylist",
         data,
         Request::options(query, "weapi")
     );
@@ -3703,7 +3703,7 @@ QVariantMap Api::simi_song(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/discovery/simiSong",
+        "/api/v1/discovery/simiSong",
         data,
         Request::options(query, "weapi")
     );
@@ -3718,7 +3718,7 @@ QVariantMap Api::simi_user(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/discovery/simiUser",
+        "/api/discovery/simiUser",
         data,
         Request::options(query, "weapi")
     );
@@ -3874,7 +3874,7 @@ QVariantMap Api::song_purchased(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/single/mybought/song/list",
+        "/api/single/mybought/song/list",
         data,
         Request::options(query, "weapi")
     );
@@ -3903,7 +3903,7 @@ QVariantMap Api::style_album(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/style-tag/home/album",
+        "/api/style-tag/home/album",
         data,
         Request::options(query, "weapi")
     );
@@ -3919,7 +3919,7 @@ QVariantMap Api::style_artist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/style-tag/home/artist",
+        "/api/style-tag/home/artist",
         data,
         Request::options(query, "weapi")
     );
@@ -3932,7 +3932,7 @@ QVariantMap Api::style_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/style-tag/home/head",
+        "/api/style-tag/home/head",
         data,
         Request::options(query, "weapi")
     );
@@ -3943,7 +3943,7 @@ QVariantMap Api::style_list(QVariantMap query) {
     QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/tag/list/get",
+        "/api/tag/list/get",
         data,
         Request::options(query, "weapi")
     );
@@ -3959,7 +3959,7 @@ QVariantMap Api::style_playlist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/style-tag/home/playlist",
+        "/api/style-tag/home/playlist",
         data,
         Request::options(query, "weapi")
     );
@@ -3970,7 +3970,7 @@ QVariantMap Api::style_preference(QVariantMap query) {
     QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/tag/my/preference/get",
+        "/api/tag/my/preference/get",
         data,
         Request::options(query, "weapi")
     );
@@ -3986,7 +3986,7 @@ QVariantMap Api::style_song(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/style-tag/home/song",
+        "/api/style-tag/home/song",
         data,
         Request::options(query, "weapi")
     );
@@ -4030,7 +4030,7 @@ QVariantMap Api::top_album(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/discovery/new/albums/area",
+        "/api/discovery/new/albums/area",
         data,
         Request::options(query, "weapi")
     );
@@ -4045,7 +4045,7 @@ QVariantMap Api::top_artists(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/artist/top",
+        "/api/artist/top",
         data,
         Request::options(query, "weapi")
     );
@@ -4090,7 +4090,7 @@ QVariantMap Api::top_mv(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/mv/toplist",
+        "/api/mv/toplist",
         data,
         Request::options(query, "weapi")
     );
@@ -4106,7 +4106,7 @@ QVariantMap Api::top_playlist_highquality(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/playlist/highquality/list",
+        "/api/playlist/highquality/list",
         data,
         Request::options(query, "weapi")
     );
@@ -4123,7 +4123,7 @@ QVariantMap Api::top_playlist(QVariantMap query) {
     };
     const auto res = request(
         POST,
-        "https://music.163.com/weapi/playlist/list",
+        "/api/playlist/list",
         data,
         Request::options(query, "weapi")
     );
@@ -4142,7 +4142,7 @@ QVariantMap Api::top_song(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/discovery/new/songs",
+        "/api/v1/discovery/new/songs",
         data,
         Request::options(query, "weapi")
     );
@@ -4155,7 +4155,7 @@ QVariantMap Api::topic_detail_event_hot(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/act/event/hot",
+        "/api/act/event/hot",
         data,
         Request::options(query, "weapi")
     );
@@ -4168,7 +4168,7 @@ QVariantMap Api::topic_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/act/detail",
+        "/api/act/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -4183,7 +4183,7 @@ QVariantMap Api::topic_sublist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/topic/sublist",
+        "/api/topic/sublist",
         data,
         Request::options(query, "weapi")
     );
@@ -4199,7 +4199,7 @@ QVariantMap Api::toplist_artist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/toplist/artist",
+        "/api/toplist/artist",
         data,
         Request::options(query, "weapi")
     );
@@ -4209,7 +4209,7 @@ QVariantMap Api::toplist_artist(QVariantMap query) {
 QVariantMap Api::toplist_detail(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/toplist/detail",
+        "/api/toplist/detail",
         {},
         Request::options(query, "weapi")
     );
@@ -4282,7 +4282,7 @@ QVariantMap Api::ugc_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/rep/ugc/detail",
+        "/api/rep/ugc/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -4330,7 +4330,7 @@ QVariantMap Api::user_account(QVariantMap query) {
     const QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/nuser/account/get",
+        "/api/nuser/account/get",
         data,
         Request::options(query, "weapi")
     );
@@ -4343,7 +4343,7 @@ QVariantMap Api::user_audio(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/djradio/get/byuser",
+        "/api/djradio/get/byuser",
         data,
         Request::options(query, "weapi")
     );
@@ -4354,7 +4354,7 @@ QVariantMap Api::user_binding(QVariantMap query) {
     const QVariantMap data{ };
     return request(
         POST,
-        "https://music.163.com/api/v1/user/bindings/" + query["uid"].toString(),
+        "/api/v1/user/bindings/" + query["uid"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -4367,7 +4367,7 @@ QVariantMap Api::user_cloud_del(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/cloud/del",
+        "/api/cloud/del",
         data,
         Request::options(query, "weapi")
     );
@@ -4381,7 +4381,7 @@ QVariantMap Api::user_cloud_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/cloud/get/byids",
+        "/api/v1/cloud/get/byids",
         data,
         Request::options(query, "weapi")
     );
@@ -4395,7 +4395,7 @@ QVariantMap Api::user_cloud(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/v1/cloud/get",
+        "/api/v1/cloud/get",
         data,
         Request::options(query, "weapi")
     );
@@ -4412,7 +4412,7 @@ QVariantMap Api::user_comment_history(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/comment/user/comment/history",
+        "/api/comment/user/comment/history",
         data,
         Request::options(query, "weapi")
     );
@@ -4422,7 +4422,7 @@ QVariantMap Api::user_comment_history(QVariantMap query) {
 QVariantMap Api::user_detail(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/v1/user/detail/" + query["uid"].toString(),
+        "/api/v1/user/detail/" + query["uid"].toString(),
         {},
         Request::options(query, "weapi")
     );
@@ -4436,7 +4436,7 @@ QVariantMap Api::user_dj(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/dj/program/" + query["uid"].toString(),
+        "/api/dj/program/" + query["uid"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -4484,7 +4484,7 @@ QVariantMap Api::user_follows(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/user/getfollows/" + query["uid"].toString(),
+        "/api/user/getfollows/" + query["uid"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -4495,7 +4495,7 @@ QVariantMap Api::user_level(QVariantMap query) {
     const QVariantMap data{ };
     return request(
         POST,
-        "https://music.163.com/weapi/user/level",
+        "/api/user/level",
         data,
         Request::options(query, "weapi")
     );
@@ -4511,7 +4511,7 @@ QVariantMap Api::user_playlist(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/user/playlist",
+        "/api/user/playlist",
         data,
         Request::options(query, "weapi")
     );
@@ -4525,7 +4525,7 @@ QVariantMap Api::user_record(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/v1/play/record",
+        "/api/v1/play/record",
         data,
         Request::options(query, "weapi")
     );
@@ -4541,7 +4541,7 @@ QVariantMap Api::user_replacephone(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/user/replaceCellphone",
+        "/api/user/replaceCellphone",
         data,
         Request::options(query, "weapi")
     );
@@ -4551,7 +4551,7 @@ QVariantMap Api::user_replacephone(QVariantMap query) {
 QVariantMap Api::user_subcount(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/subcount",
+        "/api/subcount",
         {},
         Request::options(query, "weapi")
     );
@@ -4569,7 +4569,7 @@ QVariantMap Api::user_update(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/user/profile/update",
+        "/api/user/profile/update",
         data,
         Request::options(query, "weapi")
     );
@@ -4591,7 +4591,7 @@ QVariantMap Api::verify_getQr(QVariantMap query) {
     };
     const auto res = request(
         POST,
-        "https://music.163.com/weapi/frontrisk/verify/qrcodestatus",
+        "/api/frontrisk/verify/qrcodestatus",
         data,
         Request::options(query, "weapi")
     );
@@ -4620,7 +4620,7 @@ QVariantMap Api::verify_qrcodestatus(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/frontrisk/verify/qrcodestatus",
+        "/api/frontrisk/verify/qrcodestatus",
         data,
         Request::options(query, "weapi")
     );
@@ -4635,7 +4635,7 @@ QVariantMap Api::video_category_list(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/cloudvideo/category/list",
+        "/api/cloudvideo/category/list",
         data,
         Request::options(query, "weapi")
     );
@@ -4649,7 +4649,7 @@ QVariantMap Api::video_detail_info(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/comment/commentthread/info",
+        "/api/comment/commentthread/info",
         data,
         Request::options(query, "weapi")
     );
@@ -4662,7 +4662,7 @@ QVariantMap Api::video_detail(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/cloudvideo/v1/video/detail",
+        "/api/cloudvideo/v1/video/detail",
         data,
         Request::options(query, "weapi")
     );
@@ -4673,7 +4673,7 @@ QVariantMap Api::video_group_list(QVariantMap query) {
     const QVariantMap data{};
     return request(
         POST,
-        "https://music.163.com/api/cloudvideo/group/list",
+        "/api/cloudvideo/group/list",
         data,
         Request::options(query, "weapi")
     );
@@ -4689,7 +4689,7 @@ QVariantMap Api::video_group(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/videotimeline/videogroup/otherclient/get",
+        "/api/videotimeline/videogroup/otherclient/get",
         data,
         Request::options(query, "weapi")
     );
@@ -4703,7 +4703,7 @@ QVariantMap Api::video_sub(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/cloudvideo/video/" + query["t"].toString(),
+        "/api/cloudvideo/video/" + query["t"].toString(),
         data,
         Request::options(query, "weapi")
     );
@@ -4719,7 +4719,7 @@ QVariantMap Api::video_timeline_all(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/videotimeline/otherclient/get",
+        "/api/videotimeline/otherclient/get",
         data,
         Request::options(query, "weapi")
     );
@@ -4736,7 +4736,7 @@ QVariantMap Api::video_timeline_recommend(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/api/videotimeline/get",
+        "/api/videotimeline/get",
         data,
         Request::options(query, "weapi")
     );
@@ -4750,7 +4750,7 @@ QVariantMap Api::video_url(QVariantMap query) {
     };
     return request(
         POST,
-        "https://music.163.com/weapi/cloudvideo/playurl",
+        "/api/cloudvideo/playurl",
         data,
         Request::options(query, "weapi")
     );
@@ -4767,7 +4767,7 @@ QVariantMap Api::vip_timemachine(QVariantMap query) {
     }
     return request(
         POST,
-        "https://music.163.com/weapi/vipmusic/newrecord/weekflow",
+        "/api/vipmusic/newrecord/weekflow",
         data,
         Request::options(query, "weapi")
     );
@@ -4896,7 +4896,7 @@ QVariantMap Api::voicelist_trans(QVariantMap query) {
 QVariantMap Api::weblog(QVariantMap query) {
     return request(
         POST,
-        "https://music.163.com/weapi/feedback/weblog",
+        "/api/feedback/weblog",
         query.value("data", QVariantMap()).toMap(),
         Request::options(query, "weapi")
     );
@@ -4908,7 +4908,7 @@ QVariantMap Api::yunbei_tasks_todo(QVariantMap query) {
     // /api/point/today/get
     return request(
         POST,
-        "https://music.163.com/api/usertool/task/todo/query",
+        "/api/usertool/task/todo/query",
         data,
         Request::options(query, "weapi")
     );
@@ -4920,7 +4920,7 @@ QVariantMap Api::yunbei_tasks(QVariantMap query) {
     // /api/point/today/get
     return request(
         POST,
-        "https://music.163.com/api/usertool/task/list/all",
+        "/api/usertool/task/list/all",
         data,
         Request::options(query, "weapi")
     );
@@ -4932,7 +4932,7 @@ QVariantMap Api::yunbei_today(QVariantMap query) {
     // /api/point/today/get
     return request(
         POST,
-        "https://music.163.com/api/point/today/get",
+        "/api/point/today/get",
         data,
         Request::options(query, "weapi")
     );
@@ -4944,7 +4944,7 @@ QVariantMap Api::yunbei(QVariantMap query) {
     // /api/point/today/get
     return request(
         POST,
-        "https://music.163.com/api/point/signed/get",
+        "/api/point/signed/get",
         data,
         Request::options(query, "weapi")
     );

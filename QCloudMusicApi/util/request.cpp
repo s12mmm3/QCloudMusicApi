@@ -134,6 +134,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         headers["Cookie"] = Index::cookieObjToString(cookie);
     }
 
+    QString url = "";
     auto eapiEncrypt = [&]() {
         options["url"] = uri;
         const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
@@ -168,7 +169,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             }();
             data["header"] = header;
             data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
-            uri = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
+            url = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
     };
 
     if (options["crypto"] == "weapi") {
@@ -176,7 +177,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
 
         data = Crypto::weapi(QJsonDocument::fromVariant(data));
-        uri = uri.replace(QRegularExpression("\\w*api"), "weapi");
+        url = Config::APP_CONF["domain"].toString() + "/weapi/" + uri.mid(5);
     }
     else if (options["crypto"] == "linuxapi") {
         data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
@@ -185,19 +186,19 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             { "params", data }
             }));
         headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
-        uri = "https://music.163.com/api/linux/forward";
+        url = "https://music.163.com/api/linux/forward";
     }
     else if (options["crypto"] == "eapi") {
         eapiEncrypt();
     }
     else if (options["crypto"] == "api") {
-        uri = Config::APP_CONF["apiDomain"].toString() + uri;
+        url = Config::APP_CONF["apiDomain"].toString() + uri;
     }
     else if (options["crypto"] == "") {
         if (Config::APP_CONF["encrypt"].toBool()) {
             eapiEncrypt();
         }
-        else uri = Config::APP_CONF["apiDomain"].toString() + uri;
+        else url = Config::APP_CONF["apiDomain"].toString() + uri;
     }
 
     QNetworkProxy proxy = QNetworkProxy::NoProxy;
@@ -216,14 +217,14 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
 
     QUrlQuery query;
-    query.setQuery(QUrl(uri).query());
+    query.setQuery(QUrl(url).query());
     for (auto i = data.constBegin(); i != data.constEnd(); ++i) {
         query.addQueryItem(i.key(), QUrl::toPercentEncoding(i.value().toString()));
     }
     DEBUG << "method" << method;
-    DEBUG << "url" << uri;
+    DEBUG << "url" << url;
     DEBUG << "data" << data;
-    QNetworkReply* reply = axios(method, uri, data, headers, query.toString().toUtf8(), proxy);
+    QNetworkReply* reply = axios(method, url, data, headers, query.toString().toUtf8(), proxy);
     reply->manager()->deleteLater();
 
     QVariantMap answer{
