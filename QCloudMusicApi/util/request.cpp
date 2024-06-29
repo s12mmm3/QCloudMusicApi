@@ -318,14 +318,3 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
 
     return reply;
 }
-
-QVariantMap Request::options(QVariantMap query, QString crypto)
-{
-    return {
-        { "crypto", query.value("crypto", crypto) },
-        { "cookie", query["cookie"] },
-        { "ua", query.value("ua", "") },
-        { "proxy", query["proxy"] },
-        { "realIP", query["realIP"] },
-    };
-}

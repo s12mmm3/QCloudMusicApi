@@ -1,6 +1,7 @@
 #include "plugins.h"
 
 #include "util/request.h"
+#include "util/option.h"
 
 #include <QEventLoop>
 #include <QJsonDocument>
@@ -40,7 +41,7 @@ QVariantMap Plugins::songUpload(QVariantMap query)
             { "type", "audio" },
             { "md5", query["songFile"].toMap()["md5"] },
         },
-        Request::options(query, "weapi")
+        Option::createOption(query, "weapi")
         );
 
     // 上传
@@ -84,7 +85,7 @@ QVariantMap Plugins::upload(QVariantMap query)
         POST,
         "/api/nos/token/alloc",
         data,
-        Request::options(query, "weapi")
+        Option::createOption(query, "weapi")
     );
     auto reply = Request::axios(QNetworkAccessManager::PostOperation,
         "https://nosup-hz1.127.net/yyimgs/"
