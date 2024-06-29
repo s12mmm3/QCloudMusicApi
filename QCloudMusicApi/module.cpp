@@ -29,6 +29,20 @@ NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject* parent)
     : QObject{ parent }
 {}
 
+// api
+QVariantMap Api::api(QVariantMap query) {
+    const auto method = query["method"] == "POST" ? POST : GET;
+    const QString uri = query["uri"].toString();
+    const QVariantMap data = query.value("data", QVariantMap{}).toMap();
+    const QString crypto = query["crypto"].toString();
+    return request(
+        method,
+        query["uri"].toString(),
+        query["data"].toMap(),
+        Request::options(query, query["crypto"].toString())
+    );
+}
+
 // 初始化名字
 QVariantMap Api::activate_init_profile(QVariantMap query) {
     QVariantMap data{

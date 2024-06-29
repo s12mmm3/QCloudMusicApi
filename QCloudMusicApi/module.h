@@ -10,6 +10,9 @@ class QCLOUDMUSICAPI_EXPORT NeteaseCloudMusicApi : public QObject {
 public:
     explicit NeteaseCloudMusicApi(QObject* parent = nullptr);
 
+    // api
+    Q_INVOKABLE QVariantMap api(QVariantMap);
+
     // 初始化名字
     Q_INVOKABLE QVariantMap activate_init_profile(QVariantMap);
 

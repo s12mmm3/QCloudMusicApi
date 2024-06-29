@@ -509,5 +509,11 @@
     },
     "artist_detail_dynamic": {
         "id": "15396"
+    },
+    "api": {
+        "method": "POST",
+        "crypto": "",
+        "data": {},
+        "uri": ""
     }
 }
