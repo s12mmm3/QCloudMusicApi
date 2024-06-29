@@ -3775,6 +3775,9 @@ QVariantMap Api::song_url_v1(QVariantMap query) {
 
 // 歌曲链接
 QVariantMap Api::song_url(QVariantMap query) {
+    QVariantMap cookie = query["cookie"].toMap();
+    cookie["os"] = "pc";
+    query["cookie"] = cookie;
     const auto ids = query["id"].toString().split(",");
     const QVariantMap data{
         { "ids", QJsonDocument::fromVariant(ids).toJson() },
@@ -3782,7 +3785,7 @@ QVariantMap Api::song_url(QVariantMap query) {
     };
     const auto res = request(
         POST,
-        "/api/song/enhance/player/url/v1",
+        "/api/song/enhance/player/url",
         data,
         Option::createOption(query)
     );
