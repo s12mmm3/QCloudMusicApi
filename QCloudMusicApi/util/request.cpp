@@ -70,9 +70,6 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     if (method == QNetworkAccessManager::PostOperation) {
         headers["Content-Type"] = "application/x-www-form-urlencoded";
     }
-    if (uri.contains("music.163.com")) {
-        headers["Referer"] = "https://music.163.com";
-    }
     QString ip = options.value("realIP", options.value("ip", "")).toString();
 
     if (!ip.isEmpty()) {
@@ -135,8 +132,28 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
 
     QString url = "";
-    auto eapiEncrypt = [&]() {
-        options["url"] = uri;
+    // 目前任意uri都支持三种加密方式
+    if (options["crypto"] == "weapi") {
+        headers["Referer"] = "https://music.163.com";
+        headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
+        data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
+
+        data = Crypto::weapi(QJsonDocument::fromVariant(data));
+        url = Config::APP_CONF["domain"].toString() + "/weapi/" + uri.mid(5);
+    }
+    else if (options["crypto"] == "linuxapi") {
+        data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
+            { "method", method },
+            { "url", Config::APP_CONF["domain"].toString() + uri },
+            { "params", data }
+            }));
+        headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
+        url = "https://music.163.com/api/linux/forward";
+    }
+    else if (options["crypto"] == "eapi"
+               || options["crypto"] == "api"
+               || options["crypto"] == "") {
+        // 两种加密方式，都应生成客户端的cookie
         const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
         const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header{
@@ -154,7 +171,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                                                 + "_"
                                                 + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
                            },
-        };
+                           };
         if (cookie.contains("MUSIC_U")) header["MUSIC_U"] = cookie["MUSIC_U"];
         if (cookie.contains("MUSIC_A")) header["MUSIC_A"] = cookie["MUSIC_A"];
 
@@ -163,42 +180,31 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             for (auto i = header.constBegin(); i != header.constEnd(); i++) {
                 result.push_back(
                     QUrl::toPercentEncoding(i.key()) + "=" + QUrl::toPercentEncoding(i.value().toString())
-                );
+                    );
             }
             return result.join("; ");
-            }();
+        }();
+        auto eapiEncrypt = [&]() {
             data["header"] = header;
-            data = Crypto::eapi(options["url"].toString(), QJsonDocument::fromVariant(data));
+            data = Crypto::eapi(uri, QJsonDocument::fromVariant(data));
             url = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
-    };
-
-    if (options["crypto"] == "weapi") {
-        headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
-        data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
-
-        data = Crypto::weapi(QJsonDocument::fromVariant(data));
-        url = Config::APP_CONF["domain"].toString() + "/weapi/" + uri.mid(5);
-    }
-    else if (options["crypto"] == "linuxapi") {
-        data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
-            { "method", method },
-            { "url", uri.replace(QRegularExpression("\\w*api"), "api") },
-            { "params", data }
-            }));
-        headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
-        url = "https://music.163.com/api/linux/forward";
-    }
-    else if (options["crypto"] == "eapi") {
-        eapiEncrypt();
-    }
-    else if (options["crypto"] == "api") {
-        url = Config::APP_CONF["apiDomain"].toString() + uri;
-    }
-    else if (options["crypto"] == "") {
-        if (Config::APP_CONF["encrypt"].toBool()) {
+        };
+        if (options["crypto"] == "eapi") {
             eapiEncrypt();
         }
-        else url = Config::APP_CONF["apiDomain"].toString() + uri;
+        else if (options["crypto"] == "api") {
+            url = Config::APP_CONF["apiDomain"].toString() + uri;
+        }
+        else if (options["crypto"] == "") {
+            if (Config::APP_CONF["encrypt"].toBool()) {
+                eapiEncrypt();
+            }
+            else url = Config::APP_CONF["apiDomain"].toString() + uri;
+        }
+    }
+    else {
+        // 未知的加密方式
+        DEBUG << "[ERR]" << "Unknown Crypto:" << options["crypto"].toString();
     }
 
     QNetworkProxy proxy = QNetworkProxy::NoProxy;
@@ -254,14 +260,9 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         }
         answer["cookie"] = cookie;
 
-        if (options["crypto"] == "eapi") {
+        answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+        if (answer["body"].toMap().isEmpty()) {
             answer["body"] = QJsonDocument::fromJson(Crypto::decrypt(body)).toVariant().toMap();
-            if (answer["body"].toMap().isEmpty()) {
-                answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
-            }
-        }
-        else {
-            answer["body"] = answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
         }
         answer["status"] = answer["body"].toMap().value("code", reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
         if (QList<int> { 201, 302, 400, 502, 800, 801, 802, 803 }.indexOf(answer["body"].toMap()["code"].toInt()) > -1) {

@@ -34,7 +34,9 @@ NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject* parent)
 QVariantMap Api::api(QVariantMap query) {
     const auto method = query["method"] == "POST" ? POST : GET;
     const QString uri = query["uri"].toString();
-    const QVariantMap data = query.value("data", QVariantMap{}).toMap();
+    const QVariantMap data = query.value("data").userType() == QMetaType::QString
+                                 ? QJsonDocument::fromVariant(query.value("data")).toVariant().toMap()
+                                 : query.value("data", QVariantMap{}).toMap();
     const QString crypto = query["crypto"].toString();
     return request(
         method,
@@ -549,9 +551,7 @@ QVariantMap Api::avatar_upload(QVariantMap query) {
 
 // 批量请求接口
 QVariantMap Api::batch(QVariantMap query) {
-    QVariantMap data{
-        { "e_r", true }
-    };
+    QVariantMap data{};
     for (auto i = query.begin(); i != query.end(); i++) {
         if (i.key().indexOf("/api/") == 0) {
             data[i.key()] = i.value();
