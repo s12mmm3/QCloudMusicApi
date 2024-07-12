@@ -189,6 +189,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             data["header"] = header;
             encryptData = Crypto::eapi(uri, QJsonDocument::fromVariant(data));
             url = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
+            data["e_r"] = data.contains("e_r") ? data["e_r"] : Config::APP_CONF["encryptResponse"]; // 用于加密eapi接口的返回值
         };
         if (options["crypto"] == "eapi") {
             eapiEncrypt();
@@ -266,9 +267,15 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         }
         answer["cookie"] = cookie;
 
-        answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+        if (data["e_r"].toBool()) {
+            // eapi接口返回值被加密
+            answer["body"] = Crypto::eapiResDecrypt(body.toHex().toUpper());
+        }
+        else {
+            answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
+        }
         if (answer["body"].toMap().isEmpty()) {
-            answer["body"] = QJsonDocument::fromJson(Crypto::decrypt(body)).toVariant().toMap();
+            answer["body"] = body;
         }
         answer["status"] = answer["body"].toMap().value("code", reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
         if (QList<int> { 201, 302, 400, 502, 800, 801, 802, 803 }.indexOf(answer["body"].toMap()["code"].toInt()) > -1) {
