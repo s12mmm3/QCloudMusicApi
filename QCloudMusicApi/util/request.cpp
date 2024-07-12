@@ -132,17 +132,18 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
 
     QString url = "";
+    QVariantMap encryptData;
     // 目前任意uri都支持三种加密方式
     if (options["crypto"] == "weapi") {
         headers["Referer"] = "https://music.163.com";
         headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
         data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
 
-        data = Crypto::weapi(QJsonDocument::fromVariant(data));
+        encryptData = Crypto::weapi(QJsonDocument::fromVariant(data));
         url = Config::APP_CONF["domain"].toString() + "/weapi/" + uri.mid(5);
     }
     else if (options["crypto"] == "linuxapi") {
-        data = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
+        encryptData = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
             { "method", method },
             { "url", Config::APP_CONF["domain"].toString() + uri },
             { "params", data }
@@ -186,7 +187,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         }();
         auto eapiEncrypt = [&]() {
             data["header"] = header;
-            data = Crypto::eapi(uri, QJsonDocument::fromVariant(data));
+            encryptData = Crypto::eapi(uri, QJsonDocument::fromVariant(data));
             url = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
         };
         if (options["crypto"] == "eapi") {
@@ -194,12 +195,17 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         }
         else if (options["crypto"] == "api") {
             url = Config::APP_CONF["apiDomain"].toString() + uri;
+            encryptData = data;
         }
         else if (options["crypto"] == "") {
+            // 加密方式为空，以配置文件的加密方式为准
             if (Config::APP_CONF["encrypt"].toBool()) {
                 eapiEncrypt();
             }
-            else url = Config::APP_CONF["apiDomain"].toString() + uri;
+            else {
+                url = Config::APP_CONF["apiDomain"].toString() + uri;
+                encryptData = data;
+            }
         }
     }
     else {
@@ -224,13 +230,13 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
     QUrlQuery query;
     query.setQuery(QUrl(url).query());
-    for (auto i = data.constBegin(); i != data.constEnd(); ++i) {
+    for (auto i = encryptData.constBegin(); i != encryptData.constEnd(); ++i) {
         query.addQueryItem(i.key(), QUrl::toPercentEncoding(i.value().toString()));
     }
     DEBUG << "method" << method;
     DEBUG << "url" << url;
-    DEBUG << "data" << data;
-    QNetworkReply* reply = axios(method, url, data, headers, query.toString().toUtf8(), proxy);
+    DEBUG << "data" << encryptData;
+    QNetworkReply* reply = axios(method, url, encryptData, headers, query.toString().toUtf8(), proxy);
     reply->manager()->deleteLater();
 
     QVariantMap answer{
