@@ -133,7 +133,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
     QString url = "";
     QVariantMap encryptData;
-    // 目前任意uri都支持三种加密方式
+    // 根据加密方式加密请求数据；目前任意uri都支持四种加密方式
     if (options["crypto"] == "weapi") {
         headers["Referer"] = "https://music.163.com";
         headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
@@ -185,27 +185,31 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             }
             return result.join("; ");
         }();
-        auto eapiEncrypt = [&]() {
+        auto eapi = [&]() {
+            // 使用eapi加密
             data["header"] = header;
+            data["e_r"] = options.value("e_r").isValid() ? options.value("e_r") : data.value("e_r", Config::APP_CONF.value("encryptResponse")); // 用于加密eapi接口的返回值
             encryptData = Crypto::eapi(uri, QJsonDocument::fromVariant(data));
             url = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
-            data["e_r"] = data.contains("e_r") ? data["e_r"] : Config::APP_CONF["encryptResponse"]; // 用于加密eapi接口的返回值
         };
-        if (options["crypto"] == "eapi") {
-            eapiEncrypt();
-        }
-        else if (options["crypto"] == "api") {
+        auto api = [&]() {
+            // 不使用任何加密
             url = Config::APP_CONF["apiDomain"].toString() + uri;
             encryptData = data;
+        };
+        if (options["crypto"] == "eapi") {
+            eapi();
+        }
+        else if (options["crypto"] == "api") {
+            api();
         }
         else if (options["crypto"] == "") {
             // 加密方式为空，以配置文件的加密方式为准
             if (Config::APP_CONF["encrypt"].toBool()) {
-                eapiEncrypt();
+                eapi();
             }
             else {
-                url = Config::APP_CONF["apiDomain"].toString() + uri;
-                encryptData = data;
+                api();
             }
         }
     }
@@ -268,7 +272,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         answer["cookie"] = cookie;
 
         if (data["e_r"].toBool()) {
-            // eapi接口返回值被加密
+            // eapi接口返回值被加密，需要解密
             answer["body"] = Crypto::eapiResDecrypt(body.toHex().toUpper());
         }
         else {
