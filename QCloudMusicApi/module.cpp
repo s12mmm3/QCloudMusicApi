@@ -37,6 +37,7 @@ QVariantMap Api::api(QVariantMap query) {
     const QVariantMap data = query.value("data").userType() == QMetaType::QString
                                  ? QJsonDocument::fromVariant(query.value("data")).toVariant().toMap()
                                  : query.value("data", QVariantMap{}).toMap();
+    query["cookie"] = data["cookie"];
     const QString crypto = query["crypto"].toString();
     return request(
         method,

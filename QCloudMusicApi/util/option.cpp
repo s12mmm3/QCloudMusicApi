@@ -9,5 +9,6 @@ QVariantMap Option::createOption(QVariantMap query, QString crypto)
             { "ua", query.value("ua", "") },
             { "proxy", query["proxy"] },
             { "realIP", query["realIP"] },
+            { "e_r", query.value("e_r") },
             };
 }

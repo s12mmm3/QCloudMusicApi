@@ -133,16 +133,29 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
     QString url = "";
     QVariantMap encryptData;
+    auto crypto = options["crypto"];
+    auto csrfToken = cookie.value("__csrf", "");
+
+    if (crypto == "") {
+        // 加密方式为空，以配置文件的加密方式为准
+        if (Config::APP_CONF["encrypt"].toBool()) {
+            crypto = "eapi";
+        }
+        else {
+            crypto = "api";
+        }
+    }
+
     // 根据加密方式加密请求数据；目前任意uri都支持四种加密方式
-    if (options["crypto"] == "weapi") {
+    if (crypto == "weapi") {
         headers["Referer"] = "https://music.163.com";
         headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
-        data["csrf_token"] = QRegularExpression("_csrf=([^;]+)").match(headers.value("Cookie", "").toString()).captured(1);
+        data["csrf_token"] = csrfToken;
 
         encryptData = Crypto::weapi(QJsonDocument::fromVariant(data));
         url = Config::APP_CONF["domain"].toString() + "/weapi/" + uri.mid(5);
     }
-    else if (options["crypto"] == "linuxapi") {
+    else if (crypto == "linuxapi") {
         encryptData = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
             { "method", method },
             { "url", Config::APP_CONF["domain"].toString() + uri },
@@ -151,12 +164,9 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
         url = "https://music.163.com/api/linux/forward";
     }
-    else if (options["crypto"] == "eapi"
-               || options["crypto"] == "api"
-               || options["crypto"] == "") {
+    else if (crypto == "eapi" || crypto == "api") {
         // 两种加密方式，都应生成客户端的cookie
         const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
-        const QString csrfToken = cookie.value("__csrf", "").toString();
         QVariantMap header{
                            { "osver", cookie.value("osver", "17.4.1") }, //系统版本
                            { "deviceId", cookie["deviceId"] },
@@ -197,20 +207,11 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             url = Config::APP_CONF["apiDomain"].toString() + uri;
             encryptData = data;
         };
-        if (options["crypto"] == "eapi") {
+        if (crypto == "eapi") {
             eapi();
         }
-        else if (options["crypto"] == "api") {
+        else if (crypto == "api") {
             api();
-        }
-        else if (options["crypto"] == "") {
-            // 加密方式为空，以配置文件的加密方式为准
-            if (Config::APP_CONF["encrypt"].toBool()) {
-                eapi();
-            }
-            else {
-                api();
-            }
         }
     }
     else {
