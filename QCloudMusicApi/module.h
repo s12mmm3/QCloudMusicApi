@@ -724,8 +724,22 @@ public:
     // 相似用户
     Q_INVOKABLE QVariantMap simi_user(QVariantMap);
 
+    // 歌曲详情
+    Q_INVOKABLE QVariantMap song_detail(QVariantMap);
+
+    // 会员下载歌曲记录
+    Q_INVOKABLE QVariantMap song_downlist(QVariantMap);
+
+    // 获取客户端歌曲下载链接 - v1
+    // 此版本不再采用 br 作为音质区分的标准
+    // 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
+    Q_INVOKABLE QVariantMap song_download_url_v1(QVariantMap);
+
     // 获取客户端歌曲下载链接
     Q_INVOKABLE QVariantMap song_download_url(QVariantMap);
+
+    // 会员本月下载歌曲记录
+    Q_INVOKABLE QVariantMap song_monthdownlist(QVariantMap);
 
     // 歌曲链接 - v1
     // 此版本不再采用 br 作为音质区分的标准
@@ -734,9 +748,6 @@ public:
 
     // 歌曲链接
     Q_INVOKABLE QVariantMap song_url(QVariantMap);
-
-    // 歌曲详情
-    Q_INVOKABLE QVariantMap song_detail(QVariantMap);
 
     // 音乐百科基础信息
     Q_INVOKABLE QVariantMap song_wiki_summary(QVariantMap);
@@ -755,6 +766,9 @@ public:
 
     // 歌曲红心数量
     Q_INVOKABLE QVariantMap song_red_count(QVariantMap);
+
+    // 已购买单曲
+    Q_INVOKABLE QVariantMap song_singledownlist(QVariantMap);
 
     // 曲风-专辑
     Q_INVOKABLE QVariantMap style_album(QVariantMap);
@@ -873,6 +887,9 @@ public:
 
     // 用户动态
     Q_INVOKABLE QVariantMap user_event(QVariantMap);
+
+    // 当前账号关注的用户/歌手
+    Q_INVOKABLE QVariantMap user_follow_mixed(QVariantMap);
 
     // 关注TA的人(粉丝)
     Q_INVOKABLE QVariantMap user_followeds(QVariantMap);

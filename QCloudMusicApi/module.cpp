@@ -3740,6 +3740,58 @@ QVariantMap Api::simi_user(QVariantMap query) {
     );
 }
 
+// 歌曲详情
+QVariantMap Api::song_detail(QVariantMap query) {
+    query["ids"] = query["ids"].toString().split(QRegularExpression("\\s*,\\s*"));
+    const QVariantMap data{
+        { "c", "[" + [&]() -> QString {
+             QStringList c;
+             for (auto& item : query["ids"].toStringList()) {
+                 c.append("{\"id\":" + item + "}");
+             }
+             return c.join(",");
+         }() + "]" }
+    };
+    return request(
+        POST,
+        "/api/v3/song/detail",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 会员下载歌曲记录
+QVariantMap Api::song_downlist(QVariantMap query) {
+    QVariantMap data{
+        { "limit", query.value("limit", "20") },
+        { "offset", query.value("offset", "0") },
+        { "total", "true" },
+    };
+    return request(
+        POST,
+        "/api/member/song/downlist",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 获取客户端歌曲下载链接 - v1
+// 此版本不再采用 br 作为音质区分的标准
+// 而是采用 standard, exhigh, lossless, hires, jyeffect(高清环绕声), sky(沉浸环绕声), jymaster(超清母带) 进行音质判断
+QVariantMap Api::song_download_url_v1(QVariantMap query) {
+    QVariantMap data{
+        { "id", query["id"] },
+        { "immerseType", "c51" },
+        { "level", query["level"] },
+    };
+    return request(
+        POST,
+        "/api/song/enhance/download/url/v1",
+        data,
+        Option::createOption(query)
+        );
+}
+
 // 获取客户端歌曲下载链接
 QVariantMap Api::song_download_url(QVariantMap query) {
     QVariantMap data{
@@ -3752,6 +3804,21 @@ QVariantMap Api::song_download_url(QVariantMap query) {
         data,
         Option::createOption(query)
     );
+}
+
+// 会员本月下载歌曲记录
+QVariantMap Api::song_monthdownlist(QVariantMap query) {
+    QVariantMap data{
+        { "limit", query.value("limit", "20") },
+        { "offset", query.value("offset", "0") },
+        { "total", "true" },
+    };
+    return request(
+        POST,
+        "/api/member/song/monthdownlist",
+        data,
+        Option::createOption(query)
+        );
 }
 
 // 歌曲链接 - v1
@@ -3804,26 +3871,6 @@ QVariantMap Api::song_url(QVariantMap query) {
             }
         }
     };
-}
-
-// 歌曲详情
-QVariantMap Api::song_detail(QVariantMap query) {
-    query["ids"] = query["ids"].toString().split(QRegularExpression("\\s*,\\s*"));
-    const QVariantMap data{
-        { "c", "[" + [&]() -> QString {
-             QStringList c;
-             for (auto& item : query["ids"].toStringList()) {
-                 c.append("{\"id\":" + item + "}");
-             }
-             return c.join(",");
-         }() + "]" }
-    };
-    return request(
-        POST,
-        "/api/v3/song/detail",
-        data,
-        Option::createOption(query)
-    );
 }
 
 // 音乐百科基础信息
@@ -3910,6 +3957,21 @@ QVariantMap Api::song_red_count(QVariantMap query) {
         data,
         Option::createOption(query)
     );
+}
+
+// 已购买单曲
+QVariantMap Api::song_singledownlist(QVariantMap query) {
+    QVariantMap data{
+        { "limit", query.value("limit", "20") },
+        { "offset", query.value("offset", "0") },
+        { "total", "true" },
+    };
+    return request(
+        POST,
+        "/api/member/song/singledownlist",
+        data,
+        Option::createOption(query)
+        );
 }
 
 // 曲风-专辑
@@ -4475,6 +4537,31 @@ QVariantMap Api::user_event(QVariantMap query) {
         data,
         Option::createOption(query)
     );
+}
+
+// 当前账号关注的用户/歌手
+QVariantMap Api::user_follow_mixed(QVariantMap query) {
+    auto size = query.value("size", 30);
+    auto cursor = query.value("cursor", 0);
+    auto scene = query.value("scene", 0); // 0: 所有关注 1: 关注的歌手 2: 关注的用户
+    const QVariantMap data{
+        { "authority", "false" },
+        { "page", QJsonDocument(QJsonObject::fromVariantMap(
+                                   {
+                                        { "size", size },
+                                        { "cursor", cursor }
+                                    }
+                                )).toJson(QJsonDocument::JsonFormat::Compact) },
+        { "scene", scene },
+        { "size", size },
+        { "sortType", "0" },
+    };
+    return request(
+        POST,
+        "/api/user/follow/users/mixed/get/v2",
+        data,
+        Option::createOption(query)
+        );
 }
 
 // 关注TA的人(粉丝)

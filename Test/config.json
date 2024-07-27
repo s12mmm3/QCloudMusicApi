@@ -515,5 +515,9 @@
         "crypto": "",
         "data": {},
         "uri": ""
+    },
+    "song_download_url_v1": {
+        "id": "2058263032",
+        "level": "lossless"
     }
 }
