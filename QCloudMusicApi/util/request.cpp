@@ -91,8 +91,6 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
                     { "__remember_me", true },
                     { "NMTID", randomBytes().toHex() },
                     { "_ntes_nuid", randomBytes().toHex() },
-                    { "os", options["cookie"].toMap().value("os", "ios") },
-                    { "appver", options["cookie"].toMap().value("appver", cookie.value("os") != "pc" ? iosAppVersion : "") },
                 });
         if (uri.indexOf("login") == -1) {
             auto cookie = options["cookie"].toMap();
@@ -119,15 +117,10 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     }
     else if (options.contains("cookie")) {
         // cookie string
-        auto cookie = Index::cookieToJson(options["cookie"].toString());
-        cookie["os"] = cookie.value("os", "ios");
-        cookie["appver"] = cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "");
-        headers["Cookie"] = Index::cookieObjToString(cookie);
+        headers["Cookie"] = options["cookie"];
     }
     else {
         auto cookie = Index::cookieToJson("__remember_me=true; NMTID=xxx");
-        cookie["os"] = cookie.value("os", "ios");
-        cookie["appver"] = cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "");
         headers["Cookie"] = Index::cookieObjToString(cookie);
     }
 
@@ -168,21 +161,21 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
         // 两种加密方式，都应生成客户端的cookie
         const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
         QVariantMap header{
-                           { "osver", cookie.value("osver", "17.4.1") }, //系统版本
-                           { "deviceId", cookie["deviceId"] },
-                           { "appver", cookie.value("appver", iosAppVersion) }, // app版本
-                           { "versioncode", cookie.value("versioncode", "140") }, //版本号
-                           { "mobilename", cookie.value("mobilename", "") }, //设备model
-                           { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
-                           { "resolution", cookie.value("resolution", "1920x1080") }, //设备分辨率
-                           { "__csrf", csrfToken },
-                           { "os", cookie.value("os", "ios") },
-                           { "channel", cookie.value("channel", "") },
-                           { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
-                                                + "_"
-                                                + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
-                           },
-                           };
+            { "osver", cookie.value("osver", "17.4.1") }, //系统版本
+            { "deviceId", cookie["deviceId"] },
+            { "os", cookie.value("os", "ios") },
+            { "appver", cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "") }, // app版本
+            { "versioncode", cookie.value("versioncode", "140") }, //版本号
+            { "mobilename", cookie.value("mobilename", "") }, //设备model
+            { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
+            { "resolution", cookie.value("resolution", "1920x1080") }, //设备分辨率
+            { "__csrf", csrfToken },
+            { "channel", cookie.value("channel", "") },
+            { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
+                              + "_"
+                              + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
+            },
+        };
         if (cookie.contains("MUSIC_U")) header["MUSIC_U"] = cookie["MUSIC_U"];
         if (cookie.contains("MUSIC_A")) header["MUSIC_A"] = cookie["MUSIC_A"];
 
