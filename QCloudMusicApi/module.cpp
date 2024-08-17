@@ -747,7 +747,7 @@ QVariantMap Api::cloud(QVariantMap query) {
             { "songId", "0" },
             { "version", 1 },
         },
-        Option::createOption(query)
+        Option::createOption(query, "weapi")
         );
     QString artist = "";
     QString album = "";
@@ -794,15 +794,23 @@ QVariantMap Api::cloud(QVariantMap query) {
             { "bitrate", QString::number(bitrate) },
             { "resourceId", tokenRes["body"].toMap()["result"].toMap()["resourceId"] }
         },
-        Option::createOption(query)
+        Option::createOption(query, "weapi")
     );
+
+    if (!res2["body"].toMap().contains("songId")) {
+        return {
+            { "status", 500 },
+            { "body", res2["body"].toMap() }
+        };
+    }
+
     const auto res3 = request(
         POST,
         "/api/cloud/pub/v2",
         {
             { "songid", res2["body"].toMap()["songId"] }
         },
-        Option::createOption(query)
+        Option::createOption(query, "weapi")
     );
     return {
         { "status", 200 },
