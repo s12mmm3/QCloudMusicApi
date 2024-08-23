@@ -14,10 +14,11 @@ namespace QCloudMusicApi {
     class QCLOUDMUSICAPI_EXPORT Request {
     public:
         static QString chooseUserAgent(QString uaType);
-        static QVariantMap createRequest(QNetworkAccessManager::Operation method,
+        static QVariantMap createRequest(
             QString uri,
             QVariantMap data,
-            QVariantMap options);
+            QVariantMap options
+        );
 
         // 仿axios的网络请求，需要手动析构QNetworkAccessManager, QNetworkReply生命周期由其控制
         static QNetworkReply* axios(QNetworkAccessManager::Operation method,

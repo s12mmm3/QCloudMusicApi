@@ -1,4 +1,5 @@
 ﻿#include <QCoreApplication>
+#include <QLoggingCategory>
 
 #include "server.h"
 #include "generateconfig.h"
@@ -21,6 +22,7 @@ void start() {
 int main(int argc, char* argv[])
 {
     qSetMessagePattern("%{time yyyy-MM-dd hh:mm:ss.zzz} : %{pid} : %{category} : %{type} : %{line} : %{function} : %{message}");
+    QLoggingCategory::setFilterRules("QCloudMusicApi.debug=false");
     QCoreApplication a(argc, argv);
     start();
     return a.exec();

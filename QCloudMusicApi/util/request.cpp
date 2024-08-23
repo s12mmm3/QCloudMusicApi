@@ -45,10 +45,11 @@ QString Request::chooseUserAgent(QString uaType) {
     return userAgentList["pc"];
 }
 
-QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
+QVariantMap Request::createRequest(
     QString uri,
     QVariantMap data,
     QVariantMap options) {
+    QNetworkAccessManager::Operation method = QNetworkAccessManager::PostOperation;
     DEBUG.noquote() <<
         QJsonDocument::fromVariant(
             QVariantMap{
@@ -60,16 +61,11 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
     ).toJson();
     const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
     QVariantMap headers{
-        { "User-Agent", !options.value("ua").toString().isEmpty() ? options.value("ua") : chooseUserAgent(options["uaType"].toString()) },
-        { "os", cookie.value("cookie", "ios") },
-        { "appver", cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "") },
+        { "Content-Type", "application/x-www-form-urlencoded" },
     };
     options["headers"] = options.value("headers", QVariantMap()).toMap();
     headers = Index::mergeMap(headers, options["headers"].toMap());
 
-    if (method == QNetworkAccessManager::PostOperation) {
-        headers["Content-Type"] = "application/x-www-form-urlencoded";
-    }
     QString ip = options.value("realIP", options.value("ip", "")).toString();
 
     if (!ip.isEmpty()) {
@@ -141,7 +137,7 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
 
     // 根据加密方式加密请求数据；目前任意uri都支持四种加密方式
     if (crypto == "weapi") {
-        headers["Referer"] = "https://music.163.com";
+        headers["Referer"] = Config::APP_CONF["domain"];
         headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
         data["csrf_token"] = csrfToken;
 
@@ -188,23 +184,19 @@ QVariantMap Request::createRequest(QNetworkAccessManager::Operation method,
             }
             return result.join("; ");
         }();
-        auto eapi = [&]() {
+        headers["User-Agent"] = !options.value("ua").toString().isEmpty() ? options.value("ua") : chooseUserAgent(options["uaType"].toString());
+        if (crypto == "eapi") {
             // 使用eapi加密
             data["header"] = header;
             data["e_r"] = options.value("e_r").isValid() ? options.value("e_r") : data.value("e_r", Config::APP_CONF.value("encryptResponse")); // 用于加密eapi接口的返回值
+            data["e_r"] = Index::toBoolean(data["e_r"]);
             encryptData = Crypto::eapi(uri, QJsonDocument::fromVariant(data));
             url = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
-        };
-        auto api = [&]() {
+        }
+        else if (crypto == "api") {
             // 不使用任何加密
             url = Config::APP_CONF["apiDomain"].toString() + uri;
             encryptData = data;
-        };
-        if (crypto == "eapi") {
-            eapi();
-        }
-        else if (crypto == "api") {
-            api();
         }
     }
     else {

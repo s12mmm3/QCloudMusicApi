@@ -9,8 +9,6 @@
 #include <QRegularExpression>
 
 const static auto& request = QCloudMusicApi::Request::createRequest;
-const static auto& POST = QNetworkAccessManager::PostOperation;
-const static auto& GET = QNetworkAccessManager::GetOperation;
 
 using namespace QCloudMusicApi;
 Plugins::Plugins(QObject* parent)
@@ -30,7 +28,6 @@ QVariantMap Plugins::songUpload(QVariantMap query)
     const QString bucket = "jd-musicrep-privatecloud-audio-public";
     //   获取key和token
     const auto tokenRes = request(
-        POST,
         "/api/nos/token/alloc",
         {
             { "bucket", bucket },
@@ -82,7 +79,6 @@ QVariantMap Plugins::upload(QVariantMap query)
     };
     //   获取key和token
     const auto res = request(
-        POST,
         "/api/nos/token/alloc",
         data,
         Option::createOption(query, "weapi")
