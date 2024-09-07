@@ -432,6 +432,9 @@ public:
     // 登录状态
     Q_INVOKABLE QVariantMap login_status(QVariantMap);
 
+    // 邮箱登录
+    Q_INVOKABLE QVariantMap login(QVariantMap);
+
     // 退出登录
     Q_INVOKABLE QVariantMap logout(QVariantMap);
 

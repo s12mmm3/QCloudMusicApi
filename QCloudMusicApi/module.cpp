@@ -1990,6 +1990,40 @@ QVariantMap Api::login_status(QVariantMap query) {
     return result;
 }
 
+// 邮箱登录
+QVariantMap Api::login(QVariantMap query) {
+    const QVariantMap data{
+        { "username", query["email"] },
+        { "password", query.value("md5_password", QCryptographicHash::hash(query["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex()) },
+        { "rememberLogin", "true" }
+    };
+    QVariantMap result = request(
+        "/api/login",
+        data,
+        Index::mergeMap(Option::createOption(query), { { "uaType", "pc" } })
+        );
+    if (result["body"].toMap()["code"] == 502) {
+        return {
+                { "status", 200 },
+                { "body", QVariantMap{
+                             { "msg", "账号或密码错误" },
+                             { "code", 502 },
+                             { "message", "账号或密码错误" },
+                             } },
+                };
+    }
+    if (result["body"].toMap()["code"] == 200) {
+        auto body = result["body"].toMap();
+        body["cookie"] = result["cookie"];
+        result = QVariantMap{
+            { "status", 200 },
+            { "body", body },
+            { "cookie", result["cookie"] }
+        };
+    }
+    return result;
+}
+
 // 退出登录
 QVariantMap Api::logout(QVariantMap query) {
     return request(
