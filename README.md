@@ -3,6 +3,7 @@
 [![GitHub Actions CI Status](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/windows.yml/badge.svg)](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/windows.yml)
 [![GitHub Actions CI Status](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/macos.yml/badge.svg)](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/macos.yml)
 [![GitHub Actions CI Status](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/s12mmm3/QCloudMusicApi/actions/workflows/ubuntu.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fs12mmm3%2FQCloudMusicApi.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fs12mmm3%2FQCloudMusicApi?ref=badge_shield)
 
 ![C++ version](https://img.shields.io/badge/C++-11-00599C?logo=++)
 [![Qt version](https://img.shields.io/badge/Qt-5.12+-41CD52?logo=qt)](https://www.qt.io)
@@ -119,3 +120,6 @@ cmake --build build -j
 ## License
 
 [The MIT License (MIT)](LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fs12mmm3%2FQCloudMusicApi.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fs12mmm3%2FQCloudMusicApi?ref=badge_large)
