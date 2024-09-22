@@ -741,6 +741,12 @@ public:
     // 获取客户端歌曲下载链接
     Q_INVOKABLE QVariantMap song_download_url(QVariantMap);
 
+    // 歌曲动态封面
+    Q_INVOKABLE QVariantMap song_dynamic_cover(QVariantMap);
+
+    // 歌曲是否喜爱
+    Q_INVOKABLE QVariantMap song_like_check(QVariantMap);
+
     // 会员本月下载歌曲记录
     Q_INVOKABLE QVariantMap song_monthdownlist(QVariantMap);
 
@@ -902,6 +908,9 @@ public:
 
     // 获取用户等级信息
     Q_INVOKABLE QVariantMap user_level(QVariantMap);
+
+    // 用户是否互相关注
+    Q_INVOKABLE QVariantMap user_mutualfollow_get(QVariantMap);
 
     // 用户歌单
     Q_INVOKABLE QVariantMap user_playlist(QVariantMap);

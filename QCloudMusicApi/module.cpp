@@ -3500,6 +3500,30 @@ QVariantMap Api::song_download_url(QVariantMap query) {
     );
 }
 
+// 歌曲动态封面
+QVariantMap Api::song_dynamic_cover(QVariantMap query) {
+    QVariantMap data{
+        { "songId", query["id"] },
+        };
+    return request(
+        "/api/songplay/dynamic-cover",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 歌曲是否喜爱
+QVariantMap Api::song_like_check(QVariantMap query) {
+    QVariantMap data{
+        { "trackIds", query["ids"] },
+        };
+    return request(
+        "/api/song/like/check",
+        data,
+        Option::createOption(query)
+        );
+}
+
 // 会员本月下载歌曲记录
 QVariantMap Api::song_monthdownlist(QVariantMap query) {
     QVariantMap data{
@@ -4239,6 +4263,18 @@ QVariantMap Api::user_level(QVariantMap query) {
         data,
         Option::createOption(query, "weapi")
     );
+}
+
+// 用户是否互相关注
+QVariantMap Api::user_mutualfollow_get(QVariantMap query) {
+    const QVariantMap data{
+        { "friendid", query["uid"] },
+    };
+    return request(
+        "/api/user/mutualfollow/get",
+        data,
+        Option::createOption(query)
+        );
 }
 
 // 用户歌单

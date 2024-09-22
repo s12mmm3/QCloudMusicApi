@@ -519,5 +519,14 @@
     "song_download_url_v1": {
         "id": "2058263032",
         "level": "lossless"
+    },
+    "song_dynamic_cover": {
+        "id": "2101179024"
+    },
+    "song_like_check": {
+        "ids": "[2058263032,1497529942]"
+    },
+    "user_mutualfollow_get": {
+        "uid": "79248480"
     }
 }
