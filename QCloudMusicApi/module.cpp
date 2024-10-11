@@ -37,9 +37,9 @@ QVariantMap Api::api(QVariantMap query) {
     query["cookie"] = data["cookie"];
     const QString crypto = query["crypto"].toString();
     return request(
-        query["uri"].toString(),
+        uri,
         query["data"].toMap(),
-        Option::createOption(query, query["crypto"].toString())
+        Option::createOption(query, crypto)
     );
 }
 
@@ -271,7 +271,7 @@ QVariantMap Api::artist_detail(QVariantMap query) {
     return request(
         "/api/artist/head/info/get",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -1864,6 +1864,8 @@ QVariantMap Api::listentogether_sync_playlist_get(QVariantMap query) {
 // 手机登录
 QVariantMap Api::login_cellphone(QVariantMap query) {
     const QVariantMap data{
+        { "type", "0" },
+        { "https", "true" },
         { "phone", query["phone"] },
         { "countrycode", query.value("countrycode", 86) },
         //        { "captcha", query["captcha"] },
@@ -1873,11 +1875,7 @@ QVariantMap Api::login_cellphone(QVariantMap query) {
                                          QCryptographicHash::hash(query["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex())) },
                 { "rememberLogin", "true" }
     };
-    QVariantMap result = request(
-        "/api/login/cellphone",
-        data,
-        Index::mergeMap(Option::createOption(query, "weapi"), { { "uaType", "pc" } })
-    );
+    QVariantMap result = request("/api/w/login/cellphone", data,Option::createOption(query));
     if (result["body"].toMap()["code"] == 200) {
         auto body = result["body"].toMap();
         body["cookie"] = result["cookie"];
@@ -1894,12 +1892,12 @@ QVariantMap Api::login_cellphone(QVariantMap query) {
 QVariantMap Api::login_qr_check(QVariantMap query) {
     const QVariantMap data{
         { "key", query["key"] },
-        { "type", 1 }
+        { "type", 3 }
     };
     QVariantMap result = request(
         "/api/login/qrcode/client/login",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
     auto body = result["body"].toMap();
     body["cookie"] = result["cookie"];
@@ -1914,12 +1912,12 @@ QVariantMap Api::login_qr_check(QVariantMap query) {
 // 二维码 key 生成接口
 QVariantMap Api::login_qr_key(QVariantMap query) {
     const QVariantMap data{
-        { "type", 1 }
+        { "type", 3 }
     };
     QVariantMap result = request(
         "/api/login/qrcode/unikey",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
     result = QVariantMap{
         { "status", 200 },
@@ -1950,11 +1948,7 @@ QVariantMap Api::login_qr_create(QVariantMap query) {
 
 // 登录刷新
 QVariantMap Api::login_refresh(QVariantMap query) {
-    QVariantMap result = request(
-        "/api/login/token/refresh",
-        {},
-        Index::mergeMap(Option::createOption(query, "weapi"), { { "uaType", "pc" } })
-    );
+    QVariantMap result = request("/api/login/token/refresh", {}, Option::createOption(query));
     if (result["body"].toMap()["code"] == 200) {
         auto body = result["body"].toMap();
         body["cookie"] = result["cookie"];
@@ -1993,15 +1987,13 @@ QVariantMap Api::login_status(QVariantMap query) {
 // 邮箱登录
 QVariantMap Api::login(QVariantMap query) {
     const QVariantMap data{
+        { "type", "0" },
+        { "https", "true" },
         { "username", query["email"] },
         { "password", query.value("md5_password", QCryptographicHash::hash(query["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex()) },
         { "rememberLogin", "true" }
     };
-    QVariantMap result = request(
-        "/api/login",
-        data,
-        Index::mergeMap(Option::createOption(query), { { "uaType", "pc" } })
-        );
+    QVariantMap result = request("/api/w/login", data, Option::createOption(query));
     if (result["body"].toMap()["code"] == 502) {
         return {
                 { "status", 200 },
@@ -2026,11 +2018,7 @@ QVariantMap Api::login(QVariantMap query) {
 
 // 退出登录
 QVariantMap Api::logout(QVariantMap query) {
-    return request(
-        "/api/logout",
-        {},
-        Index::mergeMap(Option::createOption(query, "weapi"), { { "uaType", "pc" } })
-    );
+    return request("/api/logout", {}, Option::createOption(query));
 }
 
 // 新版歌词 - 包含逐字歌词
@@ -3160,11 +3148,7 @@ QVariantMap Api::search_hot(QVariantMap query) {
     const QVariantMap data{
         { "type", "1111" }
     };
-    return request(
-        "/api/search/hot",
-        data,
-        Index::mergeMap(Option::createOption(query, "weapi"), { { "uaType", "mobile" } })
-    );
+    return request("/api/search/hot", data, Option::createOption(query));
 }
 
 // 本地歌曲匹配音乐信息

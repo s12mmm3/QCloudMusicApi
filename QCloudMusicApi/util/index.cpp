@@ -18,8 +18,8 @@ QVariantMap Index::cookieToJson(const QString& cookie) {
     QVariantMap obj;
     for (const QString& i : cookieArr) {
         if (i.isEmpty()) continue;
-        QStringList arr = i.trimmed().split("=");
-        obj.insert(arr.value(0), arr.value(1));
+        QStringList arr = i.split("=");
+        obj.insert(arr.value(0).trimmed(), arr.value(1).trimmed());
     }
     return obj;
 }

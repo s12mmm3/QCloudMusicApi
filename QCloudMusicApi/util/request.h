@@ -13,7 +13,7 @@ namespace QCloudMusicApi {
     // 请求管理类，参考原项目文件util/request.js
     class QCLOUDMUSICAPI_EXPORT Request {
     public:
-        static QString chooseUserAgent(QString uaType);
+        static QString chooseUserAgent(QString crypto, QString uaType = "pc");
         static QVariantMap createRequest(
             QString uri,
             QVariantMap data,

@@ -25,24 +25,41 @@
 
 QString anonymous_token;
 
-const QString iosAppVersion = "9.0.65";
+const QVariantMap osMap{
+    { "pc", QVariantMap {
+        { "os", "pc" },
+        { "appver", "3.0.18.203152" },
+        { "osver", "Microsoft-Windows-10-Professional-build-22631-64bit" },
+        } },
+    { "android", QVariantMap {
+        { "os", "android" },
+        { "appver", "8.20.20.231215173437" },
+        { "osver", "14" },
+        } },
+    { "iphone", QVariantMap {
+        { "os", "iOS" },
+        { "appver", "9.0.90" },
+        { "osver", "16.2" },
+        } },
+};
 
 using namespace QCloudMusicApi;
-QString Request::chooseUserAgent(QString uaType) {
-    const QMap<QString, QString> userAgentList{
+QString Request::chooseUserAgent(QString crypto, QString uaType) {
+    const QVariantMap userAgentMap{
         {
-            QStringLiteral("mobile"),
-            QStringLiteral("Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1")
+            "weapi", QVariantMap{
+                { "pc", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0" },
+            }
         },
         {
-            QStringLiteral("pc"),
-            QStringLiteral("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0")
-        }
+            "api", QVariantMap{
+                { "pc", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36 Chrome/91.0.4472.164 NeteaseMusicDesktop/3.0.18.203152" },
+                { "android", "NeteaseMusic/9.1.65.240927161425(9001065);Dalvik/2.1.0 (Linux; U; Android 14; 23013RK75C Build/UKQ1.230804.001)" },
+                { "iphone", "NeteaseMusic 9.0.90/5038 (iPhone; iOS 16.2; zh_CN)" },
+            }
+        },
     };
-    if (uaType == "mobile") {
-        return userAgentList["mobile"];
-    }
-    return userAgentList["pc"];
+    return userAgentMap[crypto].toMap()[uaType].toString();
 }
 
 QVariantMap Request::createRequest(
@@ -58,8 +75,8 @@ QVariantMap Request::createRequest(
                 { "data", data },
                 { "options", options}
             }
-    ).toJson();
-    const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
+        ).toJson();
+    QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
     QVariantMap headers{
         { "Content-Type", "application/x-www-form-urlencoded" },
     };
@@ -73,52 +90,49 @@ QVariantMap Request::createRequest(
         headers["X-Forwarded-For"] = ip;
     }
     // headers["X-Real-IP"] = "118.88.88.88";
-    auto randomBytes = []() {
+    auto randomBytes = [](int num) {
         QByteArray bytes;
-        for (int i = 0; i < 16; ++i) {
+        for (int i = 0; i < num; ++i) {
             bytes.append(QRandomGenerator::global()->generate());
         }
-        return bytes;
-        };
-    if (options["cookie"].userType() == QMetaType::QVariantMap) {
-        options["cookie"] =
-            Index::mergeMap(options["cookie"].toMap(),
-                {
-                    { "__remember_me", true },
-                    { "NMTID", randomBytes().toHex() },
-                    { "_ntes_nuid", randomBytes().toHex() },
-                });
-        if (uri.indexOf("login") == -1) {
-            auto cookie = options["cookie"].toMap();
-            cookie["NMTID"] = randomBytes().toHex();
-            options["cookie"] = cookie;
+        return bytes.toHex();
+    };
+
+    auto _ntes_nuid = randomBytes(32);
+    auto os = osMap.value(cookie.value("os").toString(), osMap["iphone"]).toMap();
+    cookie =
+        Index::mergeMap(cookie,
+                        {
+                            { "__remember_me", "true" },
+                            // { "NMTID", randomBytes(16) },
+                            { "ntes_kaola_ad", "1" },
+                            { "_ntes_nuid", _ntes_nuid },
+                            { "_ntes_nnid", _ntes_nuid + "," + QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()) },
+
+                            { "osver", cookie.contains("osver") ? cookie["osver"] : os["osver"] }, //系统版本
+                            { "deviceId", cookie["deviceId"] },
+                            { "os", cookie.contains("os") ? cookie["os"] : os["os"] },
+                            { "channel", cookie.contains("channel") ? cookie["channel"] : "netease" },
+                            { "appver", cookie.contains("appver") ? cookie["appver"] : os["appver"] }, // app版本
+                        });
+    if (uri.indexOf("login") == -1) {
+        cookie["NMTID"] = randomBytes(16);
+    }
+    if (!cookie.contains("MUSIC_U")) {
+        // 游客
+        if (!cookie.contains("MUSIC_A")) {
+            cookie["MUSIC_A"] = []() -> QString {
+                if (anonymous_token.isEmpty()) {
+                    QString tmpPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+                    QFile file(QDir(tmpPath).absoluteFilePath("anonymous_token"));
+                    file.open(QIODevice::ReadOnly | QIODevice::Text);
+                    anonymous_token = file.readAll();
+                }
+                return anonymous_token;
+            }();
         }
-        if (!options["cookie"].toMap().contains("MUSIC_U")) {
-            // 游客
-            if (!options["cookie"].toMap().contains("MUSIC_A")) {
-                auto cookie = options["cookie"].toMap();
-                cookie["MUSIC_A"] = []() -> QString {
-                    if (anonymous_token.isEmpty()) {
-                        QString tmpPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-                        QFile file(QDir(tmpPath).absoluteFilePath("anonymous_token"));
-                        file.open(QIODevice::ReadOnly | QIODevice::Text);
-                        anonymous_token = file.readAll();
-                    }
-                    return anonymous_token;
-                    }();
-                    options["cookie"] = cookie;
-            }
-        }
-        headers["Cookie"] = Index::cookieObjToString(options["cookie"].toMap());
     }
-    else if (options.contains("cookie")) {
-        // cookie string
-        headers["Cookie"] = options["cookie"];
-    }
-    else {
-        auto cookie = Index::cookieToJson("__remember_me=true; NMTID=xxx");
-        headers["Cookie"] = Index::cookieObjToString(cookie);
-    }
+    headers["Cookie"] = Index::cookieObjToString(cookie);
 
     QString url = "";
     QVariantMap encryptData;
@@ -138,7 +152,7 @@ QVariantMap Request::createRequest(
     // 根据加密方式加密请求数据；目前任意uri都支持四种加密方式
     if (crypto == "weapi") {
         headers["Referer"] = Config::APP_CONF["domain"];
-        headers["User-Agent"] = options.value("ua", chooseUserAgent("pc"));
+        headers["User-Agent"] = options.value("ua", chooseUserAgent("weapi"));
         data["csrf_token"] = csrfToken;
 
         encryptData = Crypto::weapi(QJsonDocument::fromVariant(data));
@@ -151,22 +165,21 @@ QVariantMap Request::createRequest(
             { "params", data }
             }));
         headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
-        url = "https://music.163.com/api/linux/forward";
+        url = Config::APP_CONF["domain"].toString() + "/api/linux/forward";
     }
     else if (crypto == "eapi" || crypto == "api") {
         // 两种加密方式，都应生成客户端的cookie
-        const QVariantMap cookie = options.value("cookie", QVariantMap()).toMap();
         QVariantMap header{
-            { "osver", cookie.value("osver", "17.4.1") }, //系统版本
+            { "osver", cookie.value("osver") }, //系统版本
             { "deviceId", cookie["deviceId"] },
-            { "os", cookie.value("os", "ios") },
-            { "appver", cookie.value("appver", cookie.value("os") != "pc" ? iosAppVersion : "") }, // app版本
+            { "os", cookie.value("os") },
+            { "appver", cookie.value("appver") }, // app版本
             { "versioncode", cookie.value("versioncode", "140") }, //版本号
             { "mobilename", cookie.value("mobilename", "") }, //设备model
             { "buildver", cookie.value("buildver", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()).mid(0, 10)) },
             { "resolution", cookie.value("resolution", "1920x1080") }, //设备分辨率
             { "__csrf", csrfToken },
-            { "channel", cookie.value("channel", "") },
+            { "channel", cookie.value("channel") },
             { "requestId", QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch())
                               + "_"
                               + QString::number((int)(QRandomGenerator::global()->bounded(1.0) * 1000)).rightJustified(4, '0')
@@ -184,7 +197,7 @@ QVariantMap Request::createRequest(
             }
             return result.join("; ");
         }();
-        headers["User-Agent"] = !options.value("ua").toString().isEmpty() ? options.value("ua") : chooseUserAgent(options["uaType"].toString());
+        headers["User-Agent"] = !options.value("ua").toString().isEmpty() ? options.value("ua") : chooseUserAgent("api");
         if (crypto == "eapi") {
             // 使用eapi加密
             data["header"] = header;

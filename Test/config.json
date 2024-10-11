@@ -513,8 +513,18 @@
     "api": {
         "method": "POST",
         "crypto": "",
-        "data": {},
-        "uri": ""
+        "data": {
+            "cp": false,
+            "id": "2058263032",
+            "kv": 0,
+            "lv": 0,
+            "rv": 0,
+            "tv": 0,
+            "yrv": 0,
+            "ytv": 0,
+            "yv": 0
+        },
+        "uri": "/api/song/lyric/v1"
     },
     "song_download_url_v1": {
         "id": "2058263032",
