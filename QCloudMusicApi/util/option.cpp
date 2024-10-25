@@ -3,12 +3,8 @@
 using namespace QCloudMusicApi;
 QVariantMap Option::createOption(QVariantMap query, QString crypto)
 {
-    return {
-            { "crypto", query.value("crypto", crypto) },
-            { "cookie", query["cookie"] },
-            { "ua", query.value("ua", "") },
-            { "proxy", query["proxy"] },
-            { "realIP", query["realIP"] },
-            { "e_r", query.value("e_r") },
-            };
+    QVariantMap result;
+    auto func = [&](QString key) { if (query.contains(key)) result[key] = query[key]; };
+    for (auto i: { "crypto", "cookie", "ua", "proxy", "realIP", "e_r" }) func(i);
+    return result;
 }

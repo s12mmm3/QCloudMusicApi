@@ -538,5 +538,17 @@
     },
     "user_mutualfollow_get": {
         "uid": "79248480"
+    },
+    "user_medal": {
+        "uid": "79248480"
+    },
+    "user_social_status": {
+        "uid": "79248480"
+    },
+    "playlist_import_name_task_create": {
+        "link": "[\"https://i.y.qq.com/n2/m/share/details/taoge.html?id=7716341988&hosteuin=\",\"https://i.y.qq.com/n2/m/share/details/taoge.html?id=8010042041&hosteuin=\"]"
+    },
+    "playlist_import_task_status": {
+        "id": "124050147"
     }
 }

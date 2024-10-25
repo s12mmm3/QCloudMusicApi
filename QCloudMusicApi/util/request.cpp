@@ -37,7 +37,7 @@ const QVariantMap osMap{
         { "osver", "14" },
         } },
     { "iphone", QVariantMap {
-        { "os", "iOS" },
+        { "os", "iPhone OS" },
         { "appver", "9.0.90" },
         { "osver", "16.2" },
         } },
@@ -136,7 +136,7 @@ QVariantMap Request::createRequest(
 
     QString url = "";
     QVariantMap encryptData;
-    auto crypto = options["crypto"];
+    auto crypto = options.value("crypto", "");
     auto csrfToken = cookie.value("__csrf", "");
 
     if (crypto == "") {

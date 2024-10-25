@@ -1722,6 +1722,61 @@ QVariantMap Api::likelist(QVariantMap query) {
     );
 }
 
+// 听歌足迹 - 本周/本月收听时长
+QVariantMap Api::listen_data_realtime_report(QVariantMap query) {
+    const QVariantMap data{
+        { "type", query.value("type", "week") }, //周 week 月 month
+    };
+    return request(
+        "/api/content/activity/listen/data/realtime/report",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 听歌足迹 - 周/月/年收听报告
+QVariantMap Api::listen_data_report(QVariantMap query) {
+    QVariantMap data{
+        { "type", query.value("type", "week") }, //周 week 月 month 年 year
+    };
+    if (query.contains("endTime")) data["endTime"] = query["endTime"]; // 不填就是本周/月的
+    return request(
+        "/api/content/activity/listen/data/report",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 听歌足迹 - 今日收听
+QVariantMap Api::listen_data_today_song(QVariantMap query) {
+    QVariantMap data{};
+    return request(
+        "/api/content/activity/listen/data/today/song/play/rank",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 听歌足迹 - 总收听时长
+QVariantMap Api::listen_data_total(QVariantMap query) {
+    QVariantMap data{};
+    return request(
+        "/api/content/activity/listen/data/total",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 听歌足迹 - 年度听歌足迹
+QVariantMap Api::listen_data_year_report(QVariantMap query) {
+    QVariantMap data{};
+    return request(
+        "/api/content/activity/listen/data/year/report",
+        data,
+        Option::createOption(query)
+        );
+}
+
 // 一起听 接受邀请
 QVariantMap Api::listentogether_accept(QVariantMap query) {
     const QVariantMap data{
@@ -2548,6 +2603,79 @@ QVariantMap Api::playlist_hot(QVariantMap query) {
         {},
         Option::createOption(query, "weapi")
     );
+}
+
+// 歌单导入 - 元数据/文字/链接导入
+QVariantMap Api::playlist_import_name_task_create(QVariantMap query) {
+    QVariantMap data{
+        { "importStarPlaylist", query.value("importStarPlaylist", false) },
+    };
+
+    if (query.contains("local")) {
+        // 元数据导入
+        auto local = QJsonDocument::fromJson(query["local"].toString().toUtf8()).toVariant().toList();
+        auto multiSongs = QJsonDocument::fromVariant([=](){
+                              QVariantList result;
+                              for (auto e: local) result.push_back(QVariantMap{
+                                      { "songName", e.toMap()["name"] },
+                                      { "artistName", e.toMap()["artist"] },
+                                      { "albumName", e.toMap()["album"] },
+                                  });
+                              return result;
+                          }()).toJson();
+        data["multiSongs"] = multiSongs;
+    }
+    else {
+        auto playlistName = query.value("playlistName", QObject::tr("导入音乐 ") + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")); // 歌单名称
+        QString songs;
+        if (query.contains("text")) {
+            // 文字导入
+            songs = QJsonDocument::fromVariant(QVariantList{
+                                                QVariantMap{
+                                                    { "name", playlistName },
+                                                    { "type", "" },
+                                                    { "url", "rpc://playlist/import?text=" + query["text"].toString() },
+}
+            }).toJson();
+        }
+
+        if (query.contains("link")) {
+            // 链接导入
+            auto link = QJsonDocument::fromJson(query["link"].toString().toUtf8()).toVariant().toList();
+            songs = QJsonDocument::fromVariant([=](){
+                                     QVariantList result;
+                                     for (auto e: link) result.push_back(QVariantMap{
+                                                                      { "name", playlistName },
+                                                                      { "type", "" },
+                                                                      { "url", e.toString() },
+                                                                      });
+                                     return result;
+                                 }()).toJson();
+        }
+        data = Index::mergeMap(data, {
+                                         { "playlistName", playlistName },
+                                         { "createBusinessCode", QVariant() },
+                                         { "extParam", QVariant() },
+                                         { "taskIdForLog", "" },
+                                         { "songs", songs },
+        });
+    }
+    return request(
+        "/api/playlist/import/name/task/create",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 歌单导入 - 任务状态
+QVariantMap Api::playlist_import_task_status(QVariantMap query) {
+    return request(
+        "/api/playlist/import/task/status/v2",
+        {
+         { "taskIds", QJsonDocument::fromVariant(QVariantList{ query["id"] }).toJson() },
+        },
+        Option::createOption(query)
+        );
 }
 
 // 获取点赞过的视频
@@ -4249,6 +4377,18 @@ QVariantMap Api::user_level(QVariantMap query) {
     );
 }
 
+// 用户徽章
+QVariantMap Api::user_medal(QVariantMap query) {
+    const QVariantMap data{
+        { "uid", query["uid"] },
+    };
+    return request(
+        "/api/medal/user/page",
+        data,
+        Option::createOption(query)
+        );
+}
+
 // 用户是否互相关注
 QVariantMap Api::user_mutualfollow_get(QVariantMap query) {
     const QVariantMap data{
@@ -4302,6 +4442,51 @@ QVariantMap Api::user_replacephone(QVariantMap query) {
         data,
         Option::createOption(query, "weapi")
     );
+}
+
+// 用户状态 - 编辑
+QVariantMap Api::user_social_status_edit(QVariantMap query) {
+    return request(
+        "/api/social/user/status/edit",
+        {
+         { "content", QJsonDocument::fromVariant(QVariantMap{
+                            { "type", query["type"] },
+                            { "iconUrl", query["iconUrl"] },
+                            { "content", query["content"] },
+                            { "actionUrl", query["actionUrl"] },
+             }).toJson() },
+        },
+        Option::createOption(query)
+        );
+}
+
+// 用户状态 - 相同状态的用户
+QVariantMap Api::user_social_status_rcmd(QVariantMap query) {
+    return request(
+        "/api/social/user/status/rcmd",
+        {},
+        Option::createOption(query)
+        );
+}
+
+// 用户状态 - 相同状态的用户
+QVariantMap Api::user_social_status_support(QVariantMap query) {
+    return request(
+        "/api/social/user/status/support",
+        {},
+        Option::createOption(query)
+        );
+}
+
+// 用户状态
+QVariantMap Api::user_social_status(QVariantMap query) {
+    return request(
+        "/api/social/user/status",
+        {
+         { "visitorId", query["uid"] },
+        },
+        Option::createOption(query)
+        );
 }
 
 // 收藏计数

@@ -387,6 +387,21 @@ public:
     // 喜欢音乐列表
     Q_INVOKABLE QVariantMap likelist(QVariantMap);
 
+    // 听歌足迹 - 本周/本月收听时长
+    Q_INVOKABLE QVariantMap listen_data_realtime_report(QVariantMap);
+
+    // 听歌足迹 - 周/月/年收听报告
+    Q_INVOKABLE QVariantMap listen_data_report(QVariantMap);
+
+    // 听歌足迹 - 今日收听
+    Q_INVOKABLE QVariantMap listen_data_today_song(QVariantMap);
+
+    // 听歌足迹 - 总收听时长
+    Q_INVOKABLE QVariantMap listen_data_total(QVariantMap);
+
+    // 听歌足迹 - 年度听歌足迹
+    Q_INVOKABLE QVariantMap listen_data_year_report(QVariantMap);
+
     // 一起听 接受邀请
     Q_INVOKABLE QVariantMap listentogether_accept(QVariantMap);
 
@@ -557,6 +572,12 @@ public:
 
     // 热门歌单分类
     Q_INVOKABLE QVariantMap playlist_hot(QVariantMap);
+
+    // 歌单导入 - 元数据/文字/链接导入
+    Q_INVOKABLE QVariantMap playlist_import_name_task_create(QVariantMap);
+
+    // 歌单导入 - 任务状态
+    Q_INVOKABLE QVariantMap playlist_import_task_status(QVariantMap);
 
     // 获取点赞过的视频
     Q_INVOKABLE QVariantMap playlist_mylike(QVariantMap);
@@ -909,6 +930,9 @@ public:
     // 获取用户等级信息
     Q_INVOKABLE QVariantMap user_level(QVariantMap);
 
+    // 用户徽章
+    Q_INVOKABLE QVariantMap user_medal(QVariantMap);
+
     // 用户是否互相关注
     Q_INVOKABLE QVariantMap user_mutualfollow_get(QVariantMap);
 
@@ -920,6 +944,18 @@ public:
 
     // 用户绑定手机
     Q_INVOKABLE QVariantMap user_replacephone(QVariantMap);
+
+    // 用户状态 - 编辑
+    Q_INVOKABLE QVariantMap user_social_status_edit(QVariantMap);
+
+    // 用户状态 - 相同状态的用户
+    Q_INVOKABLE QVariantMap user_social_status_rcmd(QVariantMap);
+
+    // 用户状态 - 支持设置的状态
+    Q_INVOKABLE QVariantMap user_social_status_support(QVariantMap);
+
+    // 用户状态
+    Q_INVOKABLE QVariantMap user_social_status(QVariantMap);
 
     // 收藏计数
     Q_INVOKABLE QVariantMap user_subcount(QVariantMap);
