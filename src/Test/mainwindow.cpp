@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle(PROJECT_NAME);
+    setWindowTitle(TARGET_NAME);
 }
 
 MainWindow::~MainWindow()

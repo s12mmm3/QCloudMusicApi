@@ -1,0 +1,16 @@
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin/Debug/src)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/Release/src)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME} CACHE PATH "Specify Install Dir" FORCE)
+
+add_subdirectory(QCloudMusicApi)
+if(MUSICAPI_TEST)
+    add_subdirectory(Test)
+endif()
+find_package(QT NAMES Qt6 Qt5)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS HttpServer)
+if(Qt${QT_VERSION_MAJOR}HttpServer_FOUND)
+    # Qt6.4后才支持QHttpServer库
+    if(MUSICAPI_SERVER)
+        add_subdirectory(ApiServer)
+    endif()
+endif()

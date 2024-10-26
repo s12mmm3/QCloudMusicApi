@@ -1,0 +1,4 @@
+#include "logger.h"
+
+Q_LOGGING_CATEGORY(LOGGER_NAME, TARGET_NAME)
+
