@@ -564,6 +564,9 @@ public:
     // 歌单动态信息
     Q_INVOKABLE QVariantMap playlist_detail_dynamic(QVariantMap);
 
+    // 相关歌单推荐
+    Q_INVOKABLE QVariantMap playlist_detail_rcmd_get(QVariantMap);
+
     // 歌单详情
     Q_INVOKABLE QVariantMap playlist_detail(QVariantMap);
 
@@ -747,6 +750,9 @@ public:
 
     // 相似用户
     Q_INVOKABLE QVariantMap simi_user(QVariantMap);
+
+    // 副歌时间
+    Q_INVOKABLE QVariantMap song_chorus(QVariantMap);
 
     // 歌曲详情
     Q_INVOKABLE QVariantMap song_detail(QVariantMap);

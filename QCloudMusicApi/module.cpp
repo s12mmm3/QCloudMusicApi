@@ -2572,6 +2572,20 @@ QVariantMap Api::playlist_detail_dynamic(QVariantMap query) {
     );
 }
 
+// 相关歌单推荐
+QVariantMap Api::playlist_detail_rcmd_get(QVariantMap query) {
+    const QVariantMap data{
+        { "scene", "playlist_head" },
+        { "playlistId", query["id"] },
+        { "newStyle", "true" }
+    };
+    return request(
+        "/api/playlist/detail/rcmd/get",
+        data,
+        Option::createOption(query)
+        );
+}
+
 // 歌单详情
 QVariantMap Api::playlist_detail(QVariantMap query) {
     const QVariantMap data{
@@ -3548,6 +3562,17 @@ QVariantMap Api::simi_user(QVariantMap query) {
         data,
         Option::createOption(query, "weapi")
     );
+}
+
+// 副歌时间
+QVariantMap Api::song_chorus(QVariantMap query) {
+    return request(
+        "/api/song/chorus",
+        {
+         { "ids", QJsonDocument::fromVariant(QVariantList{query["id"]}).toJson() },
+        },
+        Option::createOption(query)
+        );
 }
 
 // 歌曲详情

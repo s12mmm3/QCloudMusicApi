@@ -550,5 +550,11 @@
     },
     "playlist_import_task_status": {
         "id": "124050147"
+    },
+    "song_chorus": {
+        "id": "2058263032"
+    },
+    "playlist_detail_rcmd_get": {
+        "id": "2057797340"
     }
 }
