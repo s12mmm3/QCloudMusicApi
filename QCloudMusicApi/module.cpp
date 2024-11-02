@@ -495,7 +495,7 @@ QVariantMap Api::avatar_upload(QVariantMap query) {
         {
             { "imgid", uploadInfo["imgId"] }
         },
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
     return {
         { "status", 200 },
@@ -1052,7 +1052,7 @@ QVariantMap Api::daily_signin(QVariantMap query) {
     return request(
         "/api/point/dailyTask",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -1504,7 +1504,7 @@ QVariantMap Api::event_forward(QVariantMap query) {
     return request(
         "/api/event/forward",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -1517,7 +1517,7 @@ QVariantMap Api::event(QVariantMap query) {
     return request(
         "/api/v1/event/get",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -1718,7 +1718,7 @@ QVariantMap Api::likelist(QVariantMap query) {
     return request(
         "/api/song/like/get",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -2529,7 +2529,7 @@ QVariantMap Api::playlist_create(QVariantMap query) {
     return request(
         "/api/playlist/create",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -2752,7 +2752,7 @@ QVariantMap Api::playlist_subscribers(QVariantMap query) {
     return request(
         "/api/playlist/subscribers",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -2881,7 +2881,7 @@ QVariantMap Api::playlist_tracks(QVariantMap query) {
                 { "trackIds", QJsonDocument::fromVariant(tracks + tracks).toJson() }, // 歌曲id
                 { "imme", "true" },
             },
-            Option::createOption(query, "weapi")
+            Option::createOption(query)
             );
     }
     else {
@@ -2900,7 +2900,7 @@ QVariantMap Api::playlist_update_playcount(QVariantMap query) {
     return request(
         "/api/playlist/update/playcount",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -2916,7 +2916,7 @@ QVariantMap Api::playlist_update(QVariantMap query) {
     return request(
         "/api/batch",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -2942,7 +2942,7 @@ QVariantMap Api::playmode_intelligence_list(QVariantMap query) {
     return request(
         "/api/playmode/intelligence/list",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -3150,7 +3150,7 @@ QVariantMap Api::register_cellphone(QVariantMap query) {
     return request(
         "/api/register/cellphone",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -3380,7 +3380,7 @@ QVariantMap Api::send_playlist(QVariantMap query) {
     return request(
         "/api/msg/private/send",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -3409,7 +3409,7 @@ QVariantMap Api::send_text(QVariantMap query) {
     return request(
         "/api/msg/private/send",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -3433,7 +3433,7 @@ QVariantMap Api::share_resource(QVariantMap query) {
     return request(
         "/api/share/friends/resource",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
@@ -4511,7 +4511,7 @@ QVariantMap Api::user_update(QVariantMap query) {
     return request(
         "/api/user/profile/update",
         data,
-        Option::createOption(query, "weapi")
+        Option::createOption(query)
     );
 }
 
