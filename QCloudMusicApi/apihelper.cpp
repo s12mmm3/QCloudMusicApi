@@ -158,12 +158,42 @@ bool ApiHelper::loadPlugin(const QString& fileName)
     return false;
 }
 
+bool ApiHelper::loadPlugin(QCloudMusicApiPlugin *plugin)
+{
+    ApiPluginImpl* pluginImpl = new ApiPluginImpl();
+    if (plugin) {
+        pluginImpl->loader = new QPluginLoader(this);
+        pluginImpl->plugin = plugin;
+        m_pluginImpls.push_back(pluginImpl);
+        return true;
+    }
+    return false;
+}
+
 bool ApiHelper::unloadPlugin(const QString& fileName)
 {
     auto result = false;
     for (auto i = 0; i < m_pluginImpls.size(); i++) {
         auto pluginImpl = m_pluginImpls[i];
         if (pluginImpl->loader->fileName() == fileName) {
+            m_pluginImpls.removeAt(i);
+            pluginImpl->loader->deleteLater();
+            result = pluginImpl->loader->unload();
+            if (!result) {
+                DEBUG << pluginImpl->loader->errorString();
+            }
+            break;
+        }
+    }
+    return result;
+}
+
+bool ApiHelper::unloadPlugin(QCloudMusicApiPlugin *plugin)
+{
+    auto result = false;
+    for (auto i = 0; i < m_pluginImpls.size(); i++) {
+        auto pluginImpl = m_pluginImpls[i];
+        if (pluginImpl->plugin == plugin) {
             m_pluginImpls.removeAt(i);
             pluginImpl->loader->deleteLater();
             result = pluginImpl->loader->unload();

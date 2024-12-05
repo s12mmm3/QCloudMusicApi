@@ -6,6 +6,7 @@
 #include <QObject>
 
 class ApiPluginImpl;
+class QCloudMusicApiPlugin;
 
 /**
  * @class ApiHelper
@@ -65,11 +66,25 @@ public:
     Q_INVOKABLE bool loadPlugin(const QString& fileName);
 
     /**
+     * @brief 加载插件
+     * @param plugin 插件指针
+     * @return 加载结果
+     */
+    Q_INVOKABLE bool loadPlugin(QCloudMusicApiPlugin* plugin);
+
+    /**
      * @brief 卸载插件
      * @param fileName 插件路径
      * @return 卸载结果
      */
     Q_INVOKABLE bool unloadPlugin(const QString& fileName);
+
+    /**
+     * @brief 卸载插件
+     * @param plugin 插件指针
+     * @return 卸载结果
+     */
+    Q_INVOKABLE bool unloadPlugin(QCloudMusicApiPlugin* plugin);
 
 public:
     DEFINE_VALUE(QString, proxy, "")
