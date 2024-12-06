@@ -18,8 +18,8 @@ jobs:
           # 5.12.12
           - qt_version: 5.12.12
             qt_arch: gcc_64
-          # 5.15.2
-          - qt_version: 5.15.2
+          # 5.15.16
+          - qt_version: 5.15.16
             qt_arch: gcc_64
           # 6.2.4
           - qt_version: 6.2.4
