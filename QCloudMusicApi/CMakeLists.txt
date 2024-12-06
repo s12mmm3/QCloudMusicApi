@@ -37,7 +37,21 @@ add_library(${PROJECT_NAME}
     ${HEADERS}
     ${SOURCES}
 )
-set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+
+if (ANDROID)
+    include(FetchContent)
+    FetchContent_Declare(
+        android_openssl
+        DOWNLOAD_EXTRACT_TIMESTAMP true
+        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
+        )
+    FetchContent_MakeAvailable(android_openssl)
+    include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
+
+    add_android_openssl_libraries(${PROJECT_NAME})
+else()
+    set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+endif()
 
 target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Gui ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
