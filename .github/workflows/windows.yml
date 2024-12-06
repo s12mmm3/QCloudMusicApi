@@ -23,11 +23,11 @@ jobs:
           - qt_version: 5.12.12
             qt_arch: win64_msvc2017_64
             arch: x64
-          # 5.15.16
-          - qt_version: 5.15.16
+          # 5.15.2
+          - qt_version: 5.15.2
             qt_arch: win32_msvc2019
             arch: win32
-          - qt_version: 5.15.16
+          - qt_version: 5.15.2
             qt_arch: win64_msvc2019_64
             arch: x64
           # 6.2.4
