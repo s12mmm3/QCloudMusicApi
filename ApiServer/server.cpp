@@ -10,6 +10,7 @@
 #include <QMetaObject>
 #include <QUrlQuery>
 #include <QtConcurrent>
+#include <QTcpServer>
 
 #include "../QCloudMusicApi/apihelper.h"
 #include "../QCloudMusicApi/util/index.h"
@@ -39,12 +40,22 @@ void Server::serveNcmApi(QVariantMap options)
         : QHostAddress::Any;
 
     consturctServer({});
-
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    auto tcpserver = new QTcpServer();
+    if (tcpserver->listen(host, port) && server.bind(tcpserver)) {
+#else
     if (port == server.listen(host, port)) {
+#endif
         DEBUG << "server running @ http://" + (host != QHostAddress::Any ? host.toString() : "localhost") + ":" + QString::number(port);
     }
     else {
         DEBUG << "address already in use :::" + QString::number(port);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+        delete tcpserver;
+        return;
+#else
+
+#endif
     }
 }
 
@@ -60,7 +71,12 @@ void Server::consturctServer(QVariantMap options)
     const QString CORS_ALLOW_ORIGIN = parser.value(option);
 
     // 设置请求的路径和方法未知时的错误提示
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    server.setMissingHandler(this, [](const QHttpServerRequest& request, QHttpServerResponder& responder) {
+#else
     server.setMissingHandler([](const QHttpServerRequest& request, QHttpServerResponder&& responder) {
+#endif
         QHttpServerResponse response(("Cannot GET "
             + request.url().path()).toUtf8()
             , QHttpServerResponse::StatusCode::NotFound);
@@ -112,7 +128,11 @@ void Server::consturctServer(QVariantMap options)
             }
 
             QVariantMap headers;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+            for (auto& i : request.headers().toListOfPairs()) {
+#else
             for (auto& i : request.headers()) {
+#endif
                 headers[QUrl::fromPercentEncoding(i.first)] = QUrl::fromPercentEncoding(i.second);
             }
             auto cookie = Index::cookieToJson(headers["Cookie"].toString());
@@ -130,15 +150,28 @@ void Server::consturctServer(QVariantMap options)
                 /**
                    * CORS & Preflight request
                  */
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+                const auto cookies = ret["cookie"].toString();
+                response.setHeaders(QHttpHeaders::fromListOfPairs({
+                     { "Access-Control-Allow-Credentials", "true" },
+                     { "Access-Control-Allow-Origin", (!CORS_ALLOW_ORIGIN.isEmpty() ? "*" : CORS_ALLOW_ORIGIN).toUtf8() },
+                     { "Access-Control-Allow-Headers", "X-Requested-With,Content-Type" },
+                     { "Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS" },
+                     { "Content-Type", "application/json; charset=utf-8" },
+                     { "Set-Cookie", cookies.toUtf8() },
+                }));
+#else
                 response.addHeaders({
                     { "Access-Control-Allow-Credentials", "true" },
                     { "Access-Control-Allow-Origin", (!CORS_ALLOW_ORIGIN.isEmpty() ? "*" : CORS_ALLOW_ORIGIN).toUtf8() },
                     { "Access-Control-Allow-Headers", "X-Requested-With,Content-Type" },
                     { "Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS" },
                     { "Content-Type", "application/json; charset=utf-8" },
-                    });
+                });
                 const auto cookies = ret["cookie"].toString();
                 response.setHeader("Set-Cookie", cookies.toUtf8());
+#endif
                 return response;
                 });
 
