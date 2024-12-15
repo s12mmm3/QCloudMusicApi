@@ -1987,7 +1987,7 @@ QVariantMap Api::login_qr_key(QVariantMap query) {
 
 // 二维码生成接口
 QVariantMap Api::login_qr_create(QVariantMap query) {
-    const QString url = "https://music.163.com/login?codekey=" + query["key"].toString();
+    const QString url = "http://music.163.com/login?codekey=" + query["key"].toString();
     auto result = QVariantMap{
         { "code", 200 },
         { "status", 200 },

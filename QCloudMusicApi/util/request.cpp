@@ -265,8 +265,9 @@ QVariantMap Request::createRequest(
         DEBUG.noquote() << "body" << body;
 
         QString cookie;
-        for (auto& i : QString(reply->rawHeader("set-cookie")).split("\n")) {
-            cookie.append(i.replace(QRegularExpression("\\s*Domain=[^;]*"), ""));
+        auto setCookie = QString(reply->rawHeader("set-cookie"));
+        for (auto& i : setCookie.split("\n")) {
+            cookie.append(i.replace(QRegularExpression("\\s*Domain=[^;]*"), "") + ";");
         }
         answer["cookie"] = cookie;
 
