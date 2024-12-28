@@ -17,6 +17,31 @@ class QCLOUDMUSICAPI_EXPORT ApiHelper : public NeteaseCloudMusicApi
 {
     Q_OBJECT
 public:
+    /**
+     * @brief 封装了读取/修改方法
+     * proxy(): 获取代理
+     * set_proxy(proxy): 设置代理
+     * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
+     */
+    DEFINE_VALUE(QString, proxy, "");
+
+    /**
+     * @brief 封装了读取/修改方法
+     * realIP(): 获取realIP
+     * set_realIP(realIP): 设置realIP
+     * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
+     */
+    DEFINE_VALUE(QString, realIP, "");
+
+    /**
+     * @brief 封装了读取/修改方法
+     * cookie(): cookie
+     * set_cookie(cookie): 设置cookie
+     * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
+     */
+    DEFINE_VALUE(QString, cookie, "");
+
+public:
     explicit ApiHelper(QObject* parent = nullptr);
 
     /**
@@ -33,18 +58,6 @@ public:
      * @return 返回API调用结果
      */
     Q_INVOKABLE QVariantMap invokeUrl(QString url);
-
-    /**
-     * @brief 设置cookie
-     * @param cookie 用于API调用的cookie字符串
-     */
-    Q_INVOKABLE void set_cookie(QString cookie);
-
-    /**
-     * @brief 获取cookie
-     * @return cookie
-     */
-    Q_INVOKABLE QString cookie();
 
     /**
      * @brief 获取API列表
@@ -86,16 +99,11 @@ public:
      */
     Q_INVOKABLE bool unloadPlugin(QCloudMusicApiPlugin* plugin);
 
-public:
-    DEFINE_VALUE(QString, proxy, "")
-    DEFINE_VALUE(QString, realIP, "")
-
 private:
     void beforeInvoke(QVariantMap& arg);
     void afterInvoke(QVariantMap& ret);
 
 private:
-    QVariantMap m_cookie;
     QStringList m_memberList;
     QList<ApiPluginImpl*> m_pluginImpls;
 };

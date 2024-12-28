@@ -21,18 +21,20 @@ ApiHelper::ApiHelper(QObject* parent)
 
 void ApiHelper::beforeInvoke(QVariantMap& arg)
 {
+    QVariantMap arg_cookie_map = Index::cookieToJson(cookie());
     // Api只能处理map类型的cookie
     if (arg.contains("cookie")) {
         // 若传入新的cookie，替换原有的cookie
         if (arg["cookie"].userType() == QMetaType::QVariantMap) {
-            m_cookie = arg["cookie"].toMap();
+            arg_cookie_map = arg["cookie"].toMap();
         }
         else if (arg["cookie"].userType() == QMetaType::QString) {
-            m_cookie = Index::cookieToJson(arg["cookie"].toString());
+            arg_cookie_map = Index::cookieToJson(arg["cookie"].toString());
         }
+        set_cookie(Index::cookieObjToString(arg_cookie_map));
     }
-    // 使用存储的cookie
-    arg["cookie"] = m_cookie;
+    // 使用存储的cookie map
+    arg["cookie"] = arg_cookie_map;
 
     // 设置全局代理
     if (!proxy().isEmpty() && !arg.contains("proxy")) {
@@ -47,14 +49,16 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
 
 void ApiHelper::afterInvoke(QVariantMap& ret)
 {
+    QVariantMap arg_cookie_map = Index::cookieToJson(cookie());
     auto newCookie = Index::cookieToJson(ret.value("cookie").toString());
     if (!newCookie.isEmpty()) {
-        m_cookie = Index::mergeMap(m_cookie, newCookie);
+        arg_cookie_map = Index::mergeMap(arg_cookie_map, newCookie);
     }
     auto token = ret.value("body").toMap()["token"].toString();
     if (!token.isEmpty()) {
-        m_cookie["MUSIC_A"] = token;
+        arg_cookie_map["MUSIC_A"] = token;
     }
+    set_cookie(Index::cookieObjToString(arg_cookie_map));
 }
 
 QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
@@ -113,16 +117,6 @@ QStringList ApiHelper::memberList()
         memberList.append(pluginImpl->plugin->memberList());
     }
     return memberList;
-}
-
-void ApiHelper::set_cookie(QString cookie)
-{
-    m_cookie = Index::cookieToJson(cookie);
-}
-
-QString ApiHelper::cookie()
-{
-    return Index::cookieObjToString(m_cookie);
 }
 
 void ApiHelper::setFilterRules(const QString& rules)
