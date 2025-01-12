@@ -1987,7 +1987,7 @@ QVariantMap Api::login_qr_key(QVariantMap query) {
 
 // 二维码生成接口
 QVariantMap Api::login_qr_create(QVariantMap query) {
-    const QString url = "http://music.163.com/login?codekey=" + query["key"].toString();
+    const QString url = "https://music.163.com/login?codekey=" + query["key"].toString();
     auto result = QVariantMap{
         { "code", 200 },
         { "status", 200 },
@@ -3656,6 +3656,57 @@ QVariantMap Api::song_like_check(QVariantMap query) {
         };
     return request(
         "/api/song/like/check",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 歌词摘录 - 添加/修改摘录歌词
+QVariantMap Api::song_lyrics_mark_add(QVariantMap query) {
+    QVariantMap data{
+        { "songId", query["id"] },
+        { "markId", query.value("markId", "") },
+        { "data", query.value("data", "[]") },
+    };
+    return request(
+        "/api/song/play/lyrics/mark/add",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 歌词摘录 - 删除摘录歌词
+QVariantMap Api::song_lyrics_mark_del(QVariantMap query) {
+    QVariantMap data{
+        { "markIds", query["id"] },
+    };
+    return request(
+        "/api/song/play/lyrics/mark/del",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 歌词摘录 - 我的歌词本
+QVariantMap Api::song_lyrics_mark_user_page(QVariantMap query) {
+    QVariantMap data{
+        { "limit", query.value("limit", "10") },
+        { "offset", query.value("offset", "0") },
+    };
+    return request(
+        "/api/song/play/lyrics/mark/user/page",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 歌词摘录 - 歌词摘录信息
+QVariantMap Api::song_lyrics_mark(QVariantMap query) {
+    QVariantMap data{
+        { "songId", query["id"] },
+    };
+    return request(
+        "/api/song/play/lyrics/mark/song",
         data,
         Option::createOption(query)
         );

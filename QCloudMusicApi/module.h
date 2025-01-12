@@ -774,6 +774,18 @@ public:
     // 歌曲是否喜爱
     Q_INVOKABLE QVariantMap song_like_check(QVariantMap);
 
+    // 歌词摘录 - 添加/修改摘录歌词
+    Q_INVOKABLE QVariantMap song_lyrics_mark_add(QVariantMap);
+
+    // 歌词摘录 - 删除摘录歌词
+    Q_INVOKABLE QVariantMap song_lyrics_mark_del(QVariantMap);
+
+    // 歌词摘录 - 我的歌词本
+    Q_INVOKABLE QVariantMap song_lyrics_mark_user_page(QVariantMap);
+
+    // 歌词摘录 - 歌词摘录信息
+    Q_INVOKABLE QVariantMap song_lyrics_mark(QVariantMap);
+
     // 会员本月下载歌曲记录
     Q_INVOKABLE QVariantMap song_monthdownlist(QVariantMap);
 
