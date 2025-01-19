@@ -5,6 +5,7 @@
 
 #include <QMetaMethod>
 #include <QPluginLoader>
+#include <QThread>
 #include <QUrl>
 #include <QUrlQuery>
 
@@ -63,7 +64,8 @@ void ApiHelper::afterInvoke(QVariantMap& ret)
 
 QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
 {
-    beforeInvoke(arg);
+    auto connectionType = QThread::currentThread() == this->thread() ? Qt::DirectConnection : Qt::BlockingQueuedConnection;
+    QMetaObject::invokeMethod(this, [&]() { beforeInvoke(arg); }, connectionType);
 
     QVariantMap ret;
 
@@ -79,12 +81,12 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
     }
     if (useNative) {
         QMetaObject::invokeMethod(this, member.toUtf8(),
-            Qt::DirectConnection,
-            Q_RETURN_ARG(QVariantMap, ret),
-            Q_ARG(QVariantMap, arg));
+                                  connectionType,
+                                  Q_RETURN_ARG(QVariantMap, ret),
+                                  Q_ARG(QVariantMap, arg));
     }
 
-    afterInvoke(ret);
+    QMetaObject::invokeMethod(this, [&]() { afterInvoke(arg); }, connectionType);
 
     return ret;
 }
@@ -102,9 +104,9 @@ QVariantMap ApiHelper::invokeUrl(QString url)
         arg[queryItem.first] = queryItem.second;
     }
     DEBUG << "host" << qurl.host()
-        << "port" << qurl.port()
-        << "member" << member
-        << "arg" << arg;
+          << "port" << qurl.port()
+          << "member" << member
+          << "arg" << arg;
     return invoke(member, arg);
 }
 
