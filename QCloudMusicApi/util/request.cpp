@@ -332,7 +332,7 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
     // 开启一个局部的事件循环，等待响应结束，退出
     QEventLoop eventLoop;
     QObject::connect(reply->manager(), &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit); // 请求结束时退出事件循环
-    eventLoop.exec(); // 启动事件循环
+    eventLoop.exec(QEventLoop::ExcludeUserInputEvents); // 启动事件循环
 
     return reply;
 }
