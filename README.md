@@ -18,6 +18,10 @@
 
 使用方式参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致；支持设置Http服务器（需要Qt6.4及以上）
 
+### 样例项目
+
+[s12mmm3/QListenTogether](https://github.com/s12mmm3/QListenTogether) - 网易云 一起听客户端
+
 ### 目录
 
 - [需求和依赖](#需求和依赖)
