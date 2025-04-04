@@ -3,6 +3,7 @@
 project(QCloudMusicApiProject VERSION 1.0)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 option(MUSICAPI_TEST "Build Test" ON)
 option(MUSICAPI_SERVER "Build ApiServer" ON)
