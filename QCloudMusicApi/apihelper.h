@@ -3,6 +3,7 @@
 
 #include "module.h"
 
+#include <QMutex>
 #include <QObject>
 
 class ApiPluginImpl;
@@ -106,6 +107,7 @@ private:
 private:
     QStringList m_memberList;
     QList<ApiPluginImpl*> m_pluginImpls;
+    QMutex m_mutex;
 };
 
 #endif // APIHELPER_H

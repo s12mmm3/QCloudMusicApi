@@ -22,6 +22,7 @@ ApiHelper::ApiHelper(QObject* parent)
 
 void ApiHelper::beforeInvoke(QVariantMap& arg)
 {
+    QMutexLocker locker(&m_mutex);
     QVariantMap arg_cookie_map = Index::cookieToJson(cookie());
     // Api只能处理map类型的cookie
     if (arg.contains("cookie")) {
@@ -50,6 +51,7 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
 
 void ApiHelper::afterInvoke(QVariantMap& ret)
 {
+    QMutexLocker locker(&m_mutex);
     QVariantMap arg_cookie_map = Index::cookieToJson(cookie());
     auto newCookie = Index::cookieToJson(ret.value("cookie").toString());
     if (!newCookie.isEmpty()) {
@@ -64,8 +66,7 @@ void ApiHelper::afterInvoke(QVariantMap& ret)
 
 QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
 {
-    auto connectionType = QThread::currentThread() == this->thread() ? Qt::DirectConnection : Qt::BlockingQueuedConnection;
-    QMetaObject::invokeMethod(this, [&]() { beforeInvoke(arg); }, connectionType);
+    beforeInvoke(arg);
 
     QVariantMap ret;
 
@@ -81,12 +82,12 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
     }
     if (useNative) {
         QMetaObject::invokeMethod(this, member.toUtf8(),
-                                  connectionType,
+                                  Qt::DirectConnection,
                                   Q_RETURN_ARG(QVariantMap, ret),
                                   Q_ARG(QVariantMap, arg));
     }
 
-    QMetaObject::invokeMethod(this, [&]() { afterInvoke(arg); }, connectionType);
+    afterInvoke(arg);
 
     return ret;
 }
