@@ -15,31 +15,10 @@ TabPlugin::TabPlugin(QWidget* parent) :
 
 bool TabPlugin::libraryLoad(QString fileName)
 {
-    bool result = false;
-    if (!fileName.isEmpty()) {
-        result = helper.loadPlugin(fileName);
-        if (result) {
-            ui->lineEdit_library_fileName->setText(fileName);
-            ui->tabCommonUnit->setFunctions(helper.memberList());
-            libarayLoadSucceed();
-        }
-        else {
-            libraryLoadFailed();
-        }
-    }
-    return result;
+    return helper.loadPlugin(fileName);
 }
 
 bool TabPlugin::libraryUnload(QString fileName)
 {
-    bool result = false;
-    if (helper.unloadPlugin(fileName)) {
-        libarayUnloadSucceed();
-        result = true;
-    }
-    else {
-        libraryUnloadFailed();
-    }
-    ui->tabCommonUnit->setFunctions(helper.memberList());
-    return result;
+    return helper.unloadPlugin(fileName);
 }

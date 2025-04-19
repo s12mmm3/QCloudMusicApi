@@ -52,7 +52,7 @@ TabServerTest::TabServerTest(QWidget* parent) :
     setUrl();
     connect(ui->lineEdit_address, &QLineEdit::textChanged, this, &TabServerTest::setUrl);
     connect(ui->lineEdit_port, &QLineEdit::textChanged, this, &TabServerTest::setUrl);
-    connect(ui->tabCommonUnit->comboBox_function, &QComboBox::currentTextChanged, this, &TabServerTest::setUrl);
+    connect(ui->tabCommonUnit->comboBox_function(), &QComboBox::currentTextChanged, this, &TabServerTest::setUrl);
 }
 
 TabServerTest::~TabServerTest()
@@ -64,7 +64,7 @@ void TabServerTest::setUrl()
 {
     QUrl url;
     url.setUrl(ui->lineEdit_address->text());
-    url.setPath("/" + ui->tabCommonUnit->comboBox_function->currentText().replace("_", "/"));
+    url.setPath("/" + ui->tabCommonUnit->comboBox_function()->currentText().replace("_", "/"));
     url.setPort(ui->lineEdit_port->text().toInt());
     ui->lineEdit_url->setText(url.toString());
 }

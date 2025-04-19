@@ -14,10 +14,6 @@ TabCommonUnit::TabCommonUnit(QWidget* parent) :
 {
     ui->setupUi(this);
 
-    comboBox_function = ui->comboBox_function;
-    textEdit_arg = ui->textEdit_arg;
-    textEdit_ret = ui->textEdit_ret;
-
     // 将Api中的方法名称取出
     setFunctions(ServiceLocator::helper().memberList());
 }
@@ -26,6 +22,10 @@ TabCommonUnit::~TabCommonUnit()
 {
     delete ui;
 }
+
+QComboBox *TabCommonUnit::comboBox_function() { return ui->comboBox_function; }
+QTextEdit *TabCommonUnit::textEdit_arg() { return ui->textEdit_arg; }
+QTextEdit *TabCommonUnit::textEdit_ret() { return ui->textEdit_ret; }
 
 void TabCommonUnit::on_pushButton_send_clicked()
 {

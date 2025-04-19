@@ -26,9 +26,9 @@ public:
     std::function<QVariantMap(QString member, QString arg)> callback = Q_NULLPTR;
 
     // 向外暴露的控件们
-    QComboBox *comboBox_function = Q_NULLPTR;
-    QTextEdit *textEdit_arg = Q_NULLPTR;
-    QTextEdit *textEdit_ret = Q_NULLPTR;
+    QComboBox *comboBox_function();
+    QTextEdit *textEdit_arg();
+    QTextEdit *textEdit_ret();
 
     // 设置API列表
     void setFunctions(const QStringList &functions);

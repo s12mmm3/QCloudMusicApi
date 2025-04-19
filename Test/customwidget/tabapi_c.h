@@ -30,12 +30,6 @@ protected:
     virtual bool libraryLoad(QString fileName);
     virtual bool libraryUnload(QString fileName);
 
-    void libarayLoadSucceed();
-    void libraryLoadFailed();
-
-    void libarayUnloadSucceed();
-    void libraryUnloadFailed();
-
 private:
     QLibrary library;
 
