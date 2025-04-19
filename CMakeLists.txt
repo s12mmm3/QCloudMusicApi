@@ -28,6 +28,8 @@ if(NOT OPENSSL_FOUND)
     message(STATUS "Build OpenSSL: ${openssl_BINARY_DIR}")
 endif()
 set (HAVE_OPENSSL 1)
+
+set(WITH_TOOLS OFF CACHE BOOL "Build utility tools" FORCE)
 add_subdirectory(3rdparty/libqrencode)
 include_directories(3rdparty/libqrencode)
 
