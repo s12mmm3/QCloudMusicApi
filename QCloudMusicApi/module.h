@@ -133,6 +133,18 @@ public:
     // 首页轮播图
     Q_INVOKABLE QVariantMap banner(QVariantMap);
 
+    // 广播电台 - 分类/地区信息
+    Q_INVOKABLE QVariantMap broadcast_category_region_get(QVariantMap);
+
+    // 广播电台 - 我的收藏
+    Q_INVOKABLE QVariantMap broadcast_channel_collect_list(QVariantMap);
+
+    // 广播电台 - 电台信息
+    Q_INVOKABLE QVariantMap broadcast_channel_currentinfo(QVariantMap);
+
+    // 广播电台 - 全部电台
+    Q_INVOKABLE QVariantMap broadcast_channel_list(QVariantMap);
+
     // 音乐日历
     Q_INVOKABLE QVariantMap calendar(QVariantMap);
 

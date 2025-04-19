@@ -539,7 +539,60 @@ QVariantMap Api::banner(QVariantMap query) {
             { "clientType", type }
         },
         Option::createOption(query)
+        );
+}
+
+// 广播电台 - 分类/地区信息
+QVariantMap Api::broadcast_category_region_get(QVariantMap query) {
+    const QVariantMap data{};
+    return request(
+        "/api/voice/broadcast/category/region/get",
+        data,
+        Option::createOption(query)
     );
+}
+
+// 广播电台 - 我的收藏
+QVariantMap Api::broadcast_channel_collect_list(QVariantMap query) {
+    const QVariantMap data{
+        { "contentType", "BROADCAST" },
+        { "limit", query.value("limit", "99999") },
+        { "timeReverseOrder", "true" },
+        { "startDate", "4762584922000" },
+    };
+    return request(
+        "/api/content/channel/collect/list",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 广播电台 - 电台信息
+QVariantMap Api::broadcast_channel_currentinfo(QVariantMap query) {
+    const QVariantMap data{
+        { "channelId", query.value("id") },
+    };
+    return request(
+        "/api/voice/broadcast/channel/currentinfo",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// 广播电台 - 全部电台
+QVariantMap Api::broadcast_channel_list(QVariantMap query) {
+    const QVariantMap data{
+        { "categoryId", query.value("categoryId", "0") },
+        { "regionId", query.value("regionId", "0") },
+        { "limit", query.value("limit", "20") },
+        { "lastId", query.value("lastId", "0") },
+        { "score", query.value("score", "-1") },
+        };
+    return request(
+        "/api/voice/broadcast/channel/list",
+        data,
+        Option::createOption(query)
+        );
 }
 
 // 音乐日历

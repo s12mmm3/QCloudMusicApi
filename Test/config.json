@@ -559,5 +559,8 @@
     },
     "song_lyrics_mark": {
         "id": "2057797340"
+    },
+    "broadcast_channel_currentinfo": {
+        "id": "5"
     }
 }
