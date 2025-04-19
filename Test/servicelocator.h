@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QJsonDocument>
 
-#include "../QCloudMusicApi/apihelper.h"
+#include "apihelper.h"
 
 namespace ServiceLocator
 {

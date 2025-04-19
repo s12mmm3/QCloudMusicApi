@@ -1,6 +1,6 @@
 #include "tabaes.h"
 #include "ui_tabaes.h"
-#include "../../QCloudMusicApi/util/crypto.h"
+#include "util/crypto.h"
 
 using namespace QCloudMusicApi;
 TabAes::TabAes(QWidget* parent) :

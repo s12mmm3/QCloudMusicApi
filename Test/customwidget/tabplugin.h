@@ -1,7 +1,7 @@
 #ifndef TABPLUGIN_H
 #define TABPLUGIN_H
 
-#include "../../QCloudMusicApi/apihelper.h"
+#include "apihelper.h"
 #include "tabapi_c.h"
 
 QT_BEGIN_NAMESPACE

@@ -6,46 +6,33 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 option(MUSICAPI_TEST "Build Test" ON)
-option(MUSICAPI_SERVER "Build ApiServer" ON)
-option(MUSICAPI_SETOUTPUTPATH "Set default output path" ON)
-
-if(ANDROID OR IOS)
-    set(MUSICAPI_SETOUTPUTPATH OFF)
-endif()
 # 生成动态库
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
-if(MUSICAPI_SETOUTPUTPATH)
-    # set default output path
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
-    set(CMAKE_HEADER_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/include)
-
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
-
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
-
-
-    # 设置安装前缀为二进制目录
-    set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
+# 设置第三方仓库
+include_directories(3rdparty)
+# Provides dependency openssl
+option( WITH_APPS "Build applications" OFF )
+#find_package(OpenSSL QUIET)
+if(NOT OPENSSL_FOUND)
+    add_subdirectory(
+        ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/openssl-cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/3rdparty/openssl-cmake
+        EXCLUDE_FROM_ALL
+    )
+    set(OPENSSL_SSL_LIBRARY ssl)
+    set(OPENSSL_CRYPTO_LIBRARY crypto)
+    set(OPENSSL_INCLUDE_DIR "${openssl_BINARY_DIR}/include" "${openssl_BINARY_DIR}")
+    set(OPENSSL_FOUND ON)
+    set(OPENSSL_BUILD_SHARED_LIBS ON)
+    message(STATUS "Build OpenSSL: ${openssl_BINARY_DIR}")
 endif()
+set (HAVE_OPENSSL 1)
+add_subdirectory(3rdparty/libqrencode)
+include_directories(3rdparty/libqrencode)
 
 add_subdirectory(QCloudMusicApi)
+include_directories(QCloudMusicApi)
 if(MUSICAPI_TEST)
     add_subdirectory(Test)
 endif()
-
-find_package(QT NAMES Qt6 Qt5)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS HttpServer)
-if(Qt${QT_VERSION_MAJOR}HttpServer_FOUND)
-    # Qt6.4后才支持QHttpServer库
-    if(MUSICAPI_SERVER)
-        add_subdirectory(ApiServer)
-    endif()
-endif()
-

@@ -3,7 +3,7 @@
 
 #include "../servicelocator.h"
 
-#include "../libqrencode/qrencode.h"
+#include "qrencode.h"
 
 #include <QJsonDocument>
 #include <QLabel>
