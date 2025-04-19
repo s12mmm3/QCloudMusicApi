@@ -83,16 +83,6 @@ const char* invoke(char* memberName, char* value);
 ```
 
 调用例子参考[跨语言调用](./doc/BINDINGS.md)
-
-### 引用动态库文件
-
-在CMakeLists.txt文件中加上
-```CMake
-set(LIBRARY_DIR "${PROJECT_SOURCE_DIR}/QCloudMusicApi")
-# 添加头文件路径
-include_directories(${LIBRARY_DIR}/include)
-# 添加库文件路径
-link_directories(${LIBRARY_DIR}/bin)
 ```
 
 ### 在项目中引用CMake项目
@@ -100,16 +90,16 @@ link_directories(${LIBRARY_DIR}/bin)
 在CMakeLists.txt文件中加上
 ```CMake
 add_subdirectory(QCloudMusicApi)
+include_directories(QCloudMusicApi)
 add_executable(${PROJECT_NAME}
-    ./QCloudMusicApi/QCloudMusicApi/apihelper.h
-  main.cpp
+    main.cpp
 )
 target_compile_definitions(${PROJECT_NAME} PRIVATE QCLOUDMUSICAPI_LIBRARY)
-target_link_libraries(${PROJECT_NAME}  QCloudMusicApi)
+target_link_libraries(${PROJECT_NAME} QCloudMusicApi)
 ```
 引用头文件
 ```C++
-#include "QCloudMusicApi/QCloudMusicApi/apihelper.h"
+#include "QCloudMusicApi/apihelper.h"
 ```
 
 ## 编译方式
