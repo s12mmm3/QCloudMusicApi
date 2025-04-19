@@ -16,11 +16,15 @@
 
 更新尽量与原项目同步，实现了大部分接口；支持[跨语言调用](./doc/BINDINGS.md)，支持跨平台编译，支持多种编译器编译
 
-使用方式参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致；支持设置Http服务器（需要Qt6.4及以上）
+推荐直接将本仓库嵌入到其他项目中编译使用
+
+使用方式参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致
 
 ### 样例项目
 
-[s12mmm3/QListenTogether](https://github.com/s12mmm3/QListenTogether) - 网易云 一起听客户端
+[QListenTogether](https://github.com/s12mmm3/QListenTogether) - 网易云 一起听客户端
+
+[QCloudMusicServer](https://github.com/s12mmm3/QCloudMusicServer) - 网易云API HTTP服务器
 
 ### 目录
 
@@ -84,32 +88,20 @@ const char* invoke(char* memberName, char* value);
 
 调用例子参考[跨语言调用](./doc/BINDINGS.md)
 
-### 引用动态库文件
-
-在CMakeLists.txt文件中加上
-```CMake
-set(LIBRARY_DIR "${PROJECT_SOURCE_DIR}/QCloudMusicApi")
-# 添加头文件路径
-include_directories(${LIBRARY_DIR}/include)
-# 添加库文件路径
-link_directories(${LIBRARY_DIR}/bin)
-```
-
-### 在项目中引用CMake项目
+### 在CMake项目中嵌入本项目
 
 在CMakeLists.txt文件中加上
 ```CMake
 add_subdirectory(QCloudMusicApi)
+include_directories(QCloudMusicApi)
 add_executable(${PROJECT_NAME}
-    ./QCloudMusicApi/QCloudMusicApi/apihelper.h
-  main.cpp
+    main.cpp
 )
-target_compile_definitions(${PROJECT_NAME} PRIVATE QCLOUDMUSICAPI_LIBRARY)
-target_link_libraries(${PROJECT_NAME}  QCloudMusicApi)
+target_link_libraries(${PROJECT_NAME} QCloudMusicApi)
 ```
 引用头文件
 ```C++
-#include "QCloudMusicApi/QCloudMusicApi/apihelper.h"
+#include "QCloudMusicApi/apihelper.h"
 ```
 
 ## 编译方式

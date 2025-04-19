@@ -7,7 +7,7 @@
 #include <QNetworkReply>
 
 #include "../logger.h"
-#include "../../QCloudMusicApi/util/request.h"
+#include "util/request.h"
 #include "tabservertest.h"
 #include "ui_tabservertest.h"
 
