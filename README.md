@@ -16,6 +16,8 @@
 
 更新尽量与原项目同步，实现了大部分接口；支持[跨语言调用](./doc/BINDINGS.md)，支持跨平台编译，支持多种编译器编译
 
+推荐直接将本仓库嵌入到其他项目中编译使用
+
 使用方式参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致；支持设置Http服务器（需要Qt6.4及以上）
 
 ### 样例项目
@@ -85,7 +87,7 @@ const char* invoke(char* memberName, char* value);
 调用例子参考[跨语言调用](./doc/BINDINGS.md)
 ```
 
-### 在项目中引用CMake项目
+### 在CMake项目中嵌入本项目
 
 在CMakeLists.txt文件中加上
 ```CMake
@@ -94,7 +96,6 @@ include_directories(QCloudMusicApi)
 add_executable(${PROJECT_NAME}
     main.cpp
 )
-target_compile_definitions(${PROJECT_NAME} PRIVATE QCLOUDMUSICAPI_LIBRARY)
 target_link_libraries(${PROJECT_NAME} QCloudMusicApi)
 ```
 引用头文件
