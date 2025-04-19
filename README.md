@@ -18,11 +18,13 @@
 
 推荐直接将本仓库嵌入到其他项目中编译使用
 
-使用方式参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致；支持设置Http服务器（需要Qt6.4及以上）
+使用方式参考[原项目文档](https://binaryify.github.io/NeteaseCloudMusicApi)，参数与返回结果与原项目完全一致
 
 ### 样例项目
 
-[s12mmm3/QListenTogether](https://github.com/s12mmm3/QListenTogether) - 网易云 一起听客户端
+[QListenTogether](https://github.com/s12mmm3/QListenTogether) - 网易云 一起听客户端
+
+[QCloudMusicServer](https://github.com/s12mmm3/QCloudMusicServer) - 网易云API HTTP服务器
 
 ### 目录
 
@@ -85,7 +87,6 @@ const char* invoke(char* memberName, char* value);
 ```
 
 调用例子参考[跨语言调用](./doc/BINDINGS.md)
-```
 
 ### 在CMake项目中嵌入本项目
 
