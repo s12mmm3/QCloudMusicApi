@@ -4,6 +4,7 @@
 #include <QComboBox>
 #include <QTextEdit>
 #include <QWidget>
+#include <QJsonDocument>
 #include <functional>
 
 QT_BEGIN_NAMESPACE
@@ -29,6 +30,7 @@ public:
     QComboBox *comboBox_function();
     QTextEdit *textEdit_arg();
     QTextEdit *textEdit_ret();
+    QJsonDocument::JsonFormat getJsonFormat();
 
     // 设置API列表
     void setFunctions(const QStringList &functions);
