@@ -2,14 +2,16 @@
 
 #include <QFile>
 
-ServiceLocator::ServiceLocator() {}
-QJsonDocument ServiceLocator::m_config;
-ApiHelper ServiceLocator::m_helper;
-
-void ServiceLocator::init()
+static QJsonDocument g_config;
+static ApiHelper g_helper;
+namespace  ServiceLocator {
+void init()
 {
     //读取配置
     QFile file(":/config.json");
     file.open(QIODevice::ReadOnly);
-    m_config = QJsonDocument::fromJson(file.readAll());
+    g_config = QJsonDocument::fromJson(file.readAll());
+}
+const QJsonDocument &config() { return g_config; }
+ApiHelper *helper() { return &g_helper; }
 }

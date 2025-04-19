@@ -6,19 +6,11 @@
 
 #include "../QCloudMusicApi/apihelper.h"
 
-class ServiceLocator: public QObject
+namespace ServiceLocator
 {
-    Q_OBJECT
-public:
-    ServiceLocator();
-
-public:
-    static void init();
-    static const QJsonDocument& config() { return m_config; }
-    static ApiHelper& helper() { return m_helper; }
-private:
-    static QJsonDocument m_config;
-    static ApiHelper m_helper;
+void init();
+const QJsonDocument& config();
+ApiHelper* helper();
 };
 
 #endif // SERVICELOCATOR_H

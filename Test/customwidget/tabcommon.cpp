@@ -11,10 +11,10 @@ TabCommon::TabCommon(QWidget* parent) :
 {
     ui->setupUi(this);
 
-    // ServiceLocator::helper().invoke("register_anonimous", {});
+    // ServiceLocator::helper()->invoke("register_anonimous", {});
 
     ui->tabCommonUnit->callback = [](QString member, QString arg) -> QVariantMap {
-        return ServiceLocator::helper().invoke(member, QJsonDocument::fromJson(arg.toUtf8()).toVariant().toMap());
+        return ServiceLocator::helper()->invoke(member, QJsonDocument::fromJson(arg.toUtf8()).toVariant().toMap());
         };
 }
 

@@ -14,7 +14,7 @@ TabCommonUnit::TabCommonUnit(QWidget* parent) :
     ui->setupUi(this);
 
     // 将Api中的方法名称取出
-    setFunctions(ServiceLocator::helper().memberList());
+    setFunctions(ServiceLocator::helper()->memberList());
 }
 
 TabCommonUnit::~TabCommonUnit()

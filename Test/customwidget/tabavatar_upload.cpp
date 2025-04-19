@@ -51,7 +51,7 @@ void TabAvatar_upload::on_pushButton_send_clicked()
                        }
         }
     };
-    QVariantMap ret = ServiceLocator::helper().invoke("avatar_upload", arg);
+    QVariantMap ret = ServiceLocator::helper()->invoke("avatar_upload", arg);
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
 }
 

@@ -74,7 +74,7 @@ void TabLogin_qr::showQrCode(QString url)
 }
 
 QVariantMap TabLogin_qr::invoke(const QString member, const QVariantMap arg) {
-    QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
+    QVariantMap ret = ServiceLocator::helper()->invoke(member, arg);
     return ret;
 }
 
@@ -101,7 +101,7 @@ void TabLogin_qr::on_pushButton_login_qr_check_clicked()
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
     auto cookie = ret["cookie"].toString();
     if (!cookie.isEmpty()) {
-        ServiceLocator::helper().set_cookie(cookie);
+        ServiceLocator::helper()->set_cookie(cookie);
     }
 }
 

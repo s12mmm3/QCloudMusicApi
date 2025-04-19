@@ -24,7 +24,7 @@ void TabLogin_cellphone::on_pushButton_send_clicked()
         { "password", ui->lineEdit_password->text() }
     };
     auto invoke = [](const QString member, const QVariantMap arg) {
-        QVariantMap ret = ServiceLocator::helper().invoke(member, arg);
+        QVariantMap ret = ServiceLocator::helper()->invoke(member, arg);
         return ret;
         };
     QVariantMap ret = invoke("login_cellphone", arg);
