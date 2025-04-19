@@ -1,4 +1,0 @@
-#include "logger.h"
-
-Q_LOGGING_CATEGORY(LOGGER_NAME, PROJECT_NAME)
-
