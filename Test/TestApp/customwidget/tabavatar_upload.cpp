@@ -1,6 +1,6 @@
 #include "tabavatar_upload.h"
 #include "ui_tabavatar_upload.h"
-#include "../servicelocator.h"
+#include "testtool.h"
 
 #include <QFileDialog>
 #include <QFileInfo>
@@ -51,7 +51,7 @@ void TabAvatar_upload::on_pushButton_send_clicked()
                        }
         }
     };
-    QVariantMap ret = ServiceLocator::helper()->invoke("avatar_upload", arg);
+    QVariantMap ret = TestTool::helper()->invoke("avatar_upload", arg);
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
 }
 

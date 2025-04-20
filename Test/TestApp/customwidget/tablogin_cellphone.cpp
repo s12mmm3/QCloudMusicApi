@@ -1,7 +1,7 @@
 #include "tablogin_cellphone.h"
 #include "ui_tablogin_cellphone.h"
 
-#include "../servicelocator.h"
+#include "testtool.h"
 
 #include <QJsonDocument>
 
@@ -24,7 +24,7 @@ void TabLogin_cellphone::on_pushButton_send_clicked()
         { "password", ui->lineEdit_password->text() }
     };
     auto invoke = [](const QString member, const QVariantMap arg) {
-        QVariantMap ret = ServiceLocator::helper()->invoke(member, arg);
+        QVariantMap ret = TestTool::helper()->invoke(member, arg);
         return ret;
         };
     QVariantMap ret = invoke("login_cellphone", arg);

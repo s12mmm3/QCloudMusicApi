@@ -1,10 +1,10 @@
-#include "servicelocator.h"
+#include "testtool.h"
 
 #include <QFile>
 
 static QJsonDocument g_config;
 static ApiHelper g_helper;
-namespace  ServiceLocator {
+namespace TestTool {
 void init()
 {
     //读取配置

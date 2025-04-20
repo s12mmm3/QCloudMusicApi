@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "servicelocator.h"
+#include "testtool.h"
 
 #include <QApplication>
 #include <QLoggingCategory>
@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     qSetMessagePattern("%{time yyyy-MM-dd hh:mm:ss.zzz} : %{threadid} : %{category} : %{type} : %{line} : %{function} : %{message}");
-    ServiceLocator::init();
+    TestTool::init();
 
     QApplication a(argc, argv);
     MainWindow w;

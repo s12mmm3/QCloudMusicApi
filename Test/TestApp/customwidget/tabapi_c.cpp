@@ -6,7 +6,7 @@
 #include <QMessageBox>
 #include <string>
 
-#include "../servicelocator.h"
+#include "testtool.h"
 #include "tabapi_c.h"
 #include "ui_tabapi_c.h"
 #include "../logger.h"
@@ -63,7 +63,7 @@ void TabApi_c::on_pushButton_unload_clicked()
 {
     if (libraryUnload(ui->lineEdit_library_fileName->text())) QMessageBox::information(this, "", "Library unload succeed!");
     else QMessageBox::warning(this, "Library unload failed!", library.errorString());
-    ui->tabCommonUnit->setFunctions(ServiceLocator::helper()->memberList());
+    ui->tabCommonUnit->setFunctions(TestTool::helper()->memberList());
 }
 
 void TabApi_c::on_pushButton_load_clicked()

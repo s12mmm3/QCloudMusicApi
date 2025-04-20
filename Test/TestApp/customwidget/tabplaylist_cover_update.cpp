@@ -1,6 +1,6 @@
 #include "tabplaylist_cover_update.h"
 #include "ui_tabplaylist_cover_update.h"
-#include "../servicelocator.h"
+#include "testtool.h"
 
 #include <QFileDialog>
 #include <QFileInfo>
@@ -52,7 +52,7 @@ void TabPlaylist_cover_update::on_pushButton_send_clicked()
                        }
         }
     };
-    auto ret = ServiceLocator::helper()->invoke("playlist_cover_update", arg);
+    auto ret = TestTool::helper()->invoke("playlist_cover_update", arg);
     ui->textEdit_ret->setText(QJsonDocument::fromVariant(ret).toJson(QJsonDocument::Indented));
 }
 

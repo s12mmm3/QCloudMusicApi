@@ -3,7 +3,7 @@
 #include <QFile>
 #include <QDebug>
 
-#include "../servicelocator.h"
+#include "testtool.h"
 #include "tabcommonunit.h"
 #include "ui_tabcommonunit.h"
 
@@ -14,7 +14,7 @@ TabCommonUnit::TabCommonUnit(QWidget* parent) :
     ui->setupUi(this);
 
     // 将Api中的方法名称取出
-    setFunctions(ServiceLocator::helper()->memberList());
+    setFunctions(TestTool::helper()->memberList());
 }
 
 TabCommonUnit::~TabCommonUnit()
@@ -47,7 +47,7 @@ void TabCommonUnit::on_comboBox_function_currentTextChanged(const QString& arg1)
 {
     // 从config中读取当前接口的测试数据
     ui->textEdit_arg->setText(
-        QJsonDocument(ServiceLocator::config()[arg1].toObject()).toJson(getJsonFormat())
+        QJsonDocument(TestTool::config()[arg1].toObject()).toJson(getJsonFormat())
     );
 }
 
