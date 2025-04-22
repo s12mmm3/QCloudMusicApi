@@ -1,46 +1,36 @@
 #ifndef APIHELPER_H
 #define APIHELPER_H
 
-#include "module.h"
+#include "qcloudmusicapiglobal.h"
 
 #include <QMutex>
 #include <QObject>
+#include <QVariantMap>
+#include <QScopedPointer>
+#include <QStringList>
 
-class ApiPluginImpl;
+// 前向声明
+class ApiHelperPrivate;
 class QCloudMusicApiPlugin;
 
 /**
  * @class ApiHelper
- * @brief API助手类，通过反射机制调用API。
- * 继承自NeteaseCloudMusicApi，提供了调用API的高级接口。
+ * @brief API助手类，通过反射机制调用API，提供了调用API的高级接口。
  */
-class QCLOUDMUSICAPI_EXPORT ApiHelper : public NeteaseCloudMusicApi
+class QCLOUDMUSICAPI_EXPORT ApiHelper : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString proxy READ proxy WRITE set_proxy NOTIFY proxyChanged);
+    Q_PROPERTY(QString realIP READ realIP WRITE set_realIP NOTIFY realIPChanged);
+    Q_PROPERTY(QString cookie READ cookie WRITE set_cookie NOTIFY cookieChanged);
+
 public:
-    /**
-     * @brief 封装了读取/修改方法
-     * proxy(): 获取代理
-     * set_proxy(proxy): 设置代理
-     * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
-     */
-    DEFINE_VALUE(QString, proxy, "");
-
-    /**
-     * @brief 封装了读取/修改方法
-     * realIP(): 获取realIP
-     * set_realIP(realIP): 设置realIP
-     * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
-     */
-    DEFINE_VALUE(QString, realIP, "");
-
-    /**
-     * @brief 封装了读取/修改方法
-     * cookie(): cookie
-     * set_cookie(cookie): 设置cookie
-     * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
-     */
-    DEFINE_VALUE(QString, cookie, "");
+    QString proxy() const;
+    void set_proxy(QString proxy);
+    QString realIP() const;
+    void set_realIP(QString realIP);
+    QString cookie() const;
+    void set_cookie(QString cookie);
 
 public:
     explicit ApiHelper(QObject* parent = nullptr);
@@ -100,14 +90,14 @@ public:
      */
     Q_INVOKABLE bool unloadPlugin(QCloudMusicApiPlugin* plugin);
 
-private:
-    void beforeInvoke(QVariantMap& arg);
-    void afterInvoke(QVariantMap& ret);
+signals:
+    void proxyChanged();
+    void realIPChanged();
+    void cookieChanged();
 
 private:
-    QStringList m_memberList;
-    QList<ApiPluginImpl*> m_pluginImpls;
-    QMutex m_mutex;
+    Q_DECLARE_PRIVATE(ApiHelper)
+    QScopedPointer<QObject> d_ptr;
 };
 
 #endif // APIHELPER_H

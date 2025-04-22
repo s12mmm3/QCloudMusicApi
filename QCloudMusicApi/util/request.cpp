@@ -271,7 +271,7 @@ QVariantMap Request::createRequest(
         }
         answer["cookie"] = cookie;
 
-        if (data["e_r"].toBool()) {
+        if (crypto == "eapi" && data["e_r"].toBool()) {
             // eapi接口返回值被加密，需要解密
             answer["body"] = Crypto::eapiResDecrypt(body.toHex().toUpper());
         }
