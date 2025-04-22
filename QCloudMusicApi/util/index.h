@@ -1,7 +1,7 @@
 ﻿#ifndef INDEX_H
 #define INDEX_H
 
-#include "../global.h"
+#include "../qcloudmusicapiglobal.h"
 
 #include <QVariantMap>
 

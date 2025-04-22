@@ -6,7 +6,7 @@
 #include <QNetworkProxy>
 #include <QVariantMap>
 
-#include "../global.h"
+#include "../qcloudmusicapiglobal.h"
 
 namespace QCloudMusicApi {
 

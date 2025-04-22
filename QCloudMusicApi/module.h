@@ -1,7 +1,7 @@
 ﻿#ifndef MODULE_H
 #define MODULE_H
 
-#include "global.h"
+#include "qcloudmusicapiglobal.h"
 
 #include <QVariantMap>
 

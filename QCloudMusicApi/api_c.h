@@ -1,7 +1,7 @@
 #ifndef API_C_H
 #define API_C_H
 
-#include "global.h"
+#include "qcloudmusicapiglobal.h"
 
 #ifdef __cplusplus
 extern "C" {

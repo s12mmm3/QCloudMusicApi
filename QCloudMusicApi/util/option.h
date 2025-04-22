@@ -1,7 +1,7 @@
 #ifndef OPTION_H
 #define OPTION_H
 
-#include "../global.h"
+#include "../qcloudmusicapiglobal.h"
 
 #include <QObject>
 #include <QVariantMap>

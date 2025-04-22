@@ -1,7 +1,7 @@
 ﻿#ifndef CRYPTO_H
 #define CRYPTO_H
 
-#include "../global.h"
+#include "../qcloudmusicapiglobal.h"
 
 #include <QByteArray>
 #include <QVariantMap>

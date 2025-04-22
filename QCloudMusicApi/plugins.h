@@ -1,7 +1,7 @@
 #ifndef PLUGINS_H
 #define PLUGINS_H
 
-#include "global.h"
+#include "qcloudmusicapiglobal.h"
 
 #include <QVariantMap>
 
