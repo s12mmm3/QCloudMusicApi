@@ -26,6 +26,8 @@
 
 [QCloudMusicServer](https://github.com/s12mmm3/QCloudMusicServer) - 网易云API HTTP服务器
 
+[QRadioPlayer](https://github.com/s12mmm3/QRadioPlayer) - 网络广播电台客户端
+
 ### 目录
 
 - [需求和依赖](#需求和依赖)
