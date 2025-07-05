@@ -20,9 +20,9 @@ jobs:
           - qt_version: 5.12.12
             qt_arch: win64_msvc2015_64
             arch: x64
-          # 6.7.2
-          - qt_version: 6.7.2
-            qt_arch: win64_msvc2019_64
+          # 6.9.1
+          - qt_version: 6.9.1
+            qt_arch: win64_msvc2022_64
             arch: x64
             modules: 'qthttpserver qtwebsockets'
     env:

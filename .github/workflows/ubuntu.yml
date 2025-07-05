@@ -18,8 +18,8 @@ jobs:
           # 5.12.12
           - qt_version: 5.12.12
             qt_arch: gcc_64
-          # 6.7.2
-          - qt_version: 6.7.2
+          # 6.9.1
+          - qt_version: 6.9.1
             qt_arch: linux_gcc_64
             modules: 'qthttpserver qtwebsockets'
     env:
