@@ -149,6 +149,7 @@ QVariantMap Request::createRequest(
         }
     }
 
+    auto domain = options.value("domain", "").toString();
     // 根据加密方式加密请求数据；目前任意uri都支持四种加密方式
     if (crypto == "weapi") {
         headers["Referer"] = Config::APP_CONF["domain"];
@@ -156,7 +157,9 @@ QVariantMap Request::createRequest(
         data["csrf_token"] = csrfToken;
 
         encryptData = Crypto::weapi(QJsonDocument::fromVariant(data));
-        url = Config::APP_CONF["domain"].toString() + "/weapi/" + uri.mid(5);
+        url = (!domain.isEmpty()
+                   ? domain
+                   : Config::APP_CONF["domain"].toString()) + "/weapi/" + uri.mid(5);
     }
     else if (crypto == "linuxapi") {
         encryptData = Crypto::linuxapi(QJsonDocument::fromVariant(QVariantMap{
@@ -165,7 +168,9 @@ QVariantMap Request::createRequest(
             { "params", data }
             }));
         headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
-        url = Config::APP_CONF["domain"].toString() + "/api/linux/forward";
+        url = (!domain.isEmpty()
+                   ? domain
+                   : Config::APP_CONF["domain"].toString()) + "/api/linux/forward";
     }
     else if (crypto == "eapi" || crypto == "api") {
         // 两种加密方式，都应生成客户端的cookie
@@ -197,18 +202,22 @@ QVariantMap Request::createRequest(
             }
             return result.join("; ");
         }();
-        headers["User-Agent"] = !options.value("ua").toString().isEmpty() ? options.value("ua") : chooseUserAgent("api");
+        headers["User-Agent"] = !options.value("ua").toString().isEmpty() ? options.value("ua") : chooseUserAgent("api", "iphone");
         if (crypto == "eapi") {
             // 使用eapi加密
             data["header"] = header;
             data["e_r"] = options.value("e_r").isValid() ? options.value("e_r") : data.value("e_r", Config::APP_CONF.value("encryptResponse")); // 用于加密eapi接口的返回值
             data["e_r"] = Index::toBoolean(data["e_r"]);
             encryptData = Crypto::eapi(uri, QJsonDocument::fromVariant(data));
-            url = Config::APP_CONF["apiDomain"].toString() + "/eapi/" + uri.mid(5);
+            url = (!domain.isEmpty()
+                       ? domain
+                       : Config::APP_CONF["apiDomain"].toString()) + "/eapi/" + uri.mid(5);
         }
         else if (crypto == "api") {
             // 不使用任何加密
-            url = Config::APP_CONF["apiDomain"].toString() + uri;
+            url = (!domain.isEmpty()
+                       ? domain
+                       : Config::APP_CONF["apiDomain"].toString()) + uri;
             encryptData = data;
         }
     }
