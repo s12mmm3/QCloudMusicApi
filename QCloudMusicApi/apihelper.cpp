@@ -47,6 +47,11 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
     if (!realIP().isEmpty() && !arg.contains("realIP")) {
         arg.insert("realIP", realIP());
     }
+
+    // 设置全局domain
+    if (!domain().isEmpty() && !arg.contains("domain")) {
+        arg.insert("domain", domain());
+    }
 }
 
 void ApiHelper::afterInvoke(QVariantMap& ret)

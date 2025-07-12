@@ -42,6 +42,14 @@ public:
      */
     DEFINE_VALUE(QString, cookie, "");
 
+    /**
+     * @brief 封装了读取/修改方法
+     * domain(): domain
+     * set_domain(domain): 设置domain
+     * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
+     */
+    DEFINE_VALUE(QString, domain, "");
+
 public:
     explicit ApiHelper(QObject* parent = nullptr);
 
