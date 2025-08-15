@@ -22,8 +22,12 @@ ApiHelper::ApiHelper(QObject* parent)
 
 void ApiHelper::beforeInvoke(QVariantMap& arg)
 {
-    QMutexLocker locker(&m_mutex);
-    QVariantMap arg_cookie_map = Index::cookieToJson(cookie());
+    QVariantMap arg_cookie_map;
+    { // 加个锁
+        QMutexLocker locker(&m_mutex);
+        arg_cookie_map = Index::cookieToJson(this->cookie());
+    }
+
     // Api只能处理map类型的cookie
     if (arg.contains("cookie")) {
         // 若传入新的cookie，替换原有的cookie
@@ -33,7 +37,11 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
         else if (arg["cookie"].userType() == QMetaType::QString) {
             arg_cookie_map = Index::cookieToJson(arg["cookie"].toString());
         }
-        set_cookie(Index::cookieObjToString(arg_cookie_map));
+
+        { // 加个锁
+            QMutexLocker locker(&m_mutex);
+            this->set_cookie(Index::cookieObjToString(arg_cookie_map));
+        }
     }
     // 使用存储的cookie map
     arg["cookie"] = arg_cookie_map;
@@ -56,8 +64,11 @@ void ApiHelper::beforeInvoke(QVariantMap& arg)
 
 void ApiHelper::afterInvoke(QVariantMap& ret)
 {
-    QMutexLocker locker(&m_mutex);
-    QVariantMap arg_cookie_map = Index::cookieToJson(cookie());
+    QVariantMap arg_cookie_map;
+    { // 加个锁
+        QMutexLocker locker(&m_mutex);
+        arg_cookie_map = Index::cookieToJson(this->cookie());
+    }
     auto newCookie = Index::cookieToJson(ret.value("cookie").toString());
     if (!newCookie.isEmpty()) {
         arg_cookie_map = Index::mergeMap(arg_cookie_map, newCookie);
@@ -66,7 +77,11 @@ void ApiHelper::afterInvoke(QVariantMap& ret)
     if (!token.isEmpty()) {
         arg_cookie_map["MUSIC_A"] = token;
     }
-    set_cookie(Index::cookieObjToString(arg_cookie_map));
+
+    { // 加个锁
+        QMutexLocker locker(&m_mutex);
+        this->set_cookie(Index::cookieObjToString(arg_cookie_map));
+    }
 }
 
 QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
