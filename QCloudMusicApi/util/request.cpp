@@ -44,6 +44,24 @@ const QVariantMap osMap{
 };
 
 using namespace QCloudMusicApi;
+
+namespace {
+
+QString generateStaticDeviceId() {
+    static const QString hexChars = QStringLiteral("0123456789ABCDEF");
+    QString deviceId;
+    deviceId.reserve(52);
+    for (int i = 0; i < 52; ++i) {
+        const int index = QRandomGenerator::global()->bounded(hexChars.size());
+        deviceId.append(hexChars.at(index));
+    }
+    return deviceId;
+}
+
+const QString kStaticDeviceId = generateStaticDeviceId();
+
+}
+
 QString Request::chooseUserAgent(QString crypto, QString uaType) {
     const QVariantMap userAgentMap{
         {
@@ -99,6 +117,10 @@ QVariantMap Request::createRequest(
     };
 
     auto _ntes_nuid = randomBytes(32);
+    QString deviceId = cookie.value("deviceId").toString();
+    if (deviceId.isEmpty()) {
+        deviceId = kStaticDeviceId;
+    }
     auto os = osMap.value(cookie.value("os").toString(), osMap["iphone"]).toMap();
     cookie =
         Index::mergeMap(cookie,
@@ -110,7 +132,7 @@ QVariantMap Request::createRequest(
                             { "_ntes_nnid", _ntes_nuid + "," + QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()) },
 
                             { "osver", cookie.contains("osver") ? cookie["osver"] : os["osver"] }, //系统版本
-                            { "deviceId", cookie["deviceId"] },
+                            { "deviceId", deviceId },
                             { "os", cookie.contains("os") ? cookie["os"] : os["os"] },
                             { "channel", cookie.contains("channel") ? cookie["channel"] : "netease" },
                             { "appver", cookie.contains("appver") ? cookie["appver"] : os["appver"] }, // app版本
