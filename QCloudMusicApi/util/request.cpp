@@ -147,8 +147,7 @@ QVariantMap Request::createRequest(
                 if (anonymous_token.isEmpty()) {
                     QString tmpPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
                     QFile file(QDir(tmpPath).absoluteFilePath("anonymous_token"));
-                    file.open(QIODevice::ReadOnly | QIODevice::Text);
-                    anonymous_token = file.readAll();
+                    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) anonymous_token = file.readAll();
                 }
                 return anonymous_token;
             }();
