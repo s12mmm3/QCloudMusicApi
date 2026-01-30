@@ -10,6 +10,7 @@
 #include <QRandomGenerator>
 #include <QCryptographicHash>
 #include <QRegularExpression>
+#include <QDebug>
 
 using namespace QCloudMusicApi;
 
