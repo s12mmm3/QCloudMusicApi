@@ -1,5 +1,8 @@
 #include "crypto.h"
 
+#include <iostream>
+#include <sstream>
+
 #include <QByteArray>
 #include <QObject>
 #include <QVariantMap>
@@ -7,13 +10,6 @@
 #include <QRandomGenerator>
 #include <QCryptographicHash>
 #include <QRegularExpression>
-
-extern "C" {
-#include "openssl/err.h"
-#include <openssl/evp.h>
-#include <openssl/rsa.h>
-#include <openssl/pem.h>
-}
 
 using namespace QCloudMusicApi;
 
@@ -28,136 +24,227 @@ const QString Crypto::publicKey = QStringLiteral(
 );
 
 const QString Crypto::eapiKey = QStringLiteral("e82ckenh8dichen8");
+#include <cryptopp/aes.h>
+#include <cryptopp/modes.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/hex.h>
+#include <cryptopp/base64.h>
+#include <cryptopp/rsa.h>
+#include <cryptopp/osrng.h>
+#include <cryptopp/integer.h> // 用于原始RSA运算
+
 /**
- * @brief 使用AES算法加密数据的函数
+ * @brief AES加密
  * @param plainText 明文数据
- * @param mode 加密算法
- * @param key 加密密钥
- * @param iv 偏移量
- * @param format 输出格式
- * @return QString 密文数据，如果加密失败则为空字符串
+ * @param mode 加密模式("cbc"或"ecb")
+ * @param key 加密密钥(16字节对于AES-128)
+ * @param iv 偏移量(16字节对于CBC模式)
+ * @param format 输出格式("base64"或"hex")
+ * @return QByteArray 密文数据，如果加密失败则为空字符串
  */
 QByteArray Crypto::aesEncrypt(const QByteArray& plainText, const QString mode, const QByteArray& key, const QByteArray& iv, QString format) {
-    auto cipher = (mode == "cbc") ? EVP_aes_128_cbc : /*ecb*/ EVP_aes_128_ecb;
-    EVP_CIPHER_CTX* ctx;
-    int len;
-    unsigned char* ciphertext = new unsigned char[plainText.size() * 10];
-    int ciphertext_len;
-    if (!(ctx = EVP_CIPHER_CTX_new())) ERR_print_errors_fp(stderr);
-    if (1 != EVP_EncryptInit_ex(ctx, cipher(), NULL,
-        (unsigned char*)key.constData(),
-        (unsigned char*)iv.constData()))
-        ERR_print_errors_fp(stderr);
-    if (1 != EVP_EncryptUpdate(ctx, ciphertext, &len, (unsigned char*)plainText.constData(), plainText.size()))
-        ERR_print_errors_fp(stderr);
-    ciphertext_len = len;
-    if (1 != EVP_EncryptFinal_ex(ctx, ciphertext + len, &len)) ERR_print_errors_fp(stderr);
-    ciphertext_len += len;
+    try {
+        std::string ciphertext;
+        // 将QByteArray明文转换为std::string
+        std::string plainTextStd(plainText.constData(), plainText.size());
 
-    EVP_CIPHER_CTX_free(ctx);
+        if (mode.toLower() == "cbc") {
+            CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption encryptor;
+            encryptor.SetKeyWithIV(
+                reinterpret_cast<const CryptoPP::byte*>(key.constData()),
+                key.size(),
+                reinterpret_cast<const CryptoPP::byte*>(iv.constData()),
+                iv.size()
+                );
+            // 使用std::string版本的StringSource，避免转换
+            CryptoPP::StringSource(plainTextStd, true,
+                                   new CryptoPP::StreamTransformationFilter(
+                                       encryptor,
+                                       new CryptoPP::StringSink(ciphertext)
+                                       )
+                                   );
+        } else if (mode.toLower() == "ecb") {
+            CryptoPP::ECB_Mode<CryptoPP::AES>::Encryption encryptor;
+            encryptor.SetKey(
+                reinterpret_cast<const CryptoPP::byte*>(key.constData()),
+                key.size()
+                );
+            CryptoPP::StringSource(plainTextStd, true,
+                                   new CryptoPP::StreamTransformationFilter(
+                                       encryptor,
+                                       new CryptoPP::StringSink(ciphertext)
+                                       )
+                                   );
+        } else {
+            qWarning() << "Unsupported AES mode:" << mode;
+            return QByteArray();
+        }
 
-    auto result = QByteArray((char*)ciphertext, ciphertext_len);
-    delete[] ciphertext;
-    if (format == "base64") {
-        return result.toBase64();
+        // 将结果转换回QByteArray
+        QByteArray result = QByteArray::fromStdString(ciphertext);
+
+        if (format.toLower() == "base64") {
+            return result.toBase64();
+        }
+        return result.toHex().toUpper();
+
+    } catch (const CryptoPP::Exception& e) {
+        qWarning() << "Crypto++ encryption error:" << e.what();
+        return QByteArray();
     }
-    return result.toHex().toUpper();
 }
 
 /**
- * @brief 使用AES算法解密数据的函数
+ * @brief AES解密
  * @param cipherText 密文数据
- * @param mode 解密算法
- * @param key 解密密钥
- * @param iv 偏移量
- * @return QString 明文数据，如果解密失败则为空字符串
+ * @param mode 解密模式("cbc"或"ecb")
+ * @param key 解密密钥(16字节对于AES-128)
+ * @param iv 偏移量(16字节对于CBC模式)
+ * @param format 输入格式("base64"或"hex")
+ * @return QByteArray 明文数据，如果解密失败则为空字符串
  */
-QByteArray Crypto::aesDecrypt(const QByteArray& cipherText, const QString mode, const QByteArray& key, const QByteArray& iv, QString format)
-{
-    auto cipher = (mode == "cbc") ? EVP_aes_128_cbc : /*ecb*/ EVP_aes_128_ecb;
-    EVP_CIPHER_CTX* ctx;
+QByteArray Crypto::aesDecrypt(const QByteArray& cipherText, const QString mode, const QByteArray& key, const QByteArray& iv, QString format) {
+    try {
+        // 根据格式解码输入数据
+        QByteArray decodedCipherText;
+        if (format.toLower() == "base64") {
+            decodedCipherText = QByteArray::fromBase64(cipherText);
+        } else {
+            decodedCipherText = QByteArray::fromHex(cipherText);
+        }
 
-    int len;
-    auto cipherText_p = format == "base64" ? QByteArray::fromBase64(cipherText) : QByteArray::fromHex(cipherText);
-    unsigned char* plainText = new unsigned char[cipherText_p.size()];
-    int plaintext_len;
+        std::string plaintext;
+        // 将解码后的QByteArray转换为std::string
+        std::string cipherTextStd(decodedCipherText.constData(), decodedCipherText.size());
 
-    if (!(ctx = EVP_CIPHER_CTX_new())) ERR_print_errors_fp(stderr);
+        if (mode.toLower() == "cbc") {
+            CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption decryptor;
+            decryptor.SetKeyWithIV(
+                reinterpret_cast<const CryptoPP::byte*>(key.constData()),
+                key.size(),
+                reinterpret_cast<const CryptoPP::byte*>(iv.constData()),
+                iv.size()
+                );
+            // 使用std::string版本的StringSource
+            CryptoPP::StringSource(cipherTextStd, true,
+                                   new CryptoPP::StreamTransformationFilter(
+                                       decryptor,
+                                       new CryptoPP::StringSink(plaintext)
+                                       )
+                                   );
+        } else if (mode.toLower() == "ecb") {
+            CryptoPP::ECB_Mode<CryptoPP::AES>::Decryption decryptor;
+            decryptor.SetKey(
+                reinterpret_cast<const CryptoPP::byte*>(key.constData()),
+                key.size()
+                );
+            CryptoPP::StringSource(cipherTextStd, true,
+                                   new CryptoPP::StreamTransformationFilter(
+                                       decryptor,
+                                       new CryptoPP::StringSink(plaintext)
+                                       )
+                                   );
+        } else {
+            qWarning() << "Unsupported AES mode:" << mode;
+            return QByteArray();
+        }
 
-    if (1 != EVP_DecryptInit_ex(ctx, cipher(), NULL,
-        (unsigned char*)key.constData(),
-        (unsigned char*)iv.constData()))
-        ERR_print_errors_fp(stderr);
+        return QByteArray::fromStdString(plaintext);
 
-    if (1 != EVP_DecryptUpdate(ctx, plainText, &len, (unsigned char*)cipherText_p.constData(), cipherText_p.size()))
-        ERR_print_errors_fp(stderr);
-    plaintext_len = len;
-
-    if (1 != EVP_DecryptFinal_ex(ctx, plainText + len, &len)) ERR_print_errors_fp(stderr);
-    plaintext_len += len;
-
-    EVP_CIPHER_CTX_free(ctx);
-
-    auto result = QByteArray((char*)plainText, plaintext_len);
-    delete[] plainText;
-    return result;
+    } catch (const CryptoPP::Exception& e) {
+        qWarning() << "Crypto++ decryption error:" << e.what();
+        return QByteArray();
+    }
 }
 
 /**
- * @brief rsaEncrypt 公钥加密
- * @param plainText 明文
- * @param strPubKey 公钥
- * @return 加密后数据(Hex格式)
+ * @brief 使用无填充模式进行RSA公钥加密
+ * @param plainText 明文数据
+ * @param strPubKey PEM格式的公钥字符串
+ * @return QByteArray 加密后的数据，失败返回空QByteArray
  */
-QByteArray Crypto::rsaEncrypt(QString plainText, const QString& strPubKey)
-{
-    QByteArray encryptData;
-    QByteArray pubKeyArry = strPubKey.toUtf8();
-    uchar* pPubKey = (uchar*)pubKeyArry.data();
-    BIO* pKeyBio = BIO_new_mem_buf(pPubKey, pubKeyArry.length());
-    if (pKeyBio == NULL) {
-        return "";
-    }
-    RSA* pRsa = RSA_new();
-    if (strPubKey.contains("BEGIN RSA PUBLIC KEY")) {
-        pRsa = PEM_read_bio_RSAPublicKey(pKeyBio, &pRsa, NULL, NULL);
-    }
-    else {
-        pRsa = PEM_read_bio_RSA_PUBKEY(pKeyBio, &pRsa, NULL, NULL);
-    }
-    if (pRsa == NULL) {
-        BIO_free_all(pKeyBio);
-        return "";
-    }
+QByteArray Crypto::rsaEncrypt(const QString& plainText, const QString& strPubKey) {
+    try {
+        // 将QString转换为std::string
+        std::string pubKeyStr = strPubKey.toStdString();
+        std::string plainTextStr = plainText.toStdString();
 
-    int nLen = RSA_size(pRsa);
-    char* pEncryptBuf = new char[nLen];
+        // 从PEM格式中提取Base64编码的密钥数据
+        std::string keyBody;
+        size_t begin = pubKeyStr.find("-----BEGIN");
+        size_t end = pubKeyStr.find("-----END");
 
+        if (begin != std::string::npos && end != std::string::npos) {
+            size_t keyStart = pubKeyStr.find("\n", begin) + 1;
+            size_t keyEnd = pubKeyStr.find("\n", keyStart);
+            while (keyEnd < end) {
+                std::string line = pubKeyStr.substr(keyStart, keyEnd - keyStart);
+                if (line.find(":") == std::string::npos) { // 跳过头信息行
+                    keyBody += line;
+                }
+                keyStart = keyEnd + 1;
+                keyEnd = pubKeyStr.find("\n", keyStart);
+                if (keyEnd == std::string::npos) keyEnd = end;
+            }
+        }
 
-    if (plainText.length() < 128) {
-        // 如果小于128，就用0填充空位，直到长度为128
-        plainText.prepend(QString().fill(QChar(), 128 - plainText.length()));
+        // Base64解码获取DER格式的公钥
+        std::string derKey;
+        CryptoPP::StringSource(keyBody, true,
+                               new CryptoPP::Base64Decoder(
+                                   new CryptoPP::StringSink(derKey)
+                                   )
+                               );
+
+        // 从DER格式加载公钥
+        CryptoPP::RSA::PublicKey publicKey;
+        CryptoPP::StringSource derSource(derKey, true);
+        publicKey.Load(derSource);
+
+        // 获取模数(n)和公钥指数(e)
+        CryptoPP::Integer n = publicKey.GetModulus();
+        CryptoPP::Integer e = publicKey.GetPublicExponent();
+
+        int keySizeBytes = n.ByteCount(); // 模数的字节长度
+
+        // 处理明文长度：必须精确等于模数字节长度
+        if (plainTextStr.length() < keySizeBytes) {
+            // 前面补零
+            plainTextStr.insert(0, keySizeBytes - plainTextStr.length(), '\0');
+        } else if (plainTextStr.length() > keySizeBytes) {
+            // 截断超长部分
+            plainTextStr = plainTextStr.substr(0, keySizeBytes);
+        }
+
+        // 将明文转换为CryptoPP::Integer
+        CryptoPP::Integer plainInteger(
+            reinterpret_cast<const CryptoPP::byte*>(plainTextStr.data()),
+            plainTextStr.size()
+            );
+
+        // 核心：无填充RSA加密 (m^e mod n)
+        CryptoPP::Integer cipherInteger = publicKey.ApplyFunction(plainInteger);
+
+        // 将加密结果转换回字节
+        std::string cipherText;
+        cipherText.resize(keySizeBytes); // 密文长度等于模数长度
+        cipherInteger.Encode(
+            reinterpret_cast<CryptoPP::byte*>(cipherText.data()),
+            cipherText.size(),
+            CryptoPP::Integer::UNSIGNED
+            );
+
+        // 转换为QByteArray
+        QByteArray encryptData = QByteArray::fromStdString(cipherText);
+        return encryptData;
+
+    } catch (const CryptoPP::Exception& e) {
+        qWarning() << "Raw RSA encryption error:" << e.what();
+        return QByteArray();
+    } catch (const std::exception& e) {
+        qWarning() << "Standard exception in rsaEncryptRaw:" << e.what();
+        return QByteArray();
     }
-    QByteArray plainData = plainText.toUtf8();
-    int nClearDataLen = plainData.length();
-    uchar* pClearData = (uchar*)plainData.data();
-
-    int nSize = RSA_public_encrypt(nClearDataLen,
-        pClearData,
-        (unsigned char*)pEncryptBuf,
-        pRsa,
-        RSA_NO_PADDING);
-
-    if (nSize >= 0) {
-        QByteArray arry((char*)pEncryptBuf, nSize);
-        encryptData.append(arry);
-    }
-
-    // 释放内存
-    delete[] pEncryptBuf;
-    BIO_free_all(pKeyBio);
-    RSA_free(pRsa);
-    return encryptData;
 }
 
 QVariantMap Crypto::weapi(QJsonDocument object) {
