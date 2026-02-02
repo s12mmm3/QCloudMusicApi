@@ -12,6 +12,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 # 设置第三方仓库
 include_directories(3rdparty)
 set(CRYPTOPP_BUILD_TESTING OFF)
+set(CRYPTOPP_USE_MASTER_BRANCH ON)
 add_subdirectory(3rdparty/cryptopp-cmake/)
 
 set(WITH_TOOLS OFF CACHE BOOL "Build utility tools" FORCE)
