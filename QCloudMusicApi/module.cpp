@@ -4530,6 +4530,38 @@ QVariantMap Api::user_mutualfollow_get(QVariantMap query) {
         );
 }
 
+QVariantMap Api::user_playlist_collect(QVariantMap query) {
+    const QVariantMap data{
+        { "userId", query["uid"] },
+        { "limit", query.value("limit", 100) },
+        { "offset", query.value("offset", 0) },
+        { "isWebview", "true" },
+        { "includeRedHeart", "true" },
+        { "includeTop", "true" },
+    };
+    return request(
+        "/api/user/playlist/collect",
+        data,
+        Option::createOption(query)
+        );
+}
+
+QVariantMap Api::user_playlist_create(QVariantMap query) {
+    const QVariantMap data{
+        { "userId", query["uid"] },
+        { "limit", query.value("limit", 100) },
+        { "offset", query.value("offset", 0) },
+        { "isWebview", "true" },
+        { "includeRedHeart", "true" },
+        { "includeTop", "true" },
+    };
+    return request(
+        "/api/user/playlist/create",
+        data,
+        Option::createOption(query)
+        );
+}
+
 // 用户歌单
 QVariantMap Api::user_playlist(QVariantMap query) {
     const QVariantMap data{

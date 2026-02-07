@@ -966,6 +966,12 @@ public:
     // 用户是否互相关注
     Q_INVOKABLE QVariantMap user_mutualfollow_get(QVariantMap);
 
+    // 获取用户的收藏歌单列表
+    Q_INVOKABLE QVariantMap user_playlist_collect(QVariantMap);
+
+    // 获取用户的创建歌单列表
+    Q_INVOKABLE QVariantMap user_playlist_create(QVariantMap);
+
     // 用户歌单
     Q_INVOKABLE QVariantMap user_playlist(QVariantMap);
 

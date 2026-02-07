@@ -562,5 +562,11 @@
     },
     "broadcast_channel_currentinfo": {
         "id": "5"
+    },
+    "user_playlist_collect": {
+        "uid": "79248480"
+    },
+    "user_playlist_create": {
+        "uid": "79248480"
     }
 }
