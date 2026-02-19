@@ -13,8 +13,7 @@ TabCommonUnit::TabCommonUnit(QWidget* parent) :
 {
     ui->setupUi(this);
 
-    // 将Api中的方法名称取出
-    setFunctions(TestTool::helper()->memberList());
+    updateFunctions();
 }
 
 TabCommonUnit::~TabCommonUnit()
@@ -66,4 +65,10 @@ void TabCommonUnit::update(QVariantMap ret)
 void TabCommonUnit::setFunctions(const QStringList& functions)
 {
     ui->comboBox_function->addItems(functions);
+}
+
+void TabCommonUnit::updateFunctions()
+{
+    // 将Api中的方法名称取出
+    setFunctions(TestTool::helper()->memberList());
 }

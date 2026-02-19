@@ -15,7 +15,9 @@ TabPlugin::TabPlugin(QWidget* parent) :
 
 bool TabPlugin::libraryLoad(QString fileName)
 {
-    return helper.loadPlugin(fileName);
+    auto ret = helper.loadPlugin(fileName);
+    ui->tabCommonUnit->setFunctions(helper.memberList());
+    return ret;
 }
 
 bool TabPlugin::libraryUnload(QString fileName)

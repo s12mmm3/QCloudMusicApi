@@ -76,7 +76,7 @@ class ApiHelper
     // 设置全局代理
     public static void set_proxy(string proxy)
     {
-        Api.set_cookie(proxy);
+        Api.set_proxy(proxy);
     }
 
     // 获取代理

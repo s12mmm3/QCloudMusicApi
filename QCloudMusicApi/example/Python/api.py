@@ -1,6 +1,7 @@
 import ctypes
 import json
 import platform
+# 将动态库及依赖放置在文件当前目录下
 # import os
 
 # 设置环境变量，不输出Debug级别日志
@@ -93,13 +94,3 @@ def loadPlugin(fileName):
 # 卸载插件
 def unloadPlugin(fileName):
     return lib.unloadPlugin(ctypes.create_string_buffer(fileName.encode()))
-
-if __name__ == '__main__':
-    setFilterRules("QCloudMusicApi.debug=false")
-
-    result = invoke("lyric_new", json.dumps({
-        "id": "2058263032"
-    }))
-    print("result", json.dumps(json.loads(result), indent = 4, ensure_ascii = False))
-    
-    lib.freeApi()

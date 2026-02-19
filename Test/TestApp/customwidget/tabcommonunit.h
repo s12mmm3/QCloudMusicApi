@@ -35,6 +35,8 @@ public:
     // 设置API列表
     void setFunctions(const QStringList &functions);
 
+    void updateFunctions();
+
 private slots:
     void on_pushButton_send_clicked();
 
