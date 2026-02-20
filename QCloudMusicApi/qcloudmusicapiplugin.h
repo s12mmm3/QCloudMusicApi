@@ -19,4 +19,17 @@ Q_DECLARE_INTERFACE(QCloudMusicApiPlugin, QCloudMusicApiPlugin_iid)
 
 QT_END_NAMESPACE
 
+class ApiPluginImpl
+{
+public:
+    int id = -1;
+    QPluginLoader* loader = nullptr;
+    QCloudMusicApiPlugin* plugin = nullptr;
+
+    static int generateId() {
+        static int nextId = 1;
+        return nextId++;
+    }
+};
+
 #endif // QCLOUDMUSICAPIPLUGIN_H

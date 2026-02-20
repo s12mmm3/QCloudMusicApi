@@ -10,19 +10,6 @@
 #include <QUrlQuery>
 
 using namespace QCloudMusicApi;
-
-class ApiPluginImpl
-{
-public:
-    int id = -1;
-    QPluginLoader* loader = nullptr;
-    QCloudMusicApiPlugin* plugin = nullptr;
-
-    static int generateId() {
-        static int nextId = 1;
-        return nextId++;
-    }
-};
 ApiHelper::ApiHelper(QObject* parent)
     : NeteaseCloudMusicApi{ parent }
 {
