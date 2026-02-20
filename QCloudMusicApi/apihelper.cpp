@@ -69,10 +69,10 @@ void ApiHelper::afterInvoke(QVariantMap& ret)
         QMutexLocker locker(&m_mutex);
         arg_cookie_map = Index::cookieToJson(this->cookie());
     }
-    auto newCookie = Index::cookieToJson(ret.value("cookie").toString());
-    if (!newCookie.isEmpty()) {
-        arg_cookie_map = Index::mergeMap(arg_cookie_map, newCookie);
-    }
+        auto newCookie = Index::cookieToJson(ret.value("cookie").toString());
+        if (!newCookie.isEmpty()) {
+            arg_cookie_map = Index::mergeMap(arg_cookie_map, newCookie);
+        }
     auto token = ret.value("body").toMap()["token"].toString();
     if (!token.isEmpty()) {
         arg_cookie_map["MUSIC_A"] = token;
@@ -107,7 +107,7 @@ QVariantMap ApiHelper::invoke(QString member, QVariantMap arg)
                                   Q_ARG(QVariantMap, arg));
     }
 
-    afterInvoke(arg);
+    afterInvoke(ret);
 
     return ret;
 }
