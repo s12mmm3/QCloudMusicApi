@@ -115,12 +115,12 @@ QCLOUDMUSICAPI_EXPORT void setFilterRules(char* rules)
     helper.setFilterRules(rules);
 }
 
-QCLOUDMUSICAPI_EXPORT bool loadPlugin(char* fileName)
+QCLOUDMUSICAPI_EXPORT int loadPlugin(char* fileName)
 {
     return helper.loadPlugin(fileName);
 }
 
-QCLOUDMUSICAPI_EXPORT bool unloadPlugin(char* fileName)
+QCLOUDMUSICAPI_EXPORT bool unloadPlugin(int id)
 {
-    return helper.unloadPlugin(fileName);
+    return helper.unloadPlugin(id);
 }

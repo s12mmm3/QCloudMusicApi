@@ -15,12 +15,23 @@ TabPlugin::TabPlugin(QWidget* parent) :
 
 bool TabPlugin::libraryLoad(QString fileName)
 {
-    auto ret = helper.loadPlugin(fileName);
+    auto pluginId = helper.loadPlugin(fileName);
+    if (pluginId > 0) {
+        loadedPluginIds[fileName] = pluginId;
+    }
     ui->tabCommonUnit->setFunctions(helper.memberList());
-    return ret;
+    return pluginId > 0;
 }
 
 bool TabPlugin::libraryUnload(QString fileName)
 {
-    return helper.unloadPlugin(fileName);
+    auto it = loadedPluginIds.find(fileName);
+    if (it != loadedPluginIds.end()) {
+        bool result = helper.unloadPlugin(it.value());
+        if (result) {
+            loadedPluginIds.erase(it);
+        }
+        return result;
+    }
+    return false;
 }

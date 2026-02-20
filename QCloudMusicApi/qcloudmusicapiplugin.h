@@ -19,12 +19,4 @@ Q_DECLARE_INTERFACE(QCloudMusicApiPlugin, QCloudMusicApiPlugin_iid)
 
 QT_END_NAMESPACE
 
-class ApiPluginImpl
-{
-public:
-    QPluginLoader* loader = nullptr;
-
-    QCloudMusicApiPlugin* plugin = nullptr;
-};
-
 #endif // QCLOUDMUSICAPIPLUGIN_H

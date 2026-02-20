@@ -12,8 +12,8 @@ extern "C" {
     fn set_proxy(proxy: *const c_char);
     fn proxy() -> *const c_char;
     fn setFilterRules(rules: *const c_char);
-    fn loadPlugin(fileName: *const c_char) -> bool;
-    fn unloadPlugin(fileName: *const c_char) -> bool;
+    fn loadPlugin(fileName: *const c_char) -> std::ffi::c_int;
+    fn unloadPlugin(id: std::ffi::c_int) -> bool;
 }
 
 pub struct ApiHelper;
@@ -85,16 +85,16 @@ impl ApiHelper {
     }
 
     // 加载插件
-    pub fn loadPlugin(&self, fileName: &str) -> bool {
+    pub fn loadPlugin(&self, fileName: &str) -> i32 {
         unsafe {
             loadPlugin(CString::new(fileName).expect("").as_ptr())
         }
     }
 
-    // 卸载插件
-    pub fn unloadPlugin(&self, fileName: &str) -> bool {
+    // 卸载插件（通过ID）
+    pub fn unloadPlugin(&self, id: i32) -> bool {
         unsafe {
-            unloadPlugin(CString::new(fileName).expect("").as_ptr())
+            unloadPlugin(id)
         }
     }
 }

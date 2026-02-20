@@ -23,6 +23,7 @@ private:
 
 private:
     ApiHelper helper;
+    QMap<QString, int> loadedPluginIds;
 };
 
 #endif // TABPLUGIN_H

@@ -23,9 +23,9 @@ class Api
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void setFilterRules(string rules);
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool loadPlugin(string fileName);
+    public static extern int loadPlugin(string fileName);
     [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool unloadPlugin(string fileName);
+    public static extern bool unloadPlugin(int id);
 }
 
 class ApiHelper
@@ -92,15 +92,15 @@ class ApiHelper
     }
 
     // 加载插件
-    public static bool loadPlugin(string fileName)
+    public static int loadPlugin(string fileName)
     {
         return Api.loadPlugin(fileName);
     }
 
-    // 卸载插件
-    public static bool unloadPlugin(string fileName)
+    // 卸载插件（通过ID）
+    public static bool unloadPlugin(int id)
     {
-        return Api.unloadPlugin(fileName);
+        return Api.unloadPlugin(id);
     }
 }
 

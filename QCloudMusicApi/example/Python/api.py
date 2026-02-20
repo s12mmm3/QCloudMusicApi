@@ -42,9 +42,9 @@ lib.setFilterRules.argtypes = [ ctypes.c_char_p ]
 lib.setFilterRules.restype = ctypes.c_void_p
 
 lib.loadPlugin.argtypes = [ ctypes.c_char_p ]
-lib.loadPlugin.restype = ctypes.c_bool
+lib.loadPlugin.restype = ctypes.c_int
 
-lib.unloadPlugin.argtypes = [ ctypes.c_char_p ]
+lib.unloadPlugin.argtypes = [ ctypes.c_int ]
 lib.unloadPlugin.restype = ctypes.c_bool
 
 # 获取API列表
@@ -91,6 +91,6 @@ def setFilterRules(rules):
 def loadPlugin(fileName):
     return lib.loadPlugin(ctypes.create_string_buffer(fileName.encode()))
 
-# 卸载插件
-def unloadPlugin(fileName):
-    return lib.unloadPlugin(ctypes.create_string_buffer(fileName.encode()))
+# 卸载插件（通过ID）
+def unloadPlugin(pluginId):
+    return lib.unloadPlugin(pluginId)

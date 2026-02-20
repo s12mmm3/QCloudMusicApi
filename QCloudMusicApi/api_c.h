@@ -85,16 +85,16 @@ extern "C" {
     /**
      * @brief 加载插件
      * @param fileName 插件路径
-     * @return bool 加载结果
+     * @return int 插件ID（从1开始），失败返回-1
      */
-    QCLOUDMUSICAPI_EXPORT bool loadPlugin(char* fileName);
+    QCLOUDMUSICAPI_EXPORT int loadPlugin(char* fileName);
 
     /**
      * @brief 卸载插件
-     * @param fileName 插件路径
+     * @param id 插件ID
      * @return bool 卸载结果
      */
-    QCLOUDMUSICAPI_EXPORT bool unloadPlugin(char* fileName);
+    QCLOUDMUSICAPI_EXPORT bool unloadPlugin(int id);
 
 #ifdef __cplusplus
 }

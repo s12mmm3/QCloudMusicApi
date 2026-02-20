@@ -10,6 +10,19 @@
 #include <QUrlQuery>
 
 using namespace QCloudMusicApi;
+
+class ApiPluginImpl
+{
+public:
+    int id = -1;
+    QPluginLoader* loader = nullptr;
+    QCloudMusicApiPlugin* plugin = nullptr;
+
+    static int generateId() {
+        static int nextId = 1;
+        return nextId++;
+    }
+};
 ApiHelper::ApiHelper(QObject* parent)
     : NeteaseCloudMusicApi{ parent }
 {
@@ -147,13 +160,13 @@ void ApiHelper::setFilterRules(const QString& rules)
     QLoggingCategory::setFilterRules(rules);
 }
 
-bool ApiHelper::loadPlugin(const QString& fileName)
+int ApiHelper::loadPlugin(const QString& fileName)
 {
-    // 加载过的插件不再重复加载
+    // 加载过的插件不再重复加载，返回已有ID
     for (auto i = 0; i < m_pluginImpls.size(); i++) {
         auto pluginImpl = m_pluginImpls[i];
         if (pluginImpl->loader->fileName() == fileName) {
-            return true;
+            return pluginImpl->id;
         }
     }
 
@@ -166,57 +179,42 @@ bool ApiHelper::loadPlugin(const QString& fileName)
         if (plugin) {
             pluginImpl->loader = loader;
             pluginImpl->plugin = plugin;
+            pluginImpl->id = ApiPluginImpl::generateId();
             m_pluginImpls.push_back(pluginImpl);
-            return true;
+            return pluginImpl->id;
         }
     }
     DEBUG << loader->errorString();
     loader->deleteLater();
-    return false;
+    return -1;
 }
 
-bool ApiHelper::loadPlugin(QCloudMusicApiPlugin *plugin)
+int ApiHelper::loadPlugin(QCloudMusicApiPlugin *plugin)
 {
     ApiPluginImpl* pluginImpl = new ApiPluginImpl();
     if (plugin) {
         pluginImpl->loader = new QPluginLoader(this);
         pluginImpl->plugin = plugin;
+        pluginImpl->id = ApiPluginImpl::generateId();
         m_pluginImpls.push_back(pluginImpl);
-        return true;
+        return pluginImpl->id;
     }
-    return false;
+    return -1;
 }
 
-bool ApiHelper::unloadPlugin(const QString& fileName)
+bool ApiHelper::unloadPlugin(int id)
 {
     auto result = false;
     for (auto i = 0; i < m_pluginImpls.size(); i++) {
         auto pluginImpl = m_pluginImpls[i];
-        if (pluginImpl->loader->fileName() == fileName) {
+        if (pluginImpl->id == id) {
             m_pluginImpls.removeAt(i);
             pluginImpl->loader->deleteLater();
             result = pluginImpl->loader->unload();
             if (!result) {
                 DEBUG << pluginImpl->loader->errorString();
             }
-            break;
-        }
-    }
-    return result;
-}
-
-bool ApiHelper::unloadPlugin(QCloudMusicApiPlugin *plugin)
-{
-    auto result = false;
-    for (auto i = 0; i < m_pluginImpls.size(); i++) {
-        auto pluginImpl = m_pluginImpls[i];
-        if (pluginImpl->plugin == plugin) {
-            m_pluginImpls.removeAt(i);
-            pluginImpl->loader->deleteLater();
-            result = pluginImpl->loader->unload();
-            if (!result) {
-                DEBUG << pluginImpl->loader->errorString();
-            }
+            delete pluginImpl;
             break;
         }
     }

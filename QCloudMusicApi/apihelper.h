@@ -83,30 +83,23 @@ public:
     /**
      * @brief 加载插件
      * @param fileName 插件路径
-     * @return 加载结果
+     * @return 插件ID（从1开始），失败返回-1
      */
-    Q_INVOKABLE bool loadPlugin(const QString& fileName);
+    Q_INVOKABLE int loadPlugin(const QString& fileName);
 
     /**
      * @brief 加载插件
      * @param plugin 插件指针
-     * @return 加载结果
+     * @return 插件ID（从1开始），失败返回-1
      */
-    Q_INVOKABLE bool loadPlugin(QCloudMusicApiPlugin* plugin);
+    Q_INVOKABLE int loadPlugin(QCloudMusicApiPlugin* plugin);
 
     /**
      * @brief 卸载插件
-     * @param fileName 插件路径
+     * @param id 插件ID
      * @return 卸载结果
      */
-    Q_INVOKABLE bool unloadPlugin(const QString& fileName);
-
-    /**
-     * @brief 卸载插件
-     * @param plugin 插件指针
-     * @return 卸载结果
-     */
-    Q_INVOKABLE bool unloadPlugin(QCloudMusicApiPlugin* plugin);
+    Q_INVOKABLE bool unloadPlugin(int id);
 
 private:
     void beforeInvoke(QVariantMap& arg);
