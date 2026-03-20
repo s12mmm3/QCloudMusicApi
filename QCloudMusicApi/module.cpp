@@ -1217,6 +1217,68 @@ QVariantMap Api::dj_detail(QVariantMap query) {
     );
 }
 
+// DIFM电台 - 分类
+QVariantMap Api::dj_difm_all_style_channel(QVariantMap query) {
+    const QVariantMap data{
+        { "sources", query.value("sources", "[0]") },
+        };
+    return request(
+        "/api/dj/difm/all/style/channel/v2",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// DIFM电台 - 收藏列表
+QVariantMap Api::dj_difm_subscribe_channels_get(QVariantMap query) {
+    const QVariantMap data{
+        { "sources", query.value("sources", "[0]") },
+        };
+    return request(
+        "/api/dj/difm/subscribe/channels/get/v2",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// DIFM电台 - 收藏频道
+QVariantMap Api::dj_difm_channel_subscribe(QVariantMap query) {
+    const QVariantMap data{
+        { "id", query["id"] },
+        };
+    return request(
+        "/api/dj/difm/channel/subscribe",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// DIFM电台 - 取消收藏频道
+QVariantMap Api::dj_difm_channel_unsubscribe(QVariantMap query) {
+    const QVariantMap data{
+        { "id", query["id"] },
+        };
+    return request(
+        "/api/dj/difm/channel/unsubscribe",
+        data,
+        Option::createOption(query)
+        );
+}
+
+// DIFM电台 - 播放列表
+QVariantMap Api::dj_difm_playing_tracks_list(QVariantMap query) {
+    const QVariantMap data{
+        { "limit", query.value("limit", 5) },
+        { "source", query.value("source", 0) },
+        { "channelId", query["channelId"] },
+        };
+    return request(
+        "/api/dj/difm/playing/tracks/list",
+        data,
+        Option::createOption(query)
+        );
+}
+
 // 热门电台
 QVariantMap Api::dj_hot(QVariantMap query) {
     const QVariantMap data{

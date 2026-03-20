@@ -251,6 +251,21 @@ public:
     // 电台详情
     Q_INVOKABLE QVariantMap dj_detail(QVariantMap);
 
+    // DIFM电台 - 分类
+    Q_INVOKABLE QVariantMap dj_difm_all_style_channel(QVariantMap);
+
+    // DIFM电台 - 收藏列表
+    Q_INVOKABLE QVariantMap dj_difm_subscribe_channels_get(QVariantMap);
+
+    // DIFM电台 - 收藏频道
+    Q_INVOKABLE QVariantMap dj_difm_channel_subscribe(QVariantMap);
+
+    // DIFM电台 - 取消收藏频道
+    Q_INVOKABLE QVariantMap dj_difm_channel_unsubscribe(QVariantMap);
+
+    // DIFM电台 - 播放列表
+    Q_INVOKABLE QVariantMap dj_difm_playing_tracks_list(QVariantMap);
+
     // 热门电台
     Q_INVOKABLE QVariantMap dj_hot(QVariantMap);
 
