@@ -24,7 +24,7 @@ public:
      * set_proxy(proxy): 设置代理
      * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
      */
-    DEFINE_VALUE(QString, proxy, "");
+    DEFINE_VALUE_SAFETY(QString, proxy, "");
 
     /**
      * @brief 封装了读取/修改方法
@@ -32,7 +32,7 @@ public:
      * set_realIP(realIP): 设置realIP
      * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
      */
-    DEFINE_VALUE(QString, realIP, "");
+    DEFINE_VALUE_SAFETY(QString, realIP, "");
 
     /**
      * @brief 封装了读取/修改方法
@@ -40,7 +40,7 @@ public:
      * set_cookie(cookie): 设置cookie
      * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
      */
-    DEFINE_VALUE(QString, cookie, "");
+    DEFINE_VALUE_SAFETY(QString, cookie, "");
 
     /**
      * @brief 封装了读取/修改方法
@@ -48,7 +48,7 @@ public:
      * set_domain(domain): 设置domain
      * 可直接通过元对象系统修改/访问属性，不要直接修改私有属性
      */
-    DEFINE_VALUE(QString, domain, "");
+    DEFINE_VALUE_SAFETY(QString, domain, "");
 
 public:
     explicit ApiHelper(QObject* parent = nullptr);

@@ -6,17 +6,22 @@
 #include <QVariantMap>
 
 namespace QCloudMusicApi {
-
+    class Request;
     class QCLOUDMUSICAPI_EXPORT Plugins : public QObject
     {
         Q_OBJECT
     public:
-        explicit Plugins(QObject* parent = nullptr);
+        explicit Plugins(Request* request, QObject* parent = nullptr);
 
-        Q_INVOKABLE static QVariantMap songUpload(QVariantMap);
+    private:
+        QVariantMap request(QString uri, QVariantMap data, QVariantMap options);
+    public:
+        Q_INVOKABLE QVariantMap songUpload(QVariantMap);
 
-        Q_INVOKABLE static QVariantMap upload(QVariantMap);
+        Q_INVOKABLE QVariantMap upload(QVariantMap);
     signals:
+    private:
+        Request* m_request = nullptr;
     };
 
 }

@@ -8,12 +8,17 @@
 #include <QNetworkReply>
 #include <QRegularExpression>
 
-const static auto& request = QCloudMusicApi::Request::createRequest;
-
 using namespace QCloudMusicApi;
-Plugins::Plugins(QObject* parent)
+Plugins::Plugins(Request* request, QObject* parent)
     : QObject{ parent }
-{}
+{
+    m_request = request;
+}
+
+QVariantMap Plugins::request(QString uri, QVariantMap data, QVariantMap options)
+{
+    return m_request->createRequest(uri, data, options);
+}
 
 QVariantMap Plugins::songUpload(QVariantMap query)
 {
@@ -44,13 +49,12 @@ QVariantMap Plugins::songUpload(QVariantMap query)
     // 上传
     const auto objectKey = tokenRes["body"].toMap()["result"].toMap()["objectKey"].toString().replace("/", "%2F");
 
-    auto reply = Request::axios(
+    auto reply = m_request->axios(
         QNetworkAccessManager::GetOperation,
         "https://wanproxy.127.net/lbs?version=1.0&bucketname=" + bucket,
         {}, {}, "");
-    reply->manager()->deleteLater();
     const QVariantMap lbs = QJsonDocument::fromJson(reply->readAll()).toVariant().toMap();
-    reply = Request::axios(
+    reply = m_request->axios(
         QNetworkAccessManager::PostOperation,
         lbs["upload"].toList().value(0).toString() + "/" + bucket + "/" + objectKey + "?offset=0&complete=true&version=1.0",
         {},
@@ -61,7 +65,6 @@ QVariantMap Plugins::songUpload(QVariantMap query)
             { "Content-Length", query["songFile"].toMap()["size"] },
         },
         query["songFile"].toMap()["data"].toByteArray());
-    reply->manager()->deleteLater();
 
     return tokenRes;
 }
@@ -83,7 +86,7 @@ QVariantMap Plugins::upload(QVariantMap query)
         data,
         Option::createOption(query, "weapi")
     );
-    auto reply = Request::axios(QNetworkAccessManager::PostOperation,
+    auto reply = m_request->axios(QNetworkAccessManager::PostOperation,
         "https://nosup-hz1.127.net/yyimgs/"
         + res["body"].toMap()["result"].toMap()["objectKey"].toString()
         + "?offset=0&complete=true&version=1.0",
@@ -93,7 +96,6 @@ QVariantMap Plugins::upload(QVariantMap query)
                                     { "Content-Type", "image/jpeg" }
                                 },
         query["imgFile"].toMap()["data"].toByteArray());
-    reply->manager()->deleteLater();
 
     // 读取响应内容
     auto body = reply->readAll();

@@ -62,6 +62,11 @@ const QString kStaticDeviceId = generateStaticDeviceId();
 
 }
 
+Request::Request(QObject *parent): QObject(parent)
+{
+    m_networkAccessManager = new QNetworkAccessManager(this);
+}
+
 QString Request::chooseUserAgent(QString crypto, QString uaType) {
     const QVariantMap userAgentMap{
         {
@@ -153,7 +158,7 @@ QVariantMap Request::createRequest(
             }();
         }
     }
-    headers["Cookie"] = Index::cookieObjToString(cookie);
+    headers["cookie"] = Index::cookieObjToString(cookie);
 
     QString url = "";
     QVariantMap encryptData;
@@ -271,7 +276,6 @@ QVariantMap Request::createRequest(
     DEBUG << "url" << url;
     DEBUG << "data" << encryptData;
     QNetworkReply* reply = axios(method, url, encryptData, headers, query.toString().toUtf8(), proxy);
-    reply->manager()->deleteLater();
 
     QVariantMap answer{
         { "status", 500 },
@@ -335,9 +339,7 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
     for (auto i = headers.constBegin(); i != headers.constEnd(); i++) {
         request.setRawHeader(i.key().toUtf8(), i.value().toByteArray());
     }
-    // 创建一个QNetworkAccessManager对象，用来管理HTTP请求和响应
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
-    manager->setProxy(proxy);
+    m_networkAccessManager->setProxy(proxy);
 
     QUrlQuery query;
     QUrl qurl(url);
@@ -353,10 +355,10 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
     // 发送HTTP请求
     QNetworkReply* reply;
     if (method == QNetworkAccessManager::PostOperation) {
-        reply = manager->post(request, data);
+        reply = m_networkAccessManager->post(request, data);
     }
     else {
-        reply = manager->get(request);
+        reply = m_networkAccessManager->get(request);
     }
 
     // 开启一个局部的事件循环，等待响应结束，退出

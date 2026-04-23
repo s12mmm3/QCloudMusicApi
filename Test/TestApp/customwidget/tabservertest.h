@@ -9,6 +9,11 @@ class TabServerTest;
 }
 QT_END_NAMESPACE
 
+
+namespace QCloudMusicApi {
+class Request;
+}
+
 // 测试服务器Api
 class TabServerTest : public QWidget
 {
@@ -23,6 +28,7 @@ private slots:
 
 private:
     Ui::TabServerTest *ui;
+    QCloudMusicApi::Request* m_request = nullptr;
 };
 
 #endif // TABSERVERTEST_H

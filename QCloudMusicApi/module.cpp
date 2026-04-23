@@ -20,13 +20,37 @@
 #include "plugins.h"
 
 using Api = NeteaseCloudMusicApi;
-const static auto& request = QCloudMusicApi::Request::createRequest;
 const static auto& resourceTypeMap = QCloudMusicApi::Config::resourceTypeMap;
 
 using namespace QCloudMusicApi;
+
+class NeteaseCloudMusicApiPrivate : public QObject {
+public:
+    explicit NeteaseCloudMusicApiPrivate(QObject* parent = nullptr)
+    {
+        m_request = new QCloudMusicApi::Request(this);
+        m_plugins = new QCloudMusicApi::Plugins(m_request, this);
+    }
+public:
+    QVariantMap request(QString uri, QVariantMap data, QVariantMap options)
+    {
+        return m_request->createRequest(uri, data, options);
+    }
+public:
+    QCloudMusicApi::Request* m_request = nullptr;
+    QCloudMusicApi::Plugins* m_plugins = nullptr;
+};
+
 NeteaseCloudMusicApi::NeteaseCloudMusicApi(QObject* parent)
     : QObject{ parent }
-{}
+{
+    d_ptr = new NeteaseCloudMusicApiPrivate(this);
+}
+
+QVariantMap NeteaseCloudMusicApi::request(QString uri, QVariantMap data, QVariantMap options)
+{
+    return d_ptr->request(uri, data, options);
+}
 
 // api
 QVariantMap Api::api(QVariantMap query) {
@@ -489,7 +513,7 @@ QVariantMap Api::audio_match(QVariantMap query) {
 
 // 更新头像
 QVariantMap Api::avatar_upload(QVariantMap query) {
-    auto uploadInfo = QCloudMusicApi::Plugins::upload(query);
+    auto uploadInfo = d_ptr->m_plugins->upload(query);
     const QVariantMap res = request(
         "/api/user/avatar/upload/v1",
         {
@@ -776,7 +800,7 @@ QVariantMap Api::cloud(QVariantMap query) {
     );
 
     if (res["body"].toMap()["needUpload"].toBool()) {
-        const auto uploadInfo = QCloudMusicApi::Plugins::songUpload(query);
+        const auto uploadInfo = d_ptr->m_plugins->songUpload(query);
     }
     const auto res2 = request(
         "/api/upload/cloud/info/v2",
@@ -2616,7 +2640,7 @@ QVariantMap Api::playlist_cover_update(QVariantMap query) {
                                  } }
         };
     }
-    const auto uploadInfo = QCloudMusicApi::Plugins::upload(query);
+    const auto uploadInfo = d_ptr->m_plugins->upload(query);
     const auto res = request(
         "/api/playlist/cover/update",
         {

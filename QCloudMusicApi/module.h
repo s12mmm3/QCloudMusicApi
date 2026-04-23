@@ -5,10 +5,17 @@
 
 #include <QVariantMap>
 
+class NeteaseCloudMusicApiPrivate;
 class QCLOUDMUSICAPI_EXPORT NeteaseCloudMusicApi : public QObject {
     Q_OBJECT
 public:
     explicit NeteaseCloudMusicApi(QObject* parent = nullptr);
+
+private:
+    QVariantMap request(QString uri, QVariantMap data, QVariantMap options);
+    NeteaseCloudMusicApiPrivate* d_ptr = nullptr;
+
+public:
 
     // api
     Q_INVOKABLE QVariantMap api(QVariantMap);

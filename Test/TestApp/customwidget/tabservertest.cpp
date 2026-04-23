@@ -15,6 +15,7 @@ TabServerTest::TabServerTest(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TabServerTest)
 {
+    m_request = new QCloudMusicApi::Request(this);
     ui->setupUi(this);
 
     ui->tabCommonUnit->callback = [this](QString, QString arg_str) -> QVariantMap {
@@ -36,13 +37,11 @@ TabServerTest::TabServerTest(QWidget* parent) :
         for (auto i = arg.constBegin(); i != arg.constEnd(); ++i) {
             query.addQueryItem(i.key(), i.value().toString());
         }
-        auto reply = QCloudMusicApi::Request
-            ::axios(method,
-                url,
-                arg,
-                headers,
-                query.toString().toUtf8());
-        reply->manager()->deleteLater();
+        auto reply = m_request->axios(method,
+                                      url,
+                                      arg,
+                                      headers,
+                                      query.toString().toUtf8());
 
         DEBUG.noquote() << reply->rawHeaderPairs();
 

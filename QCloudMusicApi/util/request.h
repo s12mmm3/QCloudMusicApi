@@ -11,22 +11,28 @@
 namespace QCloudMusicApi {
 
     // 请求管理类，参考原项目文件util/request.js
-    class QCLOUDMUSICAPI_EXPORT Request {
+    class QCLOUDMUSICAPI_EXPORT Request: public QObject {
+        Q_OBJECT
+    public:
+        explicit Request(QObject* parent = nullptr);
+
     public:
         static QString chooseUserAgent(QString crypto, QString uaType = "pc");
-        static QVariantMap createRequest(
+        QVariantMap createRequest(
             QString uri,
             QVariantMap data,
             QVariantMap options
         );
 
-        // 仿axios的网络请求，需要手动析构QNetworkAccessManager, QNetworkReply生命周期由其控制
-        static QNetworkReply* axios(QNetworkAccessManager::Operation method,
+        // 仿axios的网络请求
+        QNetworkReply* axios(QNetworkAccessManager::Operation method,
             QString url,
             const QVariantMap& urlQuery,
             const QVariantMap& headers,
             const QByteArray& data,
             QNetworkProxy proxy = QNetworkProxy::DefaultProxy);
+    private:
+        QNetworkAccessManager* m_networkAccessManager = Q_NULLPTR;
     };
 
 }
