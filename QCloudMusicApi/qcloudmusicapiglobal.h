@@ -12,12 +12,12 @@
 #define Q_DECL_IMPORT __attribute__((visibility("default")))
 #endif
 
-#if defined(BUILD_SHARED_LIBS)
-#if defined(QCLOUDMUSICAPI_LIBRARY)
-#  define QCLOUDMUSICAPI_EXPORT Q_DECL_EXPORT
-#else
-#  define QCLOUDMUSICAPI_EXPORT Q_DECL_IMPORT
-#endif
+#if defined(QCLOUDMUSICAPI_SHARED)
+#  if defined(QCLOUDMUSICAPI_LIBRARY)
+#    define QCLOUDMUSICAPI_EXPORT Q_DECL_EXPORT
+#  else
+#    define QCLOUDMUSICAPI_EXPORT Q_DECL_IMPORT
+#  endif
 #else
 #  define QCLOUDMUSICAPI_EXPORT
 #endif

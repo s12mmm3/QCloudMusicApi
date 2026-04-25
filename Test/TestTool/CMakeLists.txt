@@ -21,7 +21,7 @@ set(PROJECT_SOURCES
     ${QRCS}
 )
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} STATIC
     ${PROJECT_SOURCES}
 )
 
@@ -31,6 +31,3 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     TESTTOOL_LIBRARY
     PROJECT_NAME="${PROJECT_NAME}"
 )
-if(BUILD_SHARED_LIBS)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_SHARED_LIBS)
-endif()

@@ -6,12 +6,12 @@
 
 #include "apihelper.h"
 
-#if defined(BUILD_SHARED_LIBS)
-#if defined(TESTTOOL_LIBRARY)
-#  define TESTTOOL_EXPORT Q_DECL_EXPORT
-#else
-#  define TESTTOOL_EXPORT Q_DECL_IMPORT
-#endif
+#if defined(TESTTOOL_SHARED)
+#  if defined(TESTTOOL_LIBRARY)
+#    define TESTTOOL_EXPORT Q_DECL_EXPORT
+#  else
+#    define TESTTOOL_EXPORT Q_DECL_IMPORT
+#  endif
 #else
 #  define TESTTOOL_EXPORT
 #endif

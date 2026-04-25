@@ -14,10 +14,17 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Gui)
 
 FILE(GLOB HEADERS ./*.h ./util/*.h)
 FILE(GLOB SOURCES ./*.cpp ./util/*.cpp)
-add_library(${PROJECT_NAME}
-    ${HEADERS}
-    ${SOURCES}
-)
+if(QCLOUDMUSICAPI_BUILD_SHARED)
+    add_library(${PROJECT_NAME} SHARED
+        ${HEADERS}
+        ${SOURCES}
+    )
+else()
+    add_library(${PROJECT_NAME} STATIC
+        ${HEADERS}
+        ${SOURCES}
+    )
+endif()
 
 if (ANDROID)
     include(FetchContent)
@@ -45,6 +52,6 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     QCLOUDMUSICAPI_LIBRARY
     PROJECT_NAME="${PROJECT_NAME}"
 )
-if(BUILD_SHARED_LIBS)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_SHARED_LIBS)
+if(QCLOUDMUSICAPI_BUILD_SHARED)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC QCLOUDMUSICAPI_SHARED)
 endif()
