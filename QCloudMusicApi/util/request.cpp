@@ -16,6 +16,7 @@
 #include <QRegularExpression>
 #include <QStandardPaths>
 #include <QDir>
+#include <QThread>
 
 #include "crypto.h"
 #include "index.h"
@@ -64,7 +65,18 @@ const QString kStaticDeviceId = generateStaticDeviceId();
 
 Request::Request(QObject *parent): QObject(parent)
 {
-    m_networkAccessManager = new QNetworkAccessManager(this);
+    m_thread = new QThread;
+    m_networkAccessManager = new QNetworkAccessManager;
+    m_networkAccessManager->moveToThread(m_thread);
+    m_thread->start();
+}
+
+Request::~Request()
+{
+    m_thread->quit();
+    m_thread->wait();
+    m_thread->deleteLater();
+    m_networkAccessManager->deleteLater();
 }
 
 QString Request::chooseUserAgent(QString crypto, QString uaType) {
@@ -276,6 +288,7 @@ QVariantMap Request::createRequest(
     DEBUG << "url" << url;
     DEBUG << "data" << encryptData;
     QNetworkReply* reply = axios(method, url, encryptData, headers, query.toString().toUtf8(), proxy);
+    auto guard = qScopeGuard([=]() { reply->deleteLater(); });
 
     QVariantMap answer{
         { "status", 500 },
@@ -339,7 +352,7 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
     for (auto i = headers.constBegin(); i != headers.constEnd(); i++) {
         request.setRawHeader(i.key().toUtf8(), i.value().toByteArray());
     }
-    m_networkAccessManager->setProxy(proxy);
+    QMetaObject::invokeMethod(m_networkAccessManager, [=]() { m_networkAccessManager->setProxy(proxy); }, Qt::BlockingQueuedConnection);
 
     QUrlQuery query;
     QUrl qurl(url);
@@ -355,10 +368,10 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
     // 发送HTTP请求
     QNetworkReply* reply;
     if (method == QNetworkAccessManager::PostOperation) {
-        reply = m_networkAccessManager->post(request, data);
+        QMetaObject::invokeMethod(m_networkAccessManager, [&]() { reply = m_networkAccessManager->post(request, data); }, Qt::BlockingQueuedConnection);
     }
     else {
-        reply = m_networkAccessManager->get(request);
+        QMetaObject::invokeMethod(m_networkAccessManager, [&]() { reply = m_networkAccessManager->get(request); }, Qt::BlockingQueuedConnection);
     }
 
     // 开启一个局部的事件循环，等待响应结束，退出

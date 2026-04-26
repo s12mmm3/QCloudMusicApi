@@ -8,6 +8,9 @@
 
 #include "../qcloudmusicapiglobal.h"
 
+class QNetworkAccessManager;
+class QThread;
+
 namespace QCloudMusicApi {
 
     // 请求管理类，参考原项目文件util/request.js
@@ -15,6 +18,7 @@ namespace QCloudMusicApi {
         Q_OBJECT
     public:
         explicit Request(QObject* parent = nullptr);
+        ~Request();
 
     public:
         static QString chooseUserAgent(QString crypto, QString uaType = "pc");
@@ -33,6 +37,7 @@ namespace QCloudMusicApi {
             QNetworkProxy proxy = QNetworkProxy::DefaultProxy);
     private:
         QNetworkAccessManager* m_networkAccessManager = Q_NULLPTR;
+        QThread*               m_thread               = Q_NULLPTR;
     };
 
 }
