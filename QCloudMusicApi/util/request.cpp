@@ -17,6 +17,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QThread>
+#include <QScopeGuard>
 
 #include "crypto.h"
 #include "index.h"
