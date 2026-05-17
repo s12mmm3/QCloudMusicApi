@@ -9,7 +9,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(cryptopp::cryptopp)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Gui)
 
 FILE(GLOB HEADERS ./*.h ./util/*.h)
