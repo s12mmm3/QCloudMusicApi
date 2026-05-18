@@ -672,6 +672,34 @@ QVariantMap Api::cellphone_existence_check(QVariantMap query) {
     );
 }
 
+QVariantMap Api::chart_detail(QVariantMap query)
+{
+    QVariantMap data {
+        { "chartCode", query["chartCode"] },
+        { "targetId", query["targetId"] },
+        { "targetType", query["targetType"] },
+        };
+    return request(
+        "/api/chart/detail",
+        data,
+        Option::createOption(query)
+        );
+}
+
+QVariantMap Api::chart_song_detail(QVariantMap query)
+{
+    QVariantMap data {
+        { "chartCode", query["chartCode"] },
+        { "targetId", query["targetId"] },
+        { "targetType", query["targetType"] },
+        };
+    return request(
+        "/api/chart/song/detail",
+        data,
+        Option::createOption(query)
+        );
+}
+
 // 歌曲可用性
 QVariantMap Api::check_music(QVariantMap query) {
     const QVariantMap data{
@@ -1831,6 +1859,18 @@ QVariantMap Api::hug_comment(QVariantMap query) {
         data,
         Option::createOption(query)
     );
+}
+
+QVariantMap Api::lbs_city_code(QVariantMap query)
+{
+    QVariantMap data {
+        { "bizCode", "" }, // chart
+    };
+    return request(
+        "/api/lbs/city/code",
+        data,
+        Option::createOption(query)
+        );
 }
 
 // 红心与取消红心歌曲

@@ -164,6 +164,12 @@ public:
     // 检测手机号码是否已注册
     Q_INVOKABLE QVariantMap cellphone_existence_check(QVariantMap);
 
+    // 获取指定维度音乐排行榜详情
+    Q_INVOKABLE QVariantMap chart_detail(QVariantMap query);
+
+    // 获取指定维度音乐排行榜列表
+    Q_INVOKABLE QVariantMap chart_song_detail(QVariantMap query);
+
     // 歌曲可用性
     Q_INVOKABLE QVariantMap check_music(QVariantMap);
 
@@ -414,6 +420,9 @@ public:
 
     //抱一抱评论
     Q_INVOKABLE QVariantMap hug_comment(QVariantMap);
+
+    // 多级行政区划数据获取接口
+    Q_INVOKABLE QVariantMap lbs_city_code(QVariantMap query);
 
     // 红心与取消红心歌曲
     Q_INVOKABLE QVariantMap like(QVariantMap);

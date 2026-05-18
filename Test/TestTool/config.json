@@ -568,5 +568,18 @@
     },
     "user_playlist_create": {
         "uid": "79248480"
+    },
+    "lbs_city_code": {
+        "bizCode": "chart"
+    },
+    "chart_detail": {
+        "chartCode": "CITY_STYLE_SONG_CHART",
+        "targetId": "110000_1020",
+        "targetType": "CITY_STYLE"
+    },
+    "chart_song_detail": {
+        "chartCode": "CITY_STYLE_SONG_CHART",
+        "targetId": "110000_1020",
+        "targetType": "CITY_STYLE"
     }
 }
