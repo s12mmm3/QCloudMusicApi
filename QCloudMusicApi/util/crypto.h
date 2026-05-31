@@ -30,7 +30,7 @@ namespace QCloudMusicApi {
 
         static QVariantMap eapi(QString url, QJsonDocument object);
 
-        static QVariantMap eapiResDecrypt(const QByteArray& encryptedParams);
+        static QVariantMap eapiResDecrypt(const QByteArray& encryptedParams, bool aeapi = false);
 
         static QVariantMap eapiReqDecrypt(const QByteArray& encryptedParams);
 

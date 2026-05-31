@@ -33,6 +33,21 @@ const QString Crypto::eapiKey = QStringLiteral("e82ckenh8dichen8");
 #include <cryptopp/rsa.h>
 #include <cryptopp/osrng.h>
 #include <cryptopp/integer.h> // 用于原始RSA运算
+#include <cryptopp/gzip.h>
+
+QByteArray gzipDecompress(const QByteArray& data) {
+    if (data.isEmpty()) return {};
+
+    try {
+        std::string decompressed;
+        const std::string compressed(data.constData(), data.size());
+        CryptoPP::StringSource(compressed, true, new CryptoPP::Gunzip(new CryptoPP::StringSink(decompressed)));
+        return QByteArray::fromStdString(decompressed);
+    } catch (const CryptoPP::Exception& e) {
+        qWarning() << "Crypto++ gzip decompress error:" << e.what();
+        return {};
+    }
+}
 
 /**
  * @brief AES加密
@@ -297,9 +312,12 @@ QVariantMap Crypto::eapi(QString url, QJsonDocument object) {
     };
 }
 
-QVariantMap Crypto::eapiResDecrypt(const QByteArray& encryptedParams) {
+QVariantMap Crypto::eapiResDecrypt(const QByteArray& encryptedParams, bool aeapi) {
     // 使用aesDecrypt解密参数
-    auto decryptedData = aesDecrypt(encryptedParams, "ecb", eapiKey.toUtf8(), "", "hex");
+    QByteArray decryptedData = aesDecrypt(encryptedParams, "ecb", eapiKey.toUtf8(), "", "hex");
+    if (aeapi) {
+        decryptedData = gzipDecompress(decryptedData);
+    }
     return QJsonDocument::fromJson(decryptedData).toVariant().toMap();
 }
 

@@ -1636,14 +1636,19 @@ QVariantMap Api::eapi_decrypt(QVariantMap query) {
     // 去除空格
     auto pureHexString = hexString;
     pureHexString = pureHexString.replace(QRegularExpression(R"(\s)"), "");
+    const auto data = [=]() -> QVariantMap {
+        if (isReq) return QCloudMusicApi::Crypto::eapiReqDecrypt(pureHexString.toUtf8());
+
+        const QVariantMap normalResult = QCloudMusicApi::Crypto::eapiResDecrypt(pureHexString.toUtf8());
+        if (!normalResult.isEmpty()) return normalResult;
+
+        return QCloudMusicApi::Crypto::eapiResDecrypt(pureHexString.toUtf8(), true);
+    }();
     return {
         { "status", 200 },
         { "body", QVariantMap {
                      { "code", 200 },
-                     { "data", isReq
-                                  ? QCloudMusicApi::Crypto::eapiReqDecrypt(pureHexString.toUtf8())
-                                    : QCloudMusicApi::Crypto::eapiResDecrypt(pureHexString.toUtf8())
-                     },
+                     { "data", data },
             }
         }
     };
@@ -5151,4 +5156,3 @@ QVariantMap Api::yunbei(QVariantMap query) {
         Option::createOption(query, "weapi")
     );
 }
-

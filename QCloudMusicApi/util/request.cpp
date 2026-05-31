@@ -244,6 +244,7 @@ QVariantMap Request::createRequest(
         headers["User-Agent"] = !options.value("ua").toString().isEmpty() ? options.value("ua") : chooseUserAgent("api", "iphone");
         if (crypto == "eapi") {
             // 使用eapi加密
+            // headers["x-aeapi"] = true; // 服务器会使用gzip压缩返回值
             data["header"] = header;
             data["e_r"] = options.value("e_r").isValid() ? options.value("e_r") : data.value("e_r", Config::APP_CONF.value("encryptResponse")); // 用于加密eapi接口的返回值
             data["e_r"] = Index::toBoolean(data["e_r"]);
@@ -321,7 +322,9 @@ QVariantMap Request::createRequest(
 
         if (data["e_r"].toBool()) {
             // eapi接口返回值被加密，需要解密
-            answer["body"] = Crypto::eapiResDecrypt(body.toHex().toUpper());
+            const QByteArray aeapiHeader = reply->rawHeader("x-aeapi").toLower();
+            const bool aeapi = aeapiHeader == "true" || aeapiHeader == "1";
+            answer["body"] = Crypto::eapiResDecrypt(body.toHex().toUpper(), aeapi);
         }
         else {
             answer["body"] = QJsonDocument::fromJson(body).toVariant().toMap();
