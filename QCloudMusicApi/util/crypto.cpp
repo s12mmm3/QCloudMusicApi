@@ -12,6 +12,16 @@
 #include <QRegularExpression>
 #include <QDebug>
 
+#include <cryptopp/aes.h>
+#include <cryptopp/modes.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/hex.h>
+#include <cryptopp/base64.h>
+#include <cryptopp/rsa.h>
+#include <cryptopp/osrng.h>
+#include <cryptopp/integer.h> // 用于原始RSA运算
+#include <cryptopp/gzip.h>
+
 using namespace QCloudMusicApi;
 
 const QString Crypto::iv = QStringLiteral("0102030405060708");
@@ -25,15 +35,6 @@ const QString Crypto::publicKey = QStringLiteral(
 );
 
 const QString Crypto::eapiKey = QStringLiteral("e82ckenh8dichen8");
-#include <cryptopp/aes.h>
-#include <cryptopp/modes.h>
-#include <cryptopp/filters.h>
-#include <cryptopp/hex.h>
-#include <cryptopp/base64.h>
-#include <cryptopp/rsa.h>
-#include <cryptopp/osrng.h>
-#include <cryptopp/integer.h> // 用于原始RSA运算
-#include <cryptopp/gzip.h>
 
 QByteArray gzipDecompress(const QByteArray& data) {
     if (data.isEmpty()) return {};
