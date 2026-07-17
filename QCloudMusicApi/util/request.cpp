@@ -74,10 +74,29 @@ Request::Request(QObject *parent): QObject(parent)
 
 Request::~Request()
 {
-    m_thread->quit();
-    m_thread->wait();
-    m_thread->deleteLater();
-    m_networkAccessManager->deleteLater();
+    if (m_networkAccessManager) {
+        if (m_networkAccessManager->thread() == QThread::currentThread() || !m_thread || !m_thread->isRunning()) {
+            delete m_networkAccessManager;
+        }
+        else {
+            QMetaObject::invokeMethod(m_networkAccessManager, [manager = m_networkAccessManager]() {
+                delete manager;
+            }, Qt::BlockingQueuedConnection);
+        }
+        m_networkAccessManager = nullptr;
+    }
+
+    if (m_thread) {
+        m_thread->quit();
+        if (QThread::currentThread() != m_thread) {
+            m_thread->wait();
+            delete m_thread;
+        }
+        else {
+            m_thread->deleteLater();
+        }
+        m_thread = nullptr;
+    }
 }
 
 QString Request::chooseUserAgent(QString crypto, QString uaType) {
@@ -353,6 +372,9 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
     QNetworkProxy proxy)
 {
     QNetworkRequest request;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    request.setTransferTimeout(30000);
+#endif
     for (auto i = headers.constBegin(); i != headers.constEnd(); i++) {
         request.setRawHeader(i.key().toUtf8(), i.value().toByteArray());
     }
@@ -382,10 +404,12 @@ QNetworkReply* Request::axios(QNetworkAccessManager::Operation method,
     QEventLoop eventLoop;
     QObject::connect(reply, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QTimer timer;
     timer.setSingleShot(true);
     QObject::connect(&timer, &QTimer::timeout, [=]() { if (!reply->isFinished()) reply->abort(); });
     timer.start(30000);
+#endif
 
     eventLoop.exec(); // 启动事件循环
 
